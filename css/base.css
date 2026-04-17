@@ -1,0 +1,221 @@
+/* ============================================================
+   BASE.CSS — Reset, Variables, Typography, Layout Primitives
+   FitPeak Gym Management System
+   ============================================================ */
+
+/* === CSS LAYERS === */
+@layer base, components, pages;
+
+/* === CSS VARIABLES === */
+@layer base {
+    :root {
+        /* Colors */
+        --clr-bg:        #0b0b0b;
+        --clr-surface:   #141414;
+        --clr-card:      #1c1c1c;
+        --clr-border:    #2a2a2a;
+        --clr-accent:    #e84118;
+        --clr-accent-2:  #f0932b;
+        --clr-accent-glow: rgba(232, 65, 24, 0.35);
+        --clr-text:      #f0ede8;
+        --clr-text-muted:#8a8580;
+        --clr-success:   #2ed573;
+        --clr-warning:   #ffa502;
+        --clr-danger:    #ff4757;
+        --clr-info:      #1e90ff;
+
+        /* Typography */
+        --font-display: 'Bebas Neue', sans-serif;
+        --font-body:    'Outfit', sans-serif;
+
+        /* Spacing */
+        --space-xs:  0.25rem;
+        --space-sm:  0.5rem;
+        --space-md:  1rem;
+        --space-lg:  1.5rem;
+        --space-xl:  2.5rem;
+        --space-2xl: 4rem;
+
+        /* Layout */
+        --max-width:    1200px;
+        --nav-height:   64px;
+        --radius-sm:    6px;
+        --radius-md:    12px;
+        --radius-lg:    20px;
+        --radius-pill:  999px;
+
+        /* Shadows */
+        --shadow-sm:  0 2px 8px rgba(0,0,0,0.4);
+        --shadow-md:  0 4px 20px rgba(0,0,0,0.5);
+        --shadow-lg:  0 8px 40px rgba(0,0,0,0.6);
+        --shadow-accent: 0 0 24px var(--clr-accent-glow);
+
+        /* Transitions */
+        --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+        --nav-height: 80px;
+    }
+
+    /* === RESET === */
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        font-size: 16px;
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        font-family: var(--font-body);
+        background-color: var(--clr-bg);
+        color: var(--clr-text);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    img, svg, video {
+        display: block;
+        max-width: 100%;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    ul, ol {
+        list-style: none;
+    }
+
+    input, select, textarea, button {
+        font-family: inherit;
+        font-size: inherit;
+    }
+
+    button {
+        cursor: pointer;
+        border: none;
+        background: none;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-display);
+        letter-spacing: 0.04em;
+        line-height: 1.1;
+        font-weight: 400;
+    }
+
+    h1 { font-size: clamp(2.5rem, 6vw, 5rem); }
+    h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
+    h3 { font-size: clamp(1.3rem, 3vw, 2rem); }
+    h4 { font-size: 1.2rem; font-family: var(--font-body); font-weight: 600; }
+
+    p { line-height: 1.7; }
+
+    strong { font-weight: 600; }
+
+    /* === LAYOUT PRIMITIVES === */
+    .container {
+        width: 100%;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 var(--space-lg);
+        margin-top: 0;
+    }
+
+    .main-content {
+        flex: 1;
+        padding-top: var(--nav-height);
+    }
+
+    .page-section {
+        padding: var(--space-2xl) 0;
+    }
+
+    /* === UTILITY === */
+    .sr-only {
+        position: absolute; width: 1px; height: 1px;
+        padding: 0; margin: -1px; overflow: hidden;
+        clip: rect(0,0,0,0); border: 0;
+    }
+
+    .text-accent   { color: var(--clr-accent); }
+    .text-muted    { color: var(--clr-text-muted); }
+    .text-center   { text-align: center; }
+    .text-success  { color: var(--clr-success); }
+    .text-danger   { color: var(--clr-danger); }
+    .text-warning  { color: var(--clr-warning); }
+
+    .flex          { display: flex; }
+    .flex-col      { flex-direction: column; }
+    .items-center  { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-sm        { gap: var(--space-sm); }
+    .gap-md        { gap: var(--space-md); }
+    .gap-lg        { gap: var(--space-lg); }
+    .w-full        { width: 100%; }
+    .mt-sm         { margin-top: var(--space-sm); }
+    .mt-md         { margin-top: var(--space-md); }
+    .mt-lg         { margin-top: var(--space-lg); }
+    .mb-md         { margin-bottom: var(--space-md); }
+    .mb-lg         { margin-bottom: var(--space-lg); }
+
+    .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-lg);
+    }
+
+    .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: var(--space-lg);
+    }
+
+    .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-md);
+    }
+
+    /* 5 cards side by side (com responsividade) */
+    .grid-5 {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: var(--space-lg);
+    }
+
+    @media (max-width: 1024px) {
+        .grid-5 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    }
+    @media (max-width: 768px) {
+        .grid-5 {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+    }
+
+    /* === SCROLLBAR === */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--clr-surface); }
+    ::-webkit-scrollbar-thumb { background: var(--clr-border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--clr-accent); }
+
+    /* === SELECTION === */
+    ::selection {
+        background: var(--clr-accent);
+        color: #fff;
+    }
+}
+
+body {
+    padding-top: var(--nav-height);
+}

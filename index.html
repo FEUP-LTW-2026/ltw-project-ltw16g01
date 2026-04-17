@@ -1,1 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FitPeak — Smart Gym Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+    <nav class="navbar" aria-label="Main navigation">
+        <a href="index.html" class="navbar-brand">FIT<span>PEAK</span></a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#features">Features</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html" class="btn btn-accent btn-sm">Get Started</a></li>
+        </ul>
+    </nav>
 
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-eyebrow">Gym of the Future</div>
+                        <h1>
+                            Train Harder.<br>
+                            <span class="accent-line">Live Better.</span>
+                        </h1>
+                        <p class="hero-description">
+                            Complete gym management platform. Classes, trainers, equipment and more — all in one place.
+                        </p>
+                        <div class="hero-actions">
+                            <a href="register.html" class="btn btn-accent btn-lg">Create Free Account</a>
+                            <a href="login.html" class="btn btn-outline btn-lg">Login</a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-stats-grid">
+                            <div class="hero-stat">
+                                <div class="hero-stat-num" data-target="520">520</div>
+                                <div class="hero-stat-label">Active Members</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="hero-stat-num" data-target="48">48</div>
+                                <div class="hero-stat-label">Weekly Classes</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="hero-stat-num" data-target="15">15</div>
+                                <div class="hero-stat-label">Trainers</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="hero-stat-num" data-target="95">95</div>
+                                <div class="hero-stat-label">Satisfaction %</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ticker / Class Types Bar -->
+        <div class="class-types-bar">
+            <div class="ticker-track" aria-hidden="true">
+                <span>Yoga</span><span class="dot">●</span>
+                <span>HIIT</span><span class="dot">●</span>
+                <span>Spinning</span><span class="dot">●</span>
+                <span>Pilates</span><span class="dot">●</span>
+                <span>CrossFit</span><span class="dot">●</span>
+                <span>Boxing</span><span class="dot">●</span>
+                <span>Strength</span><span class="dot">●</span>
+                <span>Swimming</span><span class="dot">●</span>
+                <span>Yoga</span><span class="dot">●</span>
+                <span>HIIT</span><span class="dot">●</span>
+                <span>Spinning</span><span class="dot">●</span>
+                <span>Pilates</span><span class="dot">●</span>
+                <span>CrossFit</span><span class="dot">●</span>
+                <span>Boxing</span><span class="dot">●</span>
+                <span>Strength</span><span class="dot">●</span>
+                <span>Swimming</span><span class="dot">●</span>
+            </div>
+        </div>
+
+        <!-- Features Section: 5 cards side by side -->
+        <section class="page-section" id="features">
+            <div class="container">
+                <div class="text-center mb-lg">
+                    <h2>Everything you need</h2>
+                    <p class="text-muted mt-sm">Powerful tools for members, trainers and admins.</p>
+                </div>
+                <div class="grid-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="feature-icon">🏃</div>
+                            <h4>Classes & Bookings</h4>
+                            <p class="text-muted mt-sm">Full schedule, filters and one‑click reservations.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="feature-icon">🏋️</div>
+                            <h4>Live Equipment</h4>
+                            <p class="text-muted mt-sm">Real‑time availability before you hit the gym.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="feature-icon">👤</div>
+                            <h4>Personal Trainers</h4>
+                            <p class="text-muted mt-sm">Detailed profiles and individual session booking.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="feature-icon">⭐</div>
+                            <h4>Reviews & Feedback</h4>
+                            <p class="text-muted mt-sm">Rate classes and help the community.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="feature-icon">📊</div>
+                            <h4>Admin Dashboard</h4>
+                            <p class="text-muted mt-sm">Full control over users, classes and equipment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="page-section" style="background: var(--clr-surface); border-top: 1px solid var(--clr-border);">
+            <div class="container text-center">
+                <h2>Ready to start?</h2>
+                <p class="text-muted mt-sm mb-lg">Sign up for free and explore all features.</p>
+                <a href="register.html" class="btn btn-accent btn-lg">Sign Up Now</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="navbar-brand">FIT<span>PEAK</span></div>
+                    <p>The gym that evolves with you. Technology, performance and community.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Site Map</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="register.html">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p>hello@fitpeak.com</p>
+                    <p>+351 910 000 000</p>
+                    <p>Lisbon, Portugal</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FitPeak — All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
