@@ -1,154 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FitPeak</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap">
-
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FitPeak — Plataforma de gestão de ginásio. Aulas, treinadores e equipamentos num só lugar.">
+    <meta name="theme-color" content="#0b0b0b">
+    <title>FitPeak — O Ginásio que Evolui Contigo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <a href="index.html" class="logo">Fit<span>Peak</span></a>
-      <ul class="nav-menu">
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html" class="nav-button">Get Started</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <main>
-    <section class="intro-section">
-      <div class="container">
-        <div class="intro-layout">
-          <section class="intro-content">
-            <p class="small-text">Gym of the Future</p>
-            <h1>
-              Train Harder.<br>
-              <span class="highlight">Live Better.</span>
-            </h1>
-            <p class="description">
-              Complete gym management platform. Classes, trainers, equipment and more — all in one place.
-            </p>
-            <a href="register.html" class="main-button">Create Free Account</a>
-            <a href="login.html" class="secondary-button">Login</a>
-          </section>
-          <div class="stats-grid">
-            <div class="stat-box">
-              <p class="stat-number">520</p>
-              <p class="stat-label">Active Members</p>
-            </div>
-            <div class="stat-box">
-              <p class="stat-number">48</p>
-              <p class="stat-label">Weekly Classes</p>
-            </div>
-            <div class="stat-box">
-              <p class="stat-number">15</p>
-              <p class="stat-label">Trainers</p>
-            </div>
-            <div class="stat-box">
-              <p class="stat-number">95</p>
-              <p class="stat-label">Satisfaction %</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <input type="checkbox" id="nav-toggle" aria-hidden="true" tabindex="-1">
 
-    <section class="classes-section">
-      <div class="container">
-        <ul class="classes-list">
-          <li>Pilates</li>
-          <li>CrossFit</li>
-          <li>Boxing</li>
-          <li>Strength</li>
-          <li>Swimming</li>
-          <li>Yoga</li>
-          <li>HIIT</li>
-          <li>Spinning</li>
+    <nav class="navbar" aria-label="Navegação principal">
+        <a href="index.html" class="brand" aria-label="FitPeak – início">FIT<span>PEAK</span></a>
+        <label for="nav-toggle" class="burger" aria-label="Abrir menu de navegação" role="button" tabindex="0">
+            <span></span><span></span><span></span>
+        </label>
+
+        <ul class="nav-links" role="list">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="aulas.html">Aulas</a></li>
+            <li><a href="#features">Funcionalidades</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li class="nav-auth-sep"></li> <!-- separador opcional -->
+            <li><a href="login.html" class="btn btn-outline btn-sm nav-btn">Entrar</a></li>
+            <li><a href="register.html" class="btn btn-primary btn-sm nav-btn">Registar</a></li>
         </ul>
-      </div>
-    </section>
+    </nav>
 
-    <section class="features-section">
-      <div class="container">
-        <div class="section-title">
-          <h2>Everything you need</h2>
-          <p>Powerful tools for members, trainers and admins.</p>
-        </div>
-        <div class="features-grid">
-          <div class="feature-card">
-            <p class="feature-icon">🏃</p>
-            <h3>Classes &amp; Bookings</h3>
-            <p>Full schedule, filters and one-click reservations.</p>
-          </div>
-          <div class="feature-card">
-            <p class="feature-icon">🏋️</p>
-            <h3>Live Equipment</h3>
-            <p>Real-time availability before you hit the gym.</p>
-          </div>
-          <div class="feature-card">
-            <p class="feature-icon">👤</p>
-            <h3>Personal Trainers</h3>
-            <p>Detailed profiles and individual session booking.</p>
-          </div>
-          <div class="feature-card">
-            <p class="feature-icon">⭐</p>
-            <h3>Reviews &amp; Feedback</h3>
-            <p>Rate classes and help the community.</p>
-          </div>
-          <div class="feature-card">
-            <p class="feature-icon">📊</p>
-            <h3>Admin Dashboard</h3>
-            <p>Full control over users, classes and equipment.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <main class="main">
 
-    <section class="start-section">
-      <div class="container center-text">
-        <h2>Ready to start?</h2>
-        <p>Sign up for free and explore all features.</p>
-        <a href="register.html" class="main-button">Sign Up Now</a>
-      </div>
-    </section>
-  </main>
+        <!-- ===================== HERO ===================== -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="container">
+                <div class="hero-inner">
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <section class="footer-box">
-          <h2 class="logo">Fit<span>Peak</span></h2>
-          <p>The gym that evolves with you. Technology, performance and community.</p>
+                    <!-- Left: copy -->
+                    <div class="hero-copy">
+                        <p class="hero-eyebrow">Ginásio do Futuro</p>
+                        <h1 id="hero-title">
+                            Treina Mais.<br>
+                            <span class="hero-accent">Vive Melhor.</span>
+                        </h1>
+                        <p class="hero-desc">
+                            Plataforma completa de gestão de ginásio.
+                            Inscreve-te em aulas, verifica a disponibilidade de
+                            equipamentos e marca sessões com treinadores — tudo
+                            num só lugar.
+                        </p>
+                        <div class="hero-cta">
+                            <a href="register.html" class="btn btn-primary btn-lg">Criar Conta Grátis</a>
+                            <a href="aulas.html" class="btn btn-outline btn-lg">Ver Aulas</a>
+                        </div>
+                    </div>
+
+                    <!-- Right: stat cards (hidden on mobile via CSS) -->
+                    <div class="hero-stats-wrap" aria-hidden="true">
+                        <div class="hero-stats">
+                            <div class="hero-stat">
+                                <div class="hero-stat-n">500</div>
+                                <div class="hero-stat-l">Membros Ativos</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="hero-stat-n">48</div>
+                                <div class="hero-stat-l">Aulas / Semana</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="hero-stat-n">15</div>
+                                <div class="hero-stat-l">Treinadores</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="hero-stat-n">98%</div>
+                                <div class="hero-stat-l">Satisfação</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </section>
-        <nav class="footer-box">
-          <h2>Site Map</h2>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="register.html">Sign Up</a></li>
-          </ul>
-        </nav>
-        <section class="footer-box">
-          <h2>Contact</h2>
-          <p>fitpeak@gmail.com</p>
-          <p>+351 910 000 000</p>
-          <p>Porto, Portugal</p>
+
+        <!-- ===================== TICKER ===================== -->
+        <div class="ticker-bar" aria-hidden="true">
+            <div class="ticker-track">
+                <span>Yoga</span><span class="ticker-sep">●</span>
+                <span>HIIT</span><span class="ticker-sep">●</span>
+                <span>Spinning</span><span class="ticker-sep">●</span>
+                <span>Pilates</span><span class="ticker-sep">●</span>
+                <span>CrossFit</span><span class="ticker-sep">●</span>
+                <span>Musculação</span><span class="ticker-sep">●</span>
+                <span>Boxe</span><span class="ticker-sep">●</span>
+                <span>Alongamentos</span><span class="ticker-sep">●</span>
+                <!-- Duplicado para loop contínuo -->
+                <span>Yoga</span><span class="ticker-sep">●</span>
+                <span>HIIT</span><span class="ticker-sep">●</span>
+                <span>Spinning</span><span class="ticker-sep">●</span>
+                <span>Pilates</span><span class="ticker-sep">●</span>
+                <span>CrossFit</span><span class="ticker-sep">●</span>
+                <span>Musculação</span><span class="ticker-sep">●</span>
+                <span>Boxe</span><span class="ticker-sep">●</span>
+                <span>Alongamentos</span><span class="ticker-sep">●</span>
+            </div>
+        </div>
+
+        <!-- ===================== FEATURES ===================== -->
+        <section class="section" id="features" aria-labelledby="features-title">
+            <div class="container">
+                <header class="text-center mb-lg">
+                    <h2 id="features-title">Tudo o que precisas</h2>
+                    <p class="text-muted mt-md" style="max-width:52ch;margin-inline:auto;">
+                        Ferramentas pensadas para membros, treinadores e administradores.
+                        Simples, rápido e sempre disponível.
+                    </p>
+                </header>
+
+                <div class="grid-3">
+
+                    <article class="card feat-card">
+                        <div class="card-body">
+                            <div class="feat-icon">🏃</div>
+                            <h4>Aulas &amp; Inscrições</h4>
+                            <p class="mt-md">Consulta o horário completo, filtra por tipo ou treinador e inscreve-te com um clique. Sem filas, sem chamadas.</p>
+                        </div>
+                    </article>
+
+                    <article class="card feat-card">
+                        <div class="card-body">
+                            <div class="feat-icon">🏋️</div>
+                            <h4>Equipamentos em Tempo Real</h4>
+                            <p class="mt-md">Verifica a disponibilidade dos equipamentos antes de sair de casa. Atualização automática a cada 30 segundos.</p>
+                        </div>
+                    </article>
+
+                    <article class="card feat-card">
+                        <div class="card-body">
+                            <div class="feat-icon">👤</div>
+                            <h4>Treinadores Pessoais</h4>
+                            <p class="mt-md">Perfis detalhados com especializações, avaliações de outros membros e marcação de sessões individuais.</p>
+                        </div>
+                    </article>
+
+                    <article class="card feat-card">
+                        <div class="card-body">
+                            <div class="feat-icon">⭐</div>
+                            <h4>Avaliações &amp; Reviews</h4>
+                            <p class="mt-md">Avalia as aulas que frequentaste com classificação de 1 a 5 estrelas e comentário. Ajuda a comunidade a escolher melhor.</p>
+                        </div>
+                    </article>
+
+                    <article class="card feat-card">
+                        <div class="card-body">
+                            <div class="feat-icon">📊</div>
+                            <h4>Painel de Administração</h4>
+                            <p class="mt-md">Admins controlam utilizadores, aulas e equipamentos. Dashboard com métricas, gráficos e atividade recente.</p>
+                        </div>
+                    </article>
+
+                    <article class="card feat-card">
+                        <div class="card-body">
+                            <div class="feat-icon">🔌</div>
+                            <h4>API REST Pública</h4>
+                            <p class="mt-md">Integra os dados do ginásio em aplicações de terceiros. Endpoints para aulas, treinadores e equipamentos.</p>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
         </section>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 FitPeak — All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+
+        <!-- ===================== PLANS ===================== -->
+        <section class="section" style="background: var(--surface); border-top: 1px solid var(--border);" aria-labelledby="plans-title">
+            <div class="container">
+                <header class="text-center mb-lg">
+                    <h2 id="plans-title">Planos de Membros</h2>
+                    <p class="text-muted mt-md">Escolhe o plano que se adapta ao teu estilo de vida.</p>
+                </header>
+
+                <div class="grid-3">
+
+                    <!-- Basic -->
+                    <article class="card" style="text-align:center;">
+                        <div class="card-body" style="padding: var(--sp-xl) var(--sp-lg);">
+                            <span class="badge badge-muted">Basic</span>
+                            <div style="font-family: var(--ff-display); font-size: clamp(2.5rem,5vw,3.5rem); color: var(--text); margin: var(--sp-lg) 0 var(--sp-sm);">
+                                €19<span style="font-size:1rem; color: var(--muted);">/mês</span>
+                            </div>
+                            <ul style="display:flex; flex-direction:column; gap: var(--sp-sm); text-align:left; margin-bottom: var(--sp-xl); color: var(--muted); font-size:0.9rem;">
+                                <li>✓ Acesso às instalações</li>
+                                <li>✓ 2 aulas por semana</li>
+                                <li>✓ App de gestão</li>
+                                <li style="opacity:.4;">✗ Sessões PT</li>
+                                <li style="opacity:.4;">✗ Reserva de equipamento</li>
+                            </ul>
+                            <a href="register.html" class="btn btn-outline w-full">Começar</a>
+                        </div>
+                    </article>
+
+                    <!-- Premium -->
+                    <article class="card" style="text-align:center; border-color: var(--accent); box-shadow: var(--shadow-a);">
+                        <div class="card-header" style="background: var(--accent); border-bottom: none; justify-content:center; padding: var(--sp-sm);">
+                            <span style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#fff;">Mais Popular</span>
+                        </div>
+                        <div class="card-body" style="padding: var(--sp-xl) var(--sp-lg);">
+                            <span class="badge badge-accent">Premium</span>
+                            <div style="font-family: var(--ff-display); font-size: clamp(2.5rem,5vw,3.5rem); color: var(--accent); margin: var(--sp-lg) 0 var(--sp-sm);">
+                                €39<span style="font-size:1rem; color: var(--muted);">/mês</span>
+                            </div>
+                            <ul style="display:flex; flex-direction:column; gap: var(--sp-sm); text-align:left; margin-bottom: var(--sp-xl); font-size:0.9rem; color:var(--muted);">
+                                <li>✓ Acesso ilimitado</li>
+                                <li>✓ Aulas ilimitadas</li>
+                                <li>✓ App de gestão</li>
+                                <li>✓ 2 sessões PT/mês</li>
+                                <li style="opacity:.4;">✗ Reserva de equipamento</li>
+                            </ul>
+                            <a href="register.html" class="btn btn-primary w-full">Escolher Premium</a>
+                        </div>
+                    </article>
+
+                    <!-- VIP -->
+                    <article class="card" style="text-align:center;">
+                        <div class="card-body" style="padding: var(--sp-xl) var(--sp-lg);">
+                            <span class="badge badge-warning">VIP</span>
+                            <div style="font-family: var(--ff-display); font-size: clamp(2.5rem,5vw,3.5rem); color: var(--warning); margin: var(--sp-lg) 0 var(--sp-sm);">
+                                €69<span style="font-size:1rem; color: var(--muted);">/mês</span>
+                            </div>
+                            <ul style="display:flex; flex-direction:column; gap: var(--sp-sm); text-align:left; margin-bottom: var(--sp-xl); font-size:0.9rem; color:var(--muted);">
+                                <li>✓ Acesso ilimitado 24/7</li>
+                                <li>✓ Aulas ilimitadas</li>
+                                <li>✓ App de gestão</li>
+                                <li>✓ PT sessions ilimitadas</li>
+                                <li>✓ Reserva prioritária</li>
+                            </ul>
+                            <a href="register.html" class="btn btn-outline w-full">Escolher VIP</a>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== CTA ===================== -->
+        <section class="cta-strip" id="contacto">
+            <div class="container">
+                <h2>Pronto para começar?</h2>
+                <p>Regista-te gratuitamente hoje e transforma o teu estilo de vida.</p>
+                <a href="register.html" class="btn btn-primary btn-lg">Criar Conta Agora</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="site-footer" aria-label="Rodapé">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand footer-col">
+                    <span class="brand">FIT<span>PEAK</span></span>
+                    <p>O seu ginásio, a sua vida.<br>Treina mais. Vive melhor.<br>Plataforma LTW 2026.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Plataforma</h4>
+                    <ul>
+                        <li><a href="aulas.html">Aulas</a></li>
+                        <li><a href="#">Treinadores</a></li>
+                        <li><a href="#">Equipamentos</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <p>Rua do Desporto, 42<br>1900-001 Lisboa</p>
+                    <p>info@fitpeak.com</p>
+                    <p>+351 912 345 678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 FitPeak Gym. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
