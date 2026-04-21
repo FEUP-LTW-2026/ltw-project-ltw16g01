@@ -1,103 +1,152 @@
-/* base.css */
+/* ============================================================
+   BASE.CSS — Reset, Variables, Typography, Layout Primitives
+   FitPeak Gym — LTW 2026
+   ============================================================ */
 
+/* Declare layer order here so components and pages always
+   override base regardless of import order.                  */
+@layer base, components, pages;
+
+@layer base {
+
+/* ---- CSS Custom Properties ---- */
 :root {
-  --bg-color: #0b0b0b;
-  --surface-color: #141414;
-  --card-color: #1c1c1c;
-  --border-color: #2a2a2a;
-  --accent-color: #e84118;
-  --text-color: #f0ede8;
-  --muted-color: #8a8580;
+    /* Colours */
+    --bg:          #0b0b0b;
+    --surface:     #141414;
+    --card:        #1c1c1c;
+    --border:      #272727;
+    --accent:      #e84118;
+    --accent-2:    #f0932b;
+    --accent-glow: rgba(232, 65, 24, 0.28);
+    --text:        #f0ede8;
+    --muted:       #7a7571;
+    --success:     #2ed573;
+    --warning:     #ffa502;
+    --danger:      #ff4757;
+    --info:        #1e90ff;
 
-  --title-font: "Bebas Neue", sans-serif;
-  --text-font: "Outfit", sans-serif;
+    /* Typography */
+    --ff-display: 'Bebas Neue', sans-serif;
+    --ff-body:    'Outfit', sans-serif;
 
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2.5rem;
-  --space-xxl: 4rem;
+    /* Fluid spacing */
+    --sp-xs:  0.25rem;
+    --sp-sm:  0.5rem;
+    --sp-md:  1rem;
+    --sp-lg:  clamp(1rem,   3vw, 1.5rem);
+    --sp-xl:  clamp(1.5rem, 5vw, 2.5rem);
+    --sp-2xl: clamp(2rem,   7vw, 4rem);
 
-  --max-width: 1200px;
-  --nav-height: 80px;
-
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+    /* Misc */
+    --nav-h:    60px;
+    --r-sm:     6px;
+    --r-md:     12px;
+    --r-lg:     20px;
+    --r-pill:   999px;
+    --touch:    44px;
+    --max-w:    1200px;
+    --shadow-a: 0 0 24px var(--accent-glow);
+    --t:        0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Reset */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ---- Reset ---- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: var(--text-font);
-  line-height: 1.6;
-  padding-top: var(--nav-height);
+    font-family: var(--ff-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
-img {
-  display: block;
-  max-width: 100%;
+img, svg { display: block; max-width: 100%; height: auto; }
+a        { color: inherit; text-decoration: none; }
+ul, ol   { list-style: none; }
+button   { cursor: pointer; border: none; background: none; font: inherit; }
+input, select, textarea { font: inherit; }
+
+/* ---- Typography ---- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--ff-display);
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    font-weight: 400;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+h1 { font-size: clamp(2.2rem, 7vw,   5rem); }
+h2 { font-size: clamp(1.6rem, 5vw,   3rem); }
+h3 { font-size: clamp(1.2rem, 3.5vw, 2rem); }
+h4 { font-size: clamp(1rem,   2.5vw, 1.2rem); font-family: var(--ff-body); font-weight: 600; }
+p  { line-height: 1.75; }
 
-ul {
-  list-style: none;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-h1,
-h2,
-h3 {
-  font-family: var(--title-font);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: 0.04em;
-}
-
-h1 {
-  font-size: clamp(2.8rem, 6vw, 5rem);
-}
-
-h2 {
-  font-size: clamp(2rem, 4vw, 3.5rem);
-}
-
-h3 {
-  font-size: 1.5rem;
-}
-
-p {
-  line-height: 1.7;
-}
-
+/* ---- Layout primitives ---- */
 .container {
-  width: 100%;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--space-lg);
+    width: 100%;
+    max-width: var(--max-w);
+    margin-inline: auto;
+    padding-inline: var(--sp-md);
+}
+@media (min-width: 640px)  { .container { padding-inline: var(--sp-lg); } }
+@media (min-width: 1024px) { .container { padding-inline: var(--sp-xl); } }
+
+.main    { flex: 1; padding-top: var(--nav-h); }
+.section { padding-block: var(--sp-2xl); }
+
+/* ---- Responsive grids ---- */
+.grid-2 { display: grid; grid-template-columns: 1fr; gap: var(--sp-md); }
+.grid-3 { display: grid; grid-template-columns: 1fr; gap: var(--sp-md); }
+.grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-sm); }
+
+@media (min-width: 540px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 720px) { .grid-2 { grid-template-columns: repeat(2, 1fr); gap: var(--sp-lg); } }
+@media (min-width: 860px) { .grid-3 { grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); } }
+@media (min-width: 980px) { .grid-4 { grid-template-columns: repeat(4, 1fr); gap: var(--sp-md); } }
+
+/* ---- Utility classes ---- */
+.text-accent  { color: var(--accent); }
+.text-muted   { color: var(--muted); }
+.text-center  { text-align: center; }
+.text-success { color: var(--success); }
+.text-danger  { color: var(--danger); }
+.flex         { display: flex; flex-wrap: wrap; gap: var(--sp-sm); }
+.flex-center  { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-sm); }
+.between      { justify-content: space-between; }
+.w-full       { width: 100%; }
+.mt-md        { margin-top: var(--sp-md); }
+.mt-lg        { margin-top: var(--sp-lg); }
+.mb-md        { margin-bottom: var(--sp-md); }
+.mb-lg        { margin-bottom: var(--sp-lg); }
+
+/* ---- Browser chrome ---- */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+::selection    { background: var(--accent); color: #fff; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--r-sm); }
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
-.center-text {
-  text-align: center;
-}
+} /* end @layer base */
