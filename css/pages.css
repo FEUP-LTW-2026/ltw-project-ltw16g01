@@ -1,9 +1,3 @@
-/* =========================================================
-   PAGES.CSS
-   Homepage specific styles
-   ========================================================= */
-
-/* Intro */
 .intro-section {
   min-height: calc(100vh - var(--nav-height));
   display: flex;
@@ -97,11 +91,13 @@
 }
 
 .ticker-group span {
+  display: inline-block;
   color: var(--muted-color);
   text-transform: uppercase;
   font-size: 0.8rem;
   font-weight: 600;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .ticker-group span:nth-child(even) {
@@ -152,86 +148,6 @@
   gap: var(--space-lg);
 }
 
-.plan-card {
-  padding: var(--space-xl) var(--space-lg);
-  text-align: center;
-}
-
-.featured-plan {
-  border-color: var(--accent-color);
-}
-
-.plan-top-text {
-  background-color: var(--accent-color);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.5rem;
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-md);
-}
-
-.plan-tag {
-  display: inline-block;
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--muted-color);
-  text-transform: uppercase;
-  margin-bottom: var(--space-lg);
-}
-
-.highlight-tag {
-  color: var(--accent-color);
-  border-color: rgba(232, 65, 24, 0.4);
-  background-color: rgba(232, 65, 24, 0.08);
-}
-
-.vip-tag {
-  color: var(--warning-color);
-  border-color: rgba(255, 165, 2, 0.35);
-  background-color: rgba(255, 165, 2, 0.08);
-}
-
-.plan-price {
-  font-family: var(--title-font);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  color: var(--text-color);
-  margin-bottom: var(--space-lg);
-  line-height: 1;
-}
-
-.plan-price span {
-  font-size: 1rem;
-  color: var(--muted-color);
-  font-family: var(--text-font);
-}
-
-.accent-price {
-  color: var(--accent-color);
-}
-
-.vip-price {
-  color: var(--warning-color);
-}
-
-.plan-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  text-align: left;
-  margin-bottom: var(--space-xl);
-}
-
-.plan-list li {
-  color: var(--muted-color);
-  font-size: 0.9rem;
-}
-
 /* CTA */
 .start-section {
   background-color: var(--surface-color);
@@ -271,5 +187,9 @@
   .features-grid,
   .plans-grid {
     grid-template-columns: 1fr;
+  }
+
+  .ticker-track {
+    animation-duration: 16s;
   }
 }

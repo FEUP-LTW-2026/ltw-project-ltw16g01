@@ -1,18 +1,11 @@
-/* =========================================================
-   BASE.CSS
-   Reset, variables, typography and general rules
-   ========================================================= */
-
 :root {
   --bg-color: #0b0b0b;
   --surface-color: #141414;
   --card-color: #1c1c1c;
   --border-color: #2a2a2a;
   --accent-color: #e84118;
-  --accent-second: #f0932b;
   --text-color: #f0ede8;
   --muted-color: #8a8580;
-  --warning-color: #ffa502;
 
   --title-font: "Bebas Neue", sans-serif;
   --text-font: "Outfit", sans-serif;
@@ -31,6 +24,7 @@
   --radius-lg: 20px;
 }
 
+/* Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -64,11 +58,16 @@ ul {
   list-style: none;
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   font: inherit;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--title-font);
   font-weight: 400;
   line-height: 1.1;
@@ -84,7 +83,7 @@ h2 {
 }
 
 h3 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 
 p {
@@ -100,4 +99,8 @@ p {
 
 .center-text {
   text-align: center;
+}
+
+.nav-toggle {
+  display: none;
 }

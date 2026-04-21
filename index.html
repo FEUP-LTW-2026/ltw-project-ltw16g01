@@ -15,16 +15,27 @@
 </head>
 <body>
 
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">
+
   <header>
     <nav class="navbar">
       <a href="index.html" class="logo">Fit<span>Peak</span></a>
+
+      <label for="nav-toggle" class="burger" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+
+      <label for="nav-toggle" class="nav-overlay" aria-hidden="true"></label>
+
       <ul class="nav-menu">
         <li><a href="index.html">Home</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#plans">Plans</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html" class="nav-button">Sign Up</a></li>
+        <li><a href="login.html" class="nav-login">Login</a></li>
+        <li><a href="register.html" class="nav-register">Sign Up</a></li>
       </ul>
     </nav>
   </header>
@@ -47,6 +58,7 @@
               <a href="classes.html" class="secondary-button">View Classes</a>
             </div>
           </div>
+
           <div class="stats-grid">
             <div class="stat-box">
               <p class="stat-number">500</p>
@@ -89,6 +101,7 @@
           <span>Stretching</span>
           <span>●</span>
         </div>
+
         <div class="ticker-group">
           <span>Yoga</span>
           <span>●</span>
@@ -163,7 +176,7 @@
           <h2>Membership Plans</h2>
           <p>Choose the plan that fits your lifestyle.</p>
         </div>
-        
+
         <div class="plans-grid">
           <article class="plan-card">
             <span class="plan-tag">Basic</span>
