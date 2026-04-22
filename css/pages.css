@@ -489,6 +489,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--sp-lg);
+    min-width: 0;
 }
 
 /* CSS bar chart */
@@ -801,4 +802,11 @@
     .class-foot .secondary-button,
     .class-foot .enrolled-btn,
     .class-foot .full-btn { width: 100%; justify-content: center; }
+}
+
+#dashboard-header, #dashboard-content {
+    width: 90%;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
 }
