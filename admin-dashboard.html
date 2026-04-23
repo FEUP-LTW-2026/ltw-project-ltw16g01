@@ -25,7 +25,7 @@
             <span></span><span></span><span></span>
         </label>
 
-        <ul class="nav-menu" role="list">
+        <ul class="nav-menu">
             <li><a href="index.html">Home</a></li>
             <li><a href="classes.html">Classes</a></li>
             <li><a href="trainers.html">Trainers</a></li>
@@ -37,76 +37,68 @@
 
     <main class="main">
 
-        <!-- DASHBOARD HEADER -->
         <header class="dash-header">
-            <div id = "dashboard-header">
+            <div class="dashboard-header">
                 <div class="dash-top">
                     <div>
                         <p class="dash-date">Monday, 20 April 2026</p>
                         <h1 class="dash-h1">Admin <span>Dashboard</span></h1>
                     </div>
                     <div class="dash-top-right">
-                        <span class="live-badge">
-                            <span class="live-dot" aria-hidden="true"></span>
-                            System Online
-                        </span>
                         <a href="#" class="main-button btn-sm">+ New User</a>
                     </div>
                 </div>
             </div>
         </header>
 
-        <div id = "dashboard-content" style="padding-bottom: var(--sp-2xl);">
+        <div class="dashboard-content">
 
-            <!-- KPI CARDS -->
-            <section aria-labelledby="kpi-title">
-                <h2 id="kpi-title" style="font-size:0; position:absolute; opacity:0;">Key Metrics</h2>
+            <section>
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <div class="kpi-num">247</div>
-                        <div class="kpi-lbl">👥 Active Members</div>
+                        <p class="kpi-num">247</p>
+                        <p class="kpi-lbl">👥 Active Members</p>
                     </div>
-                    <div class="kpi-card" style="--accent: var(--warning);">
-                        <div class="kpi-num" style="color:var(--warning);">12</div>
-                        <div class="kpi-lbl">🏋️ Trainers</div>
+                    <div class="kpi-card kpi-card-warning">
+                        <p class="kpi-num kpi-num-warning">12</p>
+                        <p class="kpi-lbl">🏋️ Trainers</p>
                     </div>
-                    <div class="kpi-card" style="--accent: var(--success);">
-                        <div class="kpi-num" style="color:var(--success);">48</div>
-                        <div class="kpi-lbl">📅 Active Classes</div>
+                    <div class="kpi-card kpi-card-success">
+                        <p class="kpi-num kpi-num-success">48</p>
+                        <p class="kpi-lbl">📅 Active Classes / Week</p>
                     </div>
-                    <div class="kpi-card" style="--accent: var(--info);">
-                        <div class="kpi-num" style="color:var(--info);">94%</div>
-                        <div class="kpi-lbl">⭐ Satisfaction</div>
+                    <div class="kpi-card kpi-card-info">
+                        <p class="kpi-num kpi-num-info">94%</p>
+                        <p class="kpi-lbl">⭐ Satisfaction</p>
                     </div>
                     <div class="kpi-card">
-                        <div class="kpi-num" style="font-size:clamp(1.4rem,3vw,2rem);">1 284</div>
-                        <div class="kpi-lbl">📈 Enrolments / Month</div>
+                        <p class="kpi-num kpi-num-large">1 284</p>
+                        <p class="kpi-lbl">📈 Enrollments / Month</p>
                     </div>
-                    <div class="kpi-card" style="--accent: var(--danger);">
-                        <div class="kpi-num" style="color:var(--danger);">6</div>
-                        <div class="kpi-lbl">⚠️ Equipment Issues</div>
+                    <div class="kpi-card kpi-card-danger">
+                        <p class="kpi-num kpi-num-danger">6</p>
+                        <p class="kpi-lbl">⚠️ Equipment Issues</p>
                     </div>
                 </div>
             </section>
 
-            <!-- QUICK ACTIONS -->
             <nav aria-label="Quick actions">
                 <div class="quick-grid">
                     <a href="#" class="quick-item">
                         <span class="quick-icon" aria-hidden="true">👤</span>
-                        Create Member
+                        Manage Members
                     </a>
                     <a href="#" class="quick-item">
                         <span class="quick-icon" aria-hidden="true">🏋️</span>
-                        Create Trainer
+                        Manage Trainers
                     </a>
                     <a href="classes.html" class="quick-item">
                         <span class="quick-icon" aria-hidden="true">📅</span>
-                        New Class
+                        Manage Classes
                     </a>
                     <a href="#" class="quick-item">
                         <span class="quick-icon" aria-hidden="true">⚙️</span>
-                        Equipment
+                        Manage Equipment
                     </a>
                     <a href="#" class="quick-item">
                         <span class="quick-icon" aria-hidden="true">📊</span>
@@ -119,71 +111,63 @@
                 </div>
             </nav>
 
-            <!-- TWO-COLUMN MAIN CONTENT -->
             <div class="dash-layout">
 
-                <!-- LEFT COLUMN -->
                 <div class="dash-col">
 
-                    <!-- BAR CHART -->
                     <div class="card">
                         <div class="card-head">
-                            <h2 style="font-family:var(--ff-body);font-weight:600;font-size:1rem;">
-                                Weekly Enrolments
-                            </h2>
+                            <h2 class="card-title">Weekly Enrollments</h2>
                             <span class="badge badge-accent">+18% vs last month</span>
                         </div>
-                        <div class="card-body" style="padding-bottom:0;">
+                        <div class="card-body card-body-no-bottom">
                             <div class="bar-chart-outer">
-                                <div class="bar-chart" role="img" aria-label="Bar chart: weekly enrolments over the last 7 weeks">
+                                <div class="bar-chart" aria-label="Bar chart: weekly enrollments over the last 7 weeks">
                                     <div class="bar-col">
                                         <div class="bar-val">142</div>
-                                        <div class="bar" style="height:52px;"></div>
+                                        <div class="bar bar-h-52"></div>
                                     </div>
                                     <div class="bar-col">
                                         <div class="bar-val">168</div>
-                                        <div class="bar" style="height:61px;"></div>
+                                        <div class="bar bar-h-61"></div>
                                     </div>
                                     <div class="bar-col">
                                         <div class="bar-val">155</div>
-                                        <div class="bar" style="height:56px;"></div>
+                                        <div class="bar bar-h-56"></div>
                                     </div>
                                     <div class="bar-col">
                                         <div class="bar-val">189</div>
-                                        <div class="bar" style="height:69px;"></div>
+                                        <div class="bar bar-h-69"></div>
                                     </div>
                                     <div class="bar-col">
                                         <div class="bar-val">204</div>
-                                        <div class="bar" style="height:74px;"></div>
+                                        <div class="bar bar-h-74"></div>
                                     </div>
                                     <div class="bar-col">
                                         <div class="bar-val">231</div>
-                                        <div class="bar" style="height:84px;"></div>
+                                        <div class="bar bar-h-84"></div>
                                     </div>
                                     <div class="bar-col">
-                                        <div class="bar-val" style="color:var(--warning);">247</div>
-                                        <div class="bar current" style="height:90px;"></div>
+                                        <div class="bar-val bar-val-warning">247</div>
+                                        <div class="bar current bar-h-90"></div>
                                     </div>
                                 </div>
-                                <div class="bar-labels" aria-hidden="true">
+                                <div class="bar-labels">
                                     <span class="bar-lbl">W1<br>Mar</span>
                                     <span class="bar-lbl">W2<br>Mar</span>
                                     <span class="bar-lbl">W3<br>Mar</span>
                                     <span class="bar-lbl">W4<br>Mar</span>
                                     <span class="bar-lbl">W1<br>Apr</span>
                                     <span class="bar-lbl">W2<br>Apr</span>
-                                    <span class="bar-lbl" style="color:var(--warning);">W3<br>Apr</span>
+                                    <span class="bar-lbl bar-lbl-warning">W3<br>Apr</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- POPULAR CLASSES TABLE -->
                     <div class="card">
                         <div class="card-head">
-                            <h2 style="font-family:var(--ff-body);font-weight:600;font-size:1rem;">
-                                Most Popular Classes
-                            </h2>
+                            <h2 class="card-title">Most Popular Classes</h2>
                             <a href="classes.html" class="secondary-button btn-sm">View all</a>
                         </div>
                         <div class="table-wrap">
@@ -200,17 +184,15 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            <span style="font-family:var(--ff-display);color:var(--accent);font-size:1.1rem;">1</span>
-                                        </td>
+                                        <td><span class="rank-num">1</span></td>
                                         <td>
                                             <div class="name-cell-text">
-                                                <span class="name-main">Power HIIT</span>
+                                                <span class="name-main">HIIT</span>
                                                 <span class="name-sub">Main Floor</span>
                                             </div>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Bruno Costa</td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Tue · 18:00</td>
+                                        <td class="table-muted">Bruno Costa</td>
+                                        <td class="table-muted">Tue · 18:00</td>
                                         <td><span class="badge badge-accent">189</span></td>
                                         <td>
                                             <div class="stars" aria-label="5 out of 5 stars">
@@ -223,17 +205,15 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <span style="font-family:var(--ff-display);color:var(--accent);font-size:1.1rem;">2</span>
-                                        </td>
+                                        <td><span class="rank-num">2</span></td>
                                         <td>
                                             <div class="name-cell-text">
-                                                <span class="name-main">Spinning Class</span>
+                                                <span class="name-main">Cycling</span>
                                                 <span class="name-sub">Cycling Studio</span>
                                             </div>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Carla Mendes</td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Wed · 19:00</td>
+                                        <td class="table-muted">Carla Mendes</td>
+                                        <td class="table-muted">Wed · 19:00</td>
                                         <td><span class="badge badge-accent">167</span></td>
                                         <td>
                                             <div class="stars" aria-label="4 out of 5 stars">
@@ -246,17 +226,15 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <span style="font-family:var(--ff-display);color:var(--accent);font-size:1.1rem;">3</span>
-                                        </td>
+                                        <td><span class="rank-num">3</span></td>
                                         <td>
                                             <div class="name-cell-text">
-                                                <span class="name-main">Morning Yoga</span>
+                                                <span class="name-main">Yoga</span>
                                                 <span class="name-sub">Studio A</span>
                                             </div>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Ana Silva</td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Mon · 07:00</td>
+                                        <td class="table-muted">Ana Silva</td>
+                                        <td class="table-muted">Mon · 07:00</td>
                                         <td><span class="badge badge-accent">154</span></td>
                                         <td>
                                             <div class="stars" aria-label="5 out of 5 stars">
@@ -269,17 +247,15 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <span style="font-family:var(--ff-display);color:var(--accent);font-size:1.1rem;">4</span>
-                                        </td>
+                                        <td><span class="rank-num">4</span></td>
                                         <td>
                                             <div class="name-cell-text">
-                                                <span class="name-main">CrossFit WOD</span>
+                                                <span class="name-main">CrossFit</span>
                                                 <span class="name-sub">Main Floor</span>
                                             </div>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Bruno Costa</td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Fri · 17:30</td>
+                                        <td class="table-muted">Bruno Costa</td>
+                                        <td class="table-muted">Fri · 17:30</td>
                                         <td><span class="badge badge-accent">142</span></td>
                                         <td>
                                             <div class="stars" aria-label="4 out of 5 stars">
@@ -292,17 +268,15 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <span style="font-family:var(--ff-display);color:var(--accent);font-size:1.1rem;">5</span>
-                                        </td>
+                                        <td><span class="rank-num">5</span></td>
                                         <td>
                                             <div class="name-cell-text">
-                                                <span class="name-main">Pilates Core</span>
+                                                <span class="name-main">Pilates</span>
                                                 <span class="name-sub">Studio B</span>
                                             </div>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Ana Silva</td>
-                                        <td class="text-muted" style="font-size:0.85rem;">Thu · 10:00</td>
+                                        <td class="table-muted">Ana Silva</td>
+                                        <td class="table-muted">Thu · 10:00</td>
                                         <td><span class="badge badge-accent">128</span></td>
                                         <td>
                                             <div class="stars" aria-label="5 out of 5 stars">
@@ -319,13 +293,10 @@
                         </div>
                     </div>
 
-                    <!-- ALL MEMBERS TABLE -->
                     <div class="card">
                         <div class="card-head">
-                            <h2 style="font-family:var(--ff-body);font-weight:600;font-size:1rem;">
-                                All Members
-                            </h2>
-                            <div style="display:flex;gap:var(--sp-sm);align-items:center;flex-wrap:wrap;">
+                            <h2 class="card-title">All Members</h2>
+                            <div class="card-head-actions">
                                 <span class="badge badge-muted">247 total</span>
                                 <a href="#" class="main-button btn-sm">+ Add Member</a>
                             </div>
@@ -346,37 +317,37 @@
                                     <tr>
                                         <td>
                                             <div class="name-cell">
-                                                <div class="avatar" style="background:#6c5ce7;" aria-hidden="true">S</div>
+                                                <div class="avatar avatar-purple" aria-hidden="true">S</div>
                                                 <div class="name-cell-text">
                                                     <span class="name-main">Sofia Almeida</span>
-                                                    <span class="name-sub">sofia@email.com</span>
+                                                    <span class="name-sub">sofiaalmeida@gmail.com</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">VIP</span></td>
-                                        <td class="text-muted" style="font-size:0.85rem;">14</td>
-                                        <td class="text-muted" style="font-size:0.82rem;">Today</td>
+                                        <td class="table-muted">14</td>
+                                        <td class="table-muted table-small">Today</td>
                                         <td><span class="badge badge-success">Active</span></td>
-                                        <td style="font-size:0.82rem;">
-                                            <a href="#" style="color:var(--accent);">Edit</a>
+                                        <td class="table-small">
+                                            <a href="#" class="action-link">Edit</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <div class="name-cell">
-                                                <div class="avatar" style="background:#00b894;" aria-hidden="true">R</div>
+                                                <div class="avatar avatar-green" aria-hidden="true">R</div>
                                                 <div class="name-cell-text">
                                                     <span class="name-main">Rui Tavares</span>
-                                                    <span class="name-sub">rui@email.com</span>
+                                                    <span class="name-sub">ruitavares@gmail.com</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td><span class="badge badge-accent">Premium</span></td>
-                                        <td class="text-muted" style="font-size:0.85rem;">32</td>
-                                        <td class="text-muted" style="font-size:0.82rem;">Yesterday</td>
+                                        <td class="table-muted">32</td>
+                                        <td class="table-muted table-small">Yesterday</td>
                                         <td><span class="badge badge-success">Active</span></td>
-                                        <td style="font-size:0.82rem;">
-                                            <a href="#" style="color:var(--accent);">Edit</a>
+                                        <td class="table-small">
+                                            <a href="#" class="action-link">Edit</a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -385,52 +356,52 @@
                                                 <div class="avatar" aria-hidden="true">I</div>
                                                 <div class="name-cell-text">
                                                     <span class="name-main">Inês Correia</span>
-                                                    <span class="name-sub">ines@email.com</span>
+                                                    <span class="name-sub">inescorreia@gmail.com</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td><span class="badge badge-muted">Basic</span></td>
-                                        <td class="text-muted" style="font-size:0.85rem;">8</td>
-                                        <td class="text-muted" style="font-size:0.82rem;">18 Apr</td>
+                                        <td class="table-muted">8</td>
+                                        <td class="table-muted table-small">18 Apr</td>
                                         <td><span class="badge badge-success">Active</span></td>
-                                        <td style="font-size:0.82rem;">
-                                            <a href="#" style="color:var(--accent);">Edit</a>
+                                        <td class="table-small">
+                                            <a href="#" class="action-link">Edit</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <div class="name-cell">
-                                                <div class="avatar" style="background:#e17055;" aria-hidden="true">M</div>
+                                                <div class="avatar avatar-orange" aria-hidden="true">M</div>
                                                 <div class="name-cell-text">
                                                     <span class="name-main">Marco Ferreira</span>
-                                                    <span class="name-sub">marco@email.com</span>
+                                                    <span class="name-sub">marcoferreira@gmail.com</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td><span class="badge badge-accent">Premium</span></td>
-                                        <td class="text-muted" style="font-size:0.85rem;">47</td>
-                                        <td class="text-muted" style="font-size:0.82rem;">15 Apr</td>
+                                        <td class="table-muted">47</td>
+                                        <td class="table-muted table-small">15 Apr</td>
                                         <td><span class="badge badge-danger">Suspended</span></td>
-                                        <td style="font-size:0.82rem;">
-                                            <a href="#" style="color:var(--accent);">Edit</a>
+                                        <td class="table-small">
+                                            <a href="#" class="action-link">Edit</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <div class="name-cell">
-                                                <div class="avatar" style="background:#fdcb6e;color:#333;" aria-hidden="true">L</div>
+                                                <div class="avatar avatar-yellow" aria-hidden="true">L</div>
                                                 <div class="name-cell-text">
                                                     <span class="name-main">Lara Pinheiro</span>
-                                                    <span class="name-sub">lara@email.com</span>
+                                                    <span class="name-sub">larapinheiro@gmail.com</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">VIP</span></td>
-                                        <td class="text-muted" style="font-size:0.85rem;">61</td>
-                                        <td class="text-muted" style="font-size:0.82rem;">3 Feb</td>
+                                        <td class="table-muted">61</td>
+                                        <td class="table-muted table-small">3 Feb</td>
                                         <td><span class="badge badge-success">Active</span></td>
-                                        <td style="font-size:0.82rem;">
-                                            <a href="#" style="color:var(--accent);">Edit</a>
+                                        <td class="table-small">
+                                            <a href="#" class="action-link">Edit</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -438,17 +409,13 @@
                         </div>
                     </div>
 
-                </div><!-- end left column -->
+                </div>
 
-                <!-- RIGHT COLUMN -->
                 <div class="dash-col">
 
-                    <!-- RECENT ACTIVITY -->
                     <div class="card">
                         <div class="card-head">
-                            <h2 style="font-family:var(--ff-body);font-weight:600;font-size:1rem;">
-                                Recent Activity
-                            </h2>
+                            <h2 class="card-title">Recent Activity</h2>
                             <span class="live-badge">
                                 <span class="live-dot" aria-hidden="true"></span>
                                 Live
@@ -460,7 +427,7 @@
                                     <div class="activity-dot green" aria-hidden="true"></div>
                                     <div>
                                         <div class="activity-text">
-                                            <strong>Maria Santos</strong> enrolled in <em>Power HIIT</em>
+                                            <strong>Maria Santos</strong> enrolled in <em>HIIT</em>
                                         </div>
                                         <div class="activity-time">3 minutes ago</div>
                                     </div>
@@ -469,8 +436,8 @@
                                     <div class="activity-dot blue" aria-hidden="true"></div>
                                     <div>
                                         <div class="activity-text">
-                                            <strong>Pedro Rodrigues</strong> rated <em>Spinning Class</em>
-                                            <span style="color:var(--warning);">★★★★★</span>
+                                            <strong>Pedro Rodrigues</strong> rated <em>Cycling </em>
+                                            <span class="activity-stars">★★★★★</span>
                                         </div>
                                         <div class="activity-time">11 minutes ago</div>
                                     </div>
@@ -515,7 +482,7 @@
                                     <div class="activity-dot blue" aria-hidden="true"></div>
                                     <div>
                                         <div class="activity-text">
-                                            Class <strong>Evening Yoga</strong> is now full (15/15 enrolled)
+                                            Class <strong>Yoga</strong> is now full (15/15 enrolled)
                                         </div>
                                         <div class="activity-time">3 hours ago</div>
                                     </div>
@@ -524,12 +491,9 @@
                         </div>
                     </div>
 
-                    <!-- EQUIPMENT STATUS -->
                     <div class="card">
                         <div class="card-head">
-                            <h2 style="font-family:var(--ff-body);font-weight:600;font-size:1rem;">
-                                Equipment Availability
-                            </h2>
+                            <h2 class="card-title">Equipment Availability</h2>
                             <a href="#" class="secondary-button btn-sm">Manage</a>
                         </div>
                         <div class="card-body">
@@ -542,9 +506,9 @@
                                     </div>
                                     <div class="equip-prog">
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width:75%;"></div>
+                                            <div class="progress-fill equip-fill-75"></div>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.72rem;white-space:nowrap;">75%</span>
+                                        <span class="equip-percentage">75%</span>
                                     </div>
                                 </div>
 
@@ -555,9 +519,9 @@
                                     </div>
                                     <div class="equip-prog">
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width:83%;"></div>
+                                            <div class="progress-fill equip-fill-83"></div>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.72rem;white-space:nowrap;">83%</span>
+                                        <span class="equip-percentage">83%</span>
                                     </div>
                                 </div>
 
@@ -568,9 +532,9 @@
                                     </div>
                                     <div class="equip-prog">
                                         <div class="progress-bar">
-                                            <div class="progress-fill mid" style="width:30%;"></div>
+                                            <div class="progress-fill mid equip-fill-30"></div>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.72rem;white-space:nowrap;">30%</span>
+                                        <span class="equip-percentage">30%</span>
                                     </div>
                                 </div>
 
@@ -581,9 +545,9 @@
                                     </div>
                                     <div class="equip-prog">
                                         <div class="progress-bar">
-                                            <div class="progress-fill low" style="width:33%;"></div>
+                                            <div class="progress-fill low equip-fill-33"></div>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.72rem;white-space:nowrap;">33%</span>
+                                        <span class="equip-percentage">33%</span>
                                     </div>
                                 </div>
 
@@ -594,9 +558,9 @@
                                     </div>
                                     <div class="equip-prog">
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width:83%;"></div>
+                                            <div class="progress-fill equip-fill-83"></div>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.72rem;white-space:nowrap;">83%</span>
+                                        <span class="equip-percentage">83%</span>
                                     </div>
                                 </div>
 
@@ -607,9 +571,9 @@
                                     </div>
                                     <div class="equip-prog">
                                         <div class="progress-bar">
-                                            <div class="progress-fill mid" style="width:50%;"></div>
+                                            <div class="progress-fill mid equip-fill-50"></div>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.72rem;white-space:nowrap;">50%</span>
+                                        <span class="equip-percentage">50%</span>
                                     </div>
                                 </div>
 
@@ -617,12 +581,9 @@
                         </div>
                     </div>
 
-                    <!-- TRAINERS OVERVIEW -->
                     <div class="card">
                         <div class="card-head">
-                            <h2 style="font-family:var(--ff-body);font-weight:600;font-size:1rem;">
-                                Trainers
-                            </h2>
+                            <h2 class="card-title">Trainers</h2>
                             <a href="#" class="main-button btn-sm">+ Add Trainer</a>
                         </div>
                         <div class="table-wrap">
@@ -639,14 +600,14 @@
                                     <tr>
                                         <td>
                                             <div class="name-cell">
-                                                <div class="avatar" style="background:#a29bfe;" aria-hidden="true">A</div>
+                                                <div class="avatar avatar-lilac" aria-hidden="true">A</div>
                                                 <span class="name-main">Ana Silva</span>
                                             </div>
                                         </td>
                                         <td>
                                             <span class="badge badge-info">Yoga / Pilates</span>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">3 classes</td>
+                                        <td class="table-muted">3 classes</td>
                                         <td>
                                             <div class="stars" aria-label="5 stars">
                                                 <span class="star on" aria-hidden="true">★</span>
@@ -660,14 +621,14 @@
                                     <tr>
                                         <td>
                                             <div class="name-cell">
-                                                <div class="avatar" style="background:#e17055;" aria-hidden="true">B</div>
+                                                <div class="avatar avatar-salmon" aria-hidden="true">B</div>
                                                 <span class="name-main">Bruno Costa</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge badge-danger">HIIT / CrossFit</span>
+                                            <span class="badge badge-danger">HIIT / CrossFit / Boxing</span>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">2 classes</td>
+                                        <td class="table-muted">2 classes</td>
                                         <td>
                                             <div class="stars" aria-label="4.5 stars">
                                                 <span class="star on" aria-hidden="true">★</span>
@@ -681,14 +642,14 @@
                                     <tr>
                                         <td>
                                             <div class="name-cell">
-                                                <div class="avatar" style="background:#00b894;" aria-hidden="true">C</div>
+                                                <div class="avatar avatar-teal" aria-hidden="true">C</div>
                                                 <span class="name-main">Carla Mendes</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge badge-warning">Spinning</span>
+                                            <span class="badge badge-warning">Cycling / Senior Fitness </span>
                                         </td>
-                                        <td class="text-muted" style="font-size:0.85rem;">2 classes</td>
+                                        <td class="table-muted">2 classes</td>
                                         <td>
                                             <div class="stars" aria-label="4.5 stars">
                                                 <span class="star on" aria-hidden="true">★</span>
@@ -699,16 +660,37 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="name-cell">
+                                                <div class="avatar avatar-lilac" aria-hidden="true">M</div>
+                                                <span class="name-main">Miguel Rocha</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-info"> Strength </span>
+                                        </td>
+                                        <td class="table-muted">3 classes</td>
+                                        <td>
+                                            <div class="stars" aria-label="5 stars">
+                                                <span class="star on" aria-hidden="true">★</span>
+                                                <span class="star on" aria-hidden="true">★</span>
+                                                <span class="star on" aria-hidden="true">★</span>
+                                                <span class="star on" aria-hidden="true">★</span>
+                                                <span class="star on" aria-hidden="true">★</span>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                </div><!-- end right column -->
+                </div>
 
-            </div><!-- end dash-layout -->
+            </div>
 
-        </div><!-- end container -->
+        </div>
 
     </main>
 
