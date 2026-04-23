@@ -322,9 +322,7 @@
         align-items: stretch;
     }
 
-    .class-foot .main-button,
-    .class-foot .secondary-button,
-    .class-foot .enrolled-btn {
+    .class-foot .main-button, .class-foot .secondary-button, .class-foot .enrolled-btn {
         width: 100%;
         justify-content: center;
     }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FitPeak — Browse all available classes. Yoga, HIIT, Spinning, Pilates, CrossFit and more. Filter by type, trainer or day and enroll instantly.">
+    <meta name="description" content="FitPeak — Browse all available classes. Yoga, Pilates, HIIT, Cycling, Strength, CrossFit, Boxing and Senior Fitness. Filter by type, trainer or day and enroll instantly.">
     <meta name="theme-color" content="#0b0b0b">
     <title>Classes — FitPeak</title>
 
@@ -60,12 +60,13 @@
                         <select id="f-type" name="type" class="form-select">
                             <option value="">All types</option>
                             <option value="yoga">Yoga</option>
-                            <option value="hiit">HIIT</option>
-                            <option value="spinning">Spinning</option>
                             <option value="pilates">Pilates</option>
-                            <option value="crossfit">CrossFit</option>
+                            <option value="hiit">HIIT</option>
+                            <option value="cycling">Cycling</option>
                             <option value="strength">Strength</option>
-                            <option value="stretching">Stretching</option>
+                            <option value="crossfit">CrossFit</option>
+                            <option value="boxing">Boxing</option>
+                            <option value="senior-fitness">Senior Fitness</option>
                         </select>
                     </div>
 
@@ -76,13 +77,13 @@
                             <option value="1">Ana Silva</option>
                             <option value="2">Bruno Costa</option>
                             <option value="3">Carla Mendes</option>
+                            <option value="4">Miguel Rocha</option>
                         </select>
                     </div>
 
                     <div class="filter-group">
                         <label class="form-label" for="f-day">Day</label>
                         <select id="f-day" name="day" class="form-select">
-                            <option value="">Any day</option>
                             <option value="monday">Monday</option>
                             <option value="tuesday">Tuesday</option>
                             <option value="wednesday">Wednesday</option>
@@ -100,7 +101,7 @@
 
             <div class="results-bar">
                 <p class="results-count">
-                    Showing <strong>7 classes</strong> available this week
+                    Showing <strong>8 classes</strong> available today
                 </p>
 
                 <div class="sort-row">
@@ -111,9 +112,7 @@
                 </div>
             </div>
 
-            <section aria-labelledby="classes-heading">
-                <h2 id="classes-heading" class="visually-hidden">Available classes</h2>
-
+            <section aria-label="Classes list">
                 <div class="class-grid">
 
                     <article class="class-card" aria-label="Morning Yoga — You are enrolled">
@@ -124,8 +123,8 @@
 
                         <div class="class-body">
                             <div>
-                                <h4>Morning Yoga</h4>
-                                <p>Start your day with calm and flexibility. Breathing techniques, sun salutations and restorative stretches. Suitable for all levels.</p>
+                                <h4>Yoga</h4>
+                                <p>A balanced class focused on breathing, flexibility and body awareness. Ideal for starting the day with energy, mobility and a calmer mindset.</p>
                             </div>
 
                             <ul class="class-meta">
@@ -161,92 +160,6 @@
                         </div>
                     </article>
 
-                    <article class="class-card" aria-label="Power HIIT — Spots available">
-                        <div class="class-head">
-                            <span class="class-time-big">18:00</span>
-                            <span class="badge badge-danger">HIIT</span>
-                        </div>
-
-                        <div class="class-body">
-                            <div>
-                                <h4>Power HIIT</h4>
-                                <p>High-intensity intervals combining cardio bursts with strength movements. Burn up to 600 calories and build endurance in 45 minutes.</p>
-                            </div>
-
-                            <ul class="class-meta">
-                                <li>📅 Tue, 22 Apr</li>
-                                <li>⏱ 45 min</li>
-                                <li>📍 Main Floor</li>
-                                <li>👤 Bruno Costa</li>
-                            </ul>
-
-                            <div class="class-ratings">
-                                <div class="stars" aria-label="4.8 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                </div>
-                                <span class="text-muted rating-text">4.8 &nbsp;(47 reviews)</span>
-                            </div>
-                        </div>
-
-                        <div class="class-foot">
-                            <div class="cap-wrap" aria-label="8 out of 20 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
-                                    <div class="cap-fill" style="width:40%;"></div>
-                                </div>
-                                <span>8 / 20</span>
-                            </div>
-
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
-                        </div>
-                    </article>
-
-                    <article class="class-card" aria-label="Spinning Class — Almost full">
-                        <div class="class-head">
-                            <span class="class-time-big">19:00</span>
-                            <span class="badge badge-warning">Spinning</span>
-                        </div>
-
-                        <div class="class-body">
-                            <div>
-                                <h4>Spinning Class</h4>
-                                <p>High-energy indoor cycling set to motivating music. Intervals of sprints and climbs suitable for all fitness levels. Clip-in shoes provided.</p>
-                            </div>
-
-                            <ul class="class-meta">
-                                <li>📅 Wed, 23 Apr</li>
-                                <li>⏱ 50 min</li>
-                                <li>📍 Cycling Studio</li>
-                                <li>👤 Carla Mendes</li>
-                            </ul>
-
-                            <div class="class-ratings">
-                                <div class="stars" aria-label="4.6 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star" aria-hidden="true">★</span>
-                                </div>
-                                <span class="text-muted rating-text">4.6 &nbsp;(28 reviews)</span>
-                            </div>
-                        </div>
-
-                        <div class="class-foot">
-                            <div class="cap-wrap" aria-label="16 out of 18 spots taken — almost full">
-                                <div class="cap-bar" aria-hidden="true">
-                                    <div class="cap-fill mid" style="width:89%;"></div>
-                                </div>
-                                <span class="capacity-warning">16 / 18</span>
-                            </div>
-
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
-                        </div>
-                    </article>
-
                     <article class="class-card" aria-label="Pilates Core — Spots available">
                         <div class="class-head">
                             <span class="class-time-big">10:00</span>
@@ -255,12 +168,12 @@
 
                         <div class="class-body">
                             <div>
-                                <h4>Pilates Core</h4>
-                                <p>Controlled movements focused on building core strength, improving posture and increasing flexibility. Ideal for rehabilitation and prevention of injuries.</p>
+                                <h4>Pilates</h4>
+                                <p>A controlled session focused on core strength, posture, stability and flexibility. Great for improving movement quality and preventing injuries.</p>
                             </div>
 
                             <ul class="class-meta">
-                                <li>📅 Thu, 24 Apr</li>
+                                <li>📅 Tue, 22 Apr</li>
                                 <li>⏱ 55 min</li>
                                 <li>📍 Studio B</li>
                                 <li>👤 Ana Silva</li>
@@ -290,6 +203,135 @@
                         </div>
                     </article>
 
+                    <article class="class-card" aria-label="Power HIIT — Spots available">
+                        <div class="class-head">
+                            <span class="class-time-big">18:00</span>
+                            <span class="badge badge-danger">HIIT</span>
+                        </div>
+
+                        <div class="class-body">
+                            <div>
+                                <h4>HIIT</h4>
+                                <p>A fast-paced interval workout mixing cardio bursts and strength exercises. Perfect for improving endurance, burning calories and boosting performance.</p>
+                            </div>
+
+                            <ul class="class-meta">
+                                <li>📅 Wed, 23 Apr</li>
+                                <li>⏱ 45 min</li>
+                                <li>📍 Main Floor</li>
+                                <li>👤 Bruno Costa</li>
+                            </ul>
+
+                            <div class="class-ratings">
+                                <div class="stars" aria-label="4.8 out of 5 stars">
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                </div>
+                                <span class="text-muted rating-text">4.8 &nbsp;(47 reviews)</span>
+                            </div>
+                        </div>
+
+                        <div class="class-foot">
+                            <div class="cap-wrap" aria-label="8 out of 20 spots taken">
+                                <div class="cap-bar" aria-hidden="true">
+                                    <div class="cap-fill" style="width:40%;"></div>
+                                </div>
+                                <span>8 / 20</span>
+                            </div>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                        </div>
+                    </article>
+
+                    <article class="class-card" aria-label="Indoor Cycling — Almost full">
+                        <div class="class-head">
+                            <span class="class-time-big">19:00</span>
+                            <span class="badge badge-warning">Cycling</span>
+                        </div>
+
+                        <div class="class-body">
+                            <div>
+                                <h4>Cycling</h4>
+                                <p>A high-energy cycling session with sprint intervals, climbs and rhythm-based coaching. Ideal for cardio conditioning and lower-body endurance.</p>
+                            </div>
+
+                            <ul class="class-meta">
+                                <li>📅 Thu, 24 Apr</li>
+                                <li>⏱ 50 min</li>
+                                <li>📍 Cycling Studio</li>
+                                <li>👤 Carla Mendes</li>
+                            </ul>
+
+                            <div class="class-ratings">
+                                <div class="stars" aria-label="4.6 out of 5 stars">
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star" aria-hidden="true">★</span>
+                                </div>
+                                <span class="text-muted rating-text">4.6 &nbsp;(28 reviews)</span>
+                            </div>
+                        </div>
+
+                        <div class="class-foot">
+                            <div class="cap-wrap" aria-label="16 out of 18 spots taken — almost full">
+                                <div class="cap-bar" aria-hidden="true">
+                                    <div class="cap-fill mid" style="width:89%;"></div>
+                                </div>
+                                <span class="capacity-warning">16 / 18</span>
+                            </div>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                        </div>
+                    </article>
+
+                    <article class="class-card" aria-label="Strength Lab — Spots available">
+                        <div class="class-head">
+                            <span class="class-time-big">17:00</span>
+                            <span class="badge badge-accent">Strength</span>
+                        </div>
+
+                        <div class="class-body">
+                            <div>
+                                <h4>Strength</h4>
+                                <p>A structured strength-training class focused on major lifts, proper form and progressive overload. Suitable for building muscle and improving overall power.</p>
+                            </div>
+
+                            <ul class="class-meta">
+                                <li>📅 Fri, 25 Apr</li>
+                                <li>⏱ 60 min</li>
+                                <li>📍 Weights Area</li>
+                                <li>👤 Miguel Rocha</li>
+                            </ul>
+
+                            <div class="class-ratings">
+                                <div class="stars" aria-label="4.7 out of 5 stars">
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                </div>
+                                <span class="text-muted rating-text">4.7 &nbsp;(24 reviews)</span>
+                            </div>
+                        </div>
+
+                        <div class="class-foot">
+                            <div class="cap-wrap" aria-label="6 out of 14 spots taken">
+                                <div class="cap-bar" aria-hidden="true">
+                                    <div class="cap-fill" style="width:43%;"></div>
+                                </div>
+                                <span>6 / 14</span>
+                            </div>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                        </div>
+                    </article>
+
                     <article class="class-card" aria-label="CrossFit WOD — Class is full">
                         <div class="class-head">
                             <span class="class-time-big">17:30</span>
@@ -298,8 +340,8 @@
 
                         <div class="class-body">
                             <div>
-                                <h4>CrossFit WOD</h4>
-                                <p>Workout of the Day featuring functional movements at high intensity. Combines Olympic lifting, gymnastics and metabolic conditioning. Every session is different.</p>
+                                <h4>CrossFit</h4>
+                                <p>A demanding workout combining functional movements, intensity and variety. Designed to develop strength, stamina, mobility and total-body conditioning.</p>
                             </div>
 
                             <ul class="class-meta">
@@ -329,23 +371,66 @@
                         </div>
                     </article>
 
-                    <article class="class-card" aria-label="Evening Yoga — Spots available">
+                    <article class="class-card" aria-label="Boxing Basics — Spots available">
                         <div class="class-head">
-                            <span class="class-time-big">20:00</span>
-                            <span class="badge badge-info">Yoga</span>
+                            <span class="class-time-big">20:30</span>
+                            <span class="badge badge-warning">Boxing</span>
                         </div>
 
                         <div class="class-body">
                             <div>
-                                <h4>Evening Yoga</h4>
-                                <p>Unwind after a long day with restorative yoga sequences and guided meditation. Includes yin poses held for 3–5 minutes to deeply release tension.</p>
+                                <h4>Boxing</h4>
+                                <p>A dynamic boxing class focused on footwork, combinations, technique and conditioning. Great for coordination, cardio and explosive movement.</p>
                             </div>
 
                             <ul class="class-meta">
-                                <li>📅 Fri, 25 Apr</li>
-                                <li>⏱ 60 min</li>
-                                <li>📍 Studio A</li>
-                                <li>👤 Ana Silva</li>
+                                <li>📅 Sat, 26 Apr</li>
+                                <li>⏱ 50 min</li>
+                                <li>📍 Combat Studio</li>
+                                <li>👤 Bruno Costa</li>
+                            </ul>
+
+                            <div class="class-ratings">
+                                <div class="stars" aria-label="4.8 out of 5 stars">
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                    <span class="star on" aria-hidden="true">★</span>
+                                </div>
+                                <span class="text-muted rating-text">4.8 &nbsp;(26 reviews)</span>
+                            </div>
+                        </div>
+
+                        <div class="class-foot">
+                            <div class="cap-wrap" aria-label="9 out of 16 spots taken">
+                                <div class="cap-bar" aria-hidden="true">
+                                    <div class="cap-fill" style="width:56%;"></div>
+                                </div>
+                                <span>9 / 16</span>
+                            </div>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                        </div>
+                    </article>
+
+                    <article class="class-card" aria-label="Senior Fitness — Spots available">
+                        <div class="class-head">
+                            <span class="class-time-big">11:00</span>
+                            <span class="badge badge-success">Senior Fitness</span>
+                        </div>
+
+                        <div class="class-body">
+                            <div>
+                                <h4>Senior Fitness</h4>
+                                <p>A gentle and supervised class designed to improve mobility, balance, strength and daily functional movement in a safe and supportive environment.</p>
+                            </div>
+
+                            <ul class="class-meta">
+                                <li>📅 Sat, 26 Apr</li>
+                                <li>⏱ 45 min</li>
+                                <li>📍 Studio C</li>
+                                <li>👤 Carla Mendes</li>
                             </ul>
 
                             <div class="class-ratings">
@@ -356,59 +441,16 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star on" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted rating-text">5.0 &nbsp;(14 reviews)</span>
+                                <span class="text-muted rating-text">5.0 &nbsp;(18 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="7 out of 15 spots taken">
+                            <div class="cap-wrap" aria-label="5 out of 14 spots taken">
                                 <div class="cap-bar" aria-hidden="true">
-                                    <div class="cap-fill" style="width:47%;"></div>
+                                    <div class="cap-fill" style="width:36%;"></div>
                                 </div>
-                                <span>7 / 15</span>
-                            </div>
-
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
-                        </div>
-                    </article>
-
-                    <article class="class-card" aria-label="Saturday Spin — Spots available">
-                        <div class="class-head">
-                            <span class="class-time-big">09:00</span>
-                            <span class="badge badge-warning">Spinning</span>
-                        </div>
-
-                        <div class="class-body">
-                            <div>
-                                <h4>Saturday Spin</h4>
-                                <p>Kick off your weekend with a high-energy cycling session. Progressive resistance climbs and sprint finishes set to an exclusive playlist curated by Carla.</p>
-                            </div>
-
-                            <ul class="class-meta">
-                                <li>📅 Sat, 26 Apr</li>
-                                <li>⏱ 60 min</li>
-                                <li>📍 Cycling Studio</li>
-                                <li>👤 Carla Mendes</li>
-                            </ul>
-
-                            <div class="class-ratings">
-                                <div class="stars" aria-label="4.5 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star" aria-hidden="true">★</span>
-                                </div>
-                                <span class="text-muted rating-text">4.5 &nbsp;(22 reviews)</span>
-                            </div>
-                        </div>
-
-                        <div class="class-foot">
-                            <div class="cap-wrap" aria-label="5 out of 18 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
-                                    <div class="cap-fill" style="width:28%;"></div>
-                                </div>
-                                <span>5 / 18</span>
+                                <span>5 / 14</span>
                             </div>
 
                             <a href="register.html" class="main-button btn-sm">Enroll</a>
