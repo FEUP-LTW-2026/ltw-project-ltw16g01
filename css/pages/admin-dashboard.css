@@ -1,10 +1,13 @@
+/* ADMIN-DASHBOARD.CSS */
+/* Styles for the admin dashboard: KPIs, quick actions, charts, activity feed, equipment status, trainer tables */
+
+/* Dashboard Header with gradient */
 .dash-header {
     background: linear-gradient(135deg, var(--surface) 0%, transparent 55%);
     border-bottom: 1px solid var(--border);
     padding-block: var(--sp-lg);
     margin-bottom: var(--sp-xl);
 }
-
 .dash-top {
     display: flex;
     align-items: flex-end;
@@ -12,13 +15,11 @@
     flex-wrap: wrap;
     gap: var(--sp-md);
 }
-
 .dash-date {
     font-size: 0.82rem;
     color: var(--muted);
     margin-bottom: 0.2rem;
 }
-
 .dash-h1 {
     font-family: var(--ff-display);
     font-size: clamp(1.8rem, 5vw, 3rem);
@@ -26,11 +27,7 @@
     font-weight: 400;
     letter-spacing: 0.04em;
 }
-
-.dash-h1 span {
-    color: var(--accent);
-}
-
+.dash-h1 span { color: var(--accent); }
 .dash-top-right {
     display: flex;
     align-items: center;
@@ -38,26 +35,21 @@
     flex-wrap: wrap;
 }
 
+/* Dashboard Layout Containers */
 .dashboard-header, .dashboard-content {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
-
 .dashboard-content {
     padding-bottom: var(--sp-2xl);
 }
-
 .card-title {
     font-family: var(--ff-body);
     font-weight: 600;
     font-size: 1rem;
 }
-
-.card-body-no-bottom {
-    padding-bottom: 0;
-}
-
+.card-body-no-bottom { padding-bottom: 0; }
 .card-head-actions {
     display: flex;
     align-items: center;
@@ -65,13 +57,13 @@
     flex-wrap: wrap;
 }
 
+/* KPI Grid (Key Performance Indicators) */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--sp-sm);
     margin-bottom: var(--sp-lg);
 }
-
 .kpi-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -81,7 +73,6 @@
     overflow: hidden;
     transition: border-color var(--t), box-shadow var(--t);
 }
-
 .kpi-card::before {
     content: "";
     position: absolute;
@@ -89,28 +80,14 @@
     height: 3px;
     background: var(--accent);
 }
-
-.kpi-card-warning::before {
-    background: var(--warning);
-}
-
-.kpi-card-success::before {
-    background: var(--success);
-}
-
-.kpi-card-info::before {
-    background: var(--info);
-}
-
-.kpi-card-danger::before {
-    background: var(--danger);
-}
-
+.kpi-card-warning::before { background: var(--warning); }
+.kpi-card-success::before { background: var(--success); }
+.kpi-card-info::before { background: var(--info); }
+.kpi-card-danger::before { background: var(--danger); }
 .kpi-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-a);
 }
-
 .kpi-num {
     font-family: var(--ff-display);
     font-size: clamp(1.8rem, 4vw, 2.8rem);
@@ -118,27 +95,11 @@
     line-height: 1;
     margin-bottom: 0.25rem;
 }
-
-.kpi-num-warning {
-    color: var(--warning);
-}
-
-.kpi-num-success {
-    color: var(--success);
-}
-
-.kpi-num-info {
-    color: var(--info);
-}
-
-.kpi-num-danger {
-    color: var(--danger);
-}
-
-.kpi-num-large {
-    font-size: clamp(1.4rem, 3vw, 2rem);
-}
-
+.kpi-num-warning { color: var(--warning); }
+.kpi-num-success { color: var(--success); }
+.kpi-num-info { color: var(--info); }
+.kpi-num-danger { color: var(--danger); }
+.kpi-num-large { font-size: clamp(1.4rem, 3vw, 2rem); }
 .kpi-lbl {
     font-size: 0.7rem;
     color: var(--muted);
@@ -146,13 +107,13 @@
     letter-spacing: 0.1em;
 }
 
+/* Quick Actions Grid */
 .quick-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--sp-sm);
     margin-bottom: var(--sp-xl);
 }
-
 .quick-item {
     background: var(--card);
     border: 1px solid var(--border);
@@ -171,25 +132,21 @@
     transition: all var(--t);
     cursor: pointer;
 }
-
 .quick-item:hover {
     border-color: var(--accent);
     color: var(--accent);
     background: rgba(232, 65, 24, 0.05);
     transform: translateY(-1px);
 }
+.quick-icon { font-size: 1.3rem; }
 
-.quick-icon {
-    font-size: 1.3rem;
-}
-
+/* Dashboard Two-Column Layout */
 .dash-layout {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--sp-lg);
     align-items: start;
 }
-
 .dash-col {
     display: flex;
     flex-direction: column;
@@ -197,10 +154,8 @@
     min-width: 0;
 }
 
-.bar-chart-outer {
-    overflow-x: auto;
-}
-
+/* Bar Chart Component (enrollment trends) */
+.bar-chart-outer { overflow-x: auto; }
 .bar-chart {
     display: flex;
     align-items: flex-end;
@@ -213,7 +168,6 @@
     border-bottom: none;
     border-radius: var(--r-sm) var(--r-sm) 0 0;
 }
-
 .bar-col {
     flex: 1;
     display: flex;
@@ -223,18 +177,13 @@
     height: 100%;
     gap: 3px;
 }
-
 .bar-val {
     font-size: 0.58rem;
     color: var(--accent);
     font-weight: 700;
     line-height: 1;
 }
-
-.bar-val-warning {
-    color: var(--warning);
-}
-
+.bar-val-warning { color: var(--warning); }
 .bar {
     width: 100%;
     min-width: 20px;
@@ -242,42 +191,17 @@
     background: linear-gradient(180deg, var(--accent), rgba(232, 65, 24, 0.45));
     transition: filter var(--t);
 }
+.bar:hover { filter: brightness(1.25); }
+.bar.current { background: linear-gradient(180deg, var(--warning), rgba(255, 165, 2, 0.4)); }
 
-.bar:hover {
-    filter: brightness(1.25);
-}
-
-.bar.current {
-    background: linear-gradient(180deg, var(--warning), rgba(255, 165, 2, 0.4));
-}
-
-.bar-h-52 {
-    height: 52px;
-}
-
-.bar-h-61 {
-    height: 61px;
-}
-
-.bar-h-56 {
-    height: 56px;
-}
-
-.bar-h-69 {
-    height: 69px;
-}
-
-.bar-h-74 {
-    height: 74px;
-}
-
-.bar-h-84 {
-    height: 84px;
-}
-
-.bar-h-90 {
-    height: 90px;
-}
+/* Bar chart dynamic heights (simulating data values) */
+.bar-h-52 { height: 52px; }
+.bar-h-61 { height: 61px; }
+.bar-h-56 { height: 56px; }
+.bar-h-69 { height: 69px; }
+.bar-h-74 { height: 74px; }
+.bar-h-84 { height: 84px; }
+.bar-h-90 { height: 90px; }
 
 .bar-labels {
     display: flex;
@@ -289,7 +213,6 @@
     border-top: none;
     border-radius: 0 0 var(--r-sm) var(--r-sm);
 }
-
 .bar-lbl {
     flex: 1;
     text-align: center;
@@ -297,86 +220,58 @@
     color: var(--muted);
     line-height: 1.4;
 }
+.bar-lbl-warning { color: var(--warning); }
 
-.bar-lbl-warning {
-    color: var(--warning);
-}
-
+/* Ranking Number Styling */
 .rank-num {
     font-family: var(--ff-display);
     font-size: 1.1rem;
     color: var(--accent);
 }
-
 .table-muted {
     color: var(--muted);
     font-size: 0.85rem;
 }
+.table-small { font-size: 0.82rem; }
+.action-link { color: var(--accent); }
 
-.table-small {
-    font-size: 0.82rem;
-}
-
-.action-link {
-    color: var(--accent);
-}
-
+/* Member Cell with Avatar and Text */
 .name-cell {
     display: flex;
     align-items: center;
     gap: var(--sp-sm);
 }
-
 .name-cell-text {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
-
 .name-main {
     font-weight: 600;
     font-size: 0.9rem;
 }
-
 .name-sub {
     font-size: 0.72rem;
     color: var(--muted);
 }
 
-.avatar-purple {
-    background: #6c5ce7;
-}
-
-.avatar-green {
-    background: #00b894;
-}
-
-.avatar-orange {
-    background: #e17055;
-}
-
+/* Avatar Color Variants */
+.avatar-purple { background: #6c5ce7; }
+.avatar-green { background: #00b894; }
+.avatar-orange { background: #e17055; }
 .avatar-yellow {
     background: #fdcb6e;
     color: #333;
 }
+.avatar-lilac { background: #a29bfe; }
+.avatar-salmon { background: #e17055; }
+.avatar-teal { background: #00b894; }
 
-.avatar-lilac {
-    background: #a29bfe;
-}
-
-.avatar-salmon {
-    background: #e17055;
-}
-
-.avatar-teal {
-    background: #00b894;
-}
-
+/* Activity Feed */
 .activity-feed {
     display: flex;
     flex-direction: column;
 }
-
 .activity-item {
     display: flex;
     align-items: flex-start;
@@ -384,11 +279,7 @@
     padding: var(--sp-sm) 0;
     border-bottom: 1px solid var(--border);
 }
-
-.activity-item:last-child {
-    border-bottom: none;
-}
-
+.activity-item:last-child { border-bottom: none; }
 .activity-dot {
     width: 8px;
     height: 8px;
@@ -396,50 +287,32 @@
     margin-top: 5px;
     flex-shrink: 0;
 }
-
-.activity-dot.green {
-    background: var(--success);
-}
-
-.activity-dot.orange {
-    background: var(--warning);
-}
-
-.activity-dot.red {
-    background: var(--danger);
-}
-
-.activity-dot.blue {
-    background: var(--info);
-}
-
+.activity-dot.green { background: var(--success); }
+.activity-dot.orange { background: var(--warning); }
+.activity-dot.red { background: var(--danger); }
+.activity-dot.blue { background: var(--info); }
 .activity-text {
     font-size: 0.875rem;
     line-height: 1.5;
 }
-
 .activity-time {
     font-size: 0.72rem;
     color: var(--muted);
     margin-top: 2px;
 }
+.activity-stars { color: var(--warning); }
 
-.activity-stars {
-    color: var(--warning);
-}
-
+/* Equipment List & Progress Bars */
 .equip-list {
     display: flex;
     flex-direction: column;
     gap: var(--sp-md);
 }
-
 .equip-item {
     display: flex;
     flex-direction: column;
     gap: var(--sp-xs);
 }
-
 .equip-row {
     display: flex;
     align-items: center;
@@ -447,63 +320,36 @@
     gap: var(--sp-sm);
     flex-wrap: wrap;
 }
-
 .equip-name {
     font-size: 0.88rem;
     font-weight: 600;
 }
-
 .equip-prog {
     display: flex;
     align-items: center;
     gap: var(--sp-sm);
     width: 100%;
 }
-
 .equip-percentage {
     color: var(--muted);
     font-size: 0.72rem;
     white-space: nowrap;
 }
+/* Equipment fill widths (usage percentages) */
+.equip-fill-75 { width: 75%; }
+.equip-fill-83 { width: 83%; }
+.equip-fill-30 { width: 30%; }
+.equip-fill-33 { width: 33%; }
+.equip-fill-50 { width: 50%; }
 
-.equip-fill-75 {
-    width: 75%;
-}
-
-.equip-fill-83 {
-    width: 83%;
-}
-
-.equip-fill-30 {
-    width: 30%;
-}
-
-.equip-fill-33 {
-    width: 33%;
-}
-
-.equip-fill-50 {
-    width: 50%;
-}
-
+/* Responsive Layouts for Dashboard */
 @media (min-width: 480px) {
-    .kpi-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
 }
-
 @media (min-width: 768px) {
-    .quick-grid {
-        grid-template-columns: repeat(6, 1fr);
-    }
+    .quick-grid { grid-template-columns: repeat(6, 1fr); }
 }
-
 @media (min-width: 900px) {
-    .kpi-grid {
-        grid-template-columns: repeat(6, 1fr);
-    }
-
-    .dash-layout {
-        grid-template-columns: 3fr 2fr;
-    }
+    .kpi-grid { grid-template-columns: repeat(6, 1fr); }
+    .dash-layout { grid-template-columns: 3fr 2fr; }
 }

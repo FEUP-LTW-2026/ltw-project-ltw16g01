@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- FitPeak Admin Dashboard: Overview of KPIs, charts, member management, equipment status, and activity feed -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="FitPeak — Admin Dashboard. Manage members, classes, trainers and equipment.">
     <meta name="theme-color" content="#0b0b0b">
     <title>Admin Dashboard — FitPeak</title>
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages/admin-dashboard.css">
 </head>
 <body>
 
+    <!-- Hidden checkbox for mobile menu toggling -->
     <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" tabindex="-1">
 
+    <!-- Main Navigation Bar -->
     <nav class="navbar" aria-label="Main navigation">
         <a href="index.html" class="logo" aria-label="FitPeak — home">FIT<span>PEAK</span></a>
         <label for="nav-toggle" class="burger" aria-label="Open navigation menu">
@@ -37,6 +42,7 @@
 
     <main class="main">
 
+        <!-- Dashboard Header with date and page title -->
         <header class="dash-header">
             <div class="dashboard-header">
                 <div class="dash-top">
@@ -53,6 +59,7 @@
 
         <div class="dashboard-content">
 
+            <!-- KPI Cards: key metrics overview -->
             <section>
                 <div class="kpi-grid">
                     <div class="kpi-card">
@@ -82,6 +89,7 @@
                 </div>
             </section>
 
+            <!-- Quick Actions: shortcuts to management sections -->
             <nav aria-label="Quick actions">
                 <div class="quick-grid">
                     <a href="#" class="quick-item">
@@ -111,10 +119,13 @@
                 </div>
             </nav>
 
+            <!-- Two-Column Layout: left column (charts & tables) right column (activity & equipment) -->
             <div class="dash-layout">
 
+                <!-- Left Column -->
                 <div class="dash-col">
 
+                    <!-- Bar Chart: weekly enrollments -->
                     <div class="card">
                         <div class="card-head">
                             <h2 class="card-title">Weekly Enrollments</h2>
@@ -165,6 +176,7 @@
                         </div>
                     </div>
 
+                    <!-- Most Popular Classes Table -->
                     <div class="card">
                         <div class="card-head">
                             <h2 class="card-title">Most Popular Classes</h2>
@@ -293,6 +305,7 @@
                         </div>
                     </div>
 
+                    <!-- All Members Table -->
                     <div class="card">
                         <div class="card-head">
                             <h2 class="card-title">All Members</h2>
@@ -411,8 +424,10 @@
 
                 </div>
 
+                <!-- Right Column -->
                 <div class="dash-col">
 
+                    <!-- Recent Activity Feed -->
                     <div class="card">
                         <div class="card-head">
                             <h2 class="card-title">Recent Activity</h2>
@@ -491,6 +506,7 @@
                         </div>
                     </div>
 
+                    <!-- Equipment Availability Status -->
                     <div class="card">
                         <div class="card-head">
                             <h2 class="card-title">Equipment Availability</h2>
@@ -581,6 +597,7 @@
                         </div>
                     </div>
 
+                    <!-- Trainers Table -->
                     <div class="card">
                         <div class="card-head">
                             <h2 class="card-title">Trainers</h2>
@@ -694,6 +711,7 @@
 
     </main>
 
+    <!-- Site Footer -->
     <footer class="site-footer" aria-label="Footer">
         <div class="container">
             <div class="footer-grid">

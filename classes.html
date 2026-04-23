@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- FitPeak Classes Page: Browse and enroll in gym classes -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="FitPeak — Browse all available classes. Yoga, Pilates, HIIT, Cycling, Strength, CrossFit, Boxing and Senior Fitness. Filter by type, trainer or day and enroll instantly.">
     <meta name="theme-color" content="#0b0b0b">
     <title>Classes — FitPeak</title>
 
+    <!-- Google Fonts: Bebas Neue for headings, Outfit for body -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages/classes.css">
 </head>
 <body>
 
+    <!-- Hidden checkbox for mobile menu toggling -->
     <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" tabindex="-1">
 
+    <!-- Main Navigation Bar -->
     <nav class="navbar" aria-label="Main navigation">
         <a href="index.html" class="logo" aria-label="FitPeak — home">FIT<span>PEAK</span></a>
         <label for="nav-toggle" class="burger" aria-label="Open navigation menu">
@@ -38,6 +43,7 @@
     <main class="main">
         <div class="container">
 
+            <!-- Page Header with Breadcrumb -->
             <header class="page-header">
                 <nav aria-label="Breadcrumb">
                     <ol class="breadcrumb">
@@ -53,6 +59,7 @@
                 </div>
             </header>
 
+            <!-- Filter Section: allows filtering by type, trainer, day -->
             <section aria-label="Filter classes">
                 <form class="filter-bar" method="get" action="classes.html">
                     <div class="filter-group">
@@ -100,6 +107,7 @@
                 </form>
             </section>
 
+            <!-- Results Bar: showing count and sorting options -->
             <div class="results-bar">
                 <p class="results-count">
                     Showing <strong>8 classes</strong> available today
@@ -113,9 +121,11 @@
                 </div>
             </div>
 
+            <!-- Classes Grid: list of all available class cards -->
             <section aria-label="Classes list">
                 <div class="class-grid">
 
+                    <!-- Class Card 1: Morning Yoga (user already enrolled) -->
                     <article class="class-card" aria-label="Morning Yoga — You are enrolled">
                         <div class="class-head">
                             <span class="class-time-big">07:00</span>
@@ -161,6 +171,7 @@
                         </div>
                     </article>
 
+                    <!-- Class Card 2: Pilates Core (spots available) -->
                     <article class="class-card" aria-label="Pilates Core — Spots available">
                         <div class="class-head">
                             <span class="class-time-big">10:00</span>
@@ -204,6 +215,7 @@
                         </div>
                     </article>
 
+                    <!-- Class Card 3: Power HIIT (spots available) -->
                     <article class="class-card" aria-label="Power HIIT — Spots available">
                         <div class="class-head">
                             <span class="class-time-big">18:00</span>
@@ -247,6 +259,7 @@
                         </div>
                     </article>
 
+                    <!-- Class Card 4: Indoor Cycling (almost full) -->
                     <article class="class-card" aria-label="Indoor Cycling — Almost full">
                         <div class="class-head">
                             <span class="class-time-big">19:00</span>
@@ -290,6 +303,7 @@
                         </div>
                     </article>
 
+                    <!-- Class Card 5: Strength Lab (spots available) -->
                     <article class="class-card" aria-label="Strength Lab — Spots available">
                         <div class="class-head">
                             <span class="class-time-big">17:00</span>
@@ -333,6 +347,7 @@
                         </div>
                     </article>
 
+                    <!-- Class Card 6: CrossFit WOD (class is full) -->
                     <article class="class-card" aria-label="CrossFit WOD — Class is full">
                         <div class="class-head">
                             <span class="class-time-big">17:30</span>
@@ -372,6 +387,7 @@
                         </div>
                     </article>
 
+                    <!-- Class Card 7: Boxing Basics (spots available) -->
                     <article class="class-card" aria-label="Boxing Basics — Spots available">
                         <div class="class-head">
                             <span class="class-time-big">20:30</span>
@@ -415,6 +431,7 @@
                         </div>
                     </article>
 
+                    <!-- Class Card 8: Senior Fitness (spots available) -->
                     <article class="class-card" aria-label="Senior Fitness — Spots available">
                         <div class="class-head">
                             <span class="class-time-big">11:00</span>
@@ -461,6 +478,7 @@
                 </div>
             </section>
 
+            <!-- Legend Section: explains badge colors and capacity indicators -->
             <section class="legend-section" aria-label="Class types legend">
                 <p class="legend-title">Class type legend</p>
 
@@ -480,6 +498,7 @@
         </div>
     </main>
 
+    <!-- Site Footer -->
     <footer class="site-footer" aria-label="Footer">
         <div class="container">
             <div class="footer-grid">

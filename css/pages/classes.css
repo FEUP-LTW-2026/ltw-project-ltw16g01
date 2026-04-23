@@ -1,5 +1,7 @@
 /* CLASSES.CSS */
+/* Styles for the classes listing page: filters, class cards, capacity indicators, legend */
 
+/* Filter Bar (grid of dropdowns and button) */
 .filter-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -10,12 +12,12 @@
     padding: var(--sp-md);
     margin-bottom: var(--sp-lg);
 }
-
 .filter-group {
     display: flex;
     flex-direction: column;
 }
 
+/* Results & Sorting Bar */
 .results-bar {
     display: flex;
     align-items: center;
@@ -24,16 +26,11 @@
     gap: var(--sp-sm);
     margin-bottom: var(--sp-lg);
 }
-
 .results-count {
     font-size: 0.88rem;
     color: var(--muted);
 }
-
-.results-count strong {
-    color: var(--text);
-}
-
+.results-count strong { color: var(--text); }
 .sort-row {
     display: flex;
     align-items: center;
@@ -41,7 +38,6 @@
     font-size: 0.82rem;
     color: var(--muted);
 }
-
 .sort-btn {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -55,25 +51,23 @@
     min-height: 32px;
     font-family: var(--ff-body);
 }
-
 .sort-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
 }
-
 .sort-btn.active {
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
 }
 
+/* Class Card Grid */
 .class-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--sp-md);
     margin-bottom: var(--sp-xl);
 }
-
 .class-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -83,13 +77,13 @@
     flex-direction: column;
     transition: border-color var(--t), box-shadow var(--t), transform var(--t);
 }
-
 .class-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-a);
     transform: translateY(-2px);
 }
 
+/* Class Card Header (time + type badge) */
 .class-head {
     display: flex;
     align-items: center;
@@ -100,7 +94,6 @@
     background: linear-gradient(135deg, var(--surface), var(--card));
     border-bottom: 1px solid var(--border);
 }
-
 .class-time-big {
     font-family: var(--ff-display);
     font-size: clamp(1.2rem, 3vw, 1.4rem);
@@ -109,6 +102,7 @@
     line-height: 1;
 }
 
+/* Class Card Body */
 .class-body {
     padding: var(--sp-md);
     flex: 1;
@@ -116,16 +110,11 @@
     flex-direction: column;
     gap: var(--sp-sm);
 }
-
-.class-body h4 {
-    margin-bottom: 0.15rem;
-}
-
+.class-body h4 { margin-bottom: 0.15rem; }
 .class-body > p {
     color: var(--muted);
     font-size: 0.85rem;
 }
-
 .class-meta {
     display: flex;
     flex-wrap: wrap;
@@ -133,7 +122,6 @@
     margin-top: auto;
     padding-top: var(--sp-sm);
 }
-
 .class-meta li {
     display: flex;
     align-items: center;
@@ -141,13 +129,13 @@
     font-size: 0.78rem;
     color: var(--muted);
 }
-
 .class-ratings {
     display: flex;
     align-items: center;
     gap: var(--sp-sm);
 }
 
+/* Class Card Footer (capacity + enroll button) */
 .class-foot {
     display: flex;
     align-items: center;
@@ -157,7 +145,6 @@
     padding: var(--sp-sm) var(--sp-md);
     border-top: 1px solid var(--border);
 }
-
 .cap-wrap {
     display: flex;
     align-items: center;
@@ -165,7 +152,6 @@
     font-size: 0.78rem;
     color: var(--muted);
 }
-
 .cap-bar {
     width: 52px;
     height: 5px;
@@ -173,21 +159,15 @@
     border-radius: 3px;
     overflow: hidden;
 }
-
 .cap-fill {
     height: 100%;
     border-radius: 3px;
     background: var(--success);
 }
+.cap-fill.mid { background: var(--warning); }
+.cap-fill.low { background: var(--danger); }
 
-.cap-fill.mid {
-    background: var(--warning);
-}
-
-.cap-fill.low {
-    background: var(--danger);
-}
-
+/* Enrolled Button (toggled state for already enrolled classes) */
 .enrolled-btn {
     display: inline-flex;
     align-items: center;
@@ -206,18 +186,17 @@
     cursor: pointer;
     transition: all var(--t);
 }
-
 .enrolled-btn:hover {
     background: rgba(255, 71, 87, 0.10);
     border-color: var(--danger);
     color: var(--danger);
 }
 
+/* Legend Section (explains badges and capacity colors) */
 .legend-section {
     padding-block: var(--sp-lg);
     border-top: 1px solid var(--border);
 }
-
 .legend-title {
     font-size: 0.7rem;
     font-weight: 700;
@@ -226,7 +205,6 @@
     color: var(--muted);
     margin-bottom: var(--sp-md);
 }
-
 .legend-row {
     display: flex;
     flex-wrap: wrap;
@@ -234,94 +212,46 @@
     align-items: center;
 }
 
-.page-header-row {
-    margin-top: var(--sp-sm);
-}
-
-.filter-group-end {
-    justify-content: flex-end;
-}
-
-.full-width {
-    width: 100%;
-}
-
-.rating-text {
-    font-size: 0.75rem;
-}
-
+/* Additional Utility Classes */
+.page-header-row { margin-top: var(--sp-sm); }
+.filter-group-end { justify-content: flex-end; }
+.full-width { width: 100%; }
+.rating-text { font-size: 0.75rem; }
 .capacity-warning {
     color: var(--warning);
     font-weight: 600;
 }
-
 .enrolment-note {
     font-size: 0.72rem;
     margin-top: 3px;
 }
-
 .legend-capacity-text {
     font-size: 0.8rem;
     color: var(--muted);
     margin-left: auto;
 }
+.dot-success { color: var(--success); }
+.dot-warning { color: var(--warning); }
+.dot-danger { color: var(--danger); }
 
-.dot-success {
-    color: var(--success);
-}
-
-.dot-warning {
-    color: var(--warning);
-}
-
-.dot-danger {
-    color: var(--danger);
-}
-
+/* Responsive Grid Adjustments */
 @media (min-width: 480px) {
-    .filter-bar {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .class-head {
-        padding: var(--sp-md) var(--sp-lg);
-    }
-
-    .class-body {
-        padding: var(--sp-lg);
-    }
-
-    .class-foot {
-        padding: var(--sp-md) var(--sp-lg);
-    }
+    .filter-bar { grid-template-columns: 1fr 1fr; }
+    .class-head { padding: var(--sp-md) var(--sp-lg); }
+    .class-body { padding: var(--sp-lg); }
+    .class-foot { padding: var(--sp-md) var(--sp-lg); }
 }
-
 @media (min-width: 540px) {
-    .class-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .class-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (min-width: 768px) {
-    .filter-bar {
-        grid-template-columns: repeat(4, 1fr);
-        align-items: end;
-    }
+    .filter-bar { grid-template-columns: repeat(4, 1fr); align-items: end; }
 }
-
 @media (min-width: 860px) {
-    .class-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--sp-lg);
-    }
+    .class-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); }
 }
-
 @media (max-width: 375px) {
-    .class-foot {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
+    .class-foot { flex-direction: column; align-items: stretch; }
     .class-foot .main-button, .class-foot .secondary-button, .class-foot .enrolled-btn {
         width: 100%;
         justify-content: center;
