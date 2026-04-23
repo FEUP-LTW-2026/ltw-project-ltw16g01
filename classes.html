@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FitPeak — Browse all available classes. Yoga, HIIT, Spinning, Pilates, CrossFit and more. Filter by type, trainer or day and enrol instantly.">
+    <meta name="description" content="FitPeak — Browse all available classes. Yoga, HIIT, Spinning, Pilates, CrossFit and more. Filter by type, trainer or day and enroll instantly.">
     <meta name="theme-color" content="#0b0b0b">
     <title>Classes — FitPeak</title>
 
@@ -25,7 +25,7 @@
             <span></span><span></span><span></span>
         </label>
 
-        <ul class="nav-menu" role="list">
+        <ul class="nav-menu">
             <li><a href="index.html">Home</a></li>
             <li><a href="classes.html" aria-current="page">Classes</a></li>
             <li><a href="trainers.html">Trainers</a></li>
@@ -38,7 +38,6 @@
     <main class="main">
         <div class="container">
 
-            <!-- PAGE HEADER -->
             <header class="page-header">
                 <nav aria-label="Breadcrumb">
                     <ol class="breadcrumb">
@@ -47,19 +46,13 @@
                         <li><span aria-current="page">Classes</span></li>
                     </ol>
                 </nav>
-                <div class="flex-between" style="margin-top:var(--sp-sm);">
-                    <div>
-                        <h1>Classes</h1>
-                        <p>Browse our schedule and enrol in upcoming sessions</p>
-                    </div>
-                    <span class="live-badge">
-                        <span class="live-dot" aria-hidden="true"></span>
-                        Schedule updated
-                    </span>
+
+                <div class="page-header-row">
+                    <h1>Classes</h1>
+                    <p>Browse our schedule and enroll in upcoming sessions</p>
                 </div>
             </header>
 
-            <!-- FILTER BAR -->
             <section aria-label="Filter classes">
                 <form class="filter-bar" method="get" action="classes.html">
                     <div class="filter-group">
@@ -99,17 +92,17 @@
                         </select>
                     </div>
 
-                    <div class="filter-group" style="justify-content:flex-end;">
-                        <button type="submit" class="main-button" style="width:100%;">Filter</button>
+                    <div class="filter-group filter-group-end">
+                        <button type="submit" class="main-button full-width">Filter</button>
                     </div>
                 </form>
             </section>
 
-            <!-- RESULTS BAR -->
             <div class="results-bar">
                 <p class="results-count">
                     Showing <strong>7 classes</strong> available this week
                 </p>
+
                 <div class="sort-row">
                     <span>Sort:</span>
                     <button type="button" class="sort-btn active">Date</button>
@@ -118,41 +111,30 @@
                 </div>
             </div>
 
-            <!-- CLASSES GRID -->
             <section aria-labelledby="classes-heading">
-                <h2 id="classes-heading" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Available classes</h2>
+                <h2 id="classes-heading" class="visually-hidden">Available classes</h2>
 
                 <div class="class-grid">
 
-                    <!-- CARD 1 — Enrolled -->
                     <article class="class-card" aria-label="Morning Yoga — You are enrolled">
                         <div class="class-head">
-                            <span class="class-time-big" aria-label="7:00 AM">07:00</span>
+                            <span class="class-time-big">07:00</span>
                             <span class="badge badge-info">Yoga</span>
                         </div>
+
                         <div class="class-body">
                             <div>
                                 <h4>Morning Yoga</h4>
                                 <p>Start your day with calm and flexibility. Breathing techniques, sun salutations and restorative stretches. Suitable for all levels.</p>
                             </div>
-                            <dl class="class-meta">
-                                <div class="meta-item">
-                                    <dt style="position:absolute;opacity:0;width:1px;height:1px;">Date</dt>
-                                    <dd>📅 Mon, 21 Apr</dd>
-                                </div>
-                                <div class="meta-item">
-                                    <dt style="position:absolute;opacity:0;width:1px;height:1px;">Duration</dt>
-                                    <dd>⏱ 60 min</dd>
-                                </div>
-                                <div class="meta-item">
-                                    <dt style="position:absolute;opacity:0;width:1px;height:1px;">Location</dt>
-                                    <dd>📍 Studio A</dd>
-                                </div>
-                                <div class="meta-item">
-                                    <dt style="position:absolute;opacity:0;width:1px;height:1px;">Trainer</dt>
-                                    <dd>👤 Ana Silva</dd>
-                                </div>
-                            </dl>
+
+                            <ul class="class-meta">
+                                <li>📅 Mon, 21 Apr</li>
+                                <li>⏱ 60 min</li>
+                                <li>📍 Studio A</li>
+                                <li>👤 Ana Silva</li>
+                            </ul>
+
                             <div class="class-ratings">
                                 <div class="stars" aria-label="4.9 out of 5 stars">
                                     <span class="star on" aria-hidden="true">★</span>
@@ -161,9 +143,10 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star on" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted" style="font-size:0.75rem;">4.9 &nbsp;(32 reviews)</span>
+                                <span class="text-muted rating-text">4.9 &nbsp;(32 reviews)</span>
                             </div>
                         </div>
+
                         <div class="class-foot">
                             <div class="cap-wrap" aria-label="12 out of 15 spots taken">
                                 <div class="cap-bar" aria-hidden="true">
@@ -171,29 +154,32 @@
                                 </div>
                                 <span>12 / 15</span>
                             </div>
-                            <a href="classes.html" class="enrolled-btn" aria-label="Cancel enrolment in Morning Yoga">
+
+                            <a href="classes.html" class="enrolled-btn" aria-label="Cancel enrollment in Morning Yoga">
                                 ✓ Enrolled — Cancel
                             </a>
                         </div>
                     </article>
 
-                    <!-- CARD 2 — Available -->
                     <article class="class-card" aria-label="Power HIIT — Spots available">
                         <div class="class-head">
-                            <span class="class-time-big" aria-label="6:00 PM">18:00</span>
+                            <span class="class-time-big">18:00</span>
                             <span class="badge badge-danger">HIIT</span>
                         </div>
+
                         <div class="class-body">
                             <div>
                                 <h4>Power HIIT</h4>
                                 <p>High-intensity intervals combining cardio bursts with strength movements. Burn up to 600 calories and build endurance in 45 minutes.</p>
                             </div>
-                            <dl class="class-meta">
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Date</dt><dd>📅 Tue, 22 Apr</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Duration</dt><dd>⏱ 45 min</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Location</dt><dd>📍 Main Floor</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Trainer</dt><dd>👤 Bruno Costa</dd></div>
-                            </dl>
+
+                            <ul class="class-meta">
+                                <li>📅 Tue, 22 Apr</li>
+                                <li>⏱ 45 min</li>
+                                <li>📍 Main Floor</li>
+                                <li>👤 Bruno Costa</li>
+                            </ul>
+
                             <div class="class-ratings">
                                 <div class="stars" aria-label="4.8 out of 5 stars">
                                     <span class="star on" aria-hidden="true">★</span>
@@ -202,9 +188,10 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star on" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted" style="font-size:0.75rem;">4.8 &nbsp;(47 reviews)</span>
+                                <span class="text-muted rating-text">4.8 &nbsp;(47 reviews)</span>
                             </div>
                         </div>
+
                         <div class="class-foot">
                             <div class="cap-wrap" aria-label="8 out of 20 spots taken">
                                 <div class="cap-bar" aria-hidden="true">
@@ -212,27 +199,30 @@
                                 </div>
                                 <span>8 / 20</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enrol</a>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
-                    <!-- CARD 3 — Almost full -->
                     <article class="class-card" aria-label="Spinning Class — Almost full">
                         <div class="class-head">
-                            <span class="class-time-big" aria-label="7:00 PM">19:00</span>
+                            <span class="class-time-big">19:00</span>
                             <span class="badge badge-warning">Spinning</span>
                         </div>
+
                         <div class="class-body">
                             <div>
                                 <h4>Spinning Class</h4>
                                 <p>High-energy indoor cycling set to motivating music. Intervals of sprints and climbs suitable for all fitness levels. Clip-in shoes provided.</p>
                             </div>
-                            <dl class="class-meta">
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Date</dt><dd>📅 Wed, 23 Apr</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Duration</dt><dd>⏱ 50 min</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Location</dt><dd>📍 Cycling Studio</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Trainer</dt><dd>👤 Carla Mendes</dd></div>
-                            </dl>
+
+                            <ul class="class-meta">
+                                <li>📅 Wed, 23 Apr</li>
+                                <li>⏱ 50 min</li>
+                                <li>📍 Cycling Studio</li>
+                                <li>👤 Carla Mendes</li>
+                            </ul>
+
                             <div class="class-ratings">
                                 <div class="stars" aria-label="4.6 out of 5 stars">
                                     <span class="star on" aria-hidden="true">★</span>
@@ -241,37 +231,41 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted" style="font-size:0.75rem;">4.6 &nbsp;(28 reviews)</span>
+                                <span class="text-muted rating-text">4.6 &nbsp;(28 reviews)</span>
                             </div>
                         </div>
+
                         <div class="class-foot">
                             <div class="cap-wrap" aria-label="16 out of 18 spots taken — almost full">
                                 <div class="cap-bar" aria-hidden="true">
                                     <div class="cap-fill mid" style="width:89%;"></div>
                                 </div>
-                                <span style="color:var(--warning);font-weight:600;">16 / 18</span>
+                                <span class="capacity-warning">16 / 18</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enrol</a>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
-                    <!-- CARD 4 — Available -->
                     <article class="class-card" aria-label="Pilates Core — Spots available">
                         <div class="class-head">
-                            <span class="class-time-big" aria-label="10:00 AM">10:00</span>
+                            <span class="class-time-big">10:00</span>
                             <span class="badge badge-info">Pilates</span>
                         </div>
+
                         <div class="class-body">
                             <div>
                                 <h4>Pilates Core</h4>
                                 <p>Controlled movements focused on building core strength, improving posture and increasing flexibility. Ideal for rehabilitation and prevention of injuries.</p>
                             </div>
-                            <dl class="class-meta">
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Date</dt><dd>📅 Thu, 24 Apr</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Duration</dt><dd>⏱ 55 min</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Location</dt><dd>📍 Studio B</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Trainer</dt><dd>👤 Ana Silva</dd></div>
-                            </dl>
+
+                            <ul class="class-meta">
+                                <li>📅 Thu, 24 Apr</li>
+                                <li>⏱ 55 min</li>
+                                <li>📍 Studio B</li>
+                                <li>👤 Ana Silva</li>
+                            </ul>
+
                             <div class="class-ratings">
                                 <div class="stars" aria-label="4.7 out of 5 stars">
                                     <span class="star on" aria-hidden="true">★</span>
@@ -280,9 +274,10 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star on" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted" style="font-size:0.75rem;">4.7 &nbsp;(19 reviews)</span>
+                                <span class="text-muted rating-text">4.7 &nbsp;(19 reviews)</span>
                             </div>
                         </div>
+
                         <div class="class-foot">
                             <div class="cap-wrap" aria-label="4 out of 12 spots taken">
                                 <div class="cap-bar" aria-hidden="true">
@@ -290,27 +285,30 @@
                                 </div>
                                 <span>4 / 12</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enrol</a>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
-                    <!-- CARD 5 — Full -->
                     <article class="class-card" aria-label="CrossFit WOD — Class is full">
                         <div class="class-head">
-                            <span class="class-time-big" aria-label="5:30 PM">17:30</span>
+                            <span class="class-time-big">17:30</span>
                             <span class="badge badge-danger">CrossFit</span>
                         </div>
+
                         <div class="class-body">
                             <div>
                                 <h4>CrossFit WOD</h4>
                                 <p>Workout of the Day featuring functional movements at high intensity. Combines Olympic lifting, gymnastics and metabolic conditioning. Every session is different.</p>
                             </div>
-                            <dl class="class-meta">
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Date</dt><dd>📅 Fri, 25 Apr</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Duration</dt><dd>⏱ 60 min</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Location</dt><dd>📍 Main Floor</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Trainer</dt><dd>👤 Bruno Costa</dd></div>
-                            </dl>
+
+                            <ul class="class-meta">
+                                <li>📅 Fri, 25 Apr</li>
+                                <li>⏱ 60 min</li>
+                                <li>📍 Main Floor</li>
+                                <li>👤 Bruno Costa</li>
+                            </ul>
+
                             <div class="class-ratings">
                                 <div class="stars" aria-label="4.4 out of 5 stars">
                                     <span class="star on" aria-hidden="true">★</span>
@@ -319,35 +317,37 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted" style="font-size:0.75rem;">4.4 &nbsp;(56 reviews)</span>
+                                <span class="text-muted rating-text">4.4 &nbsp;(56 reviews)</span>
                             </div>
                         </div>
+
                         <div class="class-foot">
                             <div>
                                 <span class="badge badge-danger">Class full</span>
-                                <div class="text-muted" style="font-size:0.72rem;margin-top:3px;">20 / 20 enrolled</div>
+                                <div class="text-muted enrollment-note">20 / 20 enrolled</div>
                             </div>
-                            <span class="full-btn" aria-disabled="true">Full</span>
                         </div>
                     </article>
 
-                    <!-- CARD 6 — Available -->
                     <article class="class-card" aria-label="Evening Yoga — Spots available">
                         <div class="class-head">
-                            <span class="class-time-big" aria-label="8:00 PM">20:00</span>
+                            <span class="class-time-big">20:00</span>
                             <span class="badge badge-info">Yoga</span>
                         </div>
+
                         <div class="class-body">
                             <div>
                                 <h4>Evening Yoga</h4>
                                 <p>Unwind after a long day with restorative yoga sequences and guided meditation. Includes yin poses held for 3–5 minutes to deeply release tension.</p>
                             </div>
-                            <dl class="class-meta">
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Date</dt><dd>📅 Fri, 25 Apr</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Duration</dt><dd>⏱ 60 min</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Location</dt><dd>📍 Studio A</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Trainer</dt><dd>👤 Ana Silva</dd></div>
-                            </dl>
+
+                            <ul class="class-meta">
+                                <li>📅 Fri, 25 Apr</li>
+                                <li>⏱ 60 min</li>
+                                <li>📍 Studio A</li>
+                                <li>👤 Ana Silva</li>
+                            </ul>
+
                             <div class="class-ratings">
                                 <div class="stars" aria-label="5 out of 5 stars">
                                     <span class="star on" aria-hidden="true">★</span>
@@ -356,9 +356,10 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star on" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted" style="font-size:0.75rem;">5.0 &nbsp;(14 reviews)</span>
+                                <span class="text-muted rating-text">5.0 &nbsp;(14 reviews)</span>
                             </div>
                         </div>
+
                         <div class="class-foot">
                             <div class="cap-wrap" aria-label="7 out of 15 spots taken">
                                 <div class="cap-bar" aria-hidden="true">
@@ -366,27 +367,30 @@
                                 </div>
                                 <span>7 / 15</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enrol</a>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
-                    <!-- CARD 7 — Available -->
                     <article class="class-card" aria-label="Saturday Spin — Spots available">
                         <div class="class-head">
-                            <span class="class-time-big" aria-label="9:00 AM">09:00</span>
+                            <span class="class-time-big">09:00</span>
                             <span class="badge badge-warning">Spinning</span>
                         </div>
+
                         <div class="class-body">
                             <div>
                                 <h4>Saturday Spin</h4>
                                 <p>Kick off your weekend with a high-energy cycling session. Progressive resistance climbs and sprint finishes set to an exclusive playlist curated by Carla.</p>
                             </div>
-                            <dl class="class-meta">
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Date</dt><dd>📅 Sat, 26 Apr</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Duration</dt><dd>⏱ 60 min</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Location</dt><dd>📍 Cycling Studio</dd></div>
-                                <div class="meta-item"><dt style="position:absolute;opacity:0;width:1px;height:1px;">Trainer</dt><dd>👤 Carla Mendes</dd></div>
-                            </dl>
+
+                            <ul class="class-meta">
+                                <li>📅 Sat, 26 Apr</li>
+                                <li>⏱ 60 min</li>
+                                <li>📍 Cycling Studio</li>
+                                <li>👤 Carla Mendes</li>
+                            </ul>
+
                             <div class="class-ratings">
                                 <div class="stars" aria-label="4.5 out of 5 stars">
                                     <span class="star on" aria-hidden="true">★</span>
@@ -395,9 +399,10 @@
                                     <span class="star on" aria-hidden="true">★</span>
                                     <span class="star" aria-hidden="true">★</span>
                                 </div>
-                                <span class="text-muted" style="font-size:0.75rem;">4.5 &nbsp;(22 reviews)</span>
+                                <span class="text-muted rating-text">4.5 &nbsp;(22 reviews)</span>
                             </div>
                         </div>
+
                         <div class="class-foot">
                             <div class="cap-wrap" aria-label="5 out of 18 spots taken">
                                 <div class="cap-bar" aria-hidden="true">
@@ -405,32 +410,31 @@
                                 </div>
                                 <span>5 / 18</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enrol</a>
+
+                            <a href="register.html" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
-                </div><!-- end class-grid -->
+                </div>
             </section>
 
-            <!-- LEGEND -->
-            <aside class="legend-section" aria-label="Class types legend">
+            <section class="legend-section" aria-label="Class types legend">
                 <p class="legend-title">Class type legend</p>
+
                 <div class="legend-row">
-                    <span class="badge badge-info">Yoga &amp; Pilates</span>
-                    <span class="badge badge-danger">HIIT &amp; CrossFit</span>
-                    <span class="badge badge-warning">Spinning</span>
-                    <span class="badge badge-success">✓ Enrolled</span>
-                    <span class="badge badge-muted">Other</span>
-                    <span style="font-size:0.8rem;color:var(--muted);margin-left:auto;">
-                        Capacity bar: 
-                        <span style="color:var(--success);">●</span> available &nbsp;
-                        <span style="color:var(--warning);">●</span> filling up &nbsp;
-                        <span style="color:var(--danger);">●</span> nearly full
+                    <span class="badge badge-danger">Class Full</span>
+                    <span class="badge badge-success">✓ Enrolled - Cancel</span>
+
+                    <span class="legend-capacity-text">
+                        Capacity bar:
+                        <span class="dot-success">●</span> available &nbsp;
+                        <span class="dot-warning">●</span> filling up &nbsp;
+                        <span class="dot-danger">●</span> nearly full
                     </span>
                 </div>
-            </aside>
+            </section>
 
-        </div><!-- end container -->
+        </div>
     </main>
 
     <footer class="site-footer" aria-label="Footer">
@@ -440,6 +444,7 @@
                     <span class="logo">FIT<span>PEAK</span></span>
                     <p>Your gym, your evolution. Technology, performance and community in one place.</p>
                 </div>
+
                 <div class="footer-box">
                     <h4>Platform</h4>
                     <ul>
@@ -448,6 +453,7 @@
                         <li><a href="#">Equipment</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-box">
                     <h4>Contact</h4>
                     <p>Avenida da Boavista, 1203<br>4100-130 Porto, Portugal</p>
@@ -455,6 +461,7 @@
                     <p>+351 220 145 980</p>
                 </div>
             </div>
+
             <div class="footer-bottom">
                 <p>&copy; 2026 FitPeak Gym. All rights reserved.</p>
             </div>
