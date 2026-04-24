@@ -21,18 +21,19 @@
 <body>
 
     <!-- Hidden checkbox for mobile menu toggling -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" tabindex="-1">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
 
     <!-- Main Navigation Bar -->
-    <nav class="navbar" aria-label="Main navigation">
-        <a href="index.html" class="logo" aria-label="FitPeak — home">FIT<span>PEAK</span></a>
-        <label for="nav-toggle" class="burger" aria-label="Open navigation menu">
+    <nav class="navbar">
+        <a href="index.html" class="logo">FIT<span>PEAK</span></a>
+
+        <label for="nav-toggle" class="burger">
             <span></span><span></span><span></span>
         </label>
 
         <ul class="nav-menu">
             <li><a href="index.html">Home</a></li>
-            <li><a href="classes.html" aria-current="page">Classes</a></li>
+            <li><a href="classes.html" class="active">Classes</a></li>
             <li><a href="trainers.html">Trainers</a></li>
             <li><a href="equipment.html">Equipment</a></li>
             <li><a href="login.html" class="nav-login">Login</a></li>
@@ -45,11 +46,11 @@
 
             <!-- Page Header with Breadcrumb -->
             <header class="page-header">
-                <nav aria-label="Breadcrumb">
+                <nav>
                     <ol class="breadcrumb">
                         <li><a href="index.html">Home</a></li>
-                        <li><span class="breadcrumb-sep" aria-hidden="true">›</span></li>
-                        <li><span aria-current="page">Classes</span></li>
+                        <li><span class="breadcrumb-sep">›</span></li>
+                        <li><span>Classes</span></li>
                     </ol>
                 </nav>
 
@@ -60,7 +61,7 @@
             </header>
 
             <!-- Filter Section: allows filtering by type, trainer, day -->
-            <section aria-label="Filter classes">
+            <section>
                 <form class="filter-bar" method="get" action="classes.html">
                     <div class="filter-group">
                         <label class="form-label" for="f-type">Class type</label>
@@ -122,11 +123,11 @@
             </div>
 
             <!-- Classes Grid: list of all available class cards -->
-            <section aria-label="Classes list">
+            <section>
                 <div class="class-grid">
 
                     <!-- Class Card 1: Morning Yoga (user already enrolled) -->
-                    <article class="class-card" aria-label="Morning Yoga — You are enrolled">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">07:00</span>
                             <span class="badge badge-info">Yoga</span>
@@ -146,33 +147,33 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="4.9 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
                                 </div>
                                 <span class="text-muted rating-text">4.9 &nbsp;(32 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="12 out of 15 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
+                            <div class="cap-wrap">
+                                <div class="cap-bar">
                                     <div class="cap-fill" style="width:80%;"></div>
                                 </div>
                                 <span>12 / 15</span>
                             </div>
 
-                            <a href="classes.html" class="enrolled-btn" aria-label="Cancel enrollment in Morning Yoga">
+                            <a href="classes.html" class="enrolled-btn">
                                 ✓ Enrolled — Cancel
                             </a>
                         </div>
                     </article>
 
                     <!-- Class Card 2: Pilates Core (spots available) -->
-                    <article class="class-card" aria-label="Pilates Core — Spots available">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">10:00</span>
                             <span class="badge badge-info">Pilates</span>
@@ -192,20 +193,20 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="4.7 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
                                 </div>
                                 <span class="text-muted rating-text">4.7 &nbsp;(19 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="4 out of 12 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
+                            <div class="cap-wrap">
+                                <div class="cap-bar">
                                     <div class="cap-fill" style="width:33%;"></div>
                                 </div>
                                 <span>4 / 12</span>
@@ -216,7 +217,7 @@
                     </article>
 
                     <!-- Class Card 3: Power HIIT (spots available) -->
-                    <article class="class-card" aria-label="Power HIIT — Spots available">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">18:00</span>
                             <span class="badge badge-danger">HIIT</span>
@@ -236,20 +237,20 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="4.8 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
                                 </div>
                                 <span class="text-muted rating-text">4.8 &nbsp;(47 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="8 out of 20 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
+                            <div class="cap-wrap">
+                                <div class="cap-bar">
                                     <div class="cap-fill" style="width:40%;"></div>
                                 </div>
                                 <span>8 / 20</span>
@@ -260,7 +261,7 @@
                     </article>
 
                     <!-- Class Card 4: Indoor Cycling (almost full) -->
-                    <article class="class-card" aria-label="Indoor Cycling — Almost full">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">19:00</span>
                             <span class="badge badge-warning">Cycling</span>
@@ -280,20 +281,20 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="4.6 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star">★</span>
                                 </div>
                                 <span class="text-muted rating-text">4.6 &nbsp;(28 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="16 out of 18 spots taken — almost full">
-                                <div class="cap-bar" aria-hidden="true">
+                            <div class="cap-wrap">
+                                <div class="cap-bar">
                                     <div class="cap-fill mid" style="width:89%;"></div>
                                 </div>
                                 <span class="capacity-warning">16 / 18</span>
@@ -304,7 +305,7 @@
                     </article>
 
                     <!-- Class Card 5: Strength Lab (spots available) -->
-                    <article class="class-card" aria-label="Strength Lab — Spots available">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">17:00</span>
                             <span class="badge badge-accent">Strength</span>
@@ -324,20 +325,20 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="4.7 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
                                 </div>
                                 <span class="text-muted rating-text">4.7 &nbsp;(24 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="6 out of 14 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
+                            <div class="cap-wrap">
+                                <div class="cap-bar">
                                     <div class="cap-fill" style="width:43%;"></div>
                                 </div>
                                 <span>6 / 14</span>
@@ -348,7 +349,7 @@
                     </article>
 
                     <!-- Class Card 6: CrossFit WOD (class is full) -->
-                    <article class="class-card" aria-label="CrossFit WOD — Class is full">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">17:30</span>
                             <span class="badge badge-danger">CrossFit</span>
@@ -368,12 +369,12 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="4.4 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star">★</span>
                                 </div>
                                 <span class="text-muted rating-text">4.4 &nbsp;(56 reviews)</span>
                             </div>
@@ -388,7 +389,7 @@
                     </article>
 
                     <!-- Class Card 7: Boxing Basics (spots available) -->
-                    <article class="class-card" aria-label="Boxing Basics — Spots available">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">11:30</span>
                             <span class="badge badge-warning">Boxing</span>
@@ -408,20 +409,20 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="4.8 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
                                 </div>
                                 <span class="text-muted rating-text">4.8 &nbsp;(26 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="9 out of 16 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
+                            <div class="cap-wrap">
+                                <div class="cap-bar">
                                     <div class="cap-fill" style="width:56%;"></div>
                                 </div>
                                 <span>9 / 16</span>
@@ -432,7 +433,7 @@
                     </article>
 
                     <!-- Class Card 8: Senior Fitness (spots available) -->
-                    <article class="class-card" aria-label="Senior Fitness — Spots available">
+                    <article class="class-card">
                         <div class="class-head">
                             <span class="class-time-big">20:00</span>
                             <span class="badge badge-success">Senior Fitness</span>
@@ -452,20 +453,20 @@
                             </ul>
 
                             <div class="class-ratings">
-                                <div class="stars" aria-label="5 out of 5 stars">
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
-                                    <span class="star on" aria-hidden="true">★</span>
+                                <div class="stars">
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
+                                    <span class="star on">★</span>
                                 </div>
                                 <span class="text-muted rating-text">5.0 &nbsp;(18 reviews)</span>
                             </div>
                         </div>
 
                         <div class="class-foot">
-                            <div class="cap-wrap" aria-label="5 out of 14 spots taken">
-                                <div class="cap-bar" aria-hidden="true">
+                            <div class="cap-wrap">
+                                <div class="cap-bar">
                                     <div class="cap-fill" style="width:36%;"></div>
                                 </div>
                                 <span>5 / 14</span>
@@ -479,7 +480,7 @@
             </section>
 
             <!-- Legend Section: explains badge colors and capacity indicators -->
-            <section class="legend-section" aria-label="Class types legend">
+            <section class="legend-section">
                 <p class="legend-title">Class type legend</p>
 
                 <div class="legend-row">
@@ -499,7 +500,7 @@
     </main>
 
     <!-- Site Footer -->
-    <footer class="site-footer" aria-label="Footer">
+    <footer class="site-footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-box">
@@ -511,8 +512,8 @@
                     <h4>Platform</h4>
                     <ul>
                         <li><a href="classes.html">Classes</a></li>
-                        <li><a href="#">Trainers</a></li>
-                        <li><a href="#">Equipment</a></li>
+                        <li><a href="trainers.html">Trainers</a></li>
+                        <li><a href="equipment.html">Equipment</a></li>
                     </ul>
                 </div>
 
