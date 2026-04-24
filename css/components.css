@@ -96,15 +96,14 @@
     white-space: nowrap;
     transition: color var(--t), background var(--t), border-color var(--t);
 }
-.nav-menu a:hover,
-.nav-menu a[aria-current="page"] {
+
+.nav-menu a:hover, .nav-menu a.active {
     color: var(--text);
     background: var(--card);
 }
 
 /* Login & Register Button Variants */
-.nav-menu a.nav-login,
-.nav-menu a.nav-register {
+.nav-menu a.nav-login, .nav-menu a.nav-register {
     min-height: 36px;
     padding: 0.45rem 0.95rem;
     border-radius: var(--r-sm);
