@@ -14,7 +14,7 @@ These files are located in the root folder of the project.
 
 To open and view the pages, we use the **Live Server** extension in Visual Studio Code.
 
-From the homepage, it is possible to navigate to the Classes page through the navigation menu.
+From the homepage (`index.html`), it is possible to navigate to the Classes page through the navigation menu.
 
 To open the Admin Dashboard page, manually change the browser URL to:
 
