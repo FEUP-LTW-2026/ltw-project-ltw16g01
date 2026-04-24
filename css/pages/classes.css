@@ -263,3 +263,11 @@
     font-family: var(--ff-body);
     font-weight: 600;
 }
+
+.cap-fill-80 { width: 80%; }
+.cap-fill-33 { width: 33%; }
+.cap-fill-40 { width: 40%; }
+.cap-fill-89 { width: 89%; }
+.cap-fill-43 { width: 43%; }
+.cap-fill-56 { width: 56%; }
+.cap-fill-36 { width: 36%; }
