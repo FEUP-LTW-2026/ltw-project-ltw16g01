@@ -187,10 +187,10 @@
     font-size: 0.88rem;
     margin-bottom: var(--sp-sm);
 }
-.footer-box .logo, .footer-box h2, .footer-box h4 {
+.footer-box .logo, .footer-box h2, .footer-box h3, .footer-box h4 {
     margin-bottom: var(--sp-md);
 }
-.footer-box h2, .footer-box h4 {
+.footer-box h2, .footer-box h3, .footer-box h4 {
     font-size: 0.7rem;
     font-family: var(--ff-body);
     font-weight: 700;
