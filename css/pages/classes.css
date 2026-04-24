@@ -17,6 +17,13 @@
     flex-direction: column;
 }
 
+h2 {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-family: var(--ff-body);
+    font-weight: 600;
+    margin-bottom: var(--sp-md);
+}
+
 /* Results & Sorting Bar */
 .results-bar {
     display: flex;
