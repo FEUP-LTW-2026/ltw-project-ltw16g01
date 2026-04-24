@@ -66,14 +66,14 @@
 }
 
 /* Burger Animation when toggled */
-.nav-toggle:checked ~ .navbar .burger span:nth-child(1) {
+.nav-toggle:checked ~ header .navbar .burger span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
-.nav-toggle:checked ~ .navbar .burger span:nth-child(2) {
+.nav-toggle:checked ~ header .navbar .burger span:nth-child(2) {
     opacity: 0;
     transform: scaleX(0);
 }
-.nav-toggle:checked ~ .navbar .burger span:nth-child(3) {
+.nav-toggle:checked ~ header .navbar .burger span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
 }
 
@@ -490,7 +490,7 @@ tbody td {
         z-index: 99;
         box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.3);
     }
-    .nav-toggle:checked ~ .navbar .nav-menu {
+     .nav-toggle:checked ~ header .navbar .nav-menu {
         max-height: 80vh;
         visibility: visible;
         transition: max-height 0.32s ease, visibility 0s 0s;
