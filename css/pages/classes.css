@@ -257,3 +257,9 @@
         justify-content: center;
     }
 }
+
+.class-name{
+    font-size: clamp(1rem, 2.5vw, 1.2rem); 
+    font-family: var(--ff-body);
+    font-weight: 600;
+}
