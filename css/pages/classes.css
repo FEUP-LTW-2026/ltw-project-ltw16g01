@@ -1,7 +1,7 @@
 /* CLASSES.CSS */
 /* Styles for the classes listing page: filters, class cards, capacity indicators, legend */
 
-/* Filter Bar (grid of dropdowns and button) */
+/* Filter Bar */
 .filter-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -12,6 +12,7 @@
     padding: var(--sp-md);
     margin-bottom: var(--sp-lg);
 }
+
 .filter-group {
     display: flex;
     flex-direction: column;
@@ -26,11 +27,16 @@
     gap: var(--sp-sm);
     margin-bottom: var(--sp-lg);
 }
+
 .results-count {
     font-size: 0.88rem;
     color: var(--muted);
 }
-.results-count strong { color: var(--text); }
+
+.results-count strong {
+    color: var(--text);
+}
+
 .sort-row {
     display: flex;
     align-items: center;
@@ -38,6 +44,7 @@
     font-size: 0.82rem;
     color: var(--muted);
 }
+
 .sort-btn {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -51,10 +58,12 @@
     min-height: 32px;
     font-family: var(--ff-body);
 }
+
 .sort-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
 }
+
 .sort-btn.active {
     background: var(--accent);
     border-color: var(--accent);
@@ -68,6 +77,7 @@
     gap: var(--sp-md);
     margin-bottom: var(--sp-xl);
 }
+
 .class-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -77,13 +87,14 @@
     flex-direction: column;
     transition: border-color var(--t), box-shadow var(--t), transform var(--t);
 }
+
 .class-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-a);
     transform: translateY(-2px);
 }
 
-/* Class Card Header (time + type badge) */
+/* Class Card Header */
 .class-head {
     display: flex;
     align-items: center;
@@ -94,6 +105,7 @@
     background: linear-gradient(135deg, var(--surface), var(--card));
     border-bottom: 1px solid var(--border);
 }
+
 .class-time-big {
     font-family: var(--ff-display);
     font-size: clamp(1.2rem, 3vw, 1.4rem);
@@ -110,11 +122,22 @@
     flex-direction: column;
     gap: var(--sp-sm);
 }
-.class-body h4 { margin-bottom: 0.15rem; }
-.class-body > p {
+
+/* Class Title */
+.class-name {
+    margin-bottom: 0.15rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem); 
+    font-family: var(--ff-body);
+    font-weight: 600;
+}
+
+/* Class Description Text */
+.class-body p {
     color: var(--muted);
     font-size: 0.85rem;
 }
+
+/* Class Metadata */
 .class-meta {
     display: flex;
     flex-wrap: wrap;
@@ -122,6 +145,7 @@
     margin-top: auto;
     padding-top: var(--sp-sm);
 }
+
 .class-meta li {
     display: flex;
     align-items: center;
@@ -129,13 +153,15 @@
     font-size: 0.78rem;
     color: var(--muted);
 }
+
+/* Class Rating */
 .class-ratings {
     display: flex;
     align-items: center;
     gap: var(--sp-sm);
 }
 
-/* Class Card Footer (capacity + enroll button) */
+/* Class Card Footer */
 .class-foot {
     display: flex;
     align-items: center;
@@ -145,6 +171,8 @@
     padding: var(--sp-sm) var(--sp-md);
     border-top: 1px solid var(--border);
 }
+
+/* Capacity Bar */
 .cap-wrap {
     display: flex;
     align-items: center;
@@ -152,6 +180,7 @@
     font-size: 0.78rem;
     color: var(--muted);
 }
+
 .cap-bar {
     width: 52px;
     height: 5px;
@@ -159,15 +188,31 @@
     border-radius: 3px;
     overflow: hidden;
 }
+
 .cap-fill {
     height: 100%;
     border-radius: 3px;
     background: var(--success);
 }
-.cap-fill.mid { background: var(--warning); }
-.cap-fill.low { background: var(--danger); }
 
-/* Enrolled Button (toggled state for already enrolled classes) */
+.cap-fill.mid {
+    background: var(--warning);
+}
+
+.cap-fill.low {
+    background: var(--danger);
+}
+
+/* Capacity Bar Widths */
+.cap-fill-80 { width: 80%; }
+.cap-fill-33 { width: 33%; }
+.cap-fill-40 { width: 40%; }
+.cap-fill-89 { width: 89%; }
+.cap-fill-43 { width: 43%; }
+.cap-fill-56 { width: 56%; }
+.cap-fill-36 { width: 36%; }
+
+/* Enrolled Button */
 .enrolled-btn {
     display: inline-flex;
     align-items: center;
@@ -186,17 +231,19 @@
     cursor: pointer;
     transition: all var(--t);
 }
+
 .enrolled-btn:hover {
     background: rgba(255, 71, 87, 0.10);
     border-color: var(--danger);
     color: var(--danger);
 }
 
-/* Legend Section (explains badges and capacity colors) */
+/* Legend Section */
 .legend-section {
     padding-block: var(--sp-lg);
     border-top: 1px solid var(--border);
 }
+
 .legend-title {
     font-size: 0.7rem;
     font-weight: 700;
@@ -205,6 +252,7 @@
     color: var(--muted);
     margin-bottom: var(--sp-md);
 }
+
 .legend-row {
     display: flex;
     flex-wrap: wrap;
@@ -212,62 +260,96 @@
     align-items: center;
 }
 
-/* Additional Utility Classes */
-.page-header-row { margin-top: var(--sp-sm); }
-.filter-group-end { justify-content: flex-end; }
-.full-width { width: 100%; }
-.rating-text { font-size: 0.75rem; }
+/* Small Helper Classes */
+.page-header-row {
+    margin-top: var(--sp-sm);
+}
+
+.filter-group-end {
+    justify-content: flex-end;
+}
+
+.rating-text {
+    font-size: 0.75rem;
+}
+
 .capacity-warning {
     color: var(--warning);
     font-weight: 600;
 }
+
 .enrollment-note {
     font-size: 0.72rem;
     margin-top: 3px;
 }
+
 .legend-capacity-text {
     font-size: 0.8rem;
     color: var(--muted);
     margin-left: auto;
 }
-.dot-success { color: var(--success); }
-.dot-warning { color: var(--warning); }
-.dot-danger { color: var(--danger); }
+
+.dot-success {
+    color: var(--success);
+}
+
+.dot-warning {
+    color: var(--warning);
+}
+
+.dot-danger {
+    color: var(--danger);
+}
 
 /* Responsive Grid Adjustments */
 @media (min-width: 480px) {
-    .filter-bar { grid-template-columns: 1fr 1fr; }
-    .class-head { padding: var(--sp-md) var(--sp-lg); }
-    .class-body { padding: var(--sp-lg); }
-    .class-foot { padding: var(--sp-md) var(--sp-lg); }
+    .filter-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .class-head {
+        padding: var(--sp-md) var(--sp-lg);
+    }
+
+    .class-body {
+        padding: var(--sp-lg);
+    }
+
+    .class-foot {
+        padding: var(--sp-md) var(--sp-lg);
+    }
 }
+
 @media (min-width: 540px) {
-    .class-grid { grid-template-columns: repeat(2, 1fr); }
+    .class-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
+
 @media (min-width: 768px) {
-    .filter-bar { grid-template-columns: repeat(4, 1fr); align-items: end; }
+    .filter-bar {
+        grid-template-columns: repeat(4, 1fr);
+        align-items: end;
+    }
 }
+
 @media (min-width: 860px) {
-    .class-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); }
+    .class-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--sp-lg);
+    }
 }
+
 @media (max-width: 375px) {
-    .class-foot { flex-direction: column; align-items: stretch; }
-    .class-foot .main-button, .class-foot .secondary-button, .class-foot .enrolled-btn {
+    .class-foot {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .class-foot .main-button,
+    .class-foot .secondary-button,
+    .class-foot .enrolled-btn {
         width: 100%;
         justify-content: center;
     }
 }
-
-.class-name{
-    font-size: clamp(1rem, 2.5vw, 1.2rem); 
-    font-family: var(--ff-body);
-    font-weight: 600;
-}
-
-.cap-fill-80 { width: 80%; }
-.cap-fill-33 { width: 33%; }
-.cap-fill-40 { width: 40%; }
-.cap-fill-89 { width: 89%; }
-.cap-fill-43 { width: 43%; }
-.cap-fill-56 { width: 56%; }
-.cap-fill-36 { width: 36%; }

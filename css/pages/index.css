@@ -170,7 +170,7 @@
     font-size: 2.2rem;
     margin-bottom: var(--sp-md);
 }
-.feature-card h3, .feature-card h4 { margin-bottom: var(--sp-sm); }
+.feature-card h3 { margin-bottom: var(--sp-sm); }
 .feature-card p:last-child {
     color: var(--muted);
     font-size: 0.9rem;
