@@ -5,6 +5,11 @@ require_once 'db/connection.php';
 require_once 'includes/header.php';
 require_once 'includes/footer.php';
 
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: index.php');
+    exit;
+}
+
 $pdo = getDatabaseConnection();
 
 $stmt = $pdo->prepare("SELECT DISTINCT category FROM equipment ORDER BY category");

@@ -1,6 +1,14 @@
 <?php
+
+session_start();
+
 require_once 'includes/header.php';
 require_once 'includes/footer.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: index.php');
+    exit;
+}
 
 output_header('admin-dashboard.css');
 ?>
