@@ -1,42 +1,75 @@
 /* ADD-EQUIPMENT.CSS */
-.add-equipment-card {
-    max-width: 700px;
-}
 
-.add-equipment-card .form-row {
+.add-equipment-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sp-sm);
+    grid-template-columns: 1fr;
+    gap: var(--sp-lg);
+    margin-bottom: var(--sp-2xl);
 }
 
-.auth-alert {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--sp-sm);
-    padding: var(--sp-sm) var(--sp-md);
-    border-radius: var(--r-sm);
-    font-size: 0.875rem;
-    border: 1px solid transparent;
+.add-equipment-form {
+    width: 100%;
+}
+
+.add-equipment-form .card-head h3 {
+    font-family: var(--ff-body);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.form-group {
     margin-bottom: var(--sp-md);
 }
-.auth-alert-icon {
-    font-size: 1rem;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-.alert-error {
-    background: rgba(255, 71, 87, 0.10);
-    border-color: rgba(255, 71, 87, 0.25);
-    color: var(--danger);
-}
-.alert-success {
-    background: rgba(46, 213, 115, 0.10);
-    border-color: rgba(46, 213, 115, 0.25);
-    color: var(--success);
+
+.form-input {
+    width: 100%;
+    min-height: var(--touch);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    padding: 0.75rem 0.9rem;
+    transition: border-color var(--t), box-shadow var(--t);
 }
 
-@media (max-width: 400px) {
-    .add-equipment-card .form-row {
-        grid-template-columns: 1fr;
+.form-input::placeholder {
+    color: var(--muted);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232, 65, 24, .14);
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+}
+
+.preview-card {
+    height: fit-content;
+}
+
+.preview-card .secondary-button {
+    margin-top: var(--sp-md);
+}
+
+@media (min-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 860px) {
+    .add-equipment-layout {
+        grid-template-columns: 2fr 1fr;
+        align-items: start;
     }
 }
