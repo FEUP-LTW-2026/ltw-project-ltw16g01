@@ -1,49 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- FitPeak Homepage: Main landing page with hero, features, pricing, and CTA -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FitPeak — Gym management platform. Classes, trainers and equipment all in one place.">
-    <meta name="theme-color" content="#0b0b0b">
-    <title>FitPeak — The Gym That Grows With You</title>
+<?php
+    require_once 'includes/header.php';
+    require_once 'includes/footer.php';
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components.css">
+    output_header();
+?>
     <link rel="stylesheet" href="css/pages/index.css">
-</head>
-<body>
-
-    <!-- Hidden checkbox for mobile menu toggling -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-
-    <!-- Main Navigation Bar -->
-    <header>
-        <nav class="navbar" aria-label="Main navigation">
-            <a href="index.html" class="logo">FIT<span>PEAK</span></a>
-
-            <label for="nav-toggle" class="burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-
-            <ul class="nav-menu">
-                <li><a href="index.html" aria-current="page" class="active">Home</a></li>
-                <li><a href="classes.html">Classes</a></li>
-                <li><a href="trainers.html">Trainers</a></li>
-                <li><a href="equipment.html">Equipment</a></li>
-                <li><a href="login.html" class="nav-login">Login</a></li>
-                <li><a href="register.html" class="nav-register">Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
 
     <main class="main">
 
@@ -269,34 +230,4 @@
 
     </main>
 
-    <!-- Site Footer -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-box">
-                    <span class="logo">FIT<span>PEAK</span></span>
-                    <p>Your gym, your evolution. Technology, performance and community in one place.</p>
-                </div>
-                <div class="footer-box">
-                    <h3>Platform</h3>
-                    <ul>
-                        <li><a href="classes.html">Classes</a></li>
-                        <li><a href="#">Trainers</a></li>
-                        <li><a href="#">Equipment</a></li>
-                    </ul>
-                </div>
-                <div class="footer-box">
-                    <h3>Contact</h3>
-                    <p>Avenida da Boavista, 1203<br>4100-130 Porto, Portugal</p>
-                    <p>info@fitpeak.com</p>
-                    <p>+351 220 145 980</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 FitPeak Gym. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-</body>
-</html>
+    <?php output_footer(); ?>
