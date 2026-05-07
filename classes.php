@@ -36,18 +36,8 @@ $sql = "
         cl.duration_min,
         cl.location,
         cl.day_of_week,
-        cl.start_time,
-        u.name AS trainer_name,
-        COALESCE((SELECT ROUND(AVG(r.rating),1) FROM reviews r WHERE r.class_id = cl.id), 0) AS avg_rating,
-        COALESCE((SELECT COUNT(*) FROM reviews r WHERE r.class_id = cl.id), 0) AS review_count,
-        COALESCE((SELECT COUNT(*)
-                  FROM enrollments en
-                  JOIN class_sessions cs ON en.session_id = cs.id
-                  WHERE cs.class_id = cl.id
-                    AND cs.session_date >= DATE('now')
-                    AND en.status = 'enrolled'), 0) AS enrolled_count
+        cl.start_time
     FROM classes cl
-    JOIN users u ON cl.trainer_id = u.id
     WHERE cl.active = 1
 ";
 

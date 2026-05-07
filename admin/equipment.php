@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once 'db/connection.php';
-require_once 'includes/header.php';
+require_once '../db/connection.php';
+require_once '../includes/header.php';
 
 $pdo = getDatabaseConnection();
 $equipment = $pdo->query("SELECT * FROM equipment ORDER BY category, name")->fetchAll();
@@ -102,7 +102,7 @@ output_header("equipment.css");
     </div>
 </main>
 
-<?php require_once 'includes/footer.php'; output_footer(); ?>
+<?php require_once '../includes/footer.php'; output_footer(); ?>
 
 <script>
 // Live update every 30 seconds – client-side also applies the same override

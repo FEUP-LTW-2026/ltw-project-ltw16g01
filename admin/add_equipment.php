@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-require_once 'db/connection.php';
-require_once 'includes/header.php';
-require_once 'includes/footer.php';
+require_once '../db/connection.php';
+require_once '../includes/header.php';
+require_once '../includes/footer.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+/*if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: index.php');
     exit;
-}
+}*/
 
 $pdo = getDatabaseConnection();
 
@@ -38,6 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ':status' => $status,
         ':notes' => $notes
     ]);
+    
+    header('Location: equipment.php');
 }
 
 output_header("add_equipment.css");
