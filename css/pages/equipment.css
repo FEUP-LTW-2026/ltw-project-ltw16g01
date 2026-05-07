@@ -1,0 +1,144 @@
+/* EQUIPMENT.CSS */
+/* Styles for equipment listing page – cards, availability bars, status badges */
+
+.category-title {
+    margin-bottom: 1rem;
+    color: var(--muted);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: var(--ff-body);
+    font-weight: 700;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--success);
+    font-weight: 600;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: live-pulse 2s ease infinite;
+}
+
+@keyframes live-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+.flex { display: flex; }
+.gap-md { gap: var(--sp-md); }
+.mb-lg { margin-bottom: var(--sp-lg); }
+
+.equip-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+}
+
+.equip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-md);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.equip-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-a);
+}
+
+.equip-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--sp-sm);
+    margin-bottom: var(--sp-sm);
+}
+
+.equip-name {
+    font-family: var(--ff-body);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.equip-availability {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    margin-bottom: var(--sp-sm);
+}
+
+.avail-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.avail-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--success);
+    transition: width 0.4s ease, background 0.3s;
+}
+
+.avail-fill.medium {
+    background: var(--warning);
+}
+
+.avail-fill.low {
+    background: var(--danger);
+}
+
+.avail-text {
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.equip-notes {
+    font-size: 0.8rem;
+    margin-top: var(--sp-xs);
+}
+
+.status-available {
+    border-left: 3px solid var(--success);
+}
+
+.status-maintenance {
+    border-left: 3px solid var(--warning);
+}
+
+.status-unavailable {
+    border-left: 3px solid var(--danger);
+}
+
+/* Responsive */
+@media (min-width: 540px) {
+    .equip-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 860px) {
+    .equip-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

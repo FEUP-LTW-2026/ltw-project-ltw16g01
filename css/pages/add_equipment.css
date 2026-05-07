@@ -1,0 +1,42 @@
+/* ADD-EQUIPMENT.CSS */
+.add-equipment-card {
+    max-width: 700px;
+}
+
+.add-equipment-card .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-sm);
+}
+
+.auth-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-sm);
+    padding: var(--sp-sm) var(--sp-md);
+    border-radius: var(--r-sm);
+    font-size: 0.875rem;
+    border: 1px solid transparent;
+    margin-bottom: var(--sp-md);
+}
+.auth-alert-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.alert-error {
+    background: rgba(255, 71, 87, 0.10);
+    border-color: rgba(255, 71, 87, 0.25);
+    color: var(--danger);
+}
+.alert-success {
+    background: rgba(46, 213, 115, 0.10);
+    border-color: rgba(46, 213, 115, 0.25);
+    color: var(--success);
+}
+
+@media (max-width: 400px) {
+    .add-equipment-card .form-row {
+        grid-template-columns: 1fr;
+    }
+}
