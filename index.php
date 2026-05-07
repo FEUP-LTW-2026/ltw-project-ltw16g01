@@ -2,9 +2,8 @@
     require_once 'includes/header.php';
     require_once 'includes/footer.php';
 
-    output_header();
+    output_header('index.css');
 ?>
-    <link rel="stylesheet" href="css/pages/index.css">
 
     <main class="main">
 
@@ -230,4 +229,5 @@
 
     </main>
 
+    <!-- Site Footer -->
     <?php output_footer(); ?>

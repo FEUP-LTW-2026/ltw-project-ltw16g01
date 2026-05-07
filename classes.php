@@ -1,47 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- FitPeak Classes Page: Browse and enroll in gym classes -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FitPeak — Browse all available classes. Yoga, Pilates, HIIT, Cycling, Strength, CrossFit, Boxing and Senior Fitness. Filter by type, trainer or day and enroll instantly.">
-    <meta name="theme-color" content="#0b0b0b">
-    <title>Classes — FitPeak</title>
+<?php
+require_once 'includes/header.php';
+require_once 'includes/footer.php';
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/pages/classes.css">
-</head>
-<body>
-
-    <!-- Hidden checkbox for mobile menu toggling -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-
-    <!-- Main Navigation Bar -->
-    <header>
-        <nav class="navbar">
-            <a href="index.html" class="logo">FIT<span>PEAK</span></a>
-
-            <label for="nav-toggle" class="burger">
-                <span></span><span></span><span></span>
-            </label>
-
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="classes.html" aria-current="page" class="active">Classes</a></li>
-                <li><a href="trainers.html">Trainers</a></li>
-                <li><a href="equipment.html">Equipment</a></li>
-                <li><a href="login.html" class="nav-login">Login</a></li>
-                <li><a href="register.html" class="nav-register">Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
+output_header('classes.css');
+?>
 
     <main class="main">
         <div class="container">
@@ -50,7 +12,7 @@
             <header class="page-header">
                 <nav>
                     <ol class="breadcrumb">
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.php">Home</a></li>
                         <li><span class="breadcrumb-sep">›</span></li>
                         <li><span>Classes</span></li>
                     </ol>
@@ -64,7 +26,7 @@
 
             <!-- Filter Section -->
             <section>
-                <form class="filter-bar" method="get" action="classes.html">
+                <form class="filter-bar" method="get" action="classes.php">
                     <div class="filter-group">
                         <label class="form-label" for="f-type">Class type</label>
                         <select id="f-type" name="type" class="form-select">
@@ -163,7 +125,7 @@
                                 </div>
                                 <span>12 / 15</span>
                             </div>
-                            <a href="classes.html" class="enrolled-btn">✓ Enrolled — Cancel</a>
+                            <a href="classes.php" class="enrolled-btn">✓ Enrolled — Cancel</a>
                         </div>
                     </article>
 
@@ -202,7 +164,7 @@
                                 </div>
                                 <span>4 / 12</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                            <a href="register.php" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
@@ -241,7 +203,7 @@
                                 </div>
                                 <span>8 / 20</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                            <a href="register.php" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
@@ -280,7 +242,7 @@
                                 </div>
                                 <span class="capacity-warning">16 / 18</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                            <a href="register.php" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
@@ -319,7 +281,7 @@
                                 </div>
                                 <span>6 / 14</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                            <a href="register.php" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
@@ -394,7 +356,7 @@
                                 </div>
                                 <span>9 / 16</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                            <a href="register.php" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
@@ -433,7 +395,7 @@
                                 </div>
                                 <span>5 / 14</span>
                             </div>
-                            <a href="register.html" class="main-button btn-sm">Enroll</a>
+                            <a href="register.php" class="main-button btn-sm">Enroll</a>
                         </div>
                     </article>
 
@@ -459,33 +421,4 @@
     </main>
 
     <!-- Site Footer -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-box">
-                    <span class="logo">FIT<span>PEAK</span></span>
-                    <p>Your gym, your evolution. Technology, performance and community in one place.</p>
-                </div>
-                <div class="footer-box">
-                    <h3>Platform</h3>
-                    <ul>
-                        <li><a href="classes.html">Classes</a></li>
-                        <li><a href="trainers.html">Trainers</a></li>
-                        <li><a href="equipment.html">Equipment</a></li>
-                    </ul>
-                </div>
-                <div class="footer-box">
-                    <h3>Contact</h3>
-                    <p>Avenida da Boavista, 1203<br>4100-130 Porto, Portugal</p>
-                    <p>info@fitpeak.com</p>
-                    <p>+351 220 145 980</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 FitPeak Gym. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-</body>
-</html>
+    <?php output_footer(); ?>

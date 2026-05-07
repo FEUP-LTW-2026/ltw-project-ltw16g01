@@ -121,3 +121,92 @@ CREATE TABLE IF NOT EXISTS notifications (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Seed trainer profiles
+INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
+SELECT id, 'Yoga & Pilates specialist with 10 years experience.', 'Yoga, Pilates, Flexibility', 'ACE CPT, RYT-200'
+FROM users WHERE username = 'anasilva';
+
+INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
+SELECT id, 'High-intensity training enthusiast and former athlete.', 'HIIT, CrossFit, Strength', 'NSCA-CSCS, CF-L2'
+FROM users WHERE username = 'brunocosta';
+
+INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
+SELECT id, 'Certified spinning instructor and endurance coach.', 'Spinning, Cycling, Cardio', 'Spinning Certified, ACE'
+FROM users WHERE username = 'carlamendes';
+
+
+-- Seed member profiles
+INSERT INTO member_profiles (user_id, membership_plan, plan_start, plan_end)
+SELECT id, 'premium', date('now'), date('now', '+1 year')
+FROM users
+WHERE username IN ('joaoferreira', 'mariasantos', 'pedrorodrigues');
+
+
+-- Seed classes
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Morning Yoga', 'Start your day with calm and flexibility', 'yoga', id, 15, 60, 'Monday', '07:00', 'Studio A'
+FROM users WHERE username = 'anasilva';
+
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Power HIIT', 'Burn calories and build strength', 'hiit', id, 20, 45, 'Tuesday', '18:00', 'Main Floor'
+FROM users WHERE username = 'brunocosta';
+
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Spinning Class', 'High-energy cycling for all levels', 'spinning', id, 18, 50, 'Wednesday', '19:00', 'Cycling Studio'
+FROM users WHERE username = 'carlamendes';
+
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Pilates Core', 'Strengthen your core with controlled movements', 'pilates', id, 12, 55, 'Thursday', '10:00', 'Studio B'
+FROM users WHERE username = 'anasilva';
+
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'CrossFit WOD', 'Workout of the day — push your limits', 'crossfit', id, 20, 60, 'Friday', '17:30', 'Main Floor'
+FROM users WHERE username = 'brunocosta';
+
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Evening Yoga', 'Wind down and restore with evening yoga', 'yoga', id, 15, 60, 'Friday', '20:00', 'Studio A'
+FROM users WHERE username = 'anasilva';
+
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Saturday Spin', 'Weekend ride to start your Saturday right', 'spinning', id, 18, 60, 'Saturday', '09:00', 'Cycling Studio'
+FROM users WHERE username = 'carlamendes';
+
+
+-- Seed class sessions
+INSERT INTO class_sessions (class_id, session_date)
+SELECT id, date('now', 'weekday 1') FROM classes WHERE day_of_week = 'Monday';
+
+INSERT INTO class_sessions (class_id, session_date)
+SELECT id, date('now', 'weekday 2') FROM classes WHERE day_of_week = 'Tuesday';
+
+INSERT INTO class_sessions (class_id, session_date)
+SELECT id, date('now', 'weekday 3') FROM classes WHERE day_of_week = 'Wednesday';
+
+INSERT INTO class_sessions (class_id, session_date)
+SELECT id, date('now', 'weekday 4') FROM classes WHERE day_of_week = 'Thursday';
+
+INSERT INTO class_sessions (class_id, session_date)
+SELECT id, date('now', 'weekday 5') FROM classes WHERE day_of_week = 'Friday';
+
+INSERT INTO class_sessions (class_id, session_date)
+SELECT id, date('now', 'weekday 6') FROM classes WHERE day_of_week = 'Saturday';
+
+
+-- Seed equipment
+INSERT INTO equipment (name, category, quantity, available, status) VALUES
+('Treadmill', 'Cardio', 8, 6, 'available'),
+('Stationary Bike', 'Cardio', 6, 5, 'available'),
+('Rowing Machine', 'Cardio', 4, 3, 'available'),
+('Elliptical', 'Cardio', 4, 4, 'available'),
+('Weight Bench', 'Strength', 10, 8, 'available'),
+('Squat Rack', 'Strength', 4, 3, 'available'),
+('Pull-up Bar', 'Strength', 6, 6, 'available'),
+('Dumbbell Set', 'Free Weights', 20, 18, 'available'),
+('Barbell Set', 'Free Weights', 8, 7, 'available'),
+('Kettlebell Set', 'Free Weights', 12, 10, 'available'),
+('Yoga Mat', 'Accessories', 30, 25, 'available'),
+('Foam Roller', 'Accessories', 15, 12, 'available'),
+('Battle Rope', 'Functional', 4, 3, 'available'),
+('TRX Suspension', 'Functional', 6, 5, 'available'),
+('Punching Bag', 'Cardio', 3, 2, 'available');

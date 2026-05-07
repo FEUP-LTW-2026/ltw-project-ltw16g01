@@ -1,6 +1,6 @@
 <?php
 
-function output_header() { ?>
+function output_header($pageCss) { ?>
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -16,6 +16,7 @@ function output_header() { ?>
 
         <link rel="stylesheet" href="css/base.css">
         <link rel="stylesheet" href="css/components.css">
+        <link rel="stylesheet" href="css/pages/<?php echo $pageCss; ?>">
     </head>
     <body>
 
