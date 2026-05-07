@@ -3,6 +3,9 @@
 // Creates users with hashed passwords.
 // This file should run before the SQL inserts that depend on users.
 
+require_once __DIR__ . '/connection.php';
+$pdo = getDatabaseConnection();
+
 $insertUser = $pdo->prepare("INSERT INTO users (name, username, email, password, role) VALUES (?, ?, ?, ?, ?)");
 
 // Admin
