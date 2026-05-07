@@ -1,10 +1,8 @@
 /* ADD-EQUIPMENT.CSS */
 
 .add-equipment-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--sp-lg);
-    margin-bottom: var(--sp-2xl);
+    max-width: 760px;
+    margin: 0 auto var(--sp-2xl);
 }
 
 .add-equipment-form {
@@ -53,23 +51,12 @@ textarea.form-input {
     gap: var(--sp-md);
 }
 
-.preview-card {
-    height: fit-content;
-}
-
-.preview-card .secondary-button {
-    margin-top: var(--sp-md);
+.back-button {
+    margin-top: var(--sp-sm);
 }
 
 @media (min-width: 640px) {
     .form-row {
         grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (min-width: 860px) {
-    .add-equipment-layout {
-        grid-template-columns: 2fr 1fr;
-        align-items: start;
     }
 }

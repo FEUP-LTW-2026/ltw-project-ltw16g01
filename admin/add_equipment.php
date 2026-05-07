@@ -3,6 +3,7 @@ session_start();
 
 require_once 'db/connection.php';
 require_once 'includes/header.php';
+require_once 'includes/footer.php';
 
 $pdo = getDatabaseConnection();
 
@@ -65,7 +66,7 @@ output_header("add_equipment.css");
 
                 <div class="card-head">
                     <h3>Equipment Details</h3>
-                    <span class="badge badge-accent">New</span>
+                    <span class="badge badge-warning">Admin Only</span>
                 </div>
 
                 <div class="card-body">
@@ -140,30 +141,12 @@ output_header("add_equipment.css");
                         Add Equipment
                     </button>
 
+                    <a href="equipment.php" class="secondary-button full-button back-button">
+                        Back to Equipment
+                    </a>
+
                 </div>
             </form>
-
-            <aside class="equip-card status-available preview-card">
-                <div class="equip-card-header">
-                    <h4 class="equip-name">Equipment Preview</h4>
-                    <span class="badge badge-success">Available</span>
-                </div>
-
-                <div class="equip-availability">
-                    <div class="avail-bar">
-                        <div class="avail-fill" style="width: 100%"></div>
-                    </div>
-                    <span class="text-muted avail-text">New item</span>
-                </div>
-
-                <p class="text-muted equip-notes">
-                    After adding the equipment, it will appear on the equipment page grouped by category.
-                </p>
-
-                <a href="equipment.php" class="secondary-button full-button btn-sm">
-                    Back to Equipment
-                </a>
-            </aside>
 
         </section>
 
@@ -171,6 +154,6 @@ output_header("add_equipment.css");
 </main>
 
 <?php
-require_once 'includes/footer.php';
+
 output_footer();
 ?>
