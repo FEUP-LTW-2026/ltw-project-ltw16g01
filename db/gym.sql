@@ -1,7 +1,5 @@
--- Enable foreign keys in SQLite
 PRAGMA foreign_keys = ON;
 
--- Stores all users: members, trainers and admins
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -14,7 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Extra information for trainers
 CREATE TABLE IF NOT EXISTS trainer_profiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL UNIQUE,
@@ -24,7 +21,6 @@ CREATE TABLE IF NOT EXISTS trainer_profiles (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Extra information for members
 CREATE TABLE IF NOT EXISTS member_profiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL UNIQUE,
@@ -34,7 +30,6 @@ CREATE TABLE IF NOT EXISTS member_profiles (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Gym classes
 CREATE TABLE IF NOT EXISTS classes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -50,7 +45,6 @@ CREATE TABLE IF NOT EXISTS classes (
     FOREIGN KEY(trainer_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- Scheduled class sessions
 CREATE TABLE IF NOT EXISTS class_sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     class_id INTEGER NOT NULL,
@@ -59,7 +53,6 @@ CREATE TABLE IF NOT EXISTS class_sessions (
     FOREIGN KEY(class_id) REFERENCES classes(id) ON DELETE CASCADE
 );
 
--- Member enrollments in classes
 CREATE TABLE IF NOT EXISTS enrollments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member_id INTEGER NOT NULL,
@@ -71,7 +64,6 @@ CREATE TABLE IF NOT EXISTS enrollments (
     FOREIGN KEY(session_id) REFERENCES class_sessions(id) ON DELETE CASCADE
 );
 
--- Gym equipment availability
 CREATE TABLE IF NOT EXISTS equipment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -83,7 +75,6 @@ CREATE TABLE IF NOT EXISTS equipment (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Reviews and ratings for classes
 CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member_id INTEGER NOT NULL,
@@ -96,7 +87,6 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY(class_id) REFERENCES classes(id) ON DELETE CASCADE
 );
 
--- Personal trainer bookings
 CREATE TABLE IF NOT EXISTS personal_bookings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member_id INTEGER NOT NULL,
@@ -111,7 +101,6 @@ CREATE TABLE IF NOT EXISTS personal_bookings (
     FOREIGN KEY(trainer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- User notifications
 CREATE TABLE IF NOT EXISTS notifications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
@@ -122,7 +111,13 @@ CREATE TABLE IF NOT EXISTS notifications (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Seed trainer profiles
+INSERT INTO users (name, username, email, password, role) VALUES
+('Ana Silva', 'anasilva', 'ana@fitpeak.com', '12345678', 'trainer'),
+('Bruno Costa', 'brunocosta', 'bruno@fitpeak.com', '12345678', 'trainer'),
+('Carla Mendes', 'carlamendes', 'carla@fitpeak.com', '12345678', 'trainer'),
+('Miguel Rocha', 'miguelrocha', 'miguel@fitpeak.com', '12345678', 'trainer'),
+('Admin User', 'admin', 'admin@fitpeak.com', '12345678', 'admin');
+
 INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
 SELECT id, 'Yoga & Pilates specialist with 10 years experience.', 'Yoga, Pilates, Flexibility', 'ACE CPT, RYT-200'
 FROM users WHERE username = 'anasilva';
@@ -135,15 +130,10 @@ INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
 SELECT id, 'Certified spinning instructor and endurance coach.', 'Spinning, Cycling, Cardio', 'Spinning Certified, ACE'
 FROM users WHERE username = 'carlamendes';
 
+INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
+SELECT id, 'Strength coach focused on hypertrophy and performance.', 'Strength, Hypertrophy, Functional Training', 'ACE CPT'
+FROM users WHERE username = 'miguelrocha';
 
--- Seed member profiles
-INSERT INTO member_profiles (user_id, membership_plan, plan_start, plan_end)
-SELECT id, 'premium', date('now'), date('now', '+1 year')
-FROM users
-WHERE username IN ('joaoferreira', 'mariasantos', 'pedrorodrigues');
-
-
--- Seed classes
 INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
 SELECT 'Morning Yoga', 'Start your day with calm and flexibility', 'yoga', id, 15, 60, 'Monday', '07:00', 'Studio A'
 FROM users WHERE username = 'anasilva';
@@ -153,7 +143,7 @@ SELECT 'Power HIIT', 'Burn calories and build strength', 'hiit', id, 20, 45, 'Tu
 FROM users WHERE username = 'brunocosta';
 
 INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Spinning Class', 'High-energy cycling for all levels', 'spinning', id, 18, 50, 'Wednesday', '19:00', 'Cycling Studio'
+SELECT 'Spinning Class', 'High-energy cycling for all levels', 'cycling', id, 18, 50, 'Wednesday', '19:00', 'Cycling Studio'
 FROM users WHERE username = 'carlamendes';
 
 INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
@@ -169,11 +159,21 @@ SELECT 'Evening Yoga', 'Wind down and restore with evening yoga', 'yoga', id, 15
 FROM users WHERE username = 'anasilva';
 
 INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Saturday Spin', 'Weekend ride to start your Saturday right', 'spinning', id, 18, 60, 'Saturday', '09:00', 'Cycling Studio'
+SELECT 'Saturday Spin', 'Weekend ride to start your Saturday right', 'cycling', id, 18, 60, 'Saturday', '09:00', 'Cycling Studio'
 FROM users WHERE username = 'carlamendes';
 
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Strength Basics', 'Build strength with proper technique and progressive overload', 'strength', id, 16, 60, 'Monday', '18:30', 'Main Floor'
+FROM users WHERE username = 'miguelrocha';
 
--- Seed class sessions
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Boxing Conditioning', 'Improve endurance, speed and coordination with boxing drills', 'boxing', id, 14, 50, 'Wednesday', '17:30', 'Boxing Area'
+FROM users WHERE username = 'brunocosta';
+
+INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
+SELECT 'Senior Fitness', 'Low-impact training focused on mobility, balance and strength', 'senior-fitness', id, 12, 45, 'Tuesday', '10:00', 'Studio B'
+FROM users WHERE username = 'carlamendes';
+
 INSERT INTO class_sessions (class_id, session_date)
 SELECT id, date('now', 'weekday 1') FROM classes WHERE day_of_week = 'Monday';
 
@@ -192,8 +192,6 @@ SELECT id, date('now', 'weekday 5') FROM classes WHERE day_of_week = 'Friday';
 INSERT INTO class_sessions (class_id, session_date)
 SELECT id, date('now', 'weekday 6') FROM classes WHERE day_of_week = 'Saturday';
 
-
--- Seed equipment
 INSERT INTO equipment (name, category, quantity, available, status) VALUES
 ('Treadmill', 'Cardio', 8, 6, 'available'),
 ('Stationary Bike', 'Cardio', 6, 5, 'available'),
