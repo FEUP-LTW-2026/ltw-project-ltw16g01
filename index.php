@@ -22,8 +22,8 @@
                             A complete gym management platform. Join classes, check equipment availability and book trainer sessions — all in one place.
                         </p>
                         <div class="buttons-row">
-                            <a href="register.html" class="main-button">Create Free Account</a>
-                            <a href="classes.html" class="secondary-button">View Classes</a>
+                            <a href="pages/register.php" class="main-button">Create Free Account</a>
+                            <a href="pages/classes.php" class="secondary-button">View Classes</a>
                         </div>
                     </div>
 
@@ -176,7 +176,7 @@
                             <li>✗ PT sessions</li>
                             <li>✗ Equipment reservation</li>
                         </ul>
-                        <a href="register.html" class="secondary-button full-button">Get Started</a>
+                        <a href="pages/register.php" class="secondary-button full-button">Get Started</a>
                     </article>
 
                     <!-- Premium Plan (featured) -->
@@ -195,7 +195,7 @@
                             <li>✓ 2 PT sessions/month</li>
                             <li>✗ Equipment reservation</li>
                         </ul>
-                        <a href="register.html" class="main-button full-button">Choose Premium</a>
+                        <a href="pages/register.php" class="main-button full-button">Choose Premium</a>
                     </article>
 
                     <!-- VIP Plan -->
@@ -211,7 +211,7 @@
                             <li>✓ Daily PT sessions</li>
                             <li>✓ Equipment reservation</li>
                         </ul>
-                        <a href="register.html" class="secondary-button full-button">Choose VIP</a>
+                        <a href="pages/register.php" class="secondary-button full-button">Choose VIP</a>
                     </article>
 
                 </div>
@@ -223,7 +223,7 @@
             <div class="container center-text">
                 <h2>Ready to get started?</h2>
                 <p>Sign up for free today and transform your lifestyle.</p>
-                <a href="register.html" class="main-button">Create Account Now</a>
+                <a href="pages/register.php" class="main-button">Create Account Now</a>
             </div>
         </section>
 

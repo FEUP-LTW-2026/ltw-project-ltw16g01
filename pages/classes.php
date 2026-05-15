@@ -2,52 +2,50 @@
 session_start();
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
-
 require_once '../db/connection.php';
 require_once '../db/classes.php';
-
 require_once '../template/classes.php';
 
 $pdo = getDatabaseConnection();
-$classes = getAllClasses($pdo);
+$GLOBALS['pdo'] = $pdo; // para uso nas funções de template
+
+// Obter todos os tipos de aula para o filtro
+$types = $pdo->query("SELECT name, label FROM class_types WHERE active = 1 ORDER BY label")->fetchAll();
+// Obter todos os treinadores para o filtro
+$trainers = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")->fetchAll();
+
+// Carregar horários iniciais (sem filtros)
+$schedules = getAllClassSchedules($pdo, []);
 
 output_header('classes.css');
 ?>
 
 <main class="main">
     <div class="container">
-<main class="main">
-    <div class="container">
-
         <header class="page-header">
             <nav>
                 <ol class="breadcrumb">
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="../index.php">Home</a></li>
                     <li><span class="breadcrumb-sep">›</span></li>
                     <li><span>Classes</span></li>
                 </ol>
             </nav>
-
             <div class="page-header-row">
                 <h1>Classes</h1>
                 <p>Browse our schedule and enroll in upcoming sessions</p>
             </div>
         </header>
 
+        <!-- Filtros com AJAX -->
         <section>
-            <form class="filter-bar" method="get" action="classes.php">
+            <form id="filter-form" class="filter-bar" method="get" action="classes.php">
                 <div class="filter-group">
                     <label class="form-label" for="f-type">Class type</label>
                     <select id="f-type" name="type" class="form-select">
                         <option value="">All types</option>
-                        <option value="yoga">Yoga</option>
-                        <option value="pilates">Pilates</option>
-                        <option value="hiit">HIIT</option>
-                        <option value="cycling">Cycling</option>
-                        <option value="strength">Strength</option>
-                        <option value="crossfit">CrossFit</option>
-                        <option value="boxing">Boxing</option>
-                        <option value="senior-fitness">Senior Fitness</option>
+                        <?php foreach ($types as $t): ?>
+                            <option value="<?= htmlspecialchars($t['name']) ?>"><?= htmlspecialchars($t['label']) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
@@ -55,10 +53,9 @@ output_header('classes.css');
                     <label class="form-label" for="f-trainer">Trainer</label>
                     <select id="f-trainer" name="trainer" class="form-select">
                         <option value="">All trainers</option>
-                        <option value="1">Ana Silva</option>
-                        <option value="2">Bruno Costa</option>
-                        <option value="3">Carla Mendes</option>
-                        <option value="4">Miguel Rocha</option>
+                        <?php foreach ($trainers as $tr): ?>
+                            <option value="<?= $tr['id'] ?>"><?= htmlspecialchars($tr['name']) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
@@ -72,6 +69,7 @@ output_header('classes.css');
                         <option value="thursday">Thursday</option>
                         <option value="friday">Friday</option>
                         <option value="saturday">Saturday</option>
+                        <option value="sunday">Sunday</option>
                     </select>
                 </div>
 
@@ -80,24 +78,34 @@ output_header('classes.css');
                 </div>
             </form>
         </section>
-                <div class="filter-group filter-group-end">
-                    <button type="submit" class="main-button full-width">Filter</button>
-                </div>
-            </form>
-        </section>
 
         <div class="results-bar">
-            <p class="results-count">
-                Showing <strong><?= count($classes) ?> classes</strong> available today
+            <p class="results-count" id="results-count">
+                Showing <strong id="class-count"><?= count($schedules) ?></strong> classes
             </p>
         </div>
 
-        <?php output_class_list($classes); ?>
+        <div id="class-list-container">
+            <?php output_class_schedule_list($schedules); ?>
+        </div>
 
     </div>
-</main>
-    </div>
-</main>
 
+</main>
 <?php output_footer(); ?>
-<?php output_footer(); ?>
+
+<script>
+    document.getElementById('filter-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const params = new URLSearchParams(formData);
+        fetch('../ajax/ajax_get_classes.php?' + params.toString())
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('class-list-container').innerHTML = html;
+                const cardCount = document.querySelectorAll('#class-list-container .class-card').length;
+                document.getElementById('class-count').innerText = cardCount;
+            })
+            .catch(err => console.error('AJAX error:', err));
+    });
+</script>

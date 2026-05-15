@@ -2,18 +2,23 @@
 session_start();
 
 require_once '../db/connection.php';
+require_once '../db/equipment.php';
+require_once '../template/equipment.php';
 require_once '../includes/header.php';
 
-$pdo = getDatabaseConnection();
-$equipment = $pdo->query("SELECT * FROM equipment ORDER BY category, name")->fetchAll();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ../index.php');
+    exit;
+}
 
-$categories = array_unique(array_column($equipment, 'category'));
-sort($categories);
+$pdo = getDatabaseConnection();
+
+// Obter categorias e equipamentos
+$categories = getAllEquipmentCategories($pdo);
+$equipment = getAllEquipment($pdo);
 
 output_header("equipment.css");
 ?>
-
-<link rel="stylesheet" href="css/pages/equipment.css">
 
 <main class="main">
     <div class="container">
@@ -21,7 +26,7 @@ output_header("equipment.css");
         <header class="page-header">
             <nav>
                 <ol class="breadcrumb">
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="../index.php">Home</a></li>
                     <li><span class="breadcrumb-sep">›</span></li>
                     <li><span>Equipment</span></li>
                 </ol>
@@ -45,59 +50,7 @@ output_header("equipment.css");
             <span class="badge badge-danger">● Unavailable</span>
         </div>
 
-        <?php foreach ($categories as $cat): ?>
-            <h3 class="category-title"><?= htmlspecialchars($cat) ?></h3>
-            <div class="equip-grid" id="cat-<?= htmlspecialchars(strtolower(str_replace(' ', '-', $cat))) ?>">
-                <?php foreach ($equipment as $item):
-                    if ($item['category'] !== $cat) continue;
-
-                    // --------------- FIX: force 'unavailable' when available == 0 ---------------
-                    $effectiveStatus = $item['status'];
-                    if ((int)$item['available'] === 0) {
-                        $effectiveStatus = 'unavailable';
-                    }
-
-                    $percentage = $item['quantity'] > 0
-                        ? round(((int)$item['available'] / (int)$item['quantity']) * 100)
-                        : 0;
-
-                    $barLevel = $percentage <= 25 ? 'low' : ($percentage <= 60 ? 'medium' : '');
-
-                    $statusLabel = [
-                        'available'   => 'Available',
-                        'maintenance' => 'Maintenance',
-                        'unavailable' => 'Unavailable'
-                    ][$effectiveStatus] ?? 'Unknown';
-
-                    $statusBadge = [
-                        'available'   => 'badge-success',
-                        'maintenance' => 'badge-warning',
-                        'unavailable' => 'badge-danger'
-                    ][$effectiveStatus] ?? 'badge-muted';
-                ?>
-                    <article class="equip-card status-<?= htmlspecialchars($effectiveStatus) ?>" data-eq-id="<?= $item['id'] ?>">
-                        <div class="equip-card-header">
-                            <h4 class="equip-name"><?= htmlspecialchars($item['name']) ?></h4>
-                            <span class="badge <?= $statusBadge ?>"><?= $statusLabel ?></span>
-                        </div>
-
-                        <div class="equip-availability">
-                            <div class="avail-bar">
-                                <div class="avail-fill <?= $barLevel ?>"
-                                     style="width: <?= $percentage ?>%"></div>
-                            </div>
-                            <span class="text-muted avail-text" data-avail>
-                                <?= $item['available'] ?> / <?= $item['quantity'] ?>
-                            </span>
-                        </div>
-
-                        <?php if (!empty($item['notes'])): ?>
-                            <p class="text-muted equip-notes"><?= htmlspecialchars($item['notes']) ?></p>
-                        <?php endif; ?>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        <?php endforeach; ?>
+        <?php output_equipment_grid($equipment, $categories); ?>
 
     </div>
 </main>
@@ -105,16 +58,14 @@ output_header("equipment.css");
 <?php require_once '../includes/footer.php'; output_footer(); ?>
 
 <script>
-// Live update every 30 seconds – client-side also applies the same override
 function refreshEquipment() {
-    fetch('ajax/equipment-status.php')
+    fetch('../ajax/equipment-status.php')
         .then(r => r.json())
         .then(data => {
             data.forEach(eq => {
                 const card = document.querySelector(`[data-eq-id="${eq.id}"]`);
                 if (!card) return;
 
-                // Client-side: force unavailable if available == 0
                 let effectiveStatus = eq.status;
                 if (parseInt(eq.available) === 0) {
                     effectiveStatus = 'unavailable';
@@ -140,7 +91,6 @@ function refreshEquipment() {
                     }`;
                 }
 
-                // Update card border class
                 card.className = card.className.replace(/status-\w+/, `status-${effectiveStatus}`);
             });
 
