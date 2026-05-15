@@ -12,9 +12,9 @@ function output_footer() { ?>
                 <div class="footer-box">
                     <h3>Platform</h3>
                     <ul>
-                        <li><a href="classes.php">Classes</a></li>
-                        <li><a href="trainers.php">Trainers</a></li>
-                        <li><a href="equipment.php">Equipment</a></li>
+                        <li><a href="pages/classes.php">Classes</a></li>
+                        <li><a href="pages/trainers.php">Trainers</a></li>
+                        <li><a href="pages/equipment.php">Equipment</a></li>
                     </ul>
                 </div>
 

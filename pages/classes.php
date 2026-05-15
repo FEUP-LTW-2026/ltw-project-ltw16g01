@@ -1,12 +1,12 @@
 <?php
 session_start();
-require_once 'includes/header.php';
-require_once 'includes/footer.php';
+require_once '../includes/header.php';
+require_once '../includes/footer.php';
 
-require_once 'db/connection.php';
-require_once 'db/classes.php';
+require_once '../db/connection.php';
+require_once '../db/classes.php';
 
-require_once 'template/classes.php';
+require_once '../template/classes.php';
 
 $pdo = getDatabaseConnection();
 $classes = getAllClasses($pdo);

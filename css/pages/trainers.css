@@ -1,0 +1,154 @@
+/* TRAINERS.CSS */
+/* Styles for trainers listing page: cards, filters, social links, rating, etc. */
+
+/* Reutilizamos o mesmo .filter-bar e .results-bar de classes.css */
+/* Adicionamos estilos específicos para os cards de treinador */
+
+.trainer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-lg);
+    margin-bottom: var(--sp-xl);
+}
+
+.trainer-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--t), box-shadow var(--t), transform var(--t);
+}
+
+.trainer-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-a);
+    transform: translateY(-2px);
+}
+
+/* Trainer Avatar / Photo */
+.trainer-avatar {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.trainer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.trainer-avatar .avatar-placeholder {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--surface);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Trainer Info */
+.trainer-body {
+    padding: var(--sp-md);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-sm);
+}
+
+.trainer-name {
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-family: var(--ff-body);
+    font-weight: 700;
+    color: var(--text);
+}
+
+.trainer-bio {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.trainer-specializations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-xs);
+    margin: var(--sp-xs) 0;
+}
+
+.spec-badge {
+    background: rgba(232, 65, 24, 0.12);
+    border: 1px solid rgba(232, 65, 24, 0.25);
+    border-radius: var(--r-pill);
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent);
+}
+
+/* Trainer Footer with action buttons */
+.trainer-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--sp-sm);
+    padding: var(--sp-md);
+    border-top: 1px solid var(--border);
+}
+
+/* Rating stars (reutilizado de classes.css) */
+.trainer-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xs);
+}
+
+/* Responsive grid */
+@media (min-width: 540px) {
+    .trainer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 860px) {
+    .trainer-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1100px) {
+    .trainer-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Ajustes para mobile */
+@media (max-width: 480px) {
+    .trainer-foot {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .trainer-foot .main-button,
+    .trainer-foot .secondary-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.filter-group {
+    margin-top: 20px;
+}
+
+.filter-group-end {
+    margin-bottom: 20px;
+}

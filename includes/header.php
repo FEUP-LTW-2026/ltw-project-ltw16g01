@@ -24,7 +24,7 @@ function output_header($pageCss) { ?>
 
     <header>
         <nav class="navbar" aria-label="Main navigation">
-            <a href="index.php" class="logo">FIT<span>PEAK</span></a>
+            <a href="../index.php" class="logo">FIT<span>PEAK</span></a>
 
             <label for="nav-toggle" class="burger">
                 <span></span>
@@ -33,12 +33,12 @@ function output_header($pageCss) { ?>
             </label>
 
             <ul class="nav-menu">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="classes.php">Classes</a></li>
-                <li><a href="trainers.php">Trainers</a></li>
-                <li><a href="equipment.php">Equipment</a></li>
-                <li><a href="login.php" class="nav-login">Login</a></li>
-                <li><a href="register.php" class="nav-register">Sign Up</a></li>
+                <li><a href="../index.php">Home</a></li>
+                <li><a href="../pages/classes.php">Classes</a></li>
+                <li><a href="../pages/trainers.php">Trainers</a></li>
+                <li><a href="../pages/equipment.php">Equipment</a></li>
+                <li><a href="../pages/login.php" class="nav-login">Login</a></li>
+                <li><a href="../pages/register.php" class="nav-register">Sign Up</a></li>
             </ul>
         </nav>
     </header>
