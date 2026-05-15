@@ -3,7 +3,7 @@
 
 function output_trainer_list($trainers) {
     if (empty($trainers)) {
-        echo '<div class="card"><div class="card-body center-text"><p>No trainers found.</p></div></div>';
+        echo '<div class="card"><div class="card-body center-text"><p>No trainers found matching your filters.</p></div></div>';
         return;
     }
     echo '<div class="trainer-grid">';
@@ -19,6 +19,9 @@ function output_trainer_card($trainer) {
     $specializations = array_map('trim', explode(',', $trainer['specializations'] ?? ''));
     $photo = !empty($trainer['photo']) ? $trainer['photo'] : null;
     $initials = strtoupper(substr($trainer['name'], 0, 2));
+    $rating = getTrainerRating($GLOBALS['pdo'] ?? null, $trainer['id']);
+    $fullStars = floor($rating);
+    $halfStar = ($rating - $fullStars) >= 0.5;
     ?>
     <div class="trainer-card">
         <div class="trainer-avatar">
@@ -41,9 +44,18 @@ function output_trainer_card($trainer) {
         </div>
         <div class="trainer-foot">
             <div class="trainer-rating">
-                <!-- Exemplo de rating (podes adaptar se tiveres tabela de avaliações) -->
-                <div class="stars">★★★★☆</div>
-                <span class="rating-text">(12)</span>
+                <div class="stars">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <?php if ($i <= $fullStars): ?>
+                            ★
+                        <?php elseif ($halfStar && $i == $fullStars + 1): ?>
+                            ½
+                        <?php else: ?>
+                            ☆
+                        <?php endif; ?>
+                    <?php endfor; ?>
+                </div>
+                <span class="rating-text">(<?= number_format($rating, 1) ?>)</span>
             </div>
             <a href="trainer_profile.php?id=<?= $trainer['id'] ?>" class="secondary-button btn-sm">View Profile</a>
         </div>

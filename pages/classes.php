@@ -2,23 +2,20 @@
 session_start();
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
-
 require_once '../db/connection.php';
 require_once '../db/classes.php';
-
 require_once '../template/classes.php';
 
 $pdo = getDatabaseConnection();
-$classes = getAllClasses($pdo);
+
+// Carregamento inicial (sem filtros)
+$classes = getAllClasses($pdo, []);
 
 output_header('classes.css');
 ?>
 
 <main class="main">
     <div class="container">
-<main class="main">
-    <div class="container">
-
         <header class="page-header">
             <nav>
                 <ol class="breadcrumb">
@@ -27,15 +24,15 @@ output_header('classes.css');
                     <li><span>Classes</span></li>
                 </ol>
             </nav>
-
             <div class="page-header-row">
                 <h1>Classes</h1>
                 <p>Browse our schedule and enroll in upcoming sessions</p>
             </div>
         </header>
 
+        <!-- Formulário de filtros com AJAX -->
         <section>
-            <form class="filter-bar" method="get" action="classes.php">
+            <form id="filter-form" class="filter-bar" method="get" action="classes.php">
                 <div class="filter-group">
                     <label class="form-label" for="f-type">Class type</label>
                     <select id="f-type" name="type" class="form-select">
@@ -55,10 +52,11 @@ output_header('classes.css');
                     <label class="form-label" for="f-trainer">Trainer</label>
                     <select id="f-trainer" name="trainer" class="form-select">
                         <option value="">All trainers</option>
-                        <option value="1">Ana Silva</option>
-                        <option value="2">Bruno Costa</option>
-                        <option value="3">Carla Mendes</option>
-                        <option value="4">Miguel Rocha</option>
+                        <?php
+                        $trainers = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")->fetchAll();
+                        foreach ($trainers as $trainer): ?>
+                            <option value="<?= $trainer['id'] ?>"><?= htmlspecialchars($trainer['name']) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
@@ -80,24 +78,38 @@ output_header('classes.css');
                 </div>
             </form>
         </section>
-                <div class="filter-group filter-group-end">
-                    <button type="submit" class="main-button full-width">Filter</button>
-                </div>
-            </form>
-        </section>
 
+        <!-- Barra de resultados (contador dinâmico) -->
         <div class="results-bar">
-            <p class="results-count">
-                Showing <strong><?= count($classes) ?> classes</strong> available today
+            <p class="results-count" id="results-count">
+                Showing <strong id="class-count"><?= count($classes) ?></strong> classes
             </p>
         </div>
 
-        <?php output_class_list($classes); ?>
-
-    </div>
-</main>
+        <!-- Container onde a lista será actualizada via AJAX -->
+        <div id="class-list-container">
+            <?php output_class_list($classes); ?>
+        </div>
     </div>
 </main>
 
 <?php output_footer(); ?>
-<?php output_footer(); ?>
+
+<script>
+    document.getElementById('filter-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const params = new URLSearchParams(formData);
+
+        fetch('../ajax/ajax_get_classes.php?' + params.toString())
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('class-list-container').innerHTML = html;
+                // Actualizar contador
+                const cardCount = document.querySelectorAll('#class-list-container .class-card').length;
+                document.getElementById('class-count').innerText = cardCount;
+            })
+            .catch(err => console.error('AJAX error:', err));
+    });
+</script>

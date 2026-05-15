@@ -353,3 +353,38 @@
         justify-content: center;
     }
 }
+/* HIIT Showcase Section */
+.hiit-showcase {
+    margin-top: var(--sp-2xl);
+    padding-block: var(--sp-xl);
+    background: linear-gradient(135deg, rgba(232,65,24,0.05), transparent);
+    border-top: 1px solid var(--border);
+}
+
+.hiit-featured h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin-bottom: var(--sp-lg);
+    color: var(--accent);
+}
+
+/* Garantir que a legend-section existente (se houver) não conflita */
+.legend-section {
+    margin-bottom: var(--sp-xl);
+    padding-bottom: var(--sp-md);
+    border-bottom: 1px solid var(--border);
+}
+
+.legend-row {
+    display: flex;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Ajustes responsivos para a secção HIIT */
+@media (max-width: 540px) {
+    .hiit-showcase .class-grid {
+        grid-template-columns: 1fr;
+    }
+}

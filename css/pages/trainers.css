@@ -1,8 +1,5 @@
 /* TRAINERS.CSS */
-/* Styles for trainers listing page: cards, filters, social links, rating, etc. */
-
-/* Reutilizamos o mesmo .filter-bar e .results-bar de classes.css */
-/* Adicionamos estilos específicos para os cards de treinador */
+/* Estilos para a página de treinadores: cards, avatares, especializações, rating */
 
 .trainer-grid {
     display: grid;
@@ -27,7 +24,7 @@
     transform: translateY(-2px);
 }
 
-/* Trainer Avatar / Photo */
+/* Avatar / Foto */
 .trainer-avatar {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -56,7 +53,7 @@
     justify-content: center;
 }
 
-/* Trainer Info */
+/* Corpo do card */
 .trainer-body {
     padding: var(--sp-md);
     flex: 1;
@@ -95,7 +92,7 @@
     color: var(--accent);
 }
 
-/* Trainer Footer with action buttons */
+/* Rodapé do card */
 .trainer-foot {
     display: flex;
     align-items: center;
@@ -106,14 +103,52 @@
     border-top: 1px solid var(--border);
 }
 
-/* Rating stars (reutilizado de classes.css) */
 .trainer-rating {
     display: flex;
     align-items: center;
     gap: var(--sp-xs);
 }
 
-/* Responsive grid */
+.stars {
+    color: var(--warning);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+}
+
+.rating-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+/* Secção de legenda e treinadores em destaque */
+.featured-trainers {
+    margin-top: var(--sp-2xl);
+    padding-block: var(--sp-xl);
+    background: linear-gradient(135deg, rgba(232,65,24,0.03), transparent);
+    border-top: 1px solid var(--border);
+}
+
+.featured-section h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin-bottom: var(--sp-lg);
+    color: var(--accent);
+}
+
+.legend-section {
+    margin-bottom: var(--sp-xl);
+    padding-bottom: var(--sp-md);
+    border-bottom: 1px solid var(--border);
+}
+
+.legend-row {
+    display: flex;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Responsividade */
 @media (min-width: 540px) {
     .trainer-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -132,13 +167,11 @@
     }
 }
 
-/* Ajustes para mobile */
 @media (max-width: 480px) {
     .trainer-foot {
         flex-direction: column;
         align-items: stretch;
     }
-    .trainer-foot .main-button,
     .trainer-foot .secondary-button {
         width: 100%;
         justify-content: center;
