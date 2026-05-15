@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $user = $stmt->fetch();
 
-        if (!$user || $password !== $user['password']) {
+        if (!$user || !password_verify($password, $user['password'])) {
             $error = 'Incorrect credentials. Please try again.';
         } elseif ($user['active'] == 0) {
             $error = 'Your account has been deactivated.';
@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $user['role'];
 
             if ($user['role'] === 'admin') {
-                header('Location: admin-dashboard.php');
+                header('Location: ../admin/admin-dashboard.php');
             } else {
-                header('Location: index.php');
+                header('Location: ../index.php');
             }
 
             exit;
@@ -117,7 +117,7 @@ output_header('auth.css');
     </div>
 </main>
 
-<script src="js/login.js"></script>
+<script src="../js/login.js"></script>
 
 <?php
 output_footer();

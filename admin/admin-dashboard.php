@@ -2,10 +2,10 @@
 
 session_start();
 
-require_once 'includes/header.php';
-require_once 'includes/footer.php';
-require_once 'db/admin.php';
-require_once 'templates/admin.php';
+require_once '../includes/header.php';
+require_once '../includes/footer.php';
+require_once '../db/admin.php';
+require_once '../template/admin.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: index.php');

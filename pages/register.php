@@ -186,7 +186,7 @@ output_header('auth.css');
     </div>
 </main>
 
-<script src="js/register.js"></script>
+<script src="../js/register.js"></script>
 
 <?php
 output_footer();

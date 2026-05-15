@@ -54,7 +54,7 @@ function getClasses() {
 function getEquipment() {
     $pdo = getDatabaseConnection();
 
-    $query = "SELECT name, quantity, available, status FROM equipment ORDER BY name LIMIT 6";
+    $query = "SELECT distinct name, quantity, available, status FROM equipment ORDER BY name LIMIT 6";
 
     $stmt = $pdo->query($query);
 
