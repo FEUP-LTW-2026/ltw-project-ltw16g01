@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'includes/header.php';
 require_once 'includes/footer.php';
 
@@ -13,6 +14,8 @@ $classes = getAllClasses($pdo);
 output_header('classes.css');
 ?>
 
+<main class="main">
+    <div class="container">
 <main class="main">
     <div class="container">
 
@@ -77,6 +80,11 @@ output_header('classes.css');
                 </div>
             </form>
         </section>
+                <div class="filter-group filter-group-end">
+                    <button type="submit" class="main-button full-width">Filter</button>
+                </div>
+            </form>
+        </section>
 
         <div class="results-bar">
             <p class="results-count">
@@ -88,5 +96,8 @@ output_header('classes.css');
 
     </div>
 </main>
+    </div>
+</main>
 
+<?php output_footer(); ?>
 <?php output_footer(); ?>

@@ -195,7 +195,7 @@ SELECT id, date('now', 'weekday 6') FROM classes WHERE day_of_week = 'Saturday';
 INSERT INTO equipment (name, category, quantity, available, status) VALUES
 ('Treadmill', 'Cardio', 8, 6, 'available'),
 ('Stationary Bike', 'Cardio', 6, 5, 'available'),
-('Rowing Machine', 'Cardio', 4, 3, 'available'),
+('Rowing Machine', 'Cardio', 4, 0, 'unavailable'),
 ('Elliptical', 'Cardio', 4, 4, 'available'),
 ('Weight Bench', 'Strength', 10, 8, 'available'),
 ('Squat Rack', 'Strength', 4, 3, 'available'),
