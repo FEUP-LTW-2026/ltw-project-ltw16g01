@@ -4,6 +4,7 @@ require_once '../db/trainers.php';
 require_once '../template/trainers.php';
 
 $pdo = getDatabaseConnection();
+$GLOBALS['pdo'] = $pdo;
 
 $filters = [
     'specialization' => $_GET['specialization'] ?? '',
@@ -11,6 +12,4 @@ $filters = [
 ];
 
 $trainers = getAllTrainers($pdo, $filters);
-
-// Devolve apenas o HTML da lista (sem header/footer)
 output_trainer_list($trainers);

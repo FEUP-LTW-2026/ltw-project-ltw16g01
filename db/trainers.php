@@ -1,9 +1,6 @@
 <?php
 // db/trainers.php
 
-/**
- * Retorna todos os treinadores (role='trainer') com os seus perfis, aplicando filtros opcionais.
- */
 function getAllTrainers($pdo, $filters = []) {
     $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active,
                    tp.bio, tp.specializations, tp.certifications
@@ -28,14 +25,58 @@ function getAllTrainers($pdo, $filters = []) {
 }
 
 /**
- * Calcula uma classificação média do treinador (exemplo simples baseado em reviews das aulas que ele lecciona).
- * Podes adaptar conforme a tua base de dados.
+ * Retorna um treinador pelo ID (incluindo perfil).
+ */
+function getTrainerById($pdo, $id) {
+    $sql = "SELECT u.id, u.name, u.username, u.email, u.photo,
+                   tp.bio, tp.specializations, tp.certifications
+            FROM users u
+            LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
+            WHERE u.id = ? AND u.role = 'trainer'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Calcula uma classificação média do treinador com base nas avaliações das sessões que ele lecciona.
+ * (Opcional – pode ser usado para mostrar estrelas)
  */
 function getTrainerRating($pdo, $trainerId) {
-    // Placeholder – retorna um valor fictício para demonstração
-    static $ratings = [4.2, 4.8, 4.5, 4.0, 4.9];
-    static $idx = 0;
-    $val = $ratings[$idx % count($ratings)];
-    $idx++;
-    return $val;
+    $sql = "SELECT AVG(r.rating) as avg_rating, COUNT(r.id) as review_count
+            FROM reviews r
+            JOIN class_sessions sess ON r.session_id = sess.id
+            JOIN class_schedules cs ON sess.schedule_id = cs.id
+            WHERE cs.trainer_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$trainerId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $avg = round($result['avg_rating'] ?? 0, 1);
+    $count = $result['review_count'] ?? 0;
+    return ['rating' => $avg, 'count' => $count];
+}
+
+/**
+ * Retorna os próximos horários (aulas) que um treinador vai dar (úteis para perfil).
+ */
+function getUpcomingSchedulesForTrainer($pdo, $trainerId, $limit = 3) {
+    $sql = "SELECT cs.id, c.name AS class_name, cs.day_of_week, cs.start_time, cs.location, cs.duration_min
+            FROM class_schedules cs
+            JOIN classes c ON cs.class_id = c.id
+            WHERE cs.trainer_id = ? AND c.active = 1
+            ORDER BY 
+                CASE cs.day_of_week
+                    WHEN 'Monday' THEN 1
+                    WHEN 'Tuesday' THEN 2
+                    WHEN 'Wednesday' THEN 3
+                    WHEN 'Thursday' THEN 4
+                    WHEN 'Friday' THEN 5
+                    WHEN 'Saturday' THEN 6
+                    WHEN 'Sunday' THEN 7
+                END,
+                cs.start_time
+            LIMIT ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$trainerId, $limit]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

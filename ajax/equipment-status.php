@@ -1,17 +1,20 @@
 <?php
-session_start();
-require_once __DIR__ . '/../db/connection.php';
-
-header('Content-Type: application/json');
+require_once '../db/connection.php';
+require_once '../db/equipment.php';
 
 $pdo = getDatabaseConnection();
-$equipment = $pdo->query("SELECT id, name, category, quantity, available, status, notes, updated_at FROM equipment ORDER BY category, name")->fetchAll();
+$equipment = getAllEquipment($pdo);
 
-// Override: if no unit is available, force status to 'unavailable'
-foreach ($equipment as &$item) {
-    if ((int)$item['available'] === 0) {
-        $item['status'] = 'unavailable';
-    }
+$response = [];
+foreach ($equipment as $item) {
+    $response[] = [
+        'id' => $item['id'],
+        'available' => (int)$item['available'],
+        'quantity' => (int)$item['quantity'],
+        'status' => $item['status'],
+        'notes' => $item['notes']
+    ];
 }
 
-echo json_encode($equipment);
+header('Content-Type: application/json');
+echo json_encode($response);

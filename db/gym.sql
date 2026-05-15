@@ -1,5 +1,42 @@
 PRAGMA foreign_keys = ON;
 
+-- ============================================================
+-- 1. TABELAS DE LOOKUP (NORMALIZAÇÃO)
+-- ============================================================
+
+-- Tipos de aula
+CREATE TABLE IF NOT EXISTS class_types (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    label TEXT NOT NULL,
+    description TEXT,
+    icon TEXT,
+    active INTEGER NOT NULL DEFAULT 1
+);
+
+-- Categorias de equipamento
+CREATE TABLE IF NOT EXISTS equipment_categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    label TEXT NOT NULL,
+    description TEXT,
+    active INTEGER NOT NULL DEFAULT 1
+);
+
+-- Tipos de notificação
+CREATE TABLE IF NOT EXISTS notification_types (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    label TEXT NOT NULL,
+    css_class TEXT DEFAULT 'info',
+    active INTEGER NOT NULL DEFAULT 1
+);
+
+-- ============================================================
+-- 2. TABELAS PRINCIPAIS
+-- ============================================================
+
+-- Utilizadores (membros, treinadores, admin)
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -12,6 +49,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Perfis de treinador (1:1 com users)
 CREATE TABLE IF NOT EXISTS trainer_profiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL UNIQUE,
@@ -21,6 +59,7 @@ CREATE TABLE IF NOT EXISTS trainer_profiles (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Perfis de membro (1:1 com users)
 CREATE TABLE IF NOT EXISTS member_profiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL UNIQUE,
@@ -30,29 +69,40 @@ CREATE TABLE IF NOT EXISTS member_profiles (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Aulas (apenas dados intrínsecos)
 CREATE TABLE IF NOT EXISTS classes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT,
-    type TEXT NOT NULL,
+    class_type_id INTEGER NOT NULL,
+    active INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY(class_type_id) REFERENCES class_types(id)
+);
+
+-- Horários regulares (cada aula pode ter vários horários)
+CREATE TABLE IF NOT EXISTS class_schedules (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    class_id INTEGER NOT NULL,
     trainer_id INTEGER,
+    day_of_week TEXT NOT NULL,   -- Monday, Tuesday, etc.
+    start_time TEXT NOT NULL,
+    location TEXT NOT NULL DEFAULT 'Studio A',
     capacity INTEGER NOT NULL DEFAULT 20,
     duration_min INTEGER NOT NULL DEFAULT 60,
-    day_of_week TEXT,
-    start_time TEXT,
-    location TEXT DEFAULT 'Studio A',
-    active INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY(class_id) REFERENCES classes(id) ON DELETE CASCADE,
     FOREIGN KEY(trainer_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
+-- Sessões concretas (ocorrências reais no calendário)
 CREATE TABLE IF NOT EXISTS class_sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    class_id INTEGER NOT NULL,
+    schedule_id INTEGER NOT NULL,
     session_date DATE NOT NULL,
     status TEXT DEFAULT 'scheduled' CHECK(status IN ('scheduled','cancelled','completed')),
-    FOREIGN KEY(class_id) REFERENCES classes(id) ON DELETE CASCADE
+    FOREIGN KEY(schedule_id) REFERENCES class_schedules(id) ON DELETE CASCADE
 );
 
+-- Inscrições de membros em sessões
 CREATE TABLE IF NOT EXISTS enrollments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member_id INTEGER NOT NULL,
@@ -64,29 +114,33 @@ CREATE TABLE IF NOT EXISTS enrollments (
     FOREIGN KEY(session_id) REFERENCES class_sessions(id) ON DELETE CASCADE
 );
 
+-- Equipamento
 CREATE TABLE IF NOT EXISTS equipment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    category TEXT NOT NULL,
+    category_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL DEFAULT 1,
     available INTEGER NOT NULL DEFAULT 1,
     status TEXT NOT NULL DEFAULT 'available' CHECK(status IN ('available','maintenance','unavailable')),
     notes TEXT,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(category_id) REFERENCES equipment_categories(id)
 );
 
+-- Avaliações (por sessão, não por aula)
 CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member_id INTEGER NOT NULL,
-    class_id INTEGER NOT NULL,
+    session_id INTEGER NOT NULL,
     rating INTEGER NOT NULL CHECK(rating BETWEEN 1 AND 5),
     comment TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(member_id, class_id),
+    UNIQUE(member_id, session_id),
     FOREIGN KEY(member_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(class_id) REFERENCES classes(id) ON DELETE CASCADE
+    FOREIGN KEY(session_id) REFERENCES class_sessions(id) ON DELETE CASCADE
 );
 
+-- Reservas pessoais com treinadores
 CREATE TABLE IF NOT EXISTS personal_bookings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member_id INTEGER NOT NULL,
@@ -101,110 +155,287 @@ CREATE TABLE IF NOT EXISTS personal_bookings (
     FOREIGN KEY(trainer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Notificações
 CREATE TABLE IF NOT EXISTS notifications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     message TEXT NOT NULL,
-    type TEXT DEFAULT 'info',
+    notification_type_id INTEGER NOT NULL,
     read_at DATETIME DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(notification_type_id) REFERENCES notification_types(id)
 );
 
-INSERT INTO users (name, username, email, password, role) VALUES
-('Ana Silva', 'anasilva', 'ana@fitpeak.com', '12345678', 'trainer'),
-('Bruno Costa', 'brunocosta', 'bruno@fitpeak.com', '12345678', 'trainer'),
-('Carla Mendes', 'carlamendes', 'carla@fitpeak.com', '12345678', 'trainer'),
-('Miguel Rocha', 'miguelrocha', 'miguel@fitpeak.com', '12345678', 'trainer'),
-('Admin User', 'admin', 'admin@fitpeak.com', '12345678', 'admin');
+-- ============================================================
+-- 3. INSERÇÃO DE DADOS (LOOKUP TABLES)
+-- ============================================================
 
-INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
-SELECT id, 'Yoga & Pilates specialist with 10 years experience.', 'Yoga, Pilates, Flexibility', 'ACE CPT, RYT-200'
-FROM users WHERE username = 'anasilva';
+-- Tipos de aula
+INSERT INTO class_types (name, label, description, icon) VALUES
+('yoga', 'Yoga', 'Mind-body practice focusing on flexibility and relaxation', '🧘'),
+('pilates', 'Pilates', 'Core strength and controlled movements', '🏋️'),
+('hiit', 'HIIT', 'High-intensity interval training for cardio and strength', '🔥'),
+('cycling', 'Cycling', 'Indoor cycling / spinning classes', '🚴'),
+('strength', 'Strength', 'Weight training and muscle building', '💪'),
+('crossfit', 'CrossFit', 'Functional fitness and high-intensity workouts', '⚡'),
+('boxing', 'Boxing', 'Combat sports conditioning and agility', '🥊'),
+('senior-fitness', 'Senior Fitness', 'Low-impact training for older adults', '👴');
 
-INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
-SELECT id, 'High-intensity training enthusiast and former athlete.', 'HIIT, CrossFit, Strength', 'NSCA-CSCS, CF-L2'
-FROM users WHERE username = 'brunocosta';
+-- Categorias de equipamento
+INSERT INTO equipment_categories (name, label, description) VALUES
+('Cardio', 'Cardio Machines', 'Treadmills, bikes, rowers, ellipticals'),
+('Strength', 'Strength Equipment', 'Benches, racks, bars, machines'),
+('Free Weights', 'Free Weights', 'Dumbbells, kettlebells, barbells'),
+('Accessories', 'Accessories', 'Mats, rollers, balls, straps'),
+('Functional', 'Functional Training', 'TRX, battle ropes, agility equipment');
 
-INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
-SELECT id, 'Certified spinning instructor and endurance coach.', 'Spinning, Cycling, Cardio', 'Spinning Certified, ACE'
-FROM users WHERE username = 'carlamendes';
+-- Tipos de notificação
+INSERT INTO notification_types (name, label, css_class) VALUES
+('info', 'Information', 'info'),
+('warning', 'Warning', 'warning'),
+('success', 'Success', 'success'),
+('error', 'Error', 'danger');
 
-INSERT INTO trainer_profiles (user_id, bio, specializations, certifications)
-SELECT id, 'Strength coach focused on hypertrophy and performance.', 'Strength, Hypertrophy, Functional Training', 'ACE CPT'
-FROM users WHERE username = 'miguelrocha';
+-- ============================================================
+-- 4. INSERÇÃO DE UTILIZADORES (TRAINERS, ADMIN, MEMBROS)
+-- ============================================================
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Morning Yoga', 'Start your day with calm and flexibility', 'yoga', id, 15, 60, 'Monday', '07:00', 'Studio A'
-FROM users WHERE username = 'anasilva';
+-- Senha padrão: 12345678 (em texto claro – apenas para demonstração)
+INSERT INTO users (name, username, email, password, role, active) VALUES
+-- Treinadores
+('Ana Silva', 'anasilva', 'ana@fitpeak.com', '12345678', 'trainer', 1),
+('Bruno Costa', 'brunocosta', 'bruno@fitpeak.com', '12345678', 'trainer', 1),
+('Carla Mendes', 'carlamendes', 'carla@fitpeak.com', '12345678', 'trainer', 1),
+('Miguel Rocha', 'miguelrocha', 'miguel@fitpeak.com', '12345678', 'trainer', 1),
+-- Administrador
+('Admin User', 'admin', 'admin@fitpeak.com', '12345678', 'admin', 1),
+-- Membros (5 membros comuns)
+('João Pereira', 'joaop', 'joao@email.com', '12345678', 'member', 1),
+('Maria Santos', 'marias', 'maria@email.com', '12345678', 'member', 1),
+('Rita Ferreira', 'ritaf', 'rita@email.com', '12345678', 'member', 1),
+('Carlos Andrade', 'carlosa', 'carlos@email.com', '12345678', 'member', 1),
+('Sofia Lima', 'sofial', 'sofia@email.com', '12345678', 'member', 1);
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Power HIIT', 'Burn calories and build strength', 'hiit', id, 20, 45, 'Tuesday', '18:00', 'Main Floor'
-FROM users WHERE username = 'brunocosta';
+-- ============================================================
+-- 5. PERFIS DE TREINADOR
+-- ============================================================
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Spinning Class', 'High-energy cycling for all levels', 'cycling', id, 18, 50, 'Wednesday', '19:00', 'Cycling Studio'
-FROM users WHERE username = 'carlamendes';
+INSERT INTO trainer_profiles (user_id, bio, specializations, certifications) VALUES
+((SELECT id FROM users WHERE username = 'anasilva'),
+ 'Yoga & Pilates specialist with 10 years experience.',
+ 'Yoga, Pilates, Flexibility',
+ 'ACE CPT, RYT-200'),
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Pilates Core', 'Strengthen your core with controlled movements', 'pilates', id, 12, 55, 'Thursday', '10:00', 'Studio B'
-FROM users WHERE username = 'anasilva';
+((SELECT id FROM users WHERE username = 'brunocosta'),
+ 'High-intensity training enthusiast and former athlete.',
+ 'HIIT, CrossFit, Strength',
+ 'NSCA-CSCS, CF-L2'),
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'CrossFit WOD', 'Workout of the day — push your limits', 'crossfit', id, 20, 60, 'Friday', '17:30', 'Main Floor'
-FROM users WHERE username = 'brunocosta';
+((SELECT id FROM users WHERE username = 'carlamendes'),
+ 'Certified spinning instructor and endurance coach.',
+ 'Spinning, Cycling, Cardio',
+ 'Spinning Certified, ACE'),
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Evening Yoga', 'Wind down and restore with evening yoga', 'yoga', id, 15, 60, 'Friday', '20:00', 'Studio A'
-FROM users WHERE username = 'anasilva';
+((SELECT id FROM users WHERE username = 'miguelrocha'),
+ 'Strength coach focused on hypertrophy and performance.',
+ 'Strength, Hypertrophy, Functional Training',
+ 'ACE CPT');
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Saturday Spin', 'Weekend ride to start your Saturday right', 'cycling', id, 18, 60, 'Saturday', '09:00', 'Cycling Studio'
-FROM users WHERE username = 'carlamendes';
+-- ============================================================
+-- 6. PERFIS DE MEMBRO
+-- ============================================================
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Strength Basics', 'Build strength with proper technique and progressive overload', 'strength', id, 16, 60, 'Monday', '18:30', 'Main Floor'
-FROM users WHERE username = 'miguelrocha';
+INSERT INTO member_profiles (user_id, membership_plan, plan_start, plan_end) VALUES
+((SELECT id FROM users WHERE username = 'joaop'),   'basic',   date('now'), date('now', '+1 year')),
+((SELECT id FROM users WHERE username = 'marias'),  'premium', date('now'), date('now', '+1 year')),
+((SELECT id FROM users WHERE username = 'ritaf'),   'basic',   date('now'), date('now', '+1 year')),
+((SELECT id FROM users WHERE username = 'carlosa'), 'vip',     date('now'), date('now', '+1 year')),
+((SELECT id FROM users WHERE username = 'sofial'),  'premium', date('now'), date('now', '+1 year'));
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Boxing Conditioning', 'Improve endurance, speed and coordination with boxing drills', 'boxing', id, 14, 50, 'Wednesday', '17:30', 'Boxing Area'
-FROM users WHERE username = 'brunocosta';
+-- ============================================================
+-- 7. AULAS (CLASSES) – APENAS DADOS INTRÍNSECOS
+-- ============================================================
 
-INSERT INTO classes (name, description, type, trainer_id, capacity, duration_min, day_of_week, start_time, location)
-SELECT 'Senior Fitness', 'Low-impact training focused on mobility, balance and strength', 'senior-fitness', id, 12, 45, 'Tuesday', '10:00', 'Studio B'
-FROM users WHERE username = 'carlamendes';
+INSERT INTO classes (name, description, class_type_id) VALUES
+('Morning Yoga', 'Start your day with calm and flexibility', (SELECT id FROM class_types WHERE name='yoga')),
+('Power HIIT', 'Burn calories and build strength', (SELECT id FROM class_types WHERE name='hiit')),
+('Spinning Class', 'High-energy cycling for all levels', (SELECT id FROM class_types WHERE name='cycling')),
+('Pilates Core', 'Strengthen your core with controlled movements', (SELECT id FROM class_types WHERE name='pilates')),
+('CrossFit WOD', 'Workout of the day — push your limits', (SELECT id FROM class_types WHERE name='crossfit')),
+('Evening Yoga', 'Wind down and restore with evening yoga', (SELECT id FROM class_types WHERE name='yoga')),
+('Saturday Spin', 'Weekend ride to start your Saturday right', (SELECT id FROM class_types WHERE name='cycling')),
+('Strength Basics', 'Build strength with proper technique and progressive overload', (SELECT id FROM class_types WHERE name='strength')),
+('Boxing Conditioning', 'Improve endurance, speed and coordination with boxing drills', (SELECT id FROM class_types WHERE name='boxing')),
+('Senior Fitness', 'Low-impact training focused on mobility, balance and strength', (SELECT id FROM class_types WHERE name='senior-fitness'));
 
-INSERT INTO class_sessions (class_id, session_date)
-SELECT id, date('now', 'weekday 1') FROM classes WHERE day_of_week = 'Monday';
+-- ============================================================
+-- 8. HORÁRIOS (CLASS_SCHEDULES) – CADA AULA PODE TER MÚLTIPLOS
+-- ============================================================
 
-INSERT INTO class_sessions (class_id, session_date)
-SELECT id, date('now', 'weekday 2') FROM classes WHERE day_of_week = 'Tuesday';
+INSERT INTO class_schedules (class_id, trainer_id, day_of_week, start_time, location, capacity, duration_min) VALUES
+((SELECT id FROM classes WHERE name='Morning Yoga'),   (SELECT id FROM users WHERE username='anasilva'),   'Monday',    '07:00', 'Studio A',     15, 60),
+((SELECT id FROM classes WHERE name='Power HIIT'),     (SELECT id FROM users WHERE username='brunocosta'), 'Tuesday',   '18:00', 'Main Floor',   20, 45),
+((SELECT id FROM classes WHERE name='Spinning Class'), (SELECT id FROM users WHERE username='carlamendes'),'Wednesday', '19:00', 'Cycling Studio',18, 50),
+((SELECT id FROM classes WHERE name='Pilates Core'),   (SELECT id FROM users WHERE username='anasilva'),   'Thursday',  '10:00', 'Studio B',     12, 55),
+((SELECT id FROM classes WHERE name='CrossFit WOD'),   (SELECT id FROM users WHERE username='brunocosta'), 'Friday',    '17:30', 'Main Floor',   20, 60),
+((SELECT id FROM classes WHERE name='Evening Yoga'),   (SELECT id FROM users WHERE username='anasilva'),   'Friday',    '20:00', 'Studio A',     15, 60),
+((SELECT id FROM classes WHERE name='Saturday Spin'),  (SELECT id FROM users WHERE username='carlamendes'),'Saturday',  '09:00', 'Cycling Studio',18, 60),
+((SELECT id FROM classes WHERE name='Strength Basics'),(SELECT id FROM users WHERE username='miguelrocha'),'Monday',    '18:30', 'Main Floor',   16, 60),
+((SELECT id FROM classes WHERE name='Boxing Conditioning'),(SELECT id FROM users WHERE username='brunocosta'),'Wednesday','17:30', 'Boxing Area',   14, 50),
+((SELECT id FROM classes WHERE name='Senior Fitness'), (SELECT id FROM users WHERE username='carlamendes'), 'Tuesday',   '10:00', 'Studio B',     12, 45);
 
-INSERT INTO class_sessions (class_id, session_date)
-SELECT id, date('now', 'weekday 3') FROM classes WHERE day_of_week = 'Wednesday';
+-- (Opcional) Adicionar segundo horário para a mesma aula (ex: Yoga também à Quarta)
+INSERT INTO class_schedules (class_id, trainer_id, day_of_week, start_time, location, capacity, duration_min)
+SELECT id, (SELECT id FROM users WHERE username='anasilva'), 'Wednesday', '09:00', 'Studio A', 15, 60
+FROM classes WHERE name='Morning Yoga';
 
-INSERT INTO class_sessions (class_id, session_date)
-SELECT id, date('now', 'weekday 4') FROM classes WHERE day_of_week = 'Thursday';
+-- ============================================================
+-- 9. SESSÕES CONCRETAS (PARA A PRÓXIMA SEMANA)
+-- ============================================================
 
-INSERT INTO class_sessions (class_id, session_date)
-SELECT id, date('now', 'weekday 5') FROM classes WHERE day_of_week = 'Friday';
+-- Segunda-feira
+INSERT INTO class_sessions (schedule_id, session_date)
+SELECT s.id, date('now', 'weekday 1')
+FROM class_schedules s WHERE s.day_of_week = 'Monday';
 
-INSERT INTO class_sessions (class_id, session_date)
-SELECT id, date('now', 'weekday 6') FROM classes WHERE day_of_week = 'Saturday';
+-- Terça-feira
+INSERT INTO class_sessions (schedule_id, session_date)
+SELECT s.id, date('now', 'weekday 2')
+FROM class_schedules s WHERE s.day_of_week = 'Tuesday';
 
-INSERT INTO equipment (name, category, quantity, available, status) VALUES
-('Treadmill', 'Cardio', 8, 6, 'available'),
-('Stationary Bike', 'Cardio', 6, 5, 'available'),
-('Rowing Machine', 'Cardio', 4, 0, 'unavailable'),
-('Elliptical', 'Cardio', 4, 4, 'available'),
-('Weight Bench', 'Strength', 10, 8, 'available'),
-('Squat Rack', 'Strength', 4, 3, 'available'),
-('Pull-up Bar', 'Strength', 6, 6, 'available'),
-('Dumbbell Set', 'Free Weights', 20, 18, 'available'),
-('Barbell Set', 'Free Weights', 8, 7, 'available'),
-('Kettlebell Set', 'Free Weights', 12, 10, 'available'),
-('Yoga Mat', 'Accessories', 30, 25, 'available'),
-('Foam Roller', 'Accessories', 15, 12, 'available'),
-('Battle Rope', 'Functional', 4, 3, 'available'),
-('TRX Suspension', 'Functional', 6, 5, 'available'),
-('Punching Bag', 'Cardio', 3, 2, 'available');
+-- Quarta-feira
+INSERT INTO class_sessions (schedule_id, session_date)
+SELECT s.id, date('now', 'weekday 3')
+FROM class_schedules s WHERE s.day_of_week = 'Wednesday';
+
+-- Quinta-feira
+INSERT INTO class_sessions (schedule_id, session_date)
+SELECT s.id, date('now', 'weekday 4')
+FROM class_schedules s WHERE s.day_of_week = 'Thursday';
+
+-- Sexta-feira
+INSERT INTO class_sessions (schedule_id, session_date)
+SELECT s.id, date('now', 'weekday 5')
+FROM class_schedules s WHERE s.day_of_week = 'Friday';
+
+-- Sábado
+INSERT INTO class_sessions (schedule_id, session_date)
+SELECT s.id, date('now', 'weekday 6')
+FROM class_schedules s WHERE s.day_of_week = 'Saturday';
+
+-- Domingo (nenhum horário definido, mas se houver, descomente)
+-- INSERT INTO class_sessions ... WHERE day_of_week = 'Sunday';
+
+-- ============================================================
+-- 10. INSCRIÇÕES (ENROLLMENTS) – EXEMPLOS PARA MEMBROS
+-- ============================================================
+
+-- Inscrições aleatórias para demonstração
+INSERT INTO enrollments (member_id, session_id, status)
+SELECT 
+    (SELECT id FROM users WHERE username = 'joaop'),
+    s.id,
+    'enrolled'
+FROM class_sessions s
+WHERE s.session_date = date('now', 'weekday 1')  -- próxima segunda
+LIMIT 1;
+
+INSERT INTO enrollments (member_id, session_id, status)
+SELECT 
+    (SELECT id FROM users WHERE username = 'marias'),
+    s.id,
+    'enrolled'
+FROM class_sessions s
+WHERE s.session_date = date('now', 'weekday 2')  -- terça
+LIMIT 1;
+
+INSERT INTO enrollments (member_id, session_id, status)
+SELECT 
+    (SELECT id FROM users WHERE username = 'ritaf'),
+    s.id,
+    'enrolled'
+FROM class_sessions s
+WHERE s.session_date = date('now', 'weekday 3')  -- quarta
+LIMIT 1;
+
+-- ============================================================
+-- 11. EQUIPAMENTO
+-- ============================================================
+
+INSERT INTO equipment (name, category_id, quantity, available, status, notes) VALUES
+('Treadmill',          (SELECT id FROM equipment_categories WHERE name='Cardio'),       8, 6, 'available', ''),
+('Stationary Bike',    (SELECT id FROM equipment_categories WHERE name='Cardio'),       6, 5, 'available', ''),
+('Rowing Machine',     (SELECT id FROM equipment_categories WHERE name='Cardio'),       4, 0, 'unavailable', 'Motor reparação'),
+('Elliptical',         (SELECT id FROM equipment_categories WHERE name='Cardio'),       4, 4, 'available', ''),
+('Weight Bench',       (SELECT id FROM equipment_categories WHERE name='Strength'),    10, 8, 'available', ''),
+('Squat Rack',         (SELECT id FROM equipment_categories WHERE name='Strength'),     4, 3, 'available', ''),
+('Pull-up Bar',        (SELECT id FROM equipment_categories WHERE name='Strength'),     6, 6, 'available', ''),
+('Dumbbell Set',       (SELECT id FROM equipment_categories WHERE name='Free Weights'),20,18, 'available', ''),
+('Barbell Set',        (SELECT id FROM equipment_categories WHERE name='Free Weights'), 8, 7, 'available', ''),
+('Kettlebell Set',     (SELECT id FROM equipment_categories WHERE name='Free Weights'),12,10, 'available', ''),
+('Yoga Mat',           (SELECT id FROM equipment_categories WHERE name='Accessories'), 30,25, 'available', ''),
+('Foam Roller',        (SELECT id FROM equipment_categories WHERE name='Accessories'), 15,12, 'available', ''),
+('Battle Rope',        (SELECT id FROM equipment_categories WHERE name='Functional'),   4, 3, 'available', ''),
+('TRX Suspension',     (SELECT id FROM equipment_categories WHERE name='Functional'),   6, 5, 'available', ''),
+('Punching Bag',       (SELECT id FROM equipment_categories WHERE name='Cardio'),       3, 2, 'available', '');
+
+-- ============================================================
+-- 12. AVALIAÇÕES (REVIEWS) – EXEMPLOS
+-- ============================================================
+
+INSERT INTO reviews (member_id, session_id, rating, comment) VALUES
+((SELECT id FROM users WHERE username='joaop'),
+ (SELECT s.id FROM class_sessions s JOIN class_schedules sch ON s.schedule_id = sch.id WHERE sch.day_of_week='Monday' LIMIT 1),
+ 5, 'Excelente aula! A Ana é incrível.'),
+((SELECT id FROM users WHERE username='marias'),
+ (SELECT s.id FROM class_sessions s JOIN class_schedules sch ON s.schedule_id = sch.id WHERE sch.day_of_week='Tuesday' LIMIT 1),
+ 4, 'Treino muito intenso, adorei!'),
+((SELECT id FROM users WHERE username='ritaf'),
+ (SELECT s.id FROM class_sessions s JOIN class_schedules sch ON s.schedule_id = sch.id WHERE sch.day_of_week='Wednesday' LIMIT 1),
+ 5, 'A melhor aula de spinning da minha vida.');
+
+-- ============================================================
+-- 13. RESERVAS PESSOAIS (PERSONAL_BOOKINGS) – EXEMPLOS
+-- ============================================================
+
+INSERT INTO personal_bookings (member_id, trainer_id, booking_date, start_time, duration_min, status, notes) VALUES
+((SELECT id FROM users WHERE username='carlosa'),
+ (SELECT id FROM users WHERE username='miguelrocha'),
+ date('now', '+2 days'),
+ '15:00',
+ 60,
+ 'confirmed',
+ 'Quero focar em agachamento livre'),
+
+((SELECT id FROM users WHERE username='sofial'),
+ (SELECT id FROM users WHERE username='anasilva'),
+ date('now', '+3 days'),
+ '11:00',
+ 45,
+ 'pending',
+ 'Aula de yoga privada');
+
+-- ============================================================
+-- 14. NOTIFICAÇÕES – EXEMPLOS
+-- ============================================================
+
+INSERT INTO notifications (user_id, message, notification_type_id) VALUES
+((SELECT id FROM users WHERE username='joaop'),
+ 'A sua inscrição para Morning Yoga foi confirmada.',
+ (SELECT id FROM notification_types WHERE name='success')),
+
+((SELECT id FROM users WHERE username='marias'),
+ 'Nova aula de HIIT disponível – inscreva-se já!',
+ (SELECT id FROM notification_types WHERE name='info')),
+
+((SELECT id FROM users WHERE username='ritaf'),
+ 'A sessão de Spinning de amanhã foi cancelada devido a manutenção.',
+ (SELECT id FROM notification_types WHERE name='warning'));
+
+-- ============================================================
+-- FIM DO SCRIPT
+-- ============================================================
+
+-- Verificação rápida (opcional)
+SELECT 'Database created successfully!' AS status;
