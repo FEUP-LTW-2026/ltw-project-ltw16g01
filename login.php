@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $user = $stmt->fetch();
 
-        if (!$user || !password_verify($password, $user['password'])) {
+        if (!$user || $password !== $user['password']) {
             $error = 'Incorrect credentials. Please try again.';
         } elseif ($user['active'] == 0) {
             $error = 'Your account has been deactivated.';
