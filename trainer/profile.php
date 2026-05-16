@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($upload['success'] === false) {
                 $error = $upload['error'];
             } else {
+                deleteOldProfilePhoto($_POST['current_photo'] ?? null);
                 $photoPath = $upload['path'];
             }
         }

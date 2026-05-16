@@ -304,3 +304,16 @@ function uploadProfilePhoto($file) {
         'path' => '../uploads/profiles/' . $fileName
     ];
 }
+
+function deleteOldProfilePhoto($photoPath) {
+    if (empty($photoPath)) {
+        return;
+    }
+
+    $fileName = basename($photoPath);
+    $filePath = __DIR__ . '/../uploads/profiles/' . $fileName;
+
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+}
