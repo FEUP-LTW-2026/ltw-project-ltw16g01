@@ -138,3 +138,14 @@ function isMemberEnrolled($pdo, $memberId, $sessionId) {
     $stmt->execute([$memberId, $sessionId]);
     return $stmt->fetch() !== false;
 }
+
+function createClass($pdo, $name, $description, $typeId) {
+    $stmt = $pdo->prepare("INSERT INTO classes (name, description, class_type_id, active) VALUES (?, ?, ?, 1)");
+    $stmt->execute([$name, $description, $typeId]);
+    return $pdo->lastInsertId();
+}
+
+function createClassSchedule($pdo, $classId, $trainerId, $dayOfWeek, $startTime, $location, $capacity, $duration) {
+    $stmt = $pdo->prepare("INSERT INTO class_schedules (class_id, trainer_id, day_of_week, start_time, location, capacity, duration_min) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    return $stmt->execute([$classId, $trainerId, $dayOfWeek, $startTime, $location, $capacity, $duration]);
+}

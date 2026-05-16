@@ -1,12 +1,5 @@
 <?php
-// db/auth.php
 
-/**
- * Tenta autenticar um utilizador com base no email/username e password.
- * Suporta passwords em texto claro (antigas) e com hash (novas).
- * Se a password antiga for verificada, atualiza o registo para hash.
- * Retorna os dados do utilizador se autenticado, caso contrário false.
- */
 function authenticateUser($pdo, $identifier, $password) {
     $stmt = $pdo->prepare("
         SELECT id, name, email, username, password, role, active
