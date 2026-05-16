@@ -86,6 +86,10 @@ if (!$user) {
     exit;
 }
 
+$_SESSION['user_name'] = $user['name'];
+$_SESSION['user_email'] = $user['email'];
+$_SESSION['user_photo'] = $user['photo'] ?? null;
+
 output_header('profile.css');
 ?>
 

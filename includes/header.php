@@ -15,11 +15,12 @@ if (!function_exists('output_header')) {
         // Função auxiliar para gerar o avatar (inicial ou imagem)
         function getAvatarHtml($name, $photo = null) {
             $initial = strtoupper(substr($name, 0, 1));
-            if ($photo && file_exists($photo)) {
+
+            if (!empty($photo)) {
                 return '<img src="' . htmlspecialchars($photo) . '" alt="' . htmlspecialchars($name) . '" class="avatar-img">';
-            } else {
-                return '<span class="avatar-initial">' . $initial . '</span>';
             }
+
+            return '<span class="avatar-initial">' . htmlspecialchars($initial) . '</span>';
         }
 ?>
 <!DOCTYPE html>

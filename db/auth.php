@@ -2,7 +2,7 @@
 
 function authenticateUser($pdo, $identifier, $password) {
     $stmt = $pdo->prepare("
-        SELECT id, name, email, username, password, role, active
+        SELECT id, name, email, username, password, role, photo, active
         FROM users
         WHERE (email = ? OR username = ?) AND active = 1
     ");
