@@ -1,16 +1,14 @@
 <?php
-session_start();
 
+session_start();
+require_once '../includes/header.php';
+require_once '../includes/footer.php';
+require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/equipment.php';
 require_once '../template/equipment.php';
-require_once '../includes/header.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../index.php');
-    exit;
-}
-
+requireRole('admin');
 $pdo = getDatabaseConnection();
 
 // Obter categorias e equipamentos
@@ -36,9 +34,12 @@ output_header("equipment.css");
                     <h1>Equipment</h1>
                     <p>Real‑time availability of the training floor</p>
                 </div>
-                <div class="live-indicator">
-                    <span class="live-dot"></span> Live
-                    <span id="lastUpdate" class="text-muted" style="margin-left:0.5rem;font-size:0.7rem;"></span>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="create_equipment.php" class="main-button btn-sm">+ Add Equipment</a>
+                    <div class="live-indicator">
+                        <span class="live-dot"></span> Live
+                        <span id="lastUpdate" class="text-muted" style="margin-left:0.5rem;font-size:0.7rem;"></span>
+                    </div>
                 </div>
             </div>
         </header>

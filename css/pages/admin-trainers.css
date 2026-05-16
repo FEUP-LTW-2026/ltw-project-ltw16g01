@@ -1,0 +1,15 @@
+.action-link.danger {
+    color: var(--danger);
+    margin-left: 0.5rem;
+}
+.action-link.danger:hover {
+    color: #ff6b7a;
+}
+
+.action-link.danger {
+    color: var(--danger);
+    margin-left: 0.5rem;
+}
+.action-link.danger:hover {
+    color: #ff6b7a;
+}

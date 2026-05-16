@@ -80,3 +80,58 @@ function getUpcomingSchedulesForTrainer($pdo, $trainerId, $limit = 3) {
     $stmt->execute([$trainerId, $limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+/**
+ * Cria um novo treinador (user + perfil).
+ * @param string $defaultPassword Password em texto claro (será hasheada)
+ * @return int|false ID do utilizador criado ou false em caso de erro
+ */
+function createTrainer($pdo, $name, $username, $email, $bio, $specializations, $certifications, $defaultPassword = 'changeme') {
+    // Verificar duplicados
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+    $stmt->execute([$username, $email]);
+    if ($stmt->fetch()) return false;
+
+    $hash = password_hash($defaultPassword, PASSWORD_DEFAULT);
+    $pdo->beginTransaction();
+    try {
+        $stmt = $pdo->prepare("INSERT INTO users (name, username, email, password, role, active) VALUES (?, ?, ?, ?, 'trainer', 1)");
+        $stmt->execute([$name, $username, $email, $hash]);
+        $userId = $pdo->lastInsertId();
+
+        $stmt = $pdo->prepare("INSERT INTO trainer_profiles (user_id, bio, specializations, certifications) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$userId, $bio, $specializations, $certifications]);
+        $pdo->commit();
+        return $userId;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        return false;
+    }
+}
+
+/**
+ * Atualiza os dados de um treinador existente.
+ */
+function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications) {
+    $pdo->beginTransaction();
+    try {
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, username = ?, email = ?, active = ? WHERE id = ? AND role = 'trainer'");
+        $stmt->execute([$name, $username, $email, $active, $id]);
+
+        $stmt = $pdo->prepare("UPDATE trainer_profiles SET bio = ?, specializations = ?, certifications = ? WHERE user_id = ?");
+        $stmt->execute([$bio, $specializations, $certifications, $id]);
+        $pdo->commit();
+        return true;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        return false;
+    }
+}
+
+/**
+ * Elimina um treinador (soft delete: active = 0).
+ */
+function deleteTrainer($pdo, $id) {
+    $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'trainer'");
+    return $stmt->execute([$id]);
+}

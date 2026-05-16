@@ -1,0 +1,31 @@
+/* form.css - Estilos para formulários administrativos */
+.alert {
+    padding: var(--sp-md);
+    border-radius: var(--r-sm);
+    margin-bottom: var(--sp-lg);
+}
+.alert-danger {
+    background: rgba(255, 71, 87, 0.1);
+    border-left: 3px solid var(--danger);
+    color: var(--danger);
+}
+.alert-success {
+    background: rgba(46, 213, 115, 0.1);
+    border-left: 3px solid var(--success);
+    color: var(--success);
+}
+.form-control {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

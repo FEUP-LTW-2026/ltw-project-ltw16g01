@@ -1,0 +1,6 @@
+/* create_trainer.css - igual ao form.css + compensação navbar */
+.main {
+    padding-top: calc(var(--nav-h) + 20px);
+    padding-bottom: var(--sp-lg);
+}
+/* Inclua também as regras de formulário que já usava no form.css */

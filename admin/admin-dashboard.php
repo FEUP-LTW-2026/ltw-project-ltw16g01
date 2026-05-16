@@ -3,14 +3,12 @@ session_start();
 
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
+require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/admin.php';
 require_once '../template/admin.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../index.php');
-    exit;
-}
+requireRole('admin');
 
 $pdo = getDatabaseConnection();
 $stats = getAdminStats($pdo);
@@ -51,10 +49,10 @@ output_header('admin-dashboard.css');
 
         <nav>
             <div class="quick-grid">
-                <a href="#" class="quick-item"><span class="quick-icon">👤</span>Manage Members</a>
-                <a href="#" class="quick-item"><span class="quick-icon">🏋️</span>Manage Trainers</a>
+                <a href="members.php" class="quick-item"><span class="quick-icon">👤</span>Manage Members</a>
+                <a href="trainers.php" class="quick-item"><span class="quick-icon">🏋️</span>Manage Trainers</a>
                 <a href="classes.php" class="quick-item"><span class="quick-icon">📅</span>Manage Classes</a>
-                <a href="#" class="quick-item"><span class="quick-icon">⚙️</span>Manage Equipment</a>
+                <a href="equipment.php" class="quick-item"><span class="quick-icon">⚙️</span>Manage Equipment</a>
                 <a href="#" class="quick-item"><span class="quick-icon">📊</span>Reports</a>
                 <a href="#" class="quick-item"><span class="quick-icon">🔔</span>Notifications</a>
             </div>

@@ -45,7 +45,15 @@ function output_equipment_card($item) {
         </div>
 
         <?php if (!empty($item['notes'])): ?>
-            <p class="text-muted equip-notes"><?= htmlspecialchars($item['notes']) ?></p>
+            <p class="equip-notes"><?= htmlspecialchars($item['notes']) ?></p>
+        <?php endif; ?>
+
+        <!-- Botões admin sempre no final, alinhados à direita -->
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+            <div class="equip-actions">
+                <a href="edit_equipment.php?id=<?= $item['id'] ?>" class="secondary-button btn-sm">Edit</a>
+                <a href="delete_equipment.php?id=<?= $item['id'] ?>" class="delete-btn btn-sm" onclick="return confirm('Delete this equipment?')">Delete</a>
+            </div>
         <?php endif; ?>
     </article>
     <?php
