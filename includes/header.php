@@ -54,11 +54,10 @@ if (!function_exists('output_header')) {
         <ul class="nav-menu">
             <?php if ($loggedIn): ?>
                 <?php if ($userRole === 'member'): ?>
-                    <li><a href="../index.php">Home</a></li>
+                    <li><a href="../member/member-dashboard.php">Home</a></li>
                     <li><a href="../pages/classes.php">Classes</a></li>
                     <li><a href="../pages/trainers.php">Trainers</a></li>
                     <li><a href="../pages/equipment.php">Equipment</a></li>
-                    <li><a href="../member/dashboard.php">Dashboard</a></li>
                     <li class="nav-avatar">
                     <a href="../member/profile.php" class="avatar-link" title="My Profile">
                         <div class="avatar">
