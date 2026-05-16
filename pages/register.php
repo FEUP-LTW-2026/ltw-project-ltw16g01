@@ -34,9 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($userId === false) {
             $error = 'That email or username is already registered.';
         } else {
-            $_SESSION['user_id'] = $userId;
-            $_SESSION['user_name'] = $name;
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
             $_SESSION['role'] = 'member';
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_photo'] = $user['photo'] ?? null;
 
             header('Location: ../index.php');
             exit;

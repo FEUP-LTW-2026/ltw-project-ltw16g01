@@ -28,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['role'] = $user['role'];
-            $_SESSION['photo'] = $user['photo'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_photo'] = $user['photo'] ?? null;
 
             if ($user['role'] === 'admin') {
                 header('Location: ../admin/admin-dashboard.php');
@@ -49,7 +50,7 @@ output_header('auth.css');
     <?php output_login_form($error, $postedIdentifier); ?>
 </main>
 
-<script src="js/login.js"></script>
+<script src="../js/login.js"></script>
 
 <?php
 output_footer();
