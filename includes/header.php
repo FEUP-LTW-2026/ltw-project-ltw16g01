@@ -59,7 +59,6 @@ if (!function_exists('output_header')) {
                     <li><a href="../pages/trainers.php">Trainers</a></li>
                     <li><a href="../pages/equipment.php">Equipment</a></li>
                     <li><a href="../member/dashboard.php">Dashboard</a></li>
-                    <li><a href="../member/profile.php">My Profile</a></li>
                     <li class="nav-avatar">
                     <a href="../member/profile.php" class="avatar-link" title="My Profile">
                         <div class="avatar">

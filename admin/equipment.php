@@ -1,16 +1,14 @@
 <?php
+
 session_start();
-
-require_once '../db/connection.php';
-require_once '../db/equipment.php';
-require_once '../template/equipment.php';
 require_once '../includes/header.php';
+require_once '../includes/footer.php';
+require_once '../includes/auth.php';
+require_once '../db/connection.php';
+require_once '../db/admin.php';
+require_once '../template/admin.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../index.php');
-    exit;
-}
-
+requireRole('admin');
 $pdo = getDatabaseConnection();
 
 // Obter categorias e equipamentos
