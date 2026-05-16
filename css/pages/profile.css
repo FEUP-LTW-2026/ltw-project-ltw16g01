@@ -162,6 +162,42 @@
     color: var(--danger);
 }
 
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    flex-wrap: wrap;
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.custom-file-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch);
+    padding: 0.75rem 1.4rem;
+    border-radius: var(--r-sm);
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--t), box-shadow var(--t), transform var(--t);
+}
+
+.custom-file-button:hover {
+    background: #c73615;
+    box-shadow: var(--shadow-a);
+    transform: translateY(-1px);
+}
+
+.custom-file-name {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
 @media (min-width: 640px) {
     .profile-hero {
         grid-template-columns: auto 1fr;

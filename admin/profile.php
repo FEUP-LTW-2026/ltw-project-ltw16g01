@@ -27,19 +27,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'update_basic_profile') {
-        $result = updateBasicProfile(
-            $pdo,
-            $userId,
-            $_POST['name'] ?? '',
-            $_POST['username'] ?? '',
-            $_POST['email'] ?? '',
-            $_POST['photo'] ?? null
-        );
+        $photoPath = $_POST['current_photo'] ?? null;
 
-        if ($result === true) {
-            $message = 'Profile updated successfully.';
-        } else {
-            $error = $result;
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $upload = uploadProfilePhoto($_FILES['photo']);
+
+            if ($upload['success'] === false) {
+                $error = $upload['error'];
+            } else {
+                $photoPath = $upload['path'];
+            }
+        }
+
+        if ($error === '') {
+            $result = updateBasicProfile(
+                $pdo,
+                $userId,
+                $_POST['name'] ?? '',
+                $_POST['username'] ?? '',
+                $_POST['email'] ?? '',
+                $photoPath
+            );
+
+            if ($result === true) {
+                $_SESSION['user_name'] = trim($_POST['name'] ?? '');
+                $_SESSION['user_email'] = trim($_POST['email'] ?? '');
+                $_SESSION['user_photo'] = $photoPath;
+
+                $message = 'Profile updated successfully.';
+            } else {
+                $error = $result;
+            }
         }
     }
 
