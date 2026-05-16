@@ -28,11 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['photo'] = $user['photo'];
 
             if ($user['role'] === 'admin') {
                 header('Location: ../admin/admin-dashboard.php');
-            } else {
-                header('Location: ../index.php');
+            } else if ($user['role'] === 'member') {
+                header('Location: ../member/member-dashboard.php');
+            } else if ($user['role'] === 'trainer') {
+                header('Location: ../trainer/trainer-dashboard.php');
             }
             exit;
         }

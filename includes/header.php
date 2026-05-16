@@ -1,9 +1,8 @@
 <?php
+// includes/header.php
 
-// Se a função output_header ainda não foi definida, define-a
 if (!function_exists('output_header')) {
     function output_header($pageCss) {
-        // Garantir que a sessão está disponível
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -11,6 +10,17 @@ if (!function_exists('output_header')) {
         $loggedIn = isset($_SESSION['user_id']);
         $userName = $_SESSION['user_name'] ?? '';
         $userRole = $_SESSION['role'] ?? '';
+        $userPhoto = $_SESSION['user_photo'] ?? null; // Garantir que a foto é guardada no login
+
+        // Função auxiliar para gerar o avatar (inicial ou imagem)
+        function getAvatarHtml($name, $photo = null) {
+            $initial = strtoupper(mb_substr($name, 0, 1));
+            if ($photo && file_exists($photo)) {
+                return '<img src="' . htmlspecialchars($photo) . '" alt="' . htmlspecialchars($name) . '" class="avatar-img">';
+            } else {
+                return '<span class="avatar-initial">' . $initial . '</span>';
+            }
+        }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,20 +52,54 @@ if (!function_exists('output_header')) {
         </label>
 
         <ul class="nav-menu">
-            <li><a href="../pages/index.php">Home</a></li>
-            <li><a href="../pages/classes.php">Classes</a></li>
-            <li><a href="../pages/trainers.php">Trainers</a></li>
-            <li><a href="../pages/equipment.php">Equipment</a></li>
-
             <?php if ($loggedIn): ?>
                 <?php if ($userRole === 'member'): ?>
+                    <li><a href="../index.php">Home</a></li>
+                    <li><a href="../pages/classes.php">Classes</a></li>
+                    <li><a href="../pages/trainers.php">Trainers</a></li>
+                    <li><a href="../pages/equipment.php">Equipment</a></li>
                     <li><a href="../member/dashboard.php">Dashboard</a></li>
                     <li><a href="../member/profile.php">My Profile</a></li>
+                    <li class="nav-avatar">
+                    <a href="../member/profile.php" class="avatar-link" title="My Profile">
+                        <div class="avatar">
+                            <?= getAvatarHtml($userName, $userPhoto) ?>
+                        </div>
+                    </a>
+                </li>
                 <?php elseif ($userRole === 'admin'): ?>
-                    <li><a href="../admin/admin-dashboard.php">Admin</a></li>
+                    <li><a href="../admin/admin-dashboard.php">Home</a></li>
+                    <li><a href="../admin/classes.php">Classes</a></li>
+                    <li><a href="../admin/trainers.php">Trainers</a></li>
+                    <li><a href="../admin/equipment.php">Equipment</a></li>
+                    <li><a href="../admin/members.php">Members</a></li>
+                    <li class="nav-avatar">
+                    <a href="../admin/profile.php" class="avatar-link" title="My Profile">
+                        <div class="avatar">
+                            <?= getAvatarHtml($userName, $userPhoto) ?>
+                        </div>
+                    </a>
+                </li>
+                <?php elseif ($userRole === 'trainer'): ?>
+                    <li><a href="../index.php">Home</a></li>
+                    <li><a href="../pages/classes.php">Classes</a></li>
+                    <li><a href="../pages/trainers.php">Trainers</a></li>
+                    <li><a href="../pages/equipment.php">Equipment</a></li>
+                    <li><a href="../admin/dashboard.php">Dashboard</a></li>
+                    <li><a href="../admin/members.php">Members</a></li>
+                    <li class="nav-avatar">
+                    <a href="../trainer/profile.php" class="avatar-link" title="My Profile">
+                        <div class="avatar">
+                            <?= getAvatarHtml($userName, $userPhoto) ?>
+                        </div>
+                    </a>
+                </li>
                 <?php endif; ?>
-                <li><a href="../pages/logout.php" class="nav-logout">Logout (<?= htmlspecialchars($userName) ?>)</a></li>
             <?php else: ?>
+                <li><a href="../index.php">Home</a></li>
+                <li><a href="../pages/classes.php">Classes</a></li>
+                <li><a href="../pages/trainers.php">Trainers</a></li>
+                <li><a href="../pages/equipment.php">Equipment</a></li>
                 <li><a href="../pages/login.php" class="nav-login">Login</a></li>
                 <li><a href="../pages/register.php" class="nav-register">Sign Up</a></li>
             <?php endif; ?>
@@ -65,3 +109,4 @@ if (!function_exists('output_header')) {
 <?php
     }
 }
+?>
