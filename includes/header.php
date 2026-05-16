@@ -14,7 +14,7 @@ if (!function_exists('output_header')) {
 
         // Função auxiliar para gerar o avatar (inicial ou imagem)
         function getAvatarHtml($name, $photo = null) {
-            $initial = strtoupper(mb_substr($name, 0, 1));
+            $initial = strtoupper(substr($name, 0, 1));
             if ($photo && file_exists($photo)) {
                 return '<img src="' . htmlspecialchars($photo) . '" alt="' . htmlspecialchars($name) . '" class="avatar-img">';
             } else {
