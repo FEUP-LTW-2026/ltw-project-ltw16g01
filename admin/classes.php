@@ -4,8 +4,8 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/admin.php';
-require_once '../template/admin.php';
+require_once '../db/classes.php';
+require_once '../template/classes.php';
 
 requireRole('admin');
 
@@ -33,9 +33,12 @@ output_header('classes.css');
                     <li><span>Classes</span></li>
                 </ol>
             </nav>
-            <div class="page-header-row">
-                <h1>Classes</h1>
-                <p>Browse our schedule and enroll in upcoming sessions</p>
+            <div class="page-header-row" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1>Classes</h1>
+                    <p>Browse our schedule and enroll in upcoming sessions</p>
+                </div>
+                <a href="create_class.php" class="main-button">+ New Class</a>
             </div>
         </header>
 
