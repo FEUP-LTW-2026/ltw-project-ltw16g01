@@ -53,7 +53,7 @@ output_header('auth.css');
     <?php output_register_form($error, $old); ?>
 </main>
 
-<script src="js/register.js"></script>
+<script src="../js/register.js"></script>
 
 <?php
 output_footer();

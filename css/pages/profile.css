@@ -1,0 +1,179 @@
+/* PROFILE.CSS */
+/* Styles for member, trainer and admin profile pages */
+
+.profile-page {
+    padding-bottom: var(--sp-2xl);
+}
+
+.profile-alert {
+    margin-bottom: var(--sp-md);
+    padding: 0.9rem 1rem;
+    border-radius: var(--r-md);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.profile-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-lg);
+    align-items: center;
+    background: linear-gradient(135deg, rgba(232, 65, 24, 0.12), rgba(255, 255, 255, 0.02));
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-xl);
+    margin-bottom: var(--sp-xl);
+}
+
+.profile-avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    overflow: hidden;
+    box-shadow: var(--shadow-a);
+}
+
+.profile-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-sm);
+}
+
+.profile-hero-content h1 {
+    margin: 0;
+}
+
+.profile-hero-content p {
+    color: var(--muted);
+    max-width: 65ch;
+}
+
+.profile-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-sm);
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.profile-card {
+    margin-bottom: var(--sp-xl);
+}
+
+.profile-card .card-head h2 {
+    font-family: var(--ff-body);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.profile-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
+}
+
+.form-input {
+    width: 100%;
+    min-height: var(--touch);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    padding: 0.75rem 0.9rem;
+    transition: border-color var(--t), box-shadow var(--t);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232, 65, 24, 0.14);
+}
+
+.profile-textarea {
+    resize: vertical;
+    min-height: 130px;
+}
+
+.profile-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-sm);
+}
+
+.profile-info-list p {
+    color: var(--muted);
+}
+
+.profile-info-list strong {
+    color: var(--text);
+}
+
+.profile-grid-two {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-lg);
+    margin-bottom: var(--sp-xl);
+}
+
+.logout-box {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: var(--sp-sm);
+    margin-bottom: var(--sp-md);
+}
+
+.logout-button {
+    padding: 0.9rem 2.4rem;
+    font-size: 1rem;
+    min-height: 48px;
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.logout-button:hover {
+    background: rgba(255, 71, 87, 0.12);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+@media (min-width: 640px) {
+    .profile-hero {
+        grid-template-columns: auto 1fr;
+    }
+
+    .profile-form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .profile-grid-two {
+        grid-template-columns: 1fr 1fr;
+    }
+}
