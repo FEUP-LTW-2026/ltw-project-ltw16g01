@@ -388,3 +388,13 @@
         grid-template-columns: 1fr;
     }
 }
+
+.delete-btn {
+    background: var(--danger);
+    color: white;
+    border: none;
+}
+.delete-btn:hover {
+    background: #ff3344;
+    transform: translateY(-1px);
+}

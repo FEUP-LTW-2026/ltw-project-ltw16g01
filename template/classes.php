@@ -57,6 +57,14 @@ function output_class_schedule_card($schedule) {
             <div class="cap-wrap">
                 <span class="badge badge-<?= $fillClass ?>"><?= $freeSpots ?> spots left</span>
             </div>
+            <?php
+            if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+                echo '<div class="admin-actions" style="display: flex; gap: 8px;">';
+                echo '<a href="edit_class.php?id=' . $schedule['schedule_id'] . '" class="secondary-button btn-sm">Edit</a>';
+                echo '<a href="delete_class.php?id=' . $schedule['schedule_id'] . '" class="delete-btn btn-sm" onclick="return confirm(\'Delete this class schedule?\')">Delete</a>';
+                echo '</div>';
+            }
+            ?>
         </div>
     </div>
     <?php

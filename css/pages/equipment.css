@@ -142,3 +142,48 @@
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* Equipment card layout */
+.equip-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* para uniformizar altura entre cards */
+}
+
+/* O conteúdo principal ocupa o espaço disponível, empurrando os botões para baixo */
+.equip-card-header,
+.equip-availability,
+.equip-notes {
+    flex-shrink: 0;
+}
+
+/* Botões de ação no fundo do card, alinhados à direita */
+.equip-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: auto;  /* empurra para o fundo */
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+/* Opcional: dar um espaçamento extra quando há notas */
+.equip-notes + .equip-actions {
+    margin-top: 0; /* já tem padding-top, mantém separação */
+}
+
+/* Estilo do botão delete (caso não exista) */
+.delete-btn {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--r-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--t);
+}
+.delete-btn:hover {
+    background: #ff3344;
+    transform: translateY(-1px);
+}

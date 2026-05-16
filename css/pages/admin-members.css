@@ -1,0 +1,31 @@
+/* admin-members.css - Estilos para a tabela de membros */
+.table-wrap {
+    overflow-x: auto;
+}
+.action-link.danger {
+    color: var(--danger);
+    margin-left: 0.5rem;
+}
+.action-link.danger:hover {
+    color: #ff6b7a;
+}
+.filter-bar {
+    display: flex;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+.filter-group {
+    flex: 1;
+}
+.filter-group-end {
+    flex: 0 0 auto;
+}
+@media (max-width: 640px) {
+    .filter-bar {
+        flex-direction: column;
+    }
+    .filter-group-end {
+        width: 100%;
+    }
+}
