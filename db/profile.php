@@ -242,3 +242,65 @@ function getAdminProfileStats($pdo) {
 
     return $stats;
 }
+
+function uploadProfilePhoto($file) {
+    if (!isset($file) || $file['error'] === UPLOAD_ERR_NO_FILE) {
+        return [
+            'success' => true,
+            'path' => null
+        ];
+    }
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        return [
+            'success' => false,
+            'error' => 'There was an error uploading the image.'
+        ];
+    }
+
+    $maxSize = 2 * 1024 * 1024;
+
+    if ($file['size'] > $maxSize) {
+        return [
+            'success' => false,
+            'error' => 'The image must be smaller than 2MB.'
+        ];
+    }
+
+    $allowedTypes = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp'
+    ];
+
+    $mimeType = mime_content_type($file['tmp_name']);
+
+    if (!array_key_exists($mimeType, $allowedTypes)) {
+        return [
+            'success' => false,
+            'error' => 'Invalid image format. Please use JPG, PNG or WEBP.'
+        ];
+    }
+
+    $uploadDir = __DIR__ . '/../uploads/profiles/';
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $extension = $allowedTypes[$mimeType];
+    $fileName = 'profile_' . bin2hex(random_bytes(12)) . '.' . $extension;
+    $destination = $uploadDir . $fileName;
+
+    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+        return [
+            'success' => false,
+            'error' => 'Could not save the uploaded image.'
+        ];
+    }
+
+    return [
+        'success' => true,
+        'path' => '../uploads/profiles/' . $fileName
+    ];
+}

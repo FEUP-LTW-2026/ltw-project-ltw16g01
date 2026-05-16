@@ -67,7 +67,7 @@ function output_basic_profile_form($user) {
         </div>
 
         <div class="card-body">
-            <form method="post" class="profile-form">
+            <form method="post" class="profile-form" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="update_basic_profile">
 
                 <div class="profile-form-grid">
@@ -108,15 +108,34 @@ function output_basic_profile_form($user) {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="photo">Profile photo URL</label>
+                        <label class="form-label" for="photo">Profile photo</label>
+
                         <input 
-                            class="form-input" 
-                            type="url" 
-                            id="photo" 
-                            name="photo" 
-                            placeholder="https://..." 
+                            type="hidden" 
+                            name="current_photo" 
                             value="<?= htmlspecialchars($user['photo'] ?? '') ?>"
                         >
+
+                        <div class="custom-file-upload">
+                            <input 
+                                type="file" 
+                                id="photo" 
+                                name="photo" 
+                                accept="image/png,image/jpeg,image/webp"
+                            >
+
+                            <label for="photo" class="custom-file-button">
+                                Choose image
+                            </label>
+
+                            <span id="file-name" class="custom-file-name">
+                                No image selected
+                            </span>
+                        </div>
+
+                        <small class="text-muted">
+                            Accepted formats: PNG, JPG or WEBP.
+                        </small>
                     </div>
                 </div>
 

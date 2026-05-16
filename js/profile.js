@@ -19,3 +19,16 @@ if (passwordForm) {
         }
     });
 }
+
+const photoInput = document.getElementById('photo');
+const fileName = document.getElementById('file-name');
+
+if (photoInput && fileName) {
+    photoInput.addEventListener('change', function () {
+        if (photoInput.files.length > 0) {
+            fileName.textContent = photoInput.files[0].name;
+        } else {
+            fileName.textContent = 'No image selected';
+        }
+    });
+}
