@@ -1,0 +1,324 @@
+/* PT.CSS */
+/* Styles for the FitPeak Personal Trainers page */
+
+.pt-hero {
+    min-height: 65svh;
+    display: flex;
+    align-items: center;
+    padding-block: var(--sp-2xl);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+}
+
+.pt-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 75% 45%, rgba(232, 65, 24, 0.12), transparent),
+        radial-gradient(ellipse 60% 80% at 10% 90%, rgba(240, 147, 43, 0.06), transparent);
+    pointer-events: none;
+}
+
+.pt-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+}
+
+.small-text {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    margin-bottom: var(--sp-md);
+}
+
+.small-text::before {
+    content: "";
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    flex-shrink: 0;
+}
+
+.highlight {
+    color: var(--accent);
+    display: block;
+}
+
+.pt-description {
+    color: var(--muted);
+    font-size: clamp(0.95rem, 2.5vw, 1.08rem);
+    max-width: 62ch;
+    margin-top: var(--sp-md);
+    line-height: 1.85;
+}
+
+.pt-hero-actions {
+    display: flex;
+    gap: var(--sp-sm);
+    flex-wrap: wrap;
+    margin-top: var(--sp-xl);
+}
+
+.pt-section {
+    padding-block: var(--sp-2xl);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--sp-xl);
+}
+
+.section-title p {
+    color: var(--muted);
+    max-width: 54ch;
+    margin-inline: auto;
+    margin-top: var(--sp-md);
+}
+
+/* Trainer Cards */
+.trainer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+}
+
+.trainer-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+    min-height: 100%;
+    transition: border-color var(--t), box-shadow var(--t), transform var(--t);
+}
+
+.trainer-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-a);
+    transform: translateY(-2px);
+}
+
+.trainer-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.trainer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.trainer-body {
+    flex: 1;
+}
+
+.trainer-name {
+    margin-bottom: var(--sp-sm);
+    font-size: 1.15rem;
+}
+
+.trainer-specializations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-xs);
+    margin-bottom: var(--sp-sm);
+}
+
+.spec-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--r-pill);
+    background: rgba(232, 65, 24, 0.14);
+    border: 1px solid rgba(232, 65, 24, 0.28);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.trainer-bio {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+
+.trainer-price {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: var(--sp-sm);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--r-pill);
+    background: rgba(46, 213, 115, 0.12);
+    border: 1px solid rgba(46, 213, 115, 0.25);
+    color: var(--success);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.trainer-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: var(--sp-md);
+    border-top: 1px solid var(--border);
+}
+
+.trainer-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.stars {
+    color: var(--warning);
+    letter-spacing: 0.08em;
+    line-height: 1;
+}
+
+.rating-text {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+/* Benefits */
+.pt-benefits-section {
+    padding-block: var(--sp-2xl);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.pt-benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+}
+
+.pt-benefit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+    transition: border-color var(--t), box-shadow var(--t), transform var(--t);
+}
+
+.pt-benefit-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-a);
+    transform: translateY(-2px);
+}
+
+.pt-benefit-icon {
+    font-size: 2.2rem;
+    margin-bottom: var(--sp-md);
+}
+
+.pt-benefit-card h3 {
+    margin-bottom: var(--sp-sm);
+}
+
+.pt-benefit-card p {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+/* CTA */
+.pt-cta-section {
+    padding-block: var(--sp-2xl);
+}
+
+.pt-cta-box {
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: var(--r-md);
+    padding: var(--sp-xl);
+    box-shadow: var(--shadow-a);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-lg);
+}
+
+.pt-cta-box h2 {
+    margin-bottom: var(--sp-sm);
+}
+
+.pt-cta-box p {
+    color: var(--muted);
+    max-width: 60ch;
+}
+
+/* Responsive */
+@media (max-width: 375px) {
+    .pt-hero-actions {
+        flex-direction: column;
+    }
+
+    .pt-hero-actions .main-button,
+    .pt-hero-actions .secondary-button {
+        width: 100%;
+    }
+}
+
+@media (min-width: 640px) {
+    .trainer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pt-benefits-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 860px) {
+    .trainer-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--sp-lg);
+    }
+
+    .pt-benefits-grid {
+        gap: var(--sp-lg);
+    }
+
+    .pt-cta-box {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}

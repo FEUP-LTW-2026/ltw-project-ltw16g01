@@ -56,6 +56,10 @@ CREATE TABLE IF NOT EXISTS trainer_profiles (
     bio TEXT,
     specializations TEXT,
     certifications TEXT,
+    is_pt INTEGER NOT NULL DEFAULT 0,
+    pt_description TEXT,
+    pt_hourly_rate REAL,
+    pt_available INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -208,6 +212,14 @@ INSERT INTO users (name, username, email, password, role, active) VALUES
 ('Bruno Costa', 'brunocosta', 'bruno@fitpeak.com', '12345678', 'trainer', 1),
 ('Carla Mendes', 'carlamendes', 'carla@fitpeak.com', '12345678', 'trainer', 1),
 ('Miguel Rocha', 'miguelrocha', 'miguel@fitpeak.com', '12345678', 'trainer', 1),
+('Inês Almeida', 'inesalmeida', 'ines@fitpeak.com', '12345678', 'trainer', 1),
+('Tiago Martins', 'tiagomartins', 'tiago@fitpeak.com', '12345678', 'trainer', 1),
+('Beatriz Ramos', 'beatrizramos', 'beatriz@fitpeak.com', '12345678', 'trainer', 1),
+('Duarte Oliveira', 'duarteoliveira', 'duarte@fitpeak.com', '12345678', 'trainer', 1),
+('Mariana Lopes', 'marianalopes', 'mariana@fitpeak.com', '12345678', 'trainer', 1),
+('Ricardo Nunes', 'ricardonunes', 'ricardo@fitpeak.com', '12345678', 'trainer', 1),
+('Catarina Gomes', 'catarinagomes', 'catarina@fitpeak.com', '12345678', 'trainer', 1),
+('André Ferreira', 'andreferreira', 'andre@fitpeak.com', '12345678', 'trainer', 1),
 -- Administrador
 ('Admin User', 'admin', 'admin@fitpeak.com', '12345678', 'admin', 1),
 -- Membros (5 membros comuns)
@@ -221,26 +233,104 @@ INSERT INTO users (name, username, email, password, role, active) VALUES
 -- 5. PERFIS DE TREINADOR
 -- ============================================================
 
-INSERT INTO trainer_profiles (user_id, bio, specializations, certifications) VALUES
+INSERT INTO trainer_profiles 
+(user_id, bio, specializations, certifications, is_pt, pt_description, pt_available) 
+VALUES
 ((SELECT id FROM users WHERE username = 'anasilva'),
  'Yoga & Pilates specialist with 10 years experience.',
  'Yoga, Pilates, Flexibility',
- 'ACE CPT, RYT-200'),
+ 'ACE CPT, RYT-200',
+ 0,
+ NULL,
+ 0),
 
 ((SELECT id FROM users WHERE username = 'brunocosta'),
  'High-intensity training enthusiast and former athlete.',
  'HIIT, CrossFit, Strength',
- 'NSCA-CSCS, CF-L2'),
+ 'NSCA-CSCS, CF-L2',
+ 0,
+ NULL,
+ 0),
 
 ((SELECT id FROM users WHERE username = 'carlamendes'),
  'Certified spinning instructor and endurance coach.',
  'Spinning, Cycling, Cardio',
- 'Spinning Certified, ACE'),
+ 'Spinning Certified, ACE',
+ 0,
+ NULL,
+ 0),
 
 ((SELECT id FROM users WHERE username = 'miguelrocha'),
  'Strength coach focused on hypertrophy and performance.',
  'Strength, Hypertrophy, Functional Training',
- 'ACE CPT');
+ 'ACE CPT',
+ 0,
+ NULL,
+ 0),
+
+((SELECT id FROM users WHERE username = 'inesalmeida'),
+ 'Personal trainer focused on weight loss, mobility and beginner-friendly training.',
+ 'Weight Loss, Mobility, Beginner Training',
+ 'ACE CPT',
+ 1,
+ 'Beginner-friendly PT sessions focused on fat loss, confidence and safe technique.',
+ 1),
+
+((SELECT id FROM users WHERE username = 'tiagomartins'),
+ 'Strength and conditioning coach specialized in muscle gain and athletic performance.',
+ 'Strength, Hypertrophy, Performance',
+ 'NSCA-CSCS',
+ 1,
+ 'Strength-focused PT sessions for muscle gain, athletic performance and progressive overload.',
+ 1),
+
+((SELECT id FROM users WHERE username = 'beatrizramos'),
+ 'Functional training coach focused on posture, core strength and injury prevention.',
+ 'Functional Training, Core, Injury Prevention',
+ 'NASM CPT',
+ 1,
+ 'Functional PT sessions focused on posture, core strength and injury prevention.',
+ 1),
+
+((SELECT id FROM users WHERE username = 'duarteoliveira'),
+ 'Coach focused on CrossFit, metabolic conditioning and high-intensity workouts.',
+ 'CrossFit, HIIT, Conditioning',
+ 'CF-L1, ACE CPT',
+ 1,
+ 'Personal training focused on CrossFit, conditioning and high-intensity performance.',
+ 1),
+
+((SELECT id FROM users WHERE username = 'marianalopes'),
+ 'Yoga and Pilates instructor focused on flexibility, breathing and body control.',
+ 'Yoga, Pilates, Flexibility',
+ 'RYT-200, Pilates Instructor',
+ 1,
+ 'PT sessions focused on flexibility, posture, breathing and body control.',
+ 1),
+
+((SELECT id FROM users WHERE username = 'ricardonunes'),
+ 'Personal trainer specialized in strength training, fat loss and nutrition guidance.',
+ 'Strength, Fat Loss, Nutrition',
+ 'ACE CPT, Nutrition Coach',
+ 1,
+ 'Personal training focused on strength, fat loss and nutrition guidance.',
+ 1),
+
+((SELECT id FROM users WHERE username = 'catarinagomes'),
+ 'Trainer focused on women fitness, glute training and full-body strength.',
+ 'Women Fitness, Glutes, Strength',
+ 'NASM CPT',
+ 1,
+ 'PT sessions focused on glute training, full-body strength and confidence.',
+ 1),
+
+((SELECT id FROM users WHERE username = 'andreferreira'),
+ 'Boxing and conditioning coach focused on endurance, agility and coordination.',
+ 'Boxing, Cardio, Agility',
+ 'Boxing Coach, ACE',
+ 1,
+ 'Personal training focused on boxing, cardio, agility and endurance.',
+ 1);
 
 -- ============================================================
 -- 6. PERFIS DE MEMBRO

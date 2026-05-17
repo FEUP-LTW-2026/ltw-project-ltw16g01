@@ -1,7 +1,7 @@
 <?php
 // template/trainers.php
 
-require_once '../db/trainers.php'; // para funções auxiliares
+require_once __DIR__ . '/../db/trainers.php'; // para funções auxiliares
 
 function output_trainer_list($trainers) {
     if (empty($trainers)) {
@@ -19,6 +19,8 @@ function output_trainer_card($trainer) {
     $pdo = $GLOBALS['pdo'] ?? null;
     $name = htmlspecialchars($trainer['name']);
     $bio = htmlspecialchars($trainer['bio'] ?? 'No bio provided yet.');
+    $ptDescription = htmlspecialchars($trainer['pt_description'] ?? '');
+    $ptRate = $trainer['pt_hourly_rate'] ?? null;
     $specializations = array_map('trim', explode(',', $trainer['specializations'] ?? ''));
     $photo = !empty($trainer['photo']) ? $trainer['photo'] : null;
     $initials = strtoupper(substr($trainer['name'], 0, 2));
@@ -38,8 +40,10 @@ function output_trainer_card($trainer) {
                 <div class="avatar-placeholder"><?= $initials ?></div>
             <?php endif; ?>
         </div>
+
         <div class="trainer-body">
             <h3 class="trainer-name"><?= $name ?></h3>
+
             <div class="trainer-specializations">
                 <?php foreach ($specializations as $spec): ?>
                     <?php if (!empty($spec)): ?>
@@ -47,8 +51,20 @@ function output_trainer_card($trainer) {
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
-            <p class="trainer-bio"><?= nl2br($bio) ?></p>
+
+            <?php if (!empty($ptDescription)): ?>
+                <p class="trainer-bio"><?= nl2br($ptDescription) ?></p>
+            <?php else: ?>
+                <p class="trainer-bio"><?= nl2br($bio) ?></p>
+            <?php endif; ?>
+
+            <?php if (!empty($ptRate)): ?>
+                <p class="trainer-price">
+                    €<?= number_format($ptRate, 2) ?>/session
+                </p>
+            <?php endif; ?>
         </div>
+
         <div class="trainer-foot">
             <div class="trainer-rating">
                 <div class="stars">
@@ -64,11 +80,13 @@ function output_trainer_card($trainer) {
                 </div>
                 <span class="rating-text"><?= number_format($rating, 1) ?> (<?= $reviewCount ?>)</span>
             </div>
+
             <a href="trainer_profile.php?id=<?= $trainer['id'] ?>" class="secondary-button btn-sm">View Profile</a>
         </div>
     </div>
     <?php
 }
+
 /**
  * Renderiza a tabela de treinadores com opções de editar/eliminar.
  */

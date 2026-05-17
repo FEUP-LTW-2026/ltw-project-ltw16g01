@@ -3,10 +3,41 @@
 
 function getAllTrainers($pdo, $filters = []) {
     $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active,
-                   tp.bio, tp.specializations, tp.certifications
+                   tp.bio, tp.specializations, tp.certifications,
+                   tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available
             FROM users u
             LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
             WHERE u.role = 'trainer' AND u.active = 1";
+    $params = [];
+
+    if (!empty($filters['specialization'])) {
+        $sql .= " AND tp.specializations LIKE ?";
+        $params[] = '%' . $filters['specialization'] . '%';
+    }
+    if (!empty($filters['name'])) {
+        $sql .= " AND u.name LIKE ?";
+        $params[] = '%' . $filters['name'] . '%';
+    }
+
+    $sql .= " ORDER BY u.name ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Retorna apenas os treinadores que também são Personal Trainers.
+ */
+function getAllPersonalTrainers($pdo, $filters = []) {
+    $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active,
+                   tp.bio, tp.specializations, tp.certifications,
+                   tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available
+            FROM users u
+            LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
+            WHERE u.role = 'trainer' 
+              AND u.active = 1
+              AND tp.is_pt = 1
+              AND tp.pt_available = 1";
     $params = [];
 
     if (!empty($filters['specialization'])) {
@@ -29,7 +60,8 @@ function getAllTrainers($pdo, $filters = []) {
  */
 function getTrainerById($pdo, $id) {
     $sql = "SELECT u.id, u.name, u.username, u.email, u.photo,
-                   tp.bio, tp.specializations, tp.certifications
+                   tp.bio, tp.specializations, tp.certifications,
+                   tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available
             FROM users u
             LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
             WHERE u.id = ? AND u.role = 'trainer'";
