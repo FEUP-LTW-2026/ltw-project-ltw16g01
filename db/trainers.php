@@ -4,26 +4,31 @@
 function getAllTrainers($pdo, $filters = []) {
     $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active,
                    tp.bio, tp.specializations, tp.certifications,
-                   tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available
+                   tp.is_pt, tp.pt_description, tp.pt_available
             FROM users u
             LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
             WHERE u.role = 'trainer' AND u.active = 1";
+
     $params = [];
 
     if (!empty($filters['specialization'])) {
         $sql .= " AND tp.specializations LIKE ?";
         $params[] = '%' . $filters['specialization'] . '%';
     }
+
     if (!empty($filters['name'])) {
         $sql .= " AND u.name LIKE ?";
         $params[] = '%' . $filters['name'] . '%';
     }
 
     $sql .= " ORDER BY u.name ASC";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 /**
  * Retorna apenas os treinadores que também são Personal Trainers.
@@ -31,29 +36,34 @@ function getAllTrainers($pdo, $filters = []) {
 function getAllPersonalTrainers($pdo, $filters = []) {
     $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active,
                    tp.bio, tp.specializations, tp.certifications,
-                   tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available
+                   tp.is_pt, tp.pt_description, tp.pt_available
             FROM users u
             LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
-            WHERE u.role = 'trainer' 
+            WHERE u.role = 'trainer'
               AND u.active = 1
               AND tp.is_pt = 1
               AND tp.pt_available = 1";
+
     $params = [];
 
     if (!empty($filters['specialization'])) {
         $sql .= " AND tp.specializations LIKE ?";
         $params[] = '%' . $filters['specialization'] . '%';
     }
+
     if (!empty($filters['name'])) {
         $sql .= " AND u.name LIKE ?";
         $params[] = '%' . $filters['name'] . '%';
     }
 
     $sql .= " ORDER BY u.name ASC";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 /**
  * Retorna um treinador pelo ID (incluindo perfil).
@@ -61,42 +71,60 @@ function getAllPersonalTrainers($pdo, $filters = []) {
 function getTrainerById($pdo, $id) {
     $sql = "SELECT u.id, u.name, u.username, u.email, u.photo,
                    tp.bio, tp.specializations, tp.certifications,
-                   tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available
+                   tp.is_pt, tp.pt_description, tp.pt_available
             FROM users u
             LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
-            WHERE u.id = ? AND u.role = 'trainer'";
+            WHERE u.id = ?
+              AND u.role = 'trainer'";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
+
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+
 /**
- * Calcula uma classificação média do treinador com base nas avaliações das sessões que ele lecciona.
- * (Opcional – pode ser usado para mostrar estrelas)
+ * Calcula a classificação média do treinador.
  */
 function getTrainerRating($pdo, $trainerId) {
-    $sql = "SELECT AVG(r.rating) as avg_rating, COUNT(r.id) as review_count
+    $sql = "SELECT AVG(r.rating) as avg_rating,
+                   COUNT(r.id) as review_count
             FROM reviews r
             JOIN class_sessions sess ON r.session_id = sess.id
             JOIN class_schedules cs ON sess.schedule_id = cs.id
             WHERE cs.trainer_id = ?";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$trainerId]);
+
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $avg = round($result['avg_rating'] ?? 0, 1);
     $count = $result['review_count'] ?? 0;
-    return ['rating' => $avg, 'count' => $count];
+
+    return [
+        'rating' => $avg,
+        'count' => $count
+    ];
 }
 
+
 /**
- * Retorna os próximos horários (aulas) que um treinador vai dar (úteis para perfil).
+ * Retorna os próximos horários do treinador.
  */
-function getUpcomingSchedulesForTrainer($pdo, $trainerId, $limit = 3) {
-    $sql = "SELECT cs.id, c.name AS class_name, cs.day_of_week, cs.start_time, cs.location, cs.duration_min
+function getUpcomingSchedulesForTrainer($pdo, $trainerId, $limit = 5) {
+    $sql = "SELECT cs.id,
+                   c.name AS class_name,
+                   cs.day_of_week,
+                   cs.start_time,
+                   cs.location,
+                   cs.duration_min
             FROM class_schedules cs
             JOIN classes c ON cs.class_id = c.id
-            WHERE cs.trainer_id = ? AND c.active = 1
-            ORDER BY 
+            WHERE cs.trainer_id = ?
+              AND c.active = 1
+            ORDER BY
                 CASE cs.day_of_week
                     WHEN 'Monday' THEN 1
                     WHEN 'Tuesday' THEN 2
@@ -108,62 +136,151 @@ function getUpcomingSchedulesForTrainer($pdo, $trainerId, $limit = 3) {
                 END,
                 cs.start_time
             LIMIT ?";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$trainerId, $limit]);
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
 /**
- * Cria um novo treinador (user + perfil).
- * @param string $defaultPassword Password em texto claro (será hasheada)
- * @return int|false ID do utilizador criado ou false em caso de erro
+ * Cria um novo treinador.
  */
-function createTrainer($pdo, $name, $username, $email, $bio, $specializations, $certifications, $defaultPassword = 'changeme') {
+function createTrainer(
+    $pdo,
+    $name,
+    $username,
+    $email,
+    $bio,
+    $specializations,
+    $certifications,
+    $defaultPassword = 'changeme'
+) {
     // Verificar duplicados
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+    $stmt = $pdo->prepare("
+        SELECT id
+        FROM users
+        WHERE username = ?
+           OR email = ?
+    ");
+
     $stmt->execute([$username, $email]);
-    if ($stmt->fetch()) return false;
+
+    if ($stmt->fetch()) {
+        return false;
+    }
 
     $hash = password_hash($defaultPassword, PASSWORD_DEFAULT);
+
     $pdo->beginTransaction();
+
     try {
-        $stmt = $pdo->prepare("INSERT INTO users (name, username, email, password, role, active) VALUES (?, ?, ?, ?, 'trainer', 1)");
+        $stmt = $pdo->prepare("
+            INSERT INTO users
+            (name, username, email, password, role, active)
+            VALUES (?, ?, ?, ?, 'trainer', 1)
+        ");
+
         $stmt->execute([$name, $username, $email, $hash]);
+
         $userId = $pdo->lastInsertId();
 
-        $stmt = $pdo->prepare("INSERT INTO trainer_profiles (user_id, bio, specializations, certifications) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$userId, $bio, $specializations, $certifications]);
+        $stmt = $pdo->prepare("
+            INSERT INTO trainer_profiles
+            (user_id, bio, specializations, certifications)
+            VALUES (?, ?, ?, ?)
+        ");
+
+        $stmt->execute([
+            $userId,
+            $bio,
+            $specializations,
+            $certifications
+        ]);
+
         $pdo->commit();
+
         return $userId;
+
     } catch (Exception $e) {
         $pdo->rollBack();
         return false;
     }
 }
 
+
 /**
- * Atualiza os dados de um treinador existente.
+ * Atualiza um treinador existente.
  */
-function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications) {
+function updateTrainer(
+    $pdo,
+    $id,
+    $name,
+    $username,
+    $email,
+    $active,
+    $bio,
+    $specializations,
+    $certifications
+) {
     $pdo->beginTransaction();
-    try {
-        $stmt = $pdo->prepare("UPDATE users SET name = ?, username = ?, email = ?, active = ? WHERE id = ? AND role = 'trainer'");
-        $stmt->execute([$name, $username, $email, $active, $id]);
 
-        $stmt = $pdo->prepare("UPDATE trainer_profiles SET bio = ?, specializations = ?, certifications = ? WHERE user_id = ?");
-        $stmt->execute([$bio, $specializations, $certifications, $id]);
+    try {
+        $stmt = $pdo->prepare("
+            UPDATE users
+            SET name = ?,
+                username = ?,
+                email = ?,
+                active = ?
+            WHERE id = ?
+              AND role = 'trainer'
+        ");
+
+        $stmt->execute([
+            $name,
+            $username,
+            $email,
+            $active,
+            $id
+        ]);
+
+        $stmt = $pdo->prepare("
+            UPDATE trainer_profiles
+            SET bio = ?,
+                specializations = ?,
+                certifications = ?
+            WHERE user_id = ?
+        ");
+
+        $stmt->execute([
+            $bio,
+            $specializations,
+            $certifications,
+            $id
+        ]);
+
         $pdo->commit();
+
         return true;
+
     } catch (Exception $e) {
         $pdo->rollBack();
         return false;
     }
 }
 
+
 /**
- * Elimina um treinador (soft delete: active = 0).
+ * Soft delete do treinador.
  */
 function deleteTrainer($pdo, $id) {
-    $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'trainer'");
+    $stmt = $pdo->prepare("
+        UPDATE users
+        SET active = 0
+        WHERE id = ?
+          AND role = 'trainer'
+    ");
+
     return $stmt->execute([$id]);
 }

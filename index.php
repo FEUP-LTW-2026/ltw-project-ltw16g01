@@ -126,7 +126,7 @@
                         <p>Detailed profiles with specializations, ratings and session bookings.</p>
                     </a>
 
-                    <a href="pages/ratings-reviews.php" class="feature-card">
+                    <a href="pages/ratings-reviews.php" class="feature-card-two">
                         <div class="feature-icon">⭐</div>
                         <h3>Ratings &amp; Reviews</h3>
                         <p>Review your classes and help other members choose better.</p>
