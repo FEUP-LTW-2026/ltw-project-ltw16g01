@@ -46,8 +46,11 @@ if (!function_exists('output_header')) {
 
 <header>
     <nav class="navbar" aria-label="Main navigation">
-        <a href="../index.php" class="logo">FIT<span>PEAK</span></a>
-
+        <?php if ($userRole === 'member' || $userRole === 'admin' || $userRole === 'trainer'): ?>
+            <a href="dashboard.php" class="logo">FIT<span>PEAK</span></a>
+        <?php else: ?>
+            <a href="index.php" class="logo">FIT<span>PEAK</span></a>
+        <?php endif; ?>
         <label for="nav-toggle" class="burger">
             <span></span><span></span><span></span>
         </label>
@@ -55,10 +58,10 @@ if (!function_exists('output_header')) {
         <ul class="nav-menu">
             <?php if ($loggedIn): ?>
                 <?php if ($userRole === 'member'): ?>
-                    <li><a href="../member/member-dashboard.php">Home</a></li>
-                    <li><a href="../pages/classes.php">Classes</a></li>
-                    <li><a href="../pages/trainers.php">Trainers</a></li>
-                    <li><a href="../pages/equipment.php">Equipment</a></li>
+                    <li><a href="../member/dashboard.php">Home</a></li>
+                    <li><a href="../member/classes.php">Classes</a></li>
+                    <li><a href="../member/trainers.php">Trainers</a></li>
+                    <li><a href="../member/equipment.php">Equipment</a></li>
                     <li class="nav-avatar">
                     <a href="../member/profile.php" class="avatar-link" title="My Profile">
                         <div class="avatar">
@@ -67,7 +70,7 @@ if (!function_exists('output_header')) {
                     </a>
                 </li>
                 <?php elseif ($userRole === 'admin'): ?>
-                    <li><a href="../admin/admin-dashboard.php">Home</a></li>
+                    <li><a href="../admin/dashboard.php">Home</a></li>
                     <li><a href="../admin/classes.php">Classes</a></li>
                     <li><a href="../admin/trainers.php">Trainers</a></li>
                     <li><a href="../admin/equipment.php">Equipment</a></li>
@@ -80,12 +83,11 @@ if (!function_exists('output_header')) {
                     </a>
                 </li>
                 <?php elseif ($userRole === 'trainer'): ?>
-                    <li><a href="../index.php">Home</a></li>
-                    <li><a href="../pages/classes.php">Classes</a></li>
-                    <li><a href="../pages/trainers.php">Trainers</a></li>
-                    <li><a href="../pages/equipment.php">Equipment</a></li>
-                    <li><a href="../admin/dashboard.php">Dashboard</a></li>
-                    <li><a href="../admin/members.php">Members</a></li>
+                    <li><a href="../trainer/dashboard.php">Home</a></li>
+                    <li><a href="../trainer/classes.php">Classes</a></li>
+                    <li><a href="../trainer/trainers.php">Trainers</a></li>
+                    <li><a href="../trainer/equipment.php">Equipment</a></li>
+                    <li><a href="../trainer/members.php">Members</a></li>
                     <li class="nav-avatar">
                     <a href="../trainer/profile.php" class="avatar-link" title="My Profile">
                         <div class="avatar">

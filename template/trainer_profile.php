@@ -61,7 +61,7 @@ function output_trainer_profile_hero($trainer, $rating) {
                             <a href="register.php" class="main-button">Create Account to Book</a>
                         <?php endif; ?>
 
-                        <a href="pt.php" class="secondary-button">Back to Trainers</a>
+                        <a href="trainers.php" class="secondary-button">Back to Trainers</a>
                     </div>
                 </div>
 

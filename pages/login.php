@@ -32,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_photo'] = $user['photo'] ?? null;
 
             if ($user['role'] === 'admin') {
-                header('Location: ../admin/admin-dashboard.php');
+                header('Location: ../admin/dashboard.php');
             } else if ($user['role'] === 'member') {
-                header('Location: ../member/member-dashboard.php');
+                header('Location: ../member/dashboard.php');
             } else if ($user['role'] === 'trainer') {
-                header('Location: ../trainer/trainer-dashboard.php');
+                header('Location: ../trainer/dashboard.php');
             }
             exit;
         }
