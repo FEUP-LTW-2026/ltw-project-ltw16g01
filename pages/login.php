@@ -53,5 +53,5 @@ output_header('auth.css');
 <script src="../js/login.js"></script>
 
 <?php
-output_footer();
+output_footer('../');
 ?>

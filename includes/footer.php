@@ -1,6 +1,6 @@
 <?php
 
-function output_footer() { ?>
+function output_footer($basePath = '') { ?>
     <footer class="site-footer">
         <div class="container">
             <div class="footer-grid">
@@ -12,9 +12,9 @@ function output_footer() { ?>
                 <div class="footer-box">
                     <h3>Platform</h3>
                     <ul>
-                        <li><a href="pages/classes.php">Classes</a></li>
-                        <li><a href="pages/trainers.php">Trainers</a></li>
-                        <li><a href="pages/equipment.php">Equipment</a></li>
+                        <li><a href="<?= $basePath ?>pages/classes.php">Classes</a></li>
+                        <li><a href="<?= $basePath ?>pages/trainers.php">Trainers</a></li>
+                        <li><a href="<?= $basePath ?>pages/equipment.php">Equipment</a></li>
                     </ul>
                 </div>
 

@@ -50,7 +50,7 @@ output_header("equipment.css");
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; output_footer(); ?>
+<?php require_once '../includes/footer.php'; output_footer('../'); ?>
 
 <script>
 function refreshEquipment() {

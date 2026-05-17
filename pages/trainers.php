@@ -64,7 +64,7 @@ output_header('trainers.css');
     </div>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../'); ?>
 
 <script>
     document.getElementById('filter-form').addEventListener('submit', function(e) {

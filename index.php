@@ -114,40 +114,40 @@
                 </header>
 
                 <div class="features-grid">
-                    <article class="feature-card">
-                        <div class="feature-icon">🏃</div>
-                        <h3>Classes &amp; Bookings</h3>
-                        <p>Check the full schedule, filter by type or trainer and join with one click.</p>
-                    </article>
+                    <a href="pages/about.php" class="feature-card">
+                        <div class="feature-icon">🏠</div>
+                        <h3>About Us</h3>
+                        <p>Learn more about our mission, values and the community behind FitPeak.</p>
+                    </a>
 
-                    <article class="feature-card">
+                    <a href="pages/pt.php" class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3>Personal Trainers</h3>
+                        <p>Detailed profiles with specializations, ratings and session bookings.</p>
+                    </a>
+
+                    <a href="pages/ratings-reviews.php" class="feature-card">
+                        <div class="feature-icon">⭐</div>
+                        <h3>Ratings &amp; Reviews</h3>
+                        <p>Review your classes and help other members choose better.</p>
+                    </a>
+
+                    <article class="feature-card-two">
                         <div class="feature-icon">🏋️</div>
                         <h3>Equipment Availability</h3>
                         <p>Check equipment availability before leaving home.</p>
                     </article>
 
-                    <article class="feature-card">
-                        <div class="feature-icon">👤</div>
-                        <h3>Personal Trainers</h3>
-                        <p>Detailed profiles with specializations, ratings and session bookings.</p>
-                    </article>
-
-                    <article class="feature-card">
-                        <div class="feature-icon">⭐</div>
-                        <h3>Ratings &amp; Reviews</h3>
-                        <p>Review your classes and help other members choose better.</p>
-                    </article>
-
-                    <article class="feature-card">
+                    <article class="feature-card-two">
                         <div class="feature-icon">📊</div>
                         <h3>Admin Dashboard</h3>
                         <p>Admins can manage users, classes and equipment in one place.</p>
                     </article>
 
-                    <article class="feature-card">
-                        <div class="feature-icon">🏠</div>
-                        <h3>About Us</h3>
-                        <p>Learn more about our mission, values and the community behind FitPeak.</p>
+                    <article class="feature-card-two">
+                        <div class="feature-icon">🏃</div>
+                        <h3>Classes &amp; Bookings</h3>
+                        <p>Check the full schedule, filter by type or trainer and join with one click.</p>
                     </article>
                 </div>
             </div>

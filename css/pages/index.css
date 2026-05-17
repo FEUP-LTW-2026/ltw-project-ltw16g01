@@ -156,22 +156,44 @@
 }
 .feature-card {
     background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+    transition: border-color var(--t), box-shadow var(--t), transform var(--t);
+}
+
+.feature-card-two {
+    background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--r-md);
     padding: var(--sp-lg);
     transition: border-color var(--t), box-shadow var(--t), transform var(--t);
 }
+
 .feature-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-a);
     transform: translateY(-2px);
 }
+
+.feature-card-two:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-a);
+    transform: translateY(-2px);
+}
+
 .feature-icon {
     font-size: 2.2rem;
     margin-bottom: var(--sp-md);
 }
 .feature-card h3 { margin-bottom: var(--sp-sm); }
 .feature-card p:last-child {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.feature-card-two h3 { margin-bottom: var(--sp-sm); }
+.feature-card-two p:last-child {
     color: var(--muted);
     font-size: 0.9rem;
 }
