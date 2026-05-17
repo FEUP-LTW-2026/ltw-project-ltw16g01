@@ -87,7 +87,6 @@ if (!function_exists('output_header')) {
                     <li><a href="../trainer/classes.php">Classes</a></li>
                     <li><a href="../trainer/trainers.php">Trainers</a></li>
                     <li><a href="../trainer/equipment.php">Equipment</a></li>
-                    <li><a href="../trainer/members.php">Members</a></li>
                     <li class="nav-avatar">
                     <a href="../trainer/profile.php" class="avatar-link" title="My Profile">
                         <div class="avatar">
