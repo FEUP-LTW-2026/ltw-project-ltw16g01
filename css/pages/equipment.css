@@ -187,3 +187,38 @@
     background: #ff3344;
     transform: translateY(-1px);
 }
+
+.equipment-header-row {
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.equipment-header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.equipment-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-lg);
+}
+
+.live-update-text {
+    margin-left: 0.5rem;
+    font-size: 0.7rem;
+}
+
+.avail-w-0 { width: 0%; }
+.avail-w-10 { width: 10%; }
+.avail-w-20 { width: 20%; }
+.avail-w-30 { width: 30%; }
+.avail-w-40 { width: 40%; }
+.avail-w-50 { width: 50%; }
+.avail-w-60 { width: 60%; }
+.avail-w-70 { width: 70%; }
+.avail-w-80 { width: 80%; }
+.avail-w-90 { width: 90%; }
+.avail-w-100 { width: 100%; }

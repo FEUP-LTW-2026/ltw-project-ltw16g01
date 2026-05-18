@@ -13,17 +13,16 @@ $postedIdentifier = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $identifier = trim($_POST['identifier'] ?? '');
     $password = $_POST['password'] ?? '';
+    $postedIdentifier = $identifier;
 
     if ($identifier === '' || $password === '') {
         $error = 'Please fill in all fields.';
-        $postedIdentifier = $identifier;
     } else {
         $pdo = getDatabaseConnection();
         $user = authenticateUser($pdo, $identifier, $password);
 
         if ($user === false) {
             $error = 'Incorrect credentials. Please try again.';
-            $postedIdentifier = $identifier;
         } else {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
@@ -33,10 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($user['role'] === 'admin') {
                 header('Location: ../admin/dashboard.php');
-            } else if ($user['role'] === 'member') {
+            } elseif ($user['role'] === 'member') {
                 header('Location: ../member/dashboard.php');
-            } else if ($user['role'] === 'trainer') {
+            } elseif ($user['role'] === 'trainer') {
                 header('Location: ../trainer/dashboard.php');
+            } else {
+                header('Location: ../index.php');
             }
             exit;
         }
@@ -52,6 +53,4 @@ output_header('auth.css');
 
 <script src="../js/login.js"></script>
 
-<?php
-output_footer('../');
-?>
+<?php output_footer('../'); ?>

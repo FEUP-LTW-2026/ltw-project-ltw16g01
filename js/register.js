@@ -70,7 +70,9 @@ passwordInput.addEventListener('input', function () {
 });
 
 confirmInput.addEventListener('input', function () {
-    if (confirmInput.value !== passwordInput.value) {
+    if (confirmInput.value === '') {
+        clearError(confirmInput, 'err-confirm');
+    } else if (confirmInput.value !== passwordInput.value) {
         showError(confirmInput, 'err-confirm', 'Passwords do not match.');
     } else {
         clearError(confirmInput, 'err-confirm');
@@ -104,7 +106,7 @@ form.addEventListener('submit', function (event) {
         valid = false;
     }
 
-    if (emailInput.value.trim() === '') {
+    if (!emailInput.validity.valid) {
         showError(emailInput, 'err-email', 'Please enter a valid email address.');
         valid = false;
     }

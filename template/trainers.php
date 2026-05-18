@@ -1,41 +1,36 @@
 <?php
 // template/trainers.php
 
-require_once __DIR__ . '/../db/trainers.php'; // para funções auxiliares
-
 function output_trainer_list($trainers) {
     if (empty($trainers)) {
         echo '<div class="card"><div class="card-body center-text"><p>No trainers found matching your filters.</p></div></div>';
         return;
     }
+
     echo '<div class="trainer-grid">';
-    foreach ($trainers as $trainer) {
-        output_trainer_card($trainer);
-    }
+    foreach ($trainers as $trainer) output_trainer_card($trainer);
     echo '</div>';
 }
 
 function output_trainer_card($trainer) {
-    $pdo = $GLOBALS['pdo'] ?? null;
+    $id = (int)$trainer['id'];
     $name = htmlspecialchars($trainer['name']);
     $bio = htmlspecialchars($trainer['bio'] ?? 'No bio provided yet.');
     $ptDescription = htmlspecialchars($trainer['pt_description'] ?? '');
     $ptRate = $trainer['pt_hourly_rate'] ?? null;
     $specializations = array_map('trim', explode(',', $trainer['specializations'] ?? ''));
-    $photo = !empty($trainer['photo']) ? $trainer['photo'] : null;
-    $initials = strtoupper(substr($trainer['name'], 0, 2));
-    
-    // Obter rating (opcional)
-    $ratingData = $pdo ? getTrainerRating($pdo, $trainer['id']) : ['rating' => 0, 'count' => 0];
-    $rating = $ratingData['rating'];
-    $reviewCount = $ratingData['count'];
+    $photo = !empty($trainer['photo']) ? htmlspecialchars($trainer['photo']) : null;
+    $initials = htmlspecialchars(strtoupper(substr($trainer['name'], 0, 2)));
+    $rating = (float)($trainer['rating'] ?? 0);
+    $reviewCount = (int)($trainer['review_count'] ?? 0);
     $fullStars = floor($rating);
     $halfStar = ($rating - $fullStars) >= 0.5;
     ?>
-    <div class="trainer-card">
+
+    <article class="trainer-card">
         <div class="trainer-avatar">
             <?php if ($photo): ?>
-                <img src="<?= htmlspecialchars($photo) ?>" alt="<?= $name ?>">
+                <img src="<?= $photo ?>" alt="<?= $name ?>">
             <?php else: ?>
                 <div class="avatar-placeholder"><?= $initials ?></div>
             <?php endif; ?>
@@ -46,22 +41,16 @@ function output_trainer_card($trainer) {
 
             <div class="trainer-specializations">
                 <?php foreach ($specializations as $spec): ?>
-                    <?php if (!empty($spec)): ?>
+                    <?php if ($spec !== ''): ?>
                         <span class="spec-badge"><?= htmlspecialchars($spec) ?></span>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
 
-            <?php if (!empty($ptDescription)): ?>
-                <p class="trainer-bio"><?= nl2br($ptDescription) ?></p>
-            <?php else: ?>
-                <p class="trainer-bio"><?= nl2br($bio) ?></p>
-            <?php endif; ?>
+            <p class="trainer-bio"><?= nl2br($ptDescription !== '' ? $ptDescription : $bio) ?></p>
 
             <?php if (!empty($ptRate)): ?>
-                <p class="trainer-price">
-                    €<?= number_format($ptRate, 2) ?>/session
-                </p>
+                <p class="trainer-price">€<?= number_format($ptRate, 2) ?>/session</p>
             <?php endif; ?>
         </div>
 
@@ -69,33 +58,27 @@ function output_trainer_card($trainer) {
             <div class="trainer-rating">
                 <div class="stars">
                     <?php for ($i = 1; $i <= 5; $i++): ?>
-                        <?php if ($i <= $fullStars): ?>
-                            ★
-                        <?php elseif ($halfStar && $i == $fullStars + 1): ?>
-                            ½
-                        <?php else: ?>
-                            ☆
-                        <?php endif; ?>
+                        <?php if ($i <= $fullStars): ?>★<?php elseif ($halfStar && $i == $fullStars + 1): ?>½<?php else: ?>☆<?php endif; ?>
                     <?php endfor; ?>
                 </div>
                 <span class="rating-text"><?= number_format($rating, 1) ?> (<?= $reviewCount ?>)</span>
             </div>
 
-            <a href="trainer_profile.php?id=<?= $trainer['id'] ?>" class="secondary-button btn-sm">View Profile</a>
+            <a href="trainer_profile.php?id=<?= $id ?>" class="secondary-button btn-sm">View Profile</a>
         </div>
-    </div>
+    </article>
+
     <?php
 }
 
-/**
- * Renderiza a tabela de treinadores com opções de editar/eliminar.
- */
 function output_trainers_admin_table($trainers) {
     if (empty($trainers)) {
         echo '<tr><td colspan="6" class="center-text">No trainers found.</td></tr>';
         return;
     }
+
     foreach ($trainers as $t) {
+        $id = (int)$t['id'];
         ?>
         <tr>
             <td><?= htmlspecialchars($t['name']) ?></td>
@@ -104,31 +87,41 @@ function output_trainers_admin_table($trainers) {
             <td><?= htmlspecialchars(substr($t['specializations'] ?? '', 0, 50)) ?></td>
             <td><?= $t['active'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>' ?></td>
             <td>
-                <a href="edit_trainer.php?id=<?= $t['id'] ?>" class="action-link">Edit</a>
-                <a href="delete_trainer.php?id=<?= $t['id'] ?>" class="action-link danger" onclick="return confirm('Delete this trainer?')">Delete</a>
+                <a href="edit_trainer.php?id=<?= $id ?>" class="action-link">Edit</a>
+                <a href="delete_trainer.php?id=<?= $id ?>" class="action-link danger delete-trainer-link">Delete</a>
             </td>
         </tr>
         <?php
     }
 }
 
-/**
- * Renderiza o formulário de criação/edição de treinador.
- */
-function output_trainer_form($trainer = null, $errors = [], $success = '') {
+function output_trainer_form($trainer = null, $errors = [], $success = '', $old = []) {
     $isEdit = !is_null($trainer);
-    $action = $isEdit ? 'edit_trainer.php?id=' . $trainer['id'] : 'create_trainer.php';
-    $name = $trainer['name'] ?? '';
-    $username = $trainer['username'] ?? '';
-    $email = $trainer['email'] ?? '';
-    $bio = $trainer['bio'] ?? '';
-    $specializations = $trainer['specializations'] ?? '';
-    $certifications = $trainer['certifications'] ?? '';
-    $active = $trainer['active'] ?? 1;
+    $action = $isEdit ? 'edit_trainer.php?id=' . (int)$trainer['id'] : 'create_trainer.php';
+
+    $name = htmlspecialchars($old['name'] ?? ($trainer['name'] ?? ''));
+    $username = htmlspecialchars($old['username'] ?? ($trainer['username'] ?? ''));
+    $email = htmlspecialchars($old['email'] ?? ($trainer['email'] ?? ''));
+    $bio = htmlspecialchars($old['bio'] ?? ($trainer['bio'] ?? ''));
+    $specializations = htmlspecialchars($old['specializations'] ?? ($trainer['specializations'] ?? ''));
+    $certifications = htmlspecialchars($old['certifications'] ?? ($trainer['certifications'] ?? ''));
+    $active = $old['active'] ?? ($trainer['active'] ?? 1);
     ?>
-    <div class="container" style="max-width: 700px;">
+
+    <div class="container form-container">
         <header class="page-header">
-            <h1><?= $isEdit ? 'Edit Trainer' : 'Add New Trainer' ?></h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li><a href="trainers.php">Trainers</a></li>
+                    <li><span class="breadcrumb-sep">›</span></li>
+                    <li><span><?= $isEdit ? 'Edit Trainer' : 'Add Trainer' ?></span></li>
+                </ol>
+            </nav>
+
+            <div class="page-header-row">
+                <h1><?= $isEdit ? 'Edit Trainer' : 'Add New Trainer' ?></h1>
+                <p><?= $isEdit ? 'Update the information of an existing fitness instructor.' : 'Register a new fitness instructor.' ?></p>
+            </div>
         </header>
 
         <?php if ($errors): ?>
@@ -139,47 +132,69 @@ function output_trainer_form($trainer = null, $errors = [], $success = '') {
             <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
 
-        <form method="POST" class="auth-form card" style="padding: var(--sp-lg);">
+        <form method="post" action="<?= $action ?>" class="auth-form card form-panel">
             <div class="form-group">
                 <label class="form-label">Full Name *</label>
-                <input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($name) ?>">
+                <input type="text" name="name" class="form-control" required value="<?= $name ?>">
             </div>
+
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Username *</label>
-                    <input type="text" name="username" class="form-control" required value="<?= htmlspecialchars($username) ?>">
+                    <input type="text" name="username" class="form-control" required value="<?= $username ?>">
                 </div>
+
                 <div class="form-group">
                     <label class="form-label">Email *</label>
-                    <input type="email" name="email" class="form-control" required value="<?= htmlspecialchars($email) ?>">
+                    <input type="email" name="email" class="form-control" required value="<?= $email ?>">
                 </div>
             </div>
+
             <div class="form-group">
                 <label class="form-label">Bio</label>
-                <textarea name="bio" class="form-control" rows="3"><?= htmlspecialchars($bio) ?></textarea>
+                <textarea name="bio" class="form-control" rows="3"><?= $bio ?></textarea>
             </div>
+
             <div class="form-group">
-                <label class="form-label">Specializations (comma separated)</label>
-                <input type="text" name="specializations" class="form-control" value="<?= htmlspecialchars($specializations) ?>" placeholder="e.g. Yoga, HIIT, Strength">
+                <label class="form-label">Specializations</label>
+                <input type="text" name="specializations" class="form-control" value="<?= $specializations ?>" placeholder="e.g. Yoga, HIIT, Strength">
             </div>
+
             <div class="form-group">
                 <label class="form-label">Certifications</label>
-                <input type="text" name="certifications" class="form-control" value="<?= htmlspecialchars($certifications) ?>">
+                <input type="text" name="certifications" class="form-control" value="<?= $certifications ?>">
             </div>
-            <?php if ($isEdit): ?>
-            <div class="form-group">
-                <label class="form-label">Status</label>
-                <select name="active" class="form-select">
-                    <option value="1" <?= $active == 1 ? 'selected' : '' ?>>Active</option>
-                    <option value="0" <?= $active == 0 ? 'selected' : '' ?>>Inactive</option>
-                </select>
-            </div>
+
+            <?php if (!$isEdit): ?>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Password *</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password *</label>
+                        <input type="password" name="confirm_password" class="form-control" required>
+                    </div>
+                </div>
             <?php endif; ?>
-            <div style="display: flex; gap: var(--sp-md);">
+
+            <?php if ($isEdit): ?>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select name="active" class="form-select">
+                        <option value="1" <?= (int)$active === 1 ? 'selected' : '' ?>>Active</option>
+                        <option value="0" <?= (int)$active === 0 ? 'selected' : '' ?>>Inactive</option>
+                    </select>
+                </div>
+            <?php endif; ?>
+
+            <div class="form-actions">
                 <button type="submit" class="main-button"><?= $isEdit ? 'Update Trainer' : 'Create Trainer' ?></button>
-                <a href="admin_trainers.php" class="secondary-button">Cancel</a>
+                <a href="trainers.php" class="secondary-button">Cancel</a>
             </div>
         </form>
     </div>
+
     <?php
 }

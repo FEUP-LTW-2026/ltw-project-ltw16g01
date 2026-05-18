@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../db/connection.php';
@@ -7,15 +8,12 @@ require_once '../db/classes.php';
 require_once '../template/classes.php';
 
 $pdo = getDatabaseConnection();
-$GLOBALS['pdo'] = $pdo; // para uso nas funções de template
 
-// Obter todos os tipos de aula para o filtro
-$types = $pdo->query("SELECT name, label FROM class_types WHERE active = 1 ORDER BY label")->fetchAll();
-// Obter todos os treinadores para o filtro
-$trainers = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")->fetchAll();
+$types = $pdo->query("SELECT name, label FROM class_types WHERE active = 1 ORDER BY label")->fetchAll(PDO::FETCH_ASSOC);
+$trainers = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 
-// Carregar horários iniciais (sem filtros)
-$schedules = getAllClassSchedules($pdo, []);
+$filters = ['type' => $_GET['type'] ?? '', 'trainer' => $_GET['trainer'] ?? '', 'day' => $_GET['day'] ?? ''];
+$schedules = getAllClassSchedules($pdo, $filters);
 
 output_header('classes.css');
 ?>
@@ -30,13 +28,13 @@ output_header('classes.css');
                     <li><span>Classes</span></li>
                 </ol>
             </nav>
+
             <div class="page-header-row">
                 <h1>Classes</h1>
                 <p>Browse our schedule and enroll in upcoming sessions</p>
             </div>
         </header>
 
-        <!-- Filtros com AJAX -->
         <section>
             <form id="filter-form" class="filter-bar" method="get" action="classes.php">
                 <div class="filter-group">
@@ -44,7 +42,9 @@ output_header('classes.css');
                     <select id="f-type" name="type" class="form-select">
                         <option value="">All types</option>
                         <?php foreach ($types as $t): ?>
-                            <option value="<?= htmlspecialchars($t['name']) ?>"><?= htmlspecialchars($t['label']) ?></option>
+                            <option value="<?= htmlspecialchars($t['name']) ?>" <?= $filters['type'] === $t['name'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($t['label']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -54,7 +54,9 @@ output_header('classes.css');
                     <select id="f-trainer" name="trainer" class="form-select">
                         <option value="">All trainers</option>
                         <?php foreach ($trainers as $tr): ?>
-                            <option value="<?= $tr['id'] ?>"><?= htmlspecialchars($tr['name']) ?></option>
+                            <option value="<?= (int)$tr['id'] ?>" <?= (string)$filters['trainer'] === (string)$tr['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($tr['name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -63,13 +65,11 @@ output_header('classes.css');
                     <label class="form-label" for="f-day">Day</label>
                     <select id="f-day" name="day" class="form-select">
                         <option value="">Any Day</option>
-                        <option value="monday">Monday</option>
-                        <option value="tuesday">Tuesday</option>
-                        <option value="wednesday">Wednesday</option>
-                        <option value="thursday">Thursday</option>
-                        <option value="friday">Friday</option>
-                        <option value="saturday">Saturday</option>
-                        <option value="sunday">Sunday</option>
+                        <?php foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day): ?>
+                            <option value="<?= $day ?>" <?= $filters['day'] === $day ? 'selected' : '' ?>>
+                                <?= ucfirst($day) ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
@@ -88,24 +88,9 @@ output_header('classes.css');
         <div id="class-list-container">
             <?php output_class_schedule_list($schedules); ?>
         </div>
-
     </div>
-
 </main>
-<?php output_footer('../'); ?>
 
-<script>
-    document.getElementById('filter-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const params = new URLSearchParams(formData);
-        fetch('../ajax/ajax_get_classes.php?' + params.toString())
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('class-list-container').innerHTML = html;
-                const cardCount = document.querySelectorAll('#class-list-container .class-card').length;
-                document.getElementById('class-count').innerText = cardCount;
-            })
-            .catch(err => console.error('AJAX error:', err));
-    });
-</script>
+<script src="../js/classes.js"></script>
+
+<?php output_footer('../'); ?>

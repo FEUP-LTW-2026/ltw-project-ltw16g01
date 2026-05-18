@@ -1,107 +1,86 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../includes/csrf.php';
+session_start();
+
+require_once '../includes/auth.php';
+require_once '../db/connection.php';
 
 header('Content-Type: application/json');
 
-if (!isLoggedIn() || currentUser()['role'] !== 'member') {
+if (!isLoggedIn() || ($_SESSION['role'] ?? '') !== 'member') {
     http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Não autorizado.']);
+    echo json_encode(['success' => false, 'message' => 'Not authorized.']);
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Método inválido.']);
+    echo json_encode(['success' => false, 'message' => 'Invalid method.']);
     exit;
 }
 
-$user = currentUser();
-$pdo  = getDB();
+$pdo = getDatabaseConnection();
+$input = json_decode(file_get_contents('php://input'), true) ?? [];
 
-$contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-if (strpos($contentType, 'application/json') !== false) {
-    $raw   = file_get_contents('php://input');
-    $input = json_decode($raw, true) ?? [];
-    
-    if (isset($input['csrf_token'])) {
-        $_POST['csrf_token'] = $input['csrf_token'];
-    }
-} else {
-    $input = $_POST;
-}
-
-verifyCsrf();
-
-$action    = $input['action'] ?? '';
+$action = $input['action'] ?? '';
 $sessionId = (int)($input['session_id'] ?? 0);
+$memberId = (int)$_SESSION['user_id'];
 
 if (!$sessionId) {
-    echo json_encode(['success' => false, 'message' => 'Sessão inválida.']);
+    echo json_encode(['success' => false, 'message' => 'Invalid session.']);
     exit;
 }
 
-// Fetch session
-$stmt = $pdo->prepare("
-    SELECT cs.*, c.capacity, c.name AS class_name
-    FROM class_sessions cs
-    JOIN classes c ON c.id = cs.class_id
-    WHERE cs.id = ? AND cs.session_date >= date('now') AND cs.status = 'scheduled'
-");
+$stmt = $pdo->prepare("SELECT sess.id, sess.session_date, sess.status, sch.capacity, c.name AS class_name FROM class_sessions sess JOIN class_schedules sch ON sess.schedule_id = sch.id JOIN classes c ON sch.class_id = c.id WHERE sess.id = ? AND sess.session_date >= date('now') AND sess.status = 'scheduled'");
 $stmt->execute([$sessionId]);
-$session = $stmt->fetch();
+$session = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$session) {
-    echo json_encode(['success' => false, 'message' => 'Sessão não encontrada ou já terminou.']);
+    echo json_encode(['success' => false, 'message' => 'Session not found or already finished.']);
     exit;
 }
 
 if ($action === 'enroll') {
-    // Count current enrollments
-    $cntStmt = $pdo->prepare("SELECT COUNT(*) FROM enrollments WHERE session_id = ? AND status = 'enrolled'");
-    $cntStmt->execute([$sessionId]);
-    $enrolled = (int)$cntStmt->fetchColumn();
+    $countStmt = $pdo->prepare("SELECT COUNT(*) FROM enrollments WHERE session_id = ? AND status = 'enrolled'");
+    $countStmt->execute([$sessionId]);
+    $enrolled = (int)$countStmt->fetchColumn();
 
     if ($enrolled >= (int)$session['capacity']) {
-        echo json_encode(['success' => false, 'message' => 'A aula está lotada.']);
+        echo json_encode(['success' => false, 'message' => 'This class is full.']);
         exit;
     }
 
-    // Check existing record
-    $chk = $pdo->prepare("SELECT id, status FROM enrollments WHERE member_id=? AND session_id=?");
-    $chk->execute([$user['id'], $sessionId]);
-    $record = $chk->fetch();
+    $check = $pdo->prepare("SELECT id, status FROM enrollments WHERE member_id = ? AND session_id = ?");
+    $check->execute([$memberId, $sessionId]);
+    $record = $check->fetch(PDO::FETCH_ASSOC);
 
     if ($record) {
         if ($record['status'] === 'enrolled') {
-            echo json_encode(['success' => false, 'message' => 'Já estás inscrito nesta aula.']);
+            echo json_encode(['success' => false, 'message' => 'You are already enrolled in this class.']);
             exit;
         }
-        $pdo->prepare("UPDATE enrollments SET status='enrolled', enrolled_at=CURRENT_TIMESTAMP WHERE id=?")
-            ->execute([$record['id']]);
+
+        $stmt = $pdo->prepare("UPDATE enrollments SET status = 'enrolled', enrolled_at = CURRENT_TIMESTAMP WHERE id = ?");
+        $stmt->execute([$record['id']]);
     } else {
-        $pdo->prepare("INSERT INTO enrollments (member_id, session_id, status) VALUES (?,?,'enrolled')")
-            ->execute([$user['id'], $sessionId]);
+        $stmt = $pdo->prepare("INSERT INTO enrollments (member_id, session_id, status) VALUES (?, ?, 'enrolled')");
+        $stmt->execute([$memberId, $sessionId]);
     }
 
-    addNotification(
-        $user['id'],
-        'Inscrito na aula "' . $session['class_name'] . '" em ' . date('d/m/Y', strtotime($session['session_date'])) . '.',
-        'success'
-    );
-
-    echo json_encode(['success' => true, 'message' => 'Inscrito com sucesso!']);
-
-} elseif ($action === 'cancel') {
-    $del = $pdo->prepare("UPDATE enrollments SET status='cancelled' WHERE member_id=? AND session_id=? AND status='enrolled'");
-    $del->execute([$user['id'], $sessionId]);
-
-    if ($del->rowCount() > 0) {
-        echo json_encode(['success' => true, 'message' => 'Inscrição cancelada.']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Não estavas inscrito.']);
-    }
-
-} else {
-    echo json_encode(['success' => false, 'message' => 'Ação inválida.']);
+    echo json_encode(['success' => true, 'message' => 'Enrolled successfully.']);
+    exit;
 }
+
+if ($action === 'cancel') {
+    $stmt = $pdo->prepare("UPDATE enrollments SET status = 'cancelled' WHERE member_id = ? AND session_id = ? AND status = 'enrolled'");
+    $stmt->execute([$memberId, $sessionId]);
+
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => true, 'message' => 'Enrollment cancelled.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'You were not enrolled in this class.']);
+    }
+
+    exit;
+}
+
+echo json_encode(['success' => false, 'message' => 'Invalid action.']);

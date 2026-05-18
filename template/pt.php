@@ -25,10 +25,8 @@ function output_pt_hero() { ?>
             </div>
         </div>
     </section>
-<?php } ?>
+<?php }
 
-
-<?php
 function output_pt_benefits() { ?>
     <section class="pt-benefits-section">
         <div class="container">
@@ -41,7 +39,6 @@ function output_pt_benefits() { ?>
             </header>
 
             <div class="pt-benefits-grid">
-
                 <article class="pt-benefit-card">
                     <div class="pt-benefit-icon">🎯</div>
                     <h3>Personal Goals</h3>
@@ -68,14 +65,11 @@ function output_pt_benefits() { ?>
                         from a professional trainer.
                     </p>
                 </article>
-
             </div>
         </div>
     </section>
-<?php } ?>
+<?php }
 
-
-<?php
 function output_pt_cta() { ?>
     <section class="pt-cta-section">
         <div class="container">
@@ -93,4 +87,4 @@ function output_pt_cta() { ?>
             </div>
         </div>
     </section>
-<?php } ?>
+<?php }
