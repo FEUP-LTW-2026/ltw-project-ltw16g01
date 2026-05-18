@@ -21,6 +21,35 @@
 .filter-group-end {
     flex: 0 0 auto;
 }
+
+.form-container {
+    max-width: 700px;
+}
+
+.form-card {
+    padding: var(--sp-lg);
+}
+
+.form-spaced {
+    margin-bottom: var(--sp-lg);
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--sp-md);
+    margin-top: var(--sp-md);
+}
+
+.page-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.members-filter {
+    margin-bottom: var(--sp-lg);
+}
+
 @media (max-width: 640px) {
     .filter-bar {
         flex-direction: column;

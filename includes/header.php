@@ -49,7 +49,7 @@ if (!function_exists('output_header')) {
         <?php if ($userRole === 'member' || $userRole === 'admin' || $userRole === 'trainer'): ?>
             <a href="dashboard.php" class="logo">FIT<span>PEAK</span></a>
         <?php else: ?>
-            <a href="index.php" class="logo">FIT<span>PEAK</span></a>
+            <a href="../index.php" class="logo">FIT<span>PEAK</span></a>
         <?php endif; ?>
         <label for="nav-toggle" class="burger">
             <span></span><span></span><span></span>

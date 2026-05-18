@@ -1,23 +1,20 @@
 <?php
+session_start();
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
-
 require_once '../db/connection.php';
 require_once '../db/trainers.php';
-
 require_once '../template/pt.php';
 require_once '../template/trainers.php';
 
 $pdo = getDatabaseConnection();
-$GLOBALS['pdo'] = $pdo;
-
 $trainers = getAllPersonalTrainers($pdo);
 
 output_header('pt.css');
 ?>
 
 <main class="main">
-
     <?php output_pt_hero(); ?>
 
     <section class="pt-section" id="trainers">
@@ -35,9 +32,7 @@ output_header('pt.css');
     </section>
 
     <?php output_pt_benefits(); ?>
-
     <?php output_pt_cta(); ?>
-
 </main>
 
 <?php output_footer('../'); ?>

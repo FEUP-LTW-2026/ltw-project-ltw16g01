@@ -17,14 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm = $_POST['confirm'] ?? '';
 
-    $old = [
-        'name' => $name,
-        'username' => $username,
-        'email' => $email
-    ];
+    $old = ['name' => $name, 'username' => $username, 'email' => $email];
 
     if ($name === '' || $username === '' || $email === '' || $password === '' || $confirm === '') {
         $error = 'Please fill in all fields.';
+    } elseif (strlen($username) < 3) {
+        $error = 'Username must have at least 3 characters.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Please enter a valid email address.';
+    } elseif (strlen($password) < 8) {
+        $error = 'Password must be at least 8 characters.';
     } elseif ($password !== $confirm) {
         $error = 'Passwords do not match.';
     } else {
@@ -34,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($userId === false) {
             $error = 'That email or username is already registered.';
         } else {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_id'] = $userId;
+            $_SESSION['user_name'] = $name;
             $_SESSION['role'] = 'member';
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_photo'] = $user['photo'] ?? null;
+            $_SESSION['user_email'] = $email;
+            $_SESSION['user_photo'] = null;
 
-            header('Location: ../index.php');
+            header('Location: ../member/dashboard.php');
             exit;
         }
     }
@@ -55,6 +57,4 @@ output_header('auth.css');
 
 <script src="../js/register.js"></script>
 
-<?php
-output_footer('../');
-?>
+<?php output_footer('../'); ?>

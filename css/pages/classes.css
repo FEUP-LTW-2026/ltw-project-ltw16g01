@@ -301,6 +301,17 @@
     color: var(--danger);
 }
 
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.page-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 /* Responsive Grid Adjustments */
 @media (min-width: 480px) {
     .filter-bar {
