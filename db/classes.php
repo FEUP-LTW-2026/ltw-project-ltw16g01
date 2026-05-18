@@ -52,7 +52,19 @@ function getClassSessionById($pdo, $sessionId) {
 }
 
 function getUpcomingSessionsBySchedule($pdo, $scheduleId, $limit = 5) {
-    $sql = "SELECT sess.id, sess.session_date, sess.status, (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') AS enrolled_count FROM class_sessions sess WHERE sess.schedule_id = ? AND sess.session_date >= date('now') AND sess.status = 'scheduled' ORDER BY sess.session_date ASC LIMIT ?";
+    $sql = "
+        SELECT 
+            sess.id,
+            sess.session_date,
+            sess.status,
+            (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') AS enrolled_count
+        FROM class_sessions sess
+        WHERE sess.schedule_id = ? 
+          AND sess.session_date >= date('now')
+          AND sess.status = 'scheduled'
+        ORDER BY sess.session_date ASC
+        LIMIT ?
+    ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$scheduleId, $limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
