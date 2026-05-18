@@ -17,6 +17,8 @@ $trainers = getAllTrainers($pdo, $filters);
 output_header('admin-trainers.css');
 ?>
 
+<link rel="stylesheet" href="../css/pages/form.css">
+
 <main class="main">
     <div class="container">
         <header class="page-header">
