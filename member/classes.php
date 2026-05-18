@@ -7,7 +7,7 @@ require_once '../db/connection.php';
 require_once '../db/classes.php';
 require_once '../template/classes.php';
 
-requireRole('admin');
+requireAuth('member');
 
 $pdo = getDatabaseConnection();
 $GLOBALS['pdo'] = $pdo; // para uso nas funções de template
@@ -26,19 +26,11 @@ output_header('classes.css');
 <main class="main">
     <div class="container">
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Classes</span></li>
-                </ol>
-            </nav>
             <div class="page-header-row" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h1>Classes</h1>
                     <p>Browse our schedule and enroll in upcoming sessions</p>
                 </div>
-                <a href="create_class.php" class="main-button">+ New Class</a>
             </div>
         </header>
 

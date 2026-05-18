@@ -20,13 +20,6 @@ output_header('equipment.css');
 <main class="main">
     <div class="container">
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Equipment</span></li>
-                </ol>
-            </nav>
 
             <div class="page-header-row equipment-header-row">
                 <div>
