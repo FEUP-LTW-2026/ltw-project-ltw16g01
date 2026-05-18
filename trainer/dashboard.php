@@ -6,7 +6,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/trainer.php';
 
-requireRole('trainer');
+requireAuth('trainer');
 
 $pdo = getDatabaseConnection();
 $trainerId = $_SESSION['user_id'];

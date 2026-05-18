@@ -230,4 +230,4 @@
     </main>
 
     <!-- Site Footer -->
-    <?php output_footer(); ?>
+    <?php output_footer('pages/'); ?>
