@@ -70,16 +70,6 @@ output_header('profile.css');
 <main class="main profile-page">
     <div class="container">
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><a href="admin-dashboard.php">Admin Dashboard</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Profile</span></li>
-                </ol>
-            </nav>
-        </header>
 
         <?php output_profile_alert($message, 'success'); ?>
         <?php output_profile_alert($error, 'error'); ?>
@@ -88,7 +78,7 @@ output_header('profile.css');
         <?php output_password_form(); ?>
 
         <div class="logout-box">
-            <a href="../pages/logout.php" class="secondary-button btn-sm logout-button">Logout</a>
+            <a href="../pages/logout.php" id="logout-button" class="secondary-button btn-sm logout-button">Logout</a>
         </div>
     </div>
 </main>

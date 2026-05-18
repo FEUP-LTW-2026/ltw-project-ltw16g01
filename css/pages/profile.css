@@ -213,3 +213,11 @@
         grid-template-columns: 1fr 1fr;
     }
 }
+
+#role-label {
+    width:7%;
+}
+
+#logout-button {
+    width: 100%;
+}

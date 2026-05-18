@@ -8,7 +8,7 @@ require_once '../db/classes.php';
 require_once '../db/class_sessions.php';
 require_once '../db/trainer.php';
 
-requireRole('trainer');
+requireAuth('trainer');
 
 $pdo = getDatabaseConnection();
 $trainerId = $_SESSION['user_id'];

@@ -6,6 +6,8 @@ require_once '../db/equipment.php';
 require_once '../template/equipment.php';
 require_once '../includes/header.php';
 
+requireAuth('trainer');
+
 $pdo = getDatabaseConnection();
 
 // Obter categorias e equipamentos

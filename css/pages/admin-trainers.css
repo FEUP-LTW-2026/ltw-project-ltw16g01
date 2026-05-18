@@ -13,3 +13,8 @@
 .action-link.danger:hover {
     color: #ff6b7a;
 }
+
+.filter-group {
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-lg);
+}

@@ -23,18 +23,10 @@ output_header('classes.css');
 <main class="main">
     <div class="container">
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Classes</span></li>
-                </ol>
-            </nav>
-
             <div class="page-header-row page-header-actions">
                 <div>
-                    <h1>Classes</h1>
-                    <p>Browse our schedule and enroll in upcoming sessions</p>
+                    <h1>Manage Classes</h1>
+                    <p>View, filter, add, edit or remove classes.</p>
                 </div>
 
                 <a href="create_class.php" class="main-button">+ New Class</a>

@@ -10,7 +10,7 @@ function authenticateUser($pdo, $identifier, $password) {
         return false;
     }
 
-    if (!password_verify($password, $user['password'])) {
+    if (!password_verify($password, $user['password']) || $password === $user['password']) {
         return false;
     }
 

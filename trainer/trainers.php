@@ -6,6 +6,8 @@ require_once '../db/connection.php';
 require_once '../db/trainers.php';
 require_once '../template/trainers.php';
 
+requireAuth('trainer');
+
 $pdo = getDatabaseConnection();
 $GLOBALS['pdo'] = $pdo;
 

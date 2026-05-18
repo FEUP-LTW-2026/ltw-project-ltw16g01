@@ -35,7 +35,7 @@ function output_profile_hero($user, $subtitle = '') {
         </div>
 
         <div class="profile-hero-content">
-            <span class="badge badge-accent">
+            <span id="role-label" class="badge badge-accent">
                 <?= htmlspecialchars(profile_role_label($user['role'])) ?>
             </span>
 

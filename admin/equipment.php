@@ -20,28 +20,13 @@ output_header('equipment.css');
 <main class="main">
     <div class="container">
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Equipment</span></li>
-                </ol>
-            </nav>
-
-            <div class="page-header-row equipment-header-row">
+            <div class="page-header-row page-header-actions">
                 <div>
-                    <h1>Equipment</h1>
-                    <p>Real-time availability of the training floor</p>
+                    <h1>Manage Equipment</h1>
+                    <p>View, filter, add, edit or remove equipment.</p>
                 </div>
 
-                <div class="equipment-header-actions">
-                    <a href="create_equipment.php" class="main-button btn-sm">+ Add Equipment</a>
-
-                    <div class="live-indicator">
-                        <span class="live-dot"></span> Live
-                        <span id="lastUpdate" class="text-muted live-update-text"></span>
-                    </div>
-                </div>
+                <a href="create_equipment.php" class="main-button">+ New Equipment</a>
             </div>
         </header>
 

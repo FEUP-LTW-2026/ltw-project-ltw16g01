@@ -1,0 +1,128 @@
+/* reports.css */
+
+/* KPI Cards */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+}
+.kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-md);
+    text-align: center;
+}
+.kpi-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: var(--ff-display);
+}
+.kpi-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-top: var(--sp-xs);
+}
+
+/* Charts */
+.reports-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-xl);
+}
+@media (min-width: 860px) {
+    .reports-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.chart-card, .table-card, .activity-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+    margin-bottom: var(--sp-lg);
+}
+.chart-card h3, .table-card h3, .activity-card h3 {
+    margin-bottom: var(--sp-md);
+    font-family: var(--ff-body);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-sm);
+}
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+.bar-label {
+    width: 100px;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+.bar-container {
+    flex: 1;
+    height: 8px;
+    background: var(--surface);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.bar-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    border-radius: 4px;
+}
+.bar-value {
+    width: 60px;
+    font-size: 0.85rem;
+    text-align: right;
+    color: var(--muted);
+}
+.activity-list {
+    list-style: none;
+    padding: 0;
+}
+.activity-list li {
+    padding: var(--sp-sm) 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+.activity-list li:last-child {
+    border-bottom: none;
+}
+.table-wrap {
+    overflow-x: auto;
+}
+
+@media print {
+    .export-buttons, .breadcrumb, .live-indicator {
+        display: none;
+    }
+    body {
+        background: white;
+        color: black;
+    }
+    .kpi-card, .chart-card, .table-card, .activity-card {
+        break-inside: avoid;
+        border: 1px solid #ccc;
+    }
+}
+
+.export-buttons {
+    display: flex;
+    gap: var(--sp-sm);
+}
+@media (max-width: 640px) {
+    .page-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

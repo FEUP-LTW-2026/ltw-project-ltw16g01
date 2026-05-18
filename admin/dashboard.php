@@ -28,10 +28,6 @@ output_header('admin-dashboard.css');
                     <p class="dash-date"><?= date('l, d F Y') ?></p>
                     <h1 class="dash-h1">Admin <span>Dashboard</span></h1>
                 </div>
-
-                <div class="dash-top-right">
-                    <a href="members.php" class="main-button btn-sm">Manage Users</a>
-                </div>
             </div>
         </div>
     </header>
@@ -62,7 +58,7 @@ output_header('admin-dashboard.css');
                 <a href="trainers.php" class="quick-item"><span class="quick-icon">🏋️</span>Manage Trainers</a>
                 <a href="classes.php" class="quick-item"><span class="quick-icon">📅</span>Manage Classes</a>
                 <a href="equipment.php" class="quick-item"><span class="quick-icon">⚙️</span>Manage Equipment</a>
-                <a href="#" class="quick-item"><span class="quick-icon">📊</span>Reports</a>
+                <a href="reports.php" class="quick-item"><span class="quick-icon">📊</span>Reports</a>
                 <a href="#" class="quick-item"><span class="quick-icon">🔔</span>Notifications</a>
             </div>
         </nav>
