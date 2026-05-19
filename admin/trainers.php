@@ -11,7 +11,11 @@ require_once '../template/trainers.php';
 requireAuth('admin');
 
 $pdo = getDatabaseConnection();
-$filters = ['name' => $_GET['name'] ?? '', 'specialization' => $_GET['specialization'] ?? ''];
+$specializations = getDistinctSpecializations($pdo);
+$selectedSpec = $_GET['specialization'] ?? '';
+$selectedName = $_GET['name'] ?? '';
+
+$filters = ['specialization' => $selectedSpec, 'name' => $selectedName];
 $trainers = getAllTrainers($pdo, $filters);
 
 output_header('admin-trainers.css');
@@ -39,8 +43,15 @@ output_header('admin-trainers.css');
             </div>
 
             <div class="filter-group">
-                <label class="form-label">Specialization</label>
-                <input type="text" name="specialization" class="form-control" value="<?= htmlspecialchars($filters['specialization']) ?>">
+                <label class="form-label" for="f-specialization">Specialization</label>
+                <select id="f-specialization" name="specialization" class="form-select">
+                    <option value="">All specializations</option>
+                    <?php foreach ($specializations as $spec): ?>
+                        <option value="<?= htmlspecialchars($spec) ?>" <?= $selectedSpec === $spec ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($spec) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div class="filter-group filter-group-end">

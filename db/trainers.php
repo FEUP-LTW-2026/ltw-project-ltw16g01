@@ -118,3 +118,16 @@ function deleteTrainer($pdo, $id) {
     $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'trainer'");
     return $stmt->execute([$id]);
 }
+
+function getDistinctSpecializations($pdo) {
+    $stmt = $pdo->query("SELECT specializations FROM trainer_profiles WHERE specializations IS NOT NULL AND specializations != ''");
+    $specs = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $parts = array_map('trim', explode(',', $row['specializations']));
+        foreach ($parts as $part) {
+            if (!empty($part)) $specs[$part] = $part;
+        }
+    }
+    asort($specs);
+    return array_keys($specs);
+}

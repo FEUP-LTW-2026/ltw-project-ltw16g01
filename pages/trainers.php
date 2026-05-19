@@ -8,7 +8,11 @@ require_once '../db/trainers.php';
 require_once '../template/trainers.php';
 
 $pdo = getDatabaseConnection();
-$filters = ['specialization' => $_GET['specialization'] ?? '', 'name' => $_GET['name'] ?? ''];
+$specializations = getDistinctSpecializations($pdo);
+$selectedSpec = $_GET['specialization'] ?? '';
+$selectedName = $_GET['name'] ?? '';
+
+$filters = ['specialization' => $selectedSpec, 'name' => $selectedName];
 $trainers = getAllTrainers($pdo, $filters);
 
 output_header('trainers.css');
@@ -35,7 +39,14 @@ output_header('trainers.css');
             <form id="filter-form" class="filter-bar" method="get" action="trainers.php">
                 <div class="filter-group">
                     <label class="form-label" for="f-specialization">Specialization</label>
-                    <input type="text" id="f-specialization" name="specialization" class="form-select" placeholder="e.g. Yoga, HIIT, Strength" value="<?= htmlspecialchars($filters['specialization']) ?>">
+                    <select id="f-specialization" name="specialization" class="form-select">
+                        <option value="">All specializations</option>
+                        <?php foreach ($specializations as $spec): ?>
+                            <option value="<?= htmlspecialchars($spec) ?>" <?= $selectedSpec === $spec ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($spec) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
 
                 <div class="filter-group">
