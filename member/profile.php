@@ -88,7 +88,7 @@ output_header('profile.css');
         <?php output_password_form(); ?>
 
         <div class="logout-box">
-            <a href="../pages/logout.php" class="secondary-button btn-sm logout-button">Logout</a>
+            <a href="../pages/logout.php" id="logout-button" class="secondary-button btn-sm logout-button">Logout</a>
         </div>
     </div>
 </main>
