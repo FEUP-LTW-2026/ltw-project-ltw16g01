@@ -100,6 +100,22 @@ function output_register_form($error = '', $old = []) {
             </div>
 
             <div class="form-group">
+                <label class="form-label" for="plan">Membership Plan</label>
+                    <select id="plan" name="plan" class="form-input" required>
+                        <option value="basic" <?= ($old['plan'] ?? 'basic') === 'basic' ? 'selected' : '' ?>>
+                            Basic - €19/month
+                        </option>
+                        <option value="premium" <?= ($old['plan'] ?? '') === 'premium' ? 'selected' : '' ?>>
+                            Premium - €39/month
+                        </option>
+                        <option value="vip" <?= ($old['plan'] ?? '') === 'vip' ? 'selected' : '' ?>>
+                            VIP - €69/month
+                        </option>
+                    </select>
+                <span class="field-error" id="err-plan">Please select a membership plan.</span>
+            </div>
+
+            <div class="form-group">
                 <label class="form-label" for="password">Password</label>
                 <div class="input-wrap">
                     <input type="password" id="password" name="password" class="form-input"

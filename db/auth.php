@@ -19,7 +19,13 @@ function authenticateUser($pdo, $identifier, $password) {
     return $user;
 }
 
-function registerMember($pdo, $name, $username, $email, $password) {
+function registerMember($pdo, $name, $username, $email, $password, $plan = 'basic') {
+    $allowedPlans = ['basic', 'premium', 'vip'];
+
+    if (!in_array($plan, $allowedPlans, true)) {
+        $plan = 'basic';
+    }
+
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? OR username = ?");
     $stmt->execute([$email, $username]);
 
@@ -29,7 +35,10 @@ function registerMember($pdo, $name, $username, $email, $password) {
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $pdo->prepare("INSERT INTO users (name, username, email, password, role, active) VALUES (?, ?, ?, ?, 'member', 1)");
+    $stmt = $pdo->prepare("
+        INSERT INTO users (name, username, email, password, role, active)
+        VALUES (?, ?, ?, ?, 'member', 1)
+    ");
 
     if (!$stmt->execute([$name, $username, $email, $hash])) {
         return false;
@@ -37,8 +46,12 @@ function registerMember($pdo, $name, $username, $email, $password) {
 
     $userId = $pdo->lastInsertId();
 
-    $stmt = $pdo->prepare("INSERT INTO member_profiles (user_id, membership_plan, plan_start, plan_end) VALUES (?, 'basic', DATE('now'), DATE('now', '+1 month'))");
-    $stmt->execute([$userId]);
+    $stmt = $pdo->prepare("
+        INSERT INTO member_profiles (user_id, membership_plan, plan_start, plan_end)
+        VALUES (?, ?, DATE('now'), DATE('now', '+1 month'))
+    ");
+
+    $stmt->execute([$userId, $plan]);
 
     return $userId;
 }

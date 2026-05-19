@@ -14,24 +14,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $username = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
+    $plan = $_POST['plan'] ?? 'basic';
     $password = $_POST['password'] ?? '';
     $confirm = $_POST['confirm'] ?? '';
 
-    $old = ['name' => $name, 'username' => $username, 'email' => $email];
+    $allowedPlans = ['basic', 'premium', 'vip'];
 
-    if ($name === '' || $username === '' || $email === '' || $password === '' || $confirm === '') {
+    $old = [
+        'name' => $name,
+        'username' => $username,
+        'email' => $email,
+        'plan' => $plan
+    ];
+
+    if ($name === '' || $username === '' || $email === '' || $plan === '' || $password === '' || $confirm === '') {
         $error = 'Please fill in all fields.';
     } elseif (strlen($username) < 3) {
         $error = 'Username must have at least 3 characters.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Please enter a valid email address.';
+    } elseif (!in_array($plan, $allowedPlans, true)) {
+        $error = 'Please select a valid membership plan.';
     } elseif (strlen($password) < 8) {
         $error = 'Password must be at least 8 characters.';
     } elseif ($password !== $confirm) {
         $error = 'Passwords do not match.';
     } else {
         $pdo = getDatabaseConnection();
-        $userId = registerMember($pdo, $name, $username, $email, $password);
+        $userId = registerMember($pdo, $name, $username, $email, $password, $plan);
 
         if ($userId === false) {
             $error = 'That email or username is already registered.';
