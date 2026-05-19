@@ -2,7 +2,31 @@
 // db/trainers.php
 
 function getAllTrainers($pdo, $filters = []) {
-    $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active, tp.bio, tp.specializations, tp.certifications, tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available, COALESCE(ROUND(AVG(r.rating), 1), 0) AS rating, COUNT(r.id) AS review_count FROM users u LEFT JOIN trainer_profiles tp ON u.id = tp.user_id LEFT JOIN class_schedules cs ON cs.trainer_id = u.id LEFT JOIN class_sessions sess ON sess.schedule_id = cs.id LEFT JOIN reviews r ON r.session_id = sess.id WHERE u.role = 'trainer'";
+    $sql = "
+        SELECT 
+            u.id,
+            u.name,
+            u.username,
+            u.email,
+            u.photo,
+            u.active,
+            tp.bio,
+            tp.specializations,
+            tp.certifications,
+            tp.is_pt,
+            tp.pt_description,
+            tp.pt_hourly_rate,
+            tp.pt_available,
+            COALESCE(ROUND(AVG(r.rating), 1), 0) AS rating,
+            COUNT(r.id) AS review_count
+        FROM users u
+        LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
+        LEFT JOIN class_schedules cs ON cs.trainer_id = u.id
+        LEFT JOIN class_sessions sess ON sess.schedule_id = cs.id
+        LEFT JOIN reviews r ON r.session_id = sess.id
+        WHERE u.role = 'trainer'
+    ";
+
     $params = [];
 
     if (!empty($filters['active_only'])) {
@@ -14,15 +38,27 @@ function getAllTrainers($pdo, $filters = []) {
         $params[] = '%' . $filters['specialization'] . '%';
     }
 
-    if (!empty($filters['name'])) {
-        $sql .= " AND u.name LIKE ?";
-        $params[] = '%' . $filters['name'] . '%';
+    if (!empty($filters['trainer_id'])) {
+        $sql .= " AND u.id = ?";
+        $params[] = $filters['trainer_id'];
     }
 
-    $sql .= " GROUP BY u.id ORDER BY u.name ASC";
+    if (isset($filters['is_pt']) && $filters['is_pt'] !== '') {
+        if ($filters['is_pt'] === '1') {
+            $sql .= " AND tp.is_pt = 1";
+        } elseif ($filters['is_pt'] === '0') {
+            $sql .= " AND COALESCE(tp.is_pt, 0) = 0";
+        }
+    }
+
+    $sql .= "
+        GROUP BY u.id
+        ORDER BY u.name ASC
+    ";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -117,4 +153,45 @@ function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $spec
 function deleteTrainer($pdo, $id) {
     $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'trainer'");
     return $stmt->execute([$id]);
+}
+
+function getTrainerSpecializationOptions($pdo) {
+    $stmt = $pdo->query("
+        SELECT specializations
+        FROM trainer_profiles
+        WHERE specializations IS NOT NULL
+          AND TRIM(specializations) <> ''
+    ");
+
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $specializations = [];
+
+    foreach ($rows as $row) {
+        $parts = explode(',', $row['specializations']);
+
+        foreach ($parts as $part) {
+            $spec = trim($part);
+
+            if ($spec !== '') {
+                $specializations[] = $spec;
+            }
+        }
+    }
+
+    $specializations = array_unique($specializations);
+    sort($specializations);
+
+    return $specializations;
+}
+
+function getTrainerNameOptions($pdo) {
+    $stmt = $pdo->query("
+        SELECT id, name
+        FROM users
+        WHERE role = 'trainer'
+          AND active = 1
+        ORDER BY name ASC
+    ");
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
