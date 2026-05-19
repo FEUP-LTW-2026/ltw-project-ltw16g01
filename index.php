@@ -1,8 +1,16 @@
 <?php
     require_once 'includes/header.php';
     require_once 'includes/footer.php';
+    require_once 'db/home.php';
+    require_once 'db/connection.php';
+    require_once 'template/home.php';
+
+    $pdo = getDatabaseConnection();
+    $homeStats = getHomeStats($pdo);
+    $classTypes = getHomeClassTypes($pdo);
 
     output_header('index.css');
+
 ?>
 
     <main class="main">
@@ -28,79 +36,14 @@
                     </div>
 
                     <!-- Stats Grid (visible on larger screens) -->
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <p class="stat-number">500</p>
-                            <p class="stat-label">Active Members</p>
-                        </div>
-                        <div class="stat-box">
-                            <p class="stat-number">48</p>
-                            <p class="stat-label">Classes / Week</p>
-                        </div>
-                        <div class="stat-box">
-                            <p class="stat-number">15</p>
-                            <p class="stat-label">Trainers</p>
-                        </div>
-                        <div class="stat-box">
-                            <p class="stat-number">98%</p>
-                            <p class="stat-label">Satisfaction</p>
-                        </div>
-                    </div>
+                    <?php outputStatsGrid($homeStats); ?>
 
                 </div>
             </div>
         </section>
 
         <!-- Animated Ticker: scrolling class types for visual impact -->
-        <section class="classes-section">
-            <div class="ticker-track">
-                <div class="ticker-group">
-                    <span>Yoga</span><span>●</span>
-                    <span>Pilates</span><span>●</span>
-                    <span>HIIT</span><span>●</span>
-                    <span>Cycling</span><span>●</span>
-                    <span>Strength</span><span>●</span>
-                    <span>CrossFit</span><span>●</span>
-                    <span>Boxing</span><span>●</span>
-                    <span>Senior Fitness</span><span>●</span>
-                </div>
-
-                <!-- Duplicate groups for seamless infinite scroll -->
-                <div class="ticker-group">
-                    <span>Yoga</span><span>●</span>
-                    <span>Pilates</span><span>●</span>
-                    <span>HIIT</span><span>●</span>
-                    <span>Cycling</span><span>●</span>
-                    <span>Strength</span><span>●</span>
-                    <span>CrossFit</span><span>●</span>
-                    <span>Boxing</span><span>●</span>
-                    <span>Senior Fitness</span><span>●</span>
-                </div>
-
-                <div class="ticker-group">
-                    <span>Yoga</span><span>●</span>
-                    <span>Pilates</span><span>●</span>
-                    <span>HIIT</span><span>●</span>
-                    <span>Cycling</span><span>●</span>
-                    <span>Strength</span><span>●</span>
-                    <span>CrossFit</span><span>●</span>
-                    <span>Boxing</span><span>●</span>
-                    <span>Senior Fitness</span><span>●</span>
-                </div>
-
-                <div class="ticker-group">
-                    <span>Yoga</span><span>●</span>
-                    <span>Pilates</span><span>●</span>
-                    <span>HIIT</span><span>●</span>
-                    <span>Cycling</span><span>●</span>
-                    <span>Strength</span><span>●</span>
-                    <span>CrossFit</span><span>●</span>
-                    <span>Boxing</span><span>●</span>
-                    <span>Senior Fitness</span><span>●</span>
-                </div>
-
-            </div>
-        </section>
+        <?php outputClassTicker($classTypes); ?>
 
         <!-- Features Section: highlights platform capabilities -->
         <section class="features-section" id="features">
@@ -114,41 +57,19 @@
                 </header>
 
                 <div class="features-grid">
-                    <a href="pages/about.php" class="feature-card">
-                        <div class="feature-icon">🏠</div>
-                        <h3>About Us</h3>
-                        <p>Learn more about our mission, values and the community behind FitPeak.</p>
-                    </a>
+                    <?php
+                        outputFeatureCard('🏠', 'About Us', 'Learn more about our mission, values and the community behind FitPeak.', 'pages/about.php', 'feature-card');
 
-                    <a href="pages/pt.php" class="feature-card">
-                        <div class="feature-icon">👤</div>
-                        <h3>Personal Trainers</h3>
-                        <p>Detailed profiles with specializations, ratings and session bookings.</p>
-                    </a>
+                        outputFeatureCard('👤', 'Personal Trainers', 'Detailed profiles with specializations, ratings and session bookings.', 'pages/pt.php', 'feature-card');
 
-                    <a href="pages/ratings-reviews.php" class="feature-card-two">
-                        <div class="feature-icon">⭐</div>
-                        <h3>Ratings &amp; Reviews</h3>
-                        <p>Review your classes and help other members choose better.</p>
-                    </a>
+                        outputFeatureCard('⭐', 'Ratings & Reviews', 'Review your classes and help other members choose better.', 'pages/ratings-reviews.php', 'feature-card-two');
 
-                    <article class="feature-card-two">
-                        <div class="feature-icon">🏋️</div>
-                        <h3>Equipment Availability</h3>
-                        <p>Check equipment availability before leaving home.</p>
-                    </article>
+                        outputFeatureCard('🏋️', 'Equipment Availability', 'Check equipment availability before leaving home.', 'pages/equipment.php', 'feature-card');
 
-                    <article class="feature-card-two">
-                        <div class="feature-icon">📊</div>
-                        <h3>Admin Dashboard</h3>
-                        <p>Admins can manage users, classes and equipment in one place.</p>
-                    </article>
+                        outputFeatureCard('📊', 'Admin Dashboard', 'Admins can manage users, classes and equipment in one place.', null, 'feature-card-two');
 
-                    <article class="feature-card-two">
-                        <div class="feature-icon">🏃</div>
-                        <h3>Classes &amp; Bookings</h3>
-                        <p>Check the full schedule, filter by type or trainer and join with one click.</p>
-                    </article>
+                        outputFeatureCard('🏃', 'Classes & Bookings', 'Check the full schedule, filter by type or trainer and join with one click.', 'pages/classes.php', 'feature-card');
+                    ?>    
                 </div>
             </div>
         </section>

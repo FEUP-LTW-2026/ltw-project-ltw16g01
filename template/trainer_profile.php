@@ -121,7 +121,10 @@ function output_trainer_profile_details($trainer, $schedules) {
             <div class="profile-schedule-card">
                 <div class="profile-schedule-head">
                     <h2>Classes & Schedule</h2>
-                    <p>Regular classes assigned to this trainer.</p>
+
+                    <?php if (!empty($schedules)): ?>
+                        <p>Regular classes assigned to this trainer.</p>
+                    <?php endif; ?>
                 </div>
 
                 <?php if (empty($schedules)): ?>
