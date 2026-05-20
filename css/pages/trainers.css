@@ -185,3 +185,8 @@
 .filter-group-end {
     margin-bottom: 20px;
 }
+
+.results-bar {
+    margin-top: var(--sp-md);
+    margin-bottom: var(--sp-md);
+}
