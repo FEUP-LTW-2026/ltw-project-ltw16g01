@@ -73,9 +73,6 @@ output_header('classes.css');
                     </select>
                 </div>
 
-                <div class="filter-group filter-group-end">
-                    <button type="submit" class="main-button full-width">Filter</button>
-                </div>
             </form>
         </section>
 
