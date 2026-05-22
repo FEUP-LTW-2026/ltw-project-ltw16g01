@@ -102,4 +102,4 @@ output_header('trainer-dashboard.css');
     </div>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../trainer/'); ?>

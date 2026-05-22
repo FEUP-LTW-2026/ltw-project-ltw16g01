@@ -95,4 +95,4 @@ output_header('profile.css');
 
 <script src="../js/profile.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../trainer/'); ?>
