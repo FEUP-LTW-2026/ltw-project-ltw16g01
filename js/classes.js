@@ -57,4 +57,45 @@ document.addEventListener('click', function (event) {
             editBox.classList.remove('is-visible');
         }
     }
+
+    // Enroll / Cancel enrollment
+    if (event.target.classList.contains('enroll-btn') || event.target.classList.contains('enrolled-btn')) {
+        event.preventDefault();
+
+        const button = event.target;
+        const scheduleId = button.dataset.scheduleId;
+        const action = button.dataset.action;
+
+        if (!scheduleId || !action) {
+            return;
+        }
+
+        button.disabled = true;
+
+        fetch('../ajax/enroll.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                schedule_id: scheduleId,
+                action: action
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+
+                if (data.success) {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Enrollment AJAX error:', error);
+                alert('Something went wrong.');
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
+    }
 });
