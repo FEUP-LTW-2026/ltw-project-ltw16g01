@@ -42,4 +42,4 @@ output_header('equipment.css');
 
 <script src="../js/equipment.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../admin/'); ?>

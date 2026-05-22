@@ -58,4 +58,4 @@ output_header('form.css');
     <?php output_class_form($classTypes, $trainers, $days, $old, $errors, $success, false); ?>
 </main>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../admin/'); ?>

@@ -82,4 +82,4 @@ output_header('admin-trainers.css');
 
 <script src="../js/trainers-admin.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../admin/'); ?>
