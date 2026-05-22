@@ -78,15 +78,6 @@ output_header('profile.css');
 <main class="main profile-page">
     <div class="container">
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><a href="trainer-dashboard.php">Trainer Dashboard</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Profile</span></li>
-                </ol>
-            </nav>
         </header>
 
         <?php output_profile_alert($message, 'success'); ?>
@@ -104,4 +95,4 @@ output_header('profile.css');
 
 <script src="../js/profile.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../trainer/'); ?>

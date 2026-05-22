@@ -90,6 +90,6 @@ output_header('classes.css');
     </div>
 
 </main>
-<?php output_footer(); ?>
+<?php output_footer('../member/'); ?>
 
 <script> src="../js/classes.js"</script>

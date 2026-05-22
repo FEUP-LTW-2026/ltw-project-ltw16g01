@@ -76,4 +76,4 @@ output_header('admin-members.css');
 
 <script src="../js/members-admin.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../admin/'); ?>

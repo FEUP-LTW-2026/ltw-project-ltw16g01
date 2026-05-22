@@ -77,4 +77,4 @@ output_header('form.css');
     <?php output_class_form($classTypes, $trainers, $days, $data, $errors, $success, true); ?>
 </main>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../admin/'); ?>

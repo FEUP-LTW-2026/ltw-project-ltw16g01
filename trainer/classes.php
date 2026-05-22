@@ -6,7 +6,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/classes.php';
 require_once '../db/class_sessions.php';
-require_once '../db/trainer.php';
+require_once '../db/trainers.php';
 
 requireAuth('trainer');
 
@@ -69,4 +69,4 @@ output_header('classes.css');
     </div>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../trainer/'); ?>

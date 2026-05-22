@@ -114,4 +114,4 @@ output_header('member-dashboard.css');
 
 <script src="../js/member-dashboard.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../member/'); ?>

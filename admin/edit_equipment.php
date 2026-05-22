@@ -62,4 +62,4 @@ output_header('form.css');
     <?php output_equipment_form($categories, $equipment, $errors, $success, $old); ?>
 </main>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../admin/'); ?>

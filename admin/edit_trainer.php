@@ -60,4 +60,4 @@ output_header('form.css');
     <?php output_trainer_form($trainer, $errors, $success, $old); ?>
 </main>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../admin/'); ?>

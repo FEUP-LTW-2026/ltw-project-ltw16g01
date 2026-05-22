@@ -4,7 +4,7 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/trainer.php';
+require_once '../db/trainers.php';
 
 requireAuth('trainer');
 
@@ -102,4 +102,4 @@ output_header('trainer-dashboard.css');
     </div>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../trainer/'); ?>
