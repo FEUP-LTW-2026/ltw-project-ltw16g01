@@ -115,3 +115,110 @@ function deleteClassSchedule($pdo, $scheduleId) {
     $stmt = $pdo->prepare("UPDATE class_sessions SET status = 'cancelled' WHERE schedule_id = ? AND session_date >= date('now')");
     return $stmt->execute([$scheduleId]);
 }
+
+function getSessionEnrolledMembers($pdo, $sessionId, $trainerId) {
+    $sql = "
+        SELECT 
+            u.id,
+            u.name,
+            u.email,
+            e.enrolled_at
+        FROM enrollments e
+        JOIN users u ON e.member_id = u.id
+        JOIN class_sessions sess ON e.session_id = sess.id
+        JOIN class_schedules cs ON sess.schedule_id = cs.id
+        WHERE e.session_id = ?
+          AND cs.trainer_id = ?
+          AND e.status = 'enrolled'
+        ORDER BY u.name ASC
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$sessionId, $trainerId]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function cancelTrainerSession($pdo, $sessionId, $trainerId) {
+    try {
+        $pdo->beginTransaction();
+
+        $sql = "
+            UPDATE class_sessions
+            SET status = 'cancelled'
+            WHERE id = ?
+              AND status = 'scheduled'
+              AND schedule_id IN (
+                  SELECT id 
+                  FROM class_schedules 
+                  WHERE trainer_id = ?
+              )
+        ";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$sessionId, $trainerId]);
+
+        if ($stmt->rowCount() === 0) {
+            $pdo->rollBack();
+            return false;
+        }
+
+        $stmt = $pdo->prepare("
+            UPDATE enrollments
+            SET status = 'cancelled'
+            WHERE session_id = ?
+              AND status = 'enrolled'
+        ");
+
+        $stmt->execute([$sessionId]);
+
+        $pdo->commit();
+        return true;
+
+    } catch (Exception $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        return false;
+    }
+}
+
+
+function updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration) {
+    $stmt = $pdo->prepare("
+        SELECT COALESCE(MAX(enrolled_count), 0)
+        FROM (
+            SELECT COUNT(e.id) AS enrolled_count
+            FROM class_sessions sess
+            LEFT JOIN enrollments e 
+                ON e.session_id = sess.id 
+               AND e.status = 'enrolled'
+            WHERE sess.schedule_id = ?
+              AND sess.status = 'scheduled'
+              AND sess.session_date >= date('now')
+            GROUP BY sess.id
+        )
+    ");
+
+    $stmt->execute([$scheduleId]);
+    $maxEnrolled = (int)$stmt->fetchColumn();
+
+    if ($capacity < $maxEnrolled) {
+        return 'Capacity cannot be lower than the number of enrolled members.';
+    }
+
+    $sql = "
+        UPDATE class_schedules
+        SET location = ?, 
+            capacity = ?, 
+            duration_min = ?
+        WHERE id = ?
+          AND trainer_id = ?
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $success = $stmt->execute([$location, $capacity, $duration, $scheduleId, $trainerId]);
+
+    return $success ? true : 'Could not update schedule details.';
+}

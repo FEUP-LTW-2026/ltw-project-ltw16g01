@@ -469,3 +469,210 @@
     cursor: wait;
     transform: none;
 }
+
+/* TRAINER CLASS ACTIONS */
+
+.class-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0 var(--sp-md) var(--sp-md);
+}
+
+.inline-form {
+    display: inline-flex;
+}
+
+/* Edit schedule box hidden by default */
+.schedule-edit-box {
+    display: none;
+    margin: 0 var(--sp-md) var(--sp-md);
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.schedule-edit-box.is-visible {
+    display: block;
+}
+
+.schedule-edit-form {
+    margin: 0;
+}
+
+.schedule-edit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.schedule-edit-box .form-control {
+    width: 100%;
+    min-width: 0;
+}
+
+.schedule-edit-box .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule-edit-box .form-label {
+    margin-bottom: 0.4rem;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.schedule-edit-box .form-control {
+    width: 100%;
+    min-height: 40px;
+    padding: 0.65rem 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color var(--t), box-shadow var(--t), background var(--t);
+}
+
+.schedule-edit-box .form-control:focus {
+    border-color: var(--accent);
+    background: #101010;
+    box-shadow: 0 0 0 3px rgba(232, 65, 24, 0.14);
+}
+
+.schedule-edit-box .form-actions {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.schedule-edit-box .main-button,
+.schedule-edit-box .secondary-button {
+    min-height: 38px;
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+}
+
+/* Cancel Session button */
+.danger-button {
+    border-color: rgba(255, 71, 87, 0.65);
+    color: var(--danger);
+    background: rgba(255, 71, 87, 0.04);
+}
+
+.danger-button:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(255, 71, 87, 0.22);
+}
+
+/* Roster box */
+.roster-box {
+    margin-top: 0;
+    padding: var(--sp-md);
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.roster-box h4 {
+    margin-bottom: 0.85rem;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-family: var(--ff-body);
+    font-weight: 700;
+}
+
+.roster-box .table-wrap {
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.roster-table {
+    width: 100%;
+    min-width: 420px;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.roster-table th {
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.roster-table td {
+    color: var(--text);
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.roster-table tr:last-child td {
+    border-bottom: none;
+}
+
+.roster-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+/* Alerts */
+.alert {
+    padding: 0.9rem 1rem;
+    border-radius: var(--r-md);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.alert-success {
+    background: rgba(46, 213, 115, 0.10);
+    border: 1px solid rgba(46, 213, 115, 0.32);
+    color: var(--success);
+}
+
+.alert-danger {
+    background: rgba(255, 71, 87, 0.10);
+    border: 1px solid rgba(255, 71, 87, 0.32);
+    color: var(--danger);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .schedule-edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .class-actions {
+        padding: 0 var(--sp-md) var(--sp-md);
+    }
+
+    .schedule-edit-box {
+        margin-inline: var(--sp-md);
+    }
+
+    .class-actions .secondary-button,
+    .class-actions .danger-button,
+    .inline-form {
+        width: 100%;
+    }
+
+    .inline-form button {
+        width: 100%;
+        justify-content: center;
+    }
+}

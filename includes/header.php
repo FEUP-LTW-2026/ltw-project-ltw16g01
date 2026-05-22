@@ -85,6 +85,7 @@ if (!function_exists('output_header')) {
                 <?php elseif ($userRole === 'trainer'): ?>
                     <li><a href="../trainer/dashboard.php">Home</a></li>
                     <li><a href="../trainer/classes.php">Classes</a></li>
+                    <li><a href="../trainer/trainers.php">Trainers</a></li>
                     <li><a href="../trainer/equipment.php">Equipment</a></li>
                     <li class="nav-avatar">
                     <a href="../trainer/profile.php" class="avatar-link" title="My Profile">
