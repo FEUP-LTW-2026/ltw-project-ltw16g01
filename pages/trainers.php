@@ -58,16 +58,6 @@ output_header('trainers.css');
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <select id="f-specialization" name="specialization" class="form-select">
-                        <option value="">All specializations</option>
-
-                        <?php foreach ($specializations as $specialization): ?>
-                            <option value="<?= htmlspecialchars($specialization) ?>"
-                                <?= $filters['specialization'] === $specialization ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($specialization) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
                 </div>
 
                 <div class="filter-group">
