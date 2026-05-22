@@ -195,3 +195,16 @@ function getTrainerNameOptions($pdo) {
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getDistinctSpecializations($pdo) {
+    $stmt = $pdo->query("SELECT specializations FROM trainer_profiles WHERE specializations IS NOT NULL AND specializations != ''");
+    $specs = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $parts = array_map('trim', explode(',', $row['specializations']));
+        foreach ($parts as $part) {
+            if (!empty($part)) $specs[$part] = $part;
+        }
+    }
+    asort($specs);
+    return array_keys($specs);
+}

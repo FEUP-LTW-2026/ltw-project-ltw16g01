@@ -409,3 +409,63 @@
     background: #ff3344;
     transform: translateY(-1px);
 }
+
+/* Botão Enroll (não inscrito) */
+.enroll-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 0.4rem 0.9rem;
+    min-height: 36px;
+    border-radius: var(--r-sm);
+    font-family: var(--ff-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--t);
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text);
+}
+.enroll-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: transparent;
+    transform: translateY(-1px);
+}
+
+/* Botão Enrolled (já inscrito) – sem hover vermelho */
+.enrolled-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 0.4rem 0.9rem;
+    min-height: 36px;
+    border-radius: var(--r-sm);
+    font-family: var(--ff-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--t);
+    background: rgba(46, 213, 115, 0.08);
+    border: 2px solid var(--success);
+    color: var(--success);
+}
+/* Hover suave sem vermelho – apenas um leve destaque */
+.enrolled-btn:hover {
+    background: rgba(46, 213, 115, 0.15);
+    transform: translateY(-1px);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+/* Botão desabilitado durante processamento (mesmo tamanho) */
+.enroll-btn:disabled, .enrolled-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+}

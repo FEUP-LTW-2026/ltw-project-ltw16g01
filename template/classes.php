@@ -59,14 +59,97 @@ function output_class_schedule_card($schedule) {
                 <span class="badge badge-<?= $fillClass ?>"><?= $freeSpots ?> spots left</span>
             </div>
 
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                <div class="admin-actions">
-                    <a href="../admin/edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Edit</a>
-                    <a href="../admin/delete_class.php?id=<?= $scheduleId ?>" class="delete-btn btn-sm delete-class-link">Delete</a>
-                </div>
-            <?php endif; ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member'): ?>
+                <?php
+                $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $schedule['schedule_id'], 1);
+                if (!empty($sessions)):
+                    $nextSession = $sessions[0];
+                    $sessionEnrolled = $nextSession['enrolled_count'] ?? 0;
+                    $available = $capacity - $sessionEnrolled;
+                    $isEnrolled = isMemberEnrolled($GLOBALS['pdo'], $_SESSION['user_id'], $nextSession['id']);
+                    if ($isEnrolled):
+                ?>
+                        <button class="enrolled-btn" data-schedule-id="<?= $schedule['schedule_id'] ?>" data-action="cancel">✅ Enrolled</button>
+                <?php elseif ($available > 0): ?>
+                        <button class="enroll-btn" data-schedule-id="<?= $schedule['schedule_id'] ?>" data-action="enroll">Enroll</button>
+                <?php else: ?>
+                        <button class="disabled-btn secondary-button btn-sm" disabled>Full</button>
+                <?php endif; else: ?>
+                    <button class="disabled-btn secondary-button btn-sm" disabled>No sessions</button>
+            <?php endif; endif; ?>
         </div>
+
     </article>
+
+    <script>
+        document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.enroll-btn, .enrolled-btn');
+        if (!btn) return;
+        e.preventDefault();
+
+        if (btn.disabled) return;
+
+        const scheduleId = btn.dataset.scheduleId;
+        const action = btn.dataset.action; // 'enroll' ou 'cancel'
+        if (!scheduleId || !action) return;
+
+        btn.disabled = true;
+        const originalText = btn.textContent;
+        btn.textContent = action === 'enroll' ? 'Processing...' : 'Canceling...';
+
+        fetch('../ajax/enroll.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: action, schedule_id: scheduleId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (action === 'enroll') {
+                    // Mudar para botão de cancelar
+                    btn.textContent = '✅ Enrolled';
+                    btn.classList.remove('enroll-btn', 'secondary-button');
+                    btn.classList.add('enrolled-btn');
+                    btn.dataset.action = 'cancel';
+                } else {
+                    // Mudar para botão de inscrever
+                    btn.textContent = 'Enroll';
+                    btn.classList.remove('enrolled-btn');
+                    btn.classList.add('enroll-btn', 'secondary-button');
+                    btn.dataset.action = 'enroll';
+                }
+                showToast(data.message, 'success');
+            } else {
+                showToast(data.message, 'error');
+                btn.textContent = originalText;
+            }
+            btn.disabled = false;
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            showToast('Network error. Please try again.', 'error');
+            btn.textContent = originalText;
+            btn.disabled = false;
+        });
+    });
+
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.right = '20px';
+        toast.style.backgroundColor = type === 'success' ? '#2ed573' : '#ff4757';
+        toast.style.color = '#fff';
+        toast.style.padding = '12px 20px';
+        toast.style.borderRadius = '8px';
+        toast.style.zIndex = '9999';
+        toast.style.fontWeight = '500';
+        toast.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+    </script>
 
     <?php
 }

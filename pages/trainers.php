@@ -8,6 +8,11 @@ require_once '../db/trainers.php';
 require_once '../template/trainers.php';
 
 $pdo = getDatabaseConnection();
+$specializations = getDistinctSpecializations($pdo);
+$selectedSpec = $_GET['specialization'] ?? '';
+$selectedName = $_GET['name'] ?? '';
+
+$filters = ['specialization' => $selectedSpec, 'name' => $selectedName];
 
 $filters = [
     'specialization' => $_GET['specialization'] ?? '',
@@ -45,6 +50,14 @@ output_header('trainers.css');
 
                 <div class="filter-group">
                     <label class="form-label" for="f-specialization">Specialization</label>
+                    <select id="f-specialization" name="specialization" class="form-select">
+                        <option value="">All specializations</option>
+                        <?php foreach ($specializations as $spec): ?>
+                            <option value="<?= htmlspecialchars($spec) ?>" <?= $selectedSpec === $spec ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($spec) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                     <select id="f-specialization" name="specialization" class="form-select">
                         <option value="">All specializations</option>
 
