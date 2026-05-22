@@ -61,7 +61,7 @@ function output_class_schedule_card($schedule) {
 
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member'): ?>
                 <?php
-                $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $schedule['schedule_id'], 1);
+                $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $scheduleId, 1);
                 if (!empty($sessions)):
                     $nextSession = $sessions[0];
                     $sessionEnrolled = $nextSession['enrolled_count'] ?? 0;
@@ -69,16 +69,26 @@ function output_class_schedule_card($schedule) {
                     $isEnrolled = isMemberEnrolled($GLOBALS['pdo'], $_SESSION['user_id'], $nextSession['id']);
                     if ($isEnrolled):
                 ?>
-                        <button class="enrolled-btn" data-schedule-id="<?= $schedule['schedule_id'] ?>" data-action="cancel">✅ Enrolled</button>
+                        <button class="enrolled-btn" data-schedule-id="<?= $scheduleId ?>" data-action="cancel">✅ Enrolled</button>
                 <?php elseif ($available > 0): ?>
-                        <button class="enroll-btn" data-schedule-id="<?= $schedule['schedule_id'] ?>" data-action="enroll">Enroll</button>
+                        <button class="enroll-btn" data-schedule-id="<?= $scheduleId ?>" data-action="enroll">Enroll</button>
                 <?php else: ?>
                         <button class="disabled-btn secondary-button btn-sm" disabled>Full</button>
                 <?php endif; else: ?>
                     <button class="disabled-btn secondary-button btn-sm" disabled>No sessions</button>
-            <?php endif; endif; ?>
+                <?php endif; ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <div class="admin-actions" style="display: flex; gap: 8px; margin-left: auto;">
+                    <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm"> Edit</a>
+                    <a href="delete_class.php?id=<?= $scheduleId ?>" 
+                       class="delete-btn btn-sm" 
+                       onclick="return confirm('Are you sure you want to delete this class? This action cannot be undone.');">
+                         Delete
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
-
     </article>
 
     <script>
