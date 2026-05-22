@@ -1,10 +1,12 @@
 <?php
 session_start();
 
+require_once '../includes/auth.php';
+require_once '../includes/header.php';
+require_once '../includes/footer.php';
 require_once '../db/connection.php';
 require_once '../db/equipment.php';
 require_once '../template/equipment.php';
-require_once '../includes/header.php';
 
 requireAuth('trainer');
 
@@ -21,13 +23,6 @@ output_header("equipment.css");
     <div class="container">
 
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Equipment</span></li>
-                </ol>
-            </nav>
             <div class="page-header-row flex-between" style="flex-wrap:wrap; gap:1rem;">
                 <div>
                     <h1>Equipment</h1>
