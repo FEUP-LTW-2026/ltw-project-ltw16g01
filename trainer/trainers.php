@@ -68,18 +68,4 @@ output_header('trainers.css');
 
 <?php output_footer('../'); ?>
 
-<script>
-    document.getElementById('filter-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const params = new URLSearchParams(formData);
-        fetch('../ajax/ajax_get_trainers.php?' + params.toString())
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('trainer-list-container').innerHTML = html;
-                const cardCount = document.querySelectorAll('#trainer-list-container .trainer-card').length;
-                document.getElementById('trainer-count').innerText = cardCount;
-            })
-            .catch(err => console.error('AJAX error:', err));
-    });
-</script>
+<script> src="../js/trainers.js"</script>

@@ -92,18 +92,4 @@ output_header('classes.css');
 </main>
 <?php output_footer(); ?>
 
-<script>
-    document.getElementById('filter-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const params = new URLSearchParams(formData);
-        fetch('../ajax/ajax_get_classes.php?' + params.toString())
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('class-list-container').innerHTML = html;
-                const cardCount = document.querySelectorAll('#class-list-container .class-card').length;
-                document.getElementById('class-count').innerText = cardCount;
-            })
-            .catch(err => console.error('AJAX error:', err));
-    });
-</script>
+<script> src="../js/classes.js"</script>
