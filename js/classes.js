@@ -6,9 +6,7 @@ function updateClasses() {
     if (!filterForm || !classListContainer || !classCount) {
         return;
     }
-
     const params = new URLSearchParams(new FormData(filterForm));
-
     fetch('../ajax/ajax_get_classes.php?' + params.toString())
         .then(response => response.text())
         .then(html => {
@@ -18,14 +16,10 @@ function updateClasses() {
         .catch(error => console.error('AJAX error:', error));
 }
 
-// Só ativa os filtros se a página tiver filter-form
 if (filterForm) {
-    // Impede o formulário de recarregar a página se alguém carregar Enter
     filterForm.addEventListener('submit', function (event) {
         event.preventDefault();
     });
-
-    // Atualiza automaticamente quando mudares um select
     filterForm.querySelectorAll('select').forEach(function (select) {
         select.addEventListener('change', updateClasses);
     });
@@ -37,41 +31,29 @@ document.addEventListener('click', function (event) {
             event.preventDefault();
         }
     }
-
-    // Abrir/fechar formulário de edição do schedule
     if (event.target.classList.contains('edit-schedule-button')) {
         const targetId = event.target.dataset.target;
         const editBox = document.getElementById(targetId);
-
         if (editBox) {
-            editBox.classList.toggle('is-visible');
+            editBox.style.display = 'block';
         }
     }
-
-    // Fechar formulário de edição sem guardar
     if (event.target.classList.contains('cancel-edit-schedule-button')) {
         const targetId = event.target.dataset.target;
         const editBox = document.getElementById(targetId);
-
         if (editBox) {
-            editBox.classList.remove('is-visible');
+            editBox.style.display = 'none';
         }
     }
-
-    // Enroll / Cancel enrollment
     if (event.target.classList.contains('enroll-btn') || event.target.classList.contains('enrolled-btn')) {
         event.preventDefault();
-
         const button = event.target;
         const scheduleId = button.dataset.scheduleId;
         const action = button.dataset.action;
-
         if (!scheduleId || !action) {
             return;
         }
-
         button.disabled = true;
-
         fetch('../ajax/enroll.php', {
             method: 'POST',
             headers: {
@@ -85,7 +67,6 @@ document.addEventListener('click', function (event) {
             .then(response => response.json())
             .then(data => {
                 alert(data.message);
-
                 if (data.success) {
                     location.reload();
                 }
