@@ -67,4 +67,4 @@ output_header('auth.css');
 
 <script src="../js/register.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../pages/'); ?>

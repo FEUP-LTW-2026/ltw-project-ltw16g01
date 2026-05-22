@@ -35,4 +35,4 @@ output_header('pt.css');
     <?php output_pt_cta(); ?>
 </main>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../pages/'); ?>

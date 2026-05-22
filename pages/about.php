@@ -149,4 +149,4 @@ output_header('about.css');
 
 </main>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../pages/'); ?>

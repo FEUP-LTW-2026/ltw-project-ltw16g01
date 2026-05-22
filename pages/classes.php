@@ -90,4 +90,4 @@ output_header('classes.css');
 
 <script src="../js/classes.js"></script>
 
-<?php output_footer('../'); ?>
+<?php output_footer('../pages/'); ?>
