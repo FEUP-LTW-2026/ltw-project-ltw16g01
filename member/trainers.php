@@ -31,13 +31,6 @@ output_header('trainers.css');
 <main class="main">
     <div class="container">
         <header class="page-header">
-            <nav>
-                <ol class="breadcrumb">
-                    <li><a href="../index.php">Home</a></li>
-                    <li><span class="breadcrumb-sep">›</span></li>
-                    <li><span>Trainers</span></li>
-                </ol>
-            </nav>
 
             <div class="page-header-row">
                 <h1>Our Trainers</h1>
