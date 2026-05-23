@@ -185,7 +185,35 @@ function cancelTrainerSession($pdo, $sessionId, $trainerId) {
 }
 
 
-function updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration) {
+function updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration, $startTime) {
+    $location = trim($location);
+    $capacity = (int)$capacity;
+    $duration = (int)$duration;
+    $startTime = trim($startTime);
+
+    if ($location === '' || $capacity <= 0 || $duration <= 0 || $startTime === '') {
+        return 'Please fill in all schedule fields correctly.';
+    }
+
+    $stmt = $pdo->prepare("
+        SELECT 
+            id,
+            day_of_week,
+            start_time,
+            location,
+            duration_min
+        FROM class_schedules
+        WHERE id = ?
+          AND trainer_id = ?
+    ");
+
+    $stmt->execute([$scheduleId, $trainerId]);
+    $currentSchedule = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$currentSchedule) {
+        return 'Schedule not found or you are not the trainer.';
+    }
+
     $stmt = $pdo->prepare("
         SELECT COALESCE(MAX(enrolled_count), 0)
         FROM (
@@ -208,17 +236,62 @@ function updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, 
         return 'Capacity cannot be lower than the number of enrolled members.';
     }
 
-    $sql = "
+    $newStart = strtotime($startTime);
+    $newEnd = strtotime("+{$duration} minutes", $newStart);
+
+    if ($newStart === false || $newEnd === false) {
+        return 'Invalid start time.';
+    }
+
+    $stmt = $pdo->prepare("
+        SELECT 
+            cs.id,
+            cs.start_time,
+            cs.duration_min,
+            c.name AS class_name
+        FROM class_schedules cs
+        JOIN classes c ON cs.class_id = c.id
+        WHERE cs.id <> ?
+          AND cs.day_of_week = ?
+          AND LOWER(TRIM(cs.location)) = LOWER(TRIM(?))
+          AND c.active = 1
+    ");
+
+    $stmt->execute([
+        $scheduleId,
+        $currentSchedule['day_of_week'],
+        $location
+    ]);
+
+    $possibleConflicts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($possibleConflicts as $conflict) {
+        $existingStart = strtotime($conflict['start_time']);
+        $existingEnd = strtotime("+{$conflict['duration_min']} minutes", $existingStart);
+
+        if ($newStart < $existingEnd && $newEnd > $existingStart) {
+            return "Schedule conflict: this time overlaps with '{$conflict['class_name']}' in the same location.";
+        }
+    }
+
+    $stmt = $pdo->prepare("
         UPDATE class_schedules
-        SET location = ?, 
+        SET start_time = ?,
+            location = ?, 
             capacity = ?, 
             duration_min = ?
         WHERE id = ?
           AND trainer_id = ?
-    ";
+    ");
 
-    $stmt = $pdo->prepare($sql);
-    $success = $stmt->execute([$location, $capacity, $duration, $scheduleId, $trainerId]);
+    $success = $stmt->execute([
+        $startTime,
+        $location,
+        $capacity,
+        $duration,
+        $scheduleId,
+        $trainerId
+    ]);
 
     return $success ? true : 'Could not update schedule details.';
 }

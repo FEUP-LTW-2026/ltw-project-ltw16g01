@@ -61,18 +61,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     $location   = trim($_POST['location'] ?? '');
     $capacity   = (int)($_POST['capacity'] ?? 0);
     $duration   = (int)($_POST['duration_min'] ?? 0);
+    $startTime  = trim($_POST['start_time'] ?? '');
 
-    if ($scheduleId <= 0 || $location === '' || $capacity <= 0 || $duration <= 0) {
+    if ($scheduleId <= 0 || $location === '' || $capacity <= 0 || $duration <= 0 || $startTime === '') {
         $error = 'Please fill in all schedule fields correctly.';
     } else {
-        $oldStmt = $pdo->prepare("SELECT location, capacity, duration_min FROM class_schedules WHERE id = ? AND trainer_id = ?");
+        $oldStmt = $pdo->prepare("SELECT location, capacity, duration_min, start_time FROM class_schedules WHERE id = ? AND trainer_id = ?");
         $oldStmt->execute([$scheduleId, $trainerId]);
         $old = $oldStmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$old) {
             $error = 'Schedule not found or you are not the trainer.';
         } else {
-            $updated = updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration);
+            $updated = updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration, $startTime);
             if ($updated === true) {
                 $changes = [];
                 if ($old['location'] !== $location) {
@@ -193,21 +194,24 @@ output_header('classes.css');
                             <input type="hidden" name="schedule_id" value="<?= (int)$schedule['schedule_id'] ?>">
                             <div class="schedule-edit-grid">
                                 <div class="form-group">
+                                    <label class="form-label">Start Time</label>
+                                    <input type="time" name="start_time" class="form-control" value="<?= htmlspecialchars($schedule['start_time']) ?>" required>
+                                </div>
+
+                                <div class="form-group">
                                     <label class="form-label">Location</label>
                                     <input type="text" name="location" class="form-control" value="<?= htmlspecialchars($schedule['location']) ?>" required>
                                 </div>
+
                                 <div class="form-group">
                                     <label class="form-label">Capacity</label>
                                     <input type="number" name="capacity" class="form-control" min="1" value="<?= (int)$schedule['capacity'] ?>" required>
                                 </div>
+
                                 <div class="form-group">
                                     <label class="form-label">Duration (minutes)</label>
                                     <input type="number" name="duration_min" class="form-control" min="1" value="<?= (int)$schedule['duration_min'] ?>" required>
                                 </div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="main-button btn-sm">Save Changes</button>
-                                <button type="button" class="secondary-button btn-sm cancel-edit-schedule-button" data-target="<?= $editBoxId ?>">Cancel Edit</button>
                             </div>
                         </form>
                     </div>
