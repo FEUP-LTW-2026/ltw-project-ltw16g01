@@ -1,8 +1,20 @@
 <?php
 // db/notifications.php
 function createNotification($pdo, $userId, $message, $type = 'info') {
-    $stmt = $pdo->prepare("INSERT INTO notifications (user_id, message, type, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
-    return $stmt->execute([$userId, $message, $type]);
+
+    $stmt = $pdo->prepare("SELECT id FROM notification_types WHERE name = ?");
+    $stmt->execute([$type]);
+    $typeId = $stmt->fetchColumn();
+    
+    if (!$typeId) {
+        $typeId = 1;
+    }
+    
+    $stmt = $pdo->prepare("
+        INSERT INTO notifications (user_id, message, notification_type_id, created_at)
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+    ");
+    return $stmt->execute([$userId, $message, $typeId]);
 }
 
 function getNotificationsForUser($pdo, $userId, $limit = 50, $offset = 0) {

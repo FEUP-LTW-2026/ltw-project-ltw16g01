@@ -357,4 +357,28 @@ function getTrainerPastClasses($pdo, $trainerId, $limit = 10) {
     $stmt->execute([$trainerId, $limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+function getTrainerPendingPTRequests($pdo, $trainerId) {
+    $stmt = $pdo->prepare("
+        SELECT pb.*, u.name as member_name, u.email as member_email
+        FROM personal_bookings pb
+        JOIN users u ON pb.member_id = u.id
+        WHERE pb.trainer_id = ? AND pb.status = 'pending'
+        ORDER BY pb.booking_date ASC, pb.start_time ASC
+    ");
+    $stmt->execute([$trainerId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getTrainerConfirmedPT($pdo, $trainerId, $limit = 10) {
+    $stmt = $pdo->prepare("
+        SELECT pb.*, u.name as member_name
+        FROM personal_bookings pb
+        JOIN users u ON pb.member_id = u.id
+        WHERE pb.trainer_id = ? AND pb.status = 'confirmed'
+        ORDER BY pb.booking_date DESC, pb.start_time DESC
+        LIMIT ?
+    ");
+    $stmt->execute([$trainerId, $limit]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>

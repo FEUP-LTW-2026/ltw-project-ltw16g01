@@ -194,3 +194,18 @@
     .kpi-grid { grid-template-columns: repeat(3, 1fr); }
     .dash-layout { grid-template-columns: 3fr 2fr; }
 }
+
+.decline-btn {
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--r-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--t);
+}
+.decline-btn:hover {
+    background: rgba(255, 71, 87, 0.1);
+    transform: translateY(-1px);
+}

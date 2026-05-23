@@ -6,6 +6,7 @@ require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/members.php';
+require_once '../db/personal_bookings.php';
 
 requireAuth('member');
 
@@ -15,6 +16,8 @@ $memberId = $_SESSION['user_id'];
 $stats = getMemberStats($pdo, $memberId);
 $upcoming = getMemberUpcomingEnrollments($pdo, $memberId);
 $pastClasses = getMemberPastClasses($pdo, $memberId);
+$ptRequests = getMemberPTRequests($pdo, $memberId);
+$confirmedPT = getMemberConfirmedPT($pdo, $memberId);
 
 output_header('member-dashboard.css');
 ?>
@@ -38,7 +41,6 @@ output_header('member-dashboard.css');
             <div class="kpi-card"><p class="kpi-num"><?= htmlspecialchars($stats['avg_rating']) ?></p><p class="kpi-lbl">⭐ Average Rating</p></div>
         </div>
 
-        <!-- Tabela de próximas aulas -->
         <div class="card full-width-card">
             <div class="card-head">
                 <h2 class="card-title">Your Upcoming Classes</h2>
@@ -69,7 +71,72 @@ output_header('member-dashboard.css');
             </div>
         </div>
 
-        <!-- Tabela de aulas recentes (com avaliação) -->
+        <div class="card full-width-card">
+            <div class="card-head">
+                <h2 class="card-title">Your Personal Training Requests</h2>
+                <a href="request_pt.php" class="secondary-button btn-sm">Request New PT</a>
+            </div>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr><th>Trainer</th><th>Date</th><th>Time</th><th>Duration</th><th>Status</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($ptRequests)): ?>
+                            <tr><td colspan="6" class="center-text">You have no PT requests. <a href="request_pt.php">Request a personal trainer</a></td></tr>
+                        <?php else: ?>
+                            <?php foreach ($ptRequests as $req): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($req['trainer_name']) ?></td>
+                                    <td><?= htmlspecialchars($req['booking_date']) ?></td>
+                                    <td><?= htmlspecialchars($req['start_time']) ?></td>
+                                    <td><?= (int)$req['duration_min'] ?> min</td>
+                                    <td>
+                                        <?php if ($req['status'] === 'pending'): ?>
+                                            <span class="badge badge-warning">Pending</span>
+                                        <?php elseif ($req['status'] === 'confirmed'): ?>
+                                            <span class="badge badge-success">Confirmed</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-danger">Cancelled</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($req['notes'] ?: '—') ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card full-width-card">
+            <div class="card-head">
+                <h2 class="card-title">Confirmed Personal Training Sessions</h2>
+            </div>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr><th>Trainer</th><th>Date</th><th>Time</th><th>Duration</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($confirmedPT)): ?>
+                            <tr><td colspan="5" class="center-text">No confirmed PT sessions yet.</td></tr>
+                        <?php else: ?>
+                            <?php foreach ($confirmedPT as $pt): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($pt['trainer_name']) ?></td>
+                                    <td><?= htmlspecialchars($pt['booking_date']) ?></td>
+                                    <td><?= htmlspecialchars($pt['start_time']) ?></td>
+                                    <td><?= (int)$pt['duration_min'] ?> min</td>
+                                    <td><?= htmlspecialchars($pt['notes'] ?: '—') ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="card full-width-card">
             <div class="card-head">
                 <h2 class="card-title">Recent Classes</h2>
@@ -110,7 +177,6 @@ output_header('member-dashboard.css');
         </div>
     </div>
 
-    <!-- Modal de avaliação (único, fora das tabelas) -->
     <div class="modal-overlay" id="reviewModal">
         <div class="modal">
             <div class="modal-header">
