@@ -1,0 +1,29 @@
+.legal-section {
+    padding-block: var(--sp-xl);
+}
+
+.legal-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.legal-card h2 {
+    font-family: var(--ff-body);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: var(--sp-lg);
+    margin-bottom: var(--sp-sm);
+    color: var(--text);
+}
+
+.legal-card h2:first-child {
+    margin-top: 0;
+}
+
+.legal-card p {
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: var(--sp-md);
+}

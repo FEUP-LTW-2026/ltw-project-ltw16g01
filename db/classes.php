@@ -20,6 +20,11 @@ function getAllClassSchedules($pdo, $filters = []) {
         $params[] = ucfirst(strtolower($filters['day']));
     }
 
+    if (!empty($filters['time'])) {
+        $sql .= " AND cs.start_time = ?";
+        $params[] = $filters['time'];
+    }
+
     $sql .= " ORDER BY CASE cs.day_of_week WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 WHEN 'Sunday' THEN 7 ELSE 8 END, cs.start_time";
 
     $stmt = $pdo->prepare($sql);
@@ -59,10 +64,11 @@ function getUpcomingSessionsBySchedule($pdo, $scheduleId, $limit = 5) {
             sess.status,
             (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') AS enrolled_count
         FROM class_sessions sess
+        JOIN class_schedules sch ON sess.schedule_id = sch.id
         WHERE sess.schedule_id = ? 
-          AND sess.session_date >= date('now')
+          AND datetime(sess.session_date || ' ' || sch.start_time) >= datetime('now')
           AND sess.status = 'scheduled'
-        ORDER BY sess.session_date ASC
+        ORDER BY sess.session_date ASC, sch.start_time ASC
         LIMIT ?
     ";
     $stmt = $pdo->prepare($sql);
