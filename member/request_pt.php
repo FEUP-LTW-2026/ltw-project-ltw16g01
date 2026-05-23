@@ -1,14 +1,52 @@
 <?php
 session_start();
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/personal_bookings.php';
+require_once '../db/members.php';
 
 requireAuth('member');
+
 $pdo = getDatabaseConnection();
 $memberId = $_SESSION['user_id'];
+$memberPlan = getMemberPlan($pdo, $memberId);
+
+if ($memberPlan === 'basic') {
+    output_header('request_pt.css');
+    ?>
+
+    <link rel="stylesheet" href="../css/pages/form.css">
+
+    <main class="main">
+        <div class="container" style="max-width: 700px;">
+            <header class="page-header">
+                <h1>Personal Training Not Available</h1>
+                <p>Your current membership plan does not include personal training sessions.</p>
+            </header>
+
+            <div class="auth-form card form-card">
+                <div class="alert alert-danger">
+                    Your Basic plan does not include access to Personal Training sessions.
+                </div>
+
+                <p>
+                    Upgrade to Premium or VIP to request personal training sessions with our trainers.
+                </p>
+
+                <div class="form-actions">
+                    <a href="dashboard.php" class="secondary-button">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <?php
+    output_footer();
+    exit;
+}
 
 $error = '';
 $success = '';
@@ -36,7 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 output_header('request_pt.css');
 ?>
+
 <link rel="stylesheet" href="../css/pages/form.css">
+
 <main class="main">
     <div class="container" style="max-width: 700px;">
         <header class="page-header">
@@ -53,10 +93,12 @@ output_header('request_pt.css');
         <form method="post" class="auth-form card form-card">
             <div class="form-group">
                 <label class="form-label">Select Trainer *</label>
+
                 <select name="trainer_id" class="form-select" required>
                     <option value="">-- Choose a trainer --</option>
+
                     <?php foreach ($trainers as $t): ?>
-                        <option value="<?= $t['id'] ?>">
+                        <option value="<?= (int)$t['id'] ?>">
                             <?= htmlspecialchars($t['name']) ?>
                         </option>
                     <?php endforeach; ?>
@@ -66,16 +108,31 @@ output_header('request_pt.css');
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Date *</label>
-                    <input type="date" name="booking_date" class="form-control" required min="<?= date('Y-m-d') ?>">
+
+                    <input 
+                        type="date" 
+                        name="booking_date" 
+                        class="form-control" 
+                        required 
+                        min="<?= date('Y-m-d') ?>"
+                    >
                 </div>
+
                 <div class="form-group">
                     <label class="form-label">Start Time *</label>
-                    <input type="time" name="start_time" class="form-control" required>
+
+                    <input 
+                        type="time" 
+                        name="start_time" 
+                        class="form-control" 
+                        required
+                    >
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Duration (minutes)</label>
+
                 <select name="duration_min" class="form-select">
                     <option value="30">30 minutes</option>
                     <option value="45">45 minutes</option>
@@ -87,7 +144,13 @@ output_header('request_pt.css');
 
             <div class="form-group">
                 <label class="form-label">Notes (optional)</label>
-                <textarea name="notes" class="form-control" rows="3" placeholder="e.g., Focus on back strength, injury history, etc."></textarea>
+
+                <textarea 
+                    name="notes" 
+                    class="form-control" 
+                    rows="3" 
+                    placeholder="e.g., Focus on back strength, injury history, etc."
+                ></textarea>
             </div>
 
             <div class="form-actions">
