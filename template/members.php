@@ -15,7 +15,18 @@ function output_members_admin_table($members) {
             <td><?= htmlspecialchars($m['username']) ?></td>
             <td><?= htmlspecialchars($m['email']) ?></td>
             <td><?= htmlspecialchars($m['membership_plan'] ?? 'basic') ?></td>
-            <td><?= $m['active'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>' ?></td>
+            <td>
+                <div class="status-badges">
+                    <?= $m['active'] 
+                        ? '<span class="badge badge-success">Active</span>' 
+                        : '<span class="badge badge-danger">Inactive</span>' 
+                    ?>
+
+                    <?php if (!empty($m['is_admin'])): ?>
+                        <span class="badge badge-admin">Admin</span>
+                    <?php endif; ?>
+                </div>
+            </td>
             <td>
                 <a href="edit_member.php?id=<?= $id ?>" class="action-link">Edit</a>
                 <a href="delete_member.php?id=<?= $id ?>" class="action-link danger delete-member-link">Delete</a>
