@@ -59,7 +59,7 @@ output_header('admin-dashboard.css');
                 <a href="classes.php" class="quick-item"><span class="quick-icon">📅</span>Manage Classes</a>
                 <a href="equipment.php" class="quick-item"><span class="quick-icon">⚙️</span>Manage Equipment</a>
                 <a href="reports.php" class="quick-item"><span class="quick-icon">📊</span>Reports</a>
-                <a href="#" class="quick-item"><span class="quick-icon">🔔</span>Notifications</a>
+                <a href="notifications.php" class="quick-item"><span class="quick-icon">🔔</span>Notifications</a>
             </div>
         </nav>
 

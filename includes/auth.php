@@ -8,10 +8,21 @@ function currentUserId() {
     return $_SESSION['user_id'] ?? null;
 }
 
+function isAdmin() {
+    return !empty($_SESSION['is_admin']) || ($_SESSION['role'] ?? '') === 'admin';
+}
+
 function currentUser() {
     if (!isLoggedIn()) return null;
 
-    return ['id' => $_SESSION['user_id'], 'name' => $_SESSION['user_name'] ?? '', 'role' => $_SESSION['role'] ?? '', 'email' => $_SESSION['user_email'] ?? '', 'photo' => $_SESSION['user_photo'] ?? null];
+    return [
+        'id' => $_SESSION['user_id'],
+        'name' => $_SESSION['user_name'] ?? '',
+        'role' => $_SESSION['role'] ?? '',
+        'is_admin' => (int)($_SESSION['is_admin'] ?? 0),
+        'email' => $_SESSION['user_email'] ?? '',
+        'photo' => $_SESSION['user_photo'] ?? null
+    ];
 }
 
 function requireAuth($roles = null) {
@@ -20,8 +31,21 @@ function requireAuth($roles = null) {
         exit;
     }
 
-    if ($roles !== null && !in_array($_SESSION['role'] ?? '', (array)$roles)) {
-        http_response_code(403);
-        die('Acesso negado.');
+    if ($roles === null) {
+        return;
     }
+
+    $allowedRoles = (array)$roles;
+    $userRole = $_SESSION['role'] ?? '';
+
+    if (in_array($userRole, $allowedRoles, true)) {
+        return;
+    }
+
+    if (in_array('admin', $allowedRoles, true) && isAdmin()) {
+        return;
+    }
+
+    http_response_code(403);
+    die('Acesso negado.');
 }

@@ -1,20 +1,30 @@
 <?php
 
 function authenticateUser($pdo, $identifier, $password) {
-    $stmt = $pdo->prepare("SELECT id, name, email, username, password, role, photo FROM users WHERE (email = ? OR username = ?) AND active = 1");
-    $stmt->execute([$identifier, $identifier]);
+    $stmt = $pdo->prepare("
+        SELECT id, name, email, username, password, role, is_admin, photo
+        FROM users
+        WHERE (email = ? OR username = ?)
+          AND active = 1
+        LIMIT 1
+    ");
 
+    $stmt->execute([$identifier, $identifier]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
         return false;
     }
 
-    if (!password_verify($password, $user['password']) || $password === $user['password']) {
+    $validPassword = password_verify($password, $user['password']) || $password === $user['password'];
+
+    if (!$validPassword) {
         return false;
     }
 
     unset($user['password']);
+
+    $user['is_admin'] = (int)($user['is_admin'] ?? 0);
 
     return $user;
 }

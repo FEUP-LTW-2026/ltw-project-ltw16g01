@@ -63,7 +63,23 @@ function getAllTrainers($pdo, $filters = []) {
 }
 
 function getAllPersonalTrainers($pdo, $filters = []) {
-    $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active, tp.bio, tp.specializations, tp.certifications, tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available, COALESCE(ROUND(AVG(r.rating), 1), 0) AS rating, COUNT(r.id) AS review_count FROM users u LEFT JOIN trainer_profiles tp ON u.id = tp.user_id LEFT JOIN class_schedules cs ON cs.trainer_id = u.id LEFT JOIN class_sessions sess ON sess.schedule_id = cs.id LEFT JOIN reviews r ON r.session_id = sess.id WHERE u.role = 'trainer' AND u.active = 1 AND tp.is_pt = 1 AND tp.pt_available = 1";
+    $sql = "
+        SELECT 
+            u.id, u.name, u.username, u.email, u.photo, u.active, 
+            tp.bio, tp.specializations, tp.certifications, 
+            tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available,
+            COALESCE(ROUND(AVG(r.rating), 1), 0) AS rating,
+            COUNT(r.id) AS review_count
+        FROM users u
+        LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
+        LEFT JOIN class_schedules cs ON cs.trainer_id = u.id
+        LEFT JOIN class_sessions sess ON sess.schedule_id = cs.id
+        LEFT JOIN reviews r ON r.session_id = sess.id
+        WHERE u.role = 'trainer'
+          AND u.active = 1
+          AND tp.is_pt = 1
+          AND tp.pt_available = 1
+    ";
     $params = [];
 
     if (!empty($filters['specialization'])) {
@@ -84,7 +100,27 @@ function getAllPersonalTrainers($pdo, $filters = []) {
 }
 
 function getTrainerById($pdo, $id, $activeOnly = true) {
-    $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active, tp.bio, tp.specializations, tp.certifications, tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available FROM users u LEFT JOIN trainer_profiles tp ON u.id = tp.user_id WHERE u.id = ? AND u.role = 'trainer'";
+    $sql = "
+        SELECT 
+            u.id,
+            u.name,
+            u.username,
+            u.email,
+            u.photo,
+            u.active,
+            tp.bio,
+            tp.specializations,
+            tp.certifications,
+            tp.is_pt,
+            tp.pt_description,
+            tp.pt_hourly_rate,
+            tp.pt_available
+        FROM users u
+        LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
+        WHERE u.id = ?
+          AND u.role = 'trainer'
+    ";
+
     $params = [$id];
 
     if ($activeOnly) {
@@ -93,6 +129,7 @@ function getTrainerById($pdo, $id, $activeOnly = true) {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -143,10 +180,28 @@ function createTrainer($pdo, $name, $username, $email, $bio, $specializations, $
 function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications) {
     if (trainerUsernameOrEmailExists($pdo, $username, $email, $id)) return false;
 
-    $stmt = $pdo->prepare("UPDATE users SET name = ?, username = ?, email = ?, active = ? WHERE id = ? AND role = 'trainer'");
-    if (!$stmt->execute([$name, $username, $email, $active, $id])) return false;
+    $stmt = $pdo->prepare("
+        UPDATE users
+        SET name = ?,
+            username = ?,
+            email = ?,
+            active = ?
+        WHERE id = ?
+          AND role = 'trainer'
+    ");
 
-    $stmt = $pdo->prepare("UPDATE trainer_profiles SET bio = ?, specializations = ?, certifications = ? WHERE user_id = ?");
+    if (!$stmt->execute([$name, $username, $email, $active, $id])) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare("
+        UPDATE trainer_profiles
+        SET bio = ?,
+            specializations = ?,
+            certifications = ?
+        WHERE user_id = ?
+    ");
+
     return $stmt->execute([$bio, $specializations, $certifications, $id]);
 }
 
@@ -294,3 +349,4 @@ function getTrainerPastClasses($pdo, $trainerId, $limit = 10) {
     $stmt->execute([$trainerId, $limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+?>

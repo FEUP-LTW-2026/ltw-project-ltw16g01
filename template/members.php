@@ -117,6 +117,24 @@ function output_member_form($member = null, $errors = [], $success = '', $old = 
                         <option value="0" <?= (int)$active === 0 ? 'selected' : '' ?>>Inactive</option>
                     </select>
                 </div>
+
+                <div class="form-group form-spaced">
+                    <label class="form-label">Admin Access</label>
+
+                    <label style="display:flex; align-items:center; gap:0.6rem;">
+                        <input 
+                            type="checkbox" 
+                            name="is_admin" 
+                            value="1"
+                            <?= !empty($member['is_admin']) ? 'checked' : '' ?>
+                        >
+                        <span>Allow this member to access the admin dashboard</span>
+                    </label>
+
+                    <small class="text-muted">
+                        The user will remain a member, but will also have full admin permissions.
+                    </small>
+                </div>
             <?php endif; ?>
 
             <div class="form-actions">
