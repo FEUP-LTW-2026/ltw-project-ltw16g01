@@ -49,6 +49,24 @@ function getClassScheduleById($pdo, $scheduleId) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function getClassScheduleRating($pdo, $scheduleId) {
+    $sql = "
+        SELECT 
+            ROUND(AVG(r.rating), 1) AS avg_rating,
+            COUNT(r.id) AS review_count
+        FROM reviews r
+        JOIN class_sessions sess ON r.session_id = sess.id
+        WHERE sess.schedule_id = ?
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$scheduleId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return [
+        'rating' => $result['avg_rating'] ?? 0,
+        'count' => (int)($result['review_count'] ?? 0)
+    ];
+}
+
 function getClassSessionById($pdo, $sessionId) {
     $sql = "SELECT sess.id AS session_id, sess.session_date, sess.status AS session_status, cs.id AS schedule_id, cs.day_of_week, cs.start_time, cs.location, cs.capacity, cs.duration_min, c.id AS class_id, c.name AS class_name, c.description AS class_description, ct.name AS class_type_name, ct.label AS class_type_label, u.id AS trainer_id, u.name AS trainer_name, (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') AS enrolled_count FROM class_sessions sess JOIN class_schedules cs ON sess.schedule_id = cs.id JOIN classes c ON cs.class_id = c.id JOIN class_types ct ON c.class_type_id = ct.id LEFT JOIN users u ON cs.trainer_id = u.id WHERE sess.id = ?";
     $stmt = $pdo->prepare($sql);

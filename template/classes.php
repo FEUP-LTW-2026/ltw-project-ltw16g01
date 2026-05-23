@@ -25,6 +25,9 @@ function output_class_schedule_card($schedule) {
     $typeLabel = htmlspecialchars($schedule['class_type_label'] ?? ucfirst($schedule['class_type_name']));
     $description = trim($schedule['class_description'] ?? '');
     $shortDescription = htmlspecialchars(substr($description, 0, 100)) . (strlen($description) > 100 ? '…' : '');
+    $ratingData = getClassScheduleRating($GLOBALS['pdo'], $scheduleId);
+    $avgRating = $ratingData['rating'];
+    $reviewCount = $ratingData['count'];
 
     if ($freeSpots <= 0) $fillClass = 'danger';
     elseif ($freeSpots <= ceil($capacity * 0.2)) $fillClass = 'warning';
@@ -35,8 +38,25 @@ function output_class_schedule_card($schedule) {
         <div class="class-head">
             <div class="class-time-big"><?= $startTime ?></div>
             <div class="class-ratings">
-                <div class="stars">★★★★☆</div>
-                <span class="rating-text">(4.2)</span>
+                <?php if ($reviewCount > 0): ?>
+                    <div class="stars">
+                        <?php
+                        $fullStars = floor($avgRating);
+                        $halfStar = ($avgRating - $fullStars) >= 0.5;
+                        for ($i = 1; $i <= 5; $i++) {
+                            if ($i <= $fullStars) {
+                                echo '★';
+                            } elseif ($halfStar && $i == $fullStars + 1) {
+                                echo '½';
+                            } else {
+                                echo '☆';
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php else: ?>
+                    <span class="badge badge-muted">No reviews yet</span>
+                <?php endif; ?>
             </div>
         </div>
 
