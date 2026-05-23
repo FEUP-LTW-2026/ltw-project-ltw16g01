@@ -159,3 +159,102 @@ function deleteMember($pdo, $id) {
     $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'member'");
     return $stmt->execute([$id]);
 }
+
+/* =========================
+   MEMBERSHIP PLAN LOGIC
+   ========================= */
+
+function getMemberPlan($pdo, $memberId) {
+    $stmt = $pdo->prepare("
+        SELECT membership_plan
+        FROM member_profiles
+        WHERE user_id = ?
+        LIMIT 1
+    ");
+
+    $stmt->execute([$memberId]);
+
+    return $stmt->fetchColumn() ?: 'basic';
+}
+
+function getMemberWeeklyClassCount($pdo, $memberId, $sessionDate) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM enrollments e
+        JOIN class_sessions sess ON e.session_id = sess.id
+        WHERE e.member_id = ?
+          AND e.status = 'enrolled'
+          AND strftime('%Y-%W', sess.session_date) = strftime('%Y-%W', ?)
+    ");
+
+    $stmt->execute([$memberId, $sessionDate]);
+
+    return (int)$stmt->fetchColumn();
+}
+
+function canMemberEnrollInClass($pdo, $memberId, $sessionId) {
+    $plan = getMemberPlan($pdo, $memberId);
+
+    if ($plan === 'premium' || $plan === 'vip') {
+        return [
+            'allowed' => true,
+            'message' => ''
+        ];
+    }
+
+    $stmt = $pdo->prepare("
+        SELECT session_date
+        FROM class_sessions
+        WHERE id = ?
+        LIMIT 1
+    ");
+
+    $stmt->execute([$sessionId]);
+    $sessionDate = $stmt->fetchColumn();
+
+    if (!$sessionDate) {
+        return [
+            'allowed' => false,
+            'message' => 'Invalid session.'
+        ];
+    }
+
+    $weeklyCount = getMemberWeeklyClassCount($pdo, $memberId, $sessionDate);
+
+    if ($plan === 'basic' && $weeklyCount >= 2) {
+        return [
+            'allowed' => false,
+            'message' => 'Your Basic plan only allows 2 classes per week. Upgrade to Premium or VIP for unlimited classes.'
+        ];
+    }
+
+    return [
+        'allowed' => true,
+        'message' => ''
+    ];
+}
+
+function getMemberPlanFeatures($plan) {
+    $features = [
+        'basic' => [
+            'label' => 'Basic',
+            'classes' => '2 classes per week',
+            'pt' => 'PT sessions not included',
+            'equipment' => 'Equipment reservation not included'
+        ],
+        'premium' => [
+            'label' => 'Premium',
+            'classes' => 'Unlimited classes',
+            'pt' => '2 PT sessions per month',
+            'equipment' => 'Equipment reservation not included'
+        ],
+        'vip' => [
+            'label' => 'VIP',
+            'classes' => 'Unlimited classes',
+            'pt' => 'Daily PT sessions',
+            'equipment' => 'Equipment reservation included'
+        ]
+    ];
+
+    return $features[$plan] ?? $features['basic'];
+}

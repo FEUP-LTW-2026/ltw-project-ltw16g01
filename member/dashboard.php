@@ -15,6 +15,8 @@ $memberId = $_SESSION['user_id'];
 $stats = getMemberStats($pdo, $memberId);
 $upcoming = getMemberUpcomingEnrollments($pdo, $memberId);
 $pastClasses = getMemberPastClasses($pdo, $memberId);
+$memberPlan = getMemberPlan($pdo, $memberId);
+$planFeatures = getMemberPlanFeatures($memberPlan);
 
 output_header('member-dashboard.css');
 ?>
@@ -36,6 +38,46 @@ output_header('member-dashboard.css');
             <div class="kpi-card"><p class="kpi-num"><?= (int)$stats['upcoming'] ?></p><p class="kpi-lbl">📅 Upcoming Classes</p></div>
             <div class="kpi-card"><p class="kpi-num"><?= (int)$stats['past'] ?></p><p class="kpi-lbl">🏁 Classes Completed</p></div>
             <div class="kpi-card"><p class="kpi-num"><?= htmlspecialchars($stats['avg_rating']) ?></p><p class="kpi-lbl">⭐ Average Rating</p></div>
+        </div>
+
+        <div class="card full-width-card membership-card">
+            <div class="card-head">
+                <h2 class="card-title">Your Membership Plan</h2>
+                <span class="badge badge-admin"><?= htmlspecialchars($planFeatures['label']) ?></span>
+            </div>
+
+            <div class="membership-body">
+                <ul class="membership-features">
+                    <li>
+                        <span class="membership-icon">🏋️</span>
+                        <span><strong>Classes:</strong> <?= htmlspecialchars($planFeatures['classes']) ?></span>
+                    </li>
+
+                    <li>
+                        <span class="membership-icon">👤</span>
+                        <span><strong>Personal Trainer:</strong> <?= htmlspecialchars($planFeatures['pt']) ?></span>
+                    </li>
+
+                    <li>
+                        <span class="membership-icon">🛠️</span>
+                        <span><strong>Equipment:</strong> <?= htmlspecialchars($planFeatures['equipment']) ?></span>
+                    </li>
+                </ul>
+
+                <?php if ($memberPlan === 'basic'): ?>
+                    <p class="membership-note">
+                        Upgrade to Premium or VIP to unlock unlimited classes and more training options.
+                    </p>
+                <?php elseif ($memberPlan === 'premium'): ?>
+                    <p class="membership-note">
+                        Upgrade to VIP to unlock equipment reservation and daily PT sessions.
+                    </p>
+                <?php else: ?>
+                    <p class="membership-note">
+                        You have full access to all FitPeak member features.
+                    </p>
+                <?php endif; ?>
+            </div>
         </div>
 
         <!-- Tabela de próximas aulas -->
