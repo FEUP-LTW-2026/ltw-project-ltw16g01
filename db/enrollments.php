@@ -3,12 +3,13 @@
 
 function getNextScheduledSessionByScheduleId($pdo, $scheduleId) {
     $stmt = $pdo->prepare("
-        SELECT id, session_date, status
-        FROM class_sessions
-        WHERE schedule_id = ?
-          AND session_date >= date('now')
-          AND status = 'scheduled'
-        ORDER BY session_date ASC
+        SELECT cs.id, cs.session_date, cs.status
+        FROM class_sessions cs
+        JOIN class_schedules sch ON cs.schedule_id = sch.id
+        WHERE cs.schedule_id = ?
+        AND datetime(cs.session_date || ' ' || sch.start_time) >= datetime('now')
+        AND cs.status = 'scheduled'
+        ORDER BY cs.session_date ASC, sch.start_time ASC
         LIMIT 1
     ");
 
