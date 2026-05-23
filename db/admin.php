@@ -37,3 +37,48 @@ function getEquipment($pdo) {
     $stmt = $pdo->query("SELECT e.id, e.name, e.quantity, e.available, e.status, e.notes, ec.label AS category FROM equipment e JOIN equipment_categories ec ON e.category_id = ec.id ORDER BY ec.label, e.name");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getRecentNotifications($pdo, $limit = 5) {
+    $stmt = $pdo->prepare("
+        SELECT n.*, nt.label as type_label, nt.css_class
+        FROM notifications n
+        JOIN notification_types nt ON n.notification_type_id = nt.id
+        WHERE n.user_id = (SELECT id FROM users WHERE role = 'admin' LIMIT 1)
+        ORDER BY n.created_at DESC
+        LIMIT ?
+    ");
+    $stmt->execute([$limit]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getMonthlyGrowth($pdo) {
+    $currentMonthStart = date('Y-m-01');
+    $lastMonthStart = date('Y-m-01', strtotime('-1 month'));
+    $lastMonthEnd = date('Y-m-t', strtotime('-1 month'));
+
+    $stmt = $pdo->prepare("
+        SELECT 
+            COUNT(CASE WHEN created_at >= ? THEN 1 END) as current_count,
+            COUNT(CASE WHEN created_at BETWEEN ? AND ? THEN 1 END) as last_count
+        FROM users
+        WHERE role = 'member'
+    ");
+    $stmt->execute([$currentMonthStart, $lastMonthStart, $lastMonthEnd]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $current = (int)$result['current_count'];
+    $last = (int)$result['last_count'];
+
+    if ($last == 0) return $current > 0 ? 100 : 0;
+    return round(($current - $last) / $last * 100);
+}
+
+function getMonthlyEnrollments($pdo) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) as total
+        FROM enrollments
+        WHERE enrolled_at >= date('now', '-30 days')
+    ");
+    $stmt->execute();
+    return (int)$stmt->fetchColumn();
+}
