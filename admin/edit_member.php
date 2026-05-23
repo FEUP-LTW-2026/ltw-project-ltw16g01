@@ -30,8 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $plan = $_POST['plan'] ?? 'basic';
     $planEnd = trim($_POST['plan_end'] ?? '');
     $active = (int)($_POST['active'] ?? 1);
+    $isAdmin = isset($_POST['is_admin']) ? 1 : 0;
 
-    $old = ['name' => $name, 'username' => $username, 'email' => $email, 'plan' => $plan, 'plan_end' => $planEnd, 'active' => $active];
+    $old = [
+    'name' => $name,
+    'username' => $username,
+    'email' => $email,
+    'plan' => $plan,
+    'plan_end' => $planEnd,
+    'active' => $active,
+    'is_admin' => $isAdmin
+];
 
     if ($name === '' || $username === '' || $email === '') {
         $errors[] = 'Name, username and email are required.';
@@ -42,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!in_array($plan, ['basic', 'premium', 'vip'])) {
         $errors[] = 'Invalid membership plan.';
     } else {
-        $result = updateMember($pdo, $id, $name, $username, $email, $active, $plan, $planEnd);
+        $result = updateMember($pdo, $id, $name, $username, $email, $active, $plan, $planEnd, $isAdmin);
 
         if ($result === false) {
             $errors[] = 'Username or email already in use.';

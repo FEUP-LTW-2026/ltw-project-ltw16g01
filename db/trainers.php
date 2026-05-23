@@ -10,6 +10,7 @@ function getAllTrainers($pdo, $filters = []) {
             u.email,
             u.photo,
             u.active,
+            u.admin,
             tp.bio,
             tp.specializations,
             tp.certifications,
@@ -84,7 +85,28 @@ function getAllPersonalTrainers($pdo, $filters = []) {
 }
 
 function getTrainerById($pdo, $id, $activeOnly = true) {
-    $sql = "SELECT u.id, u.name, u.username, u.email, u.photo, u.active, tp.bio, tp.specializations, tp.certifications, tp.is_pt, tp.pt_description, tp.pt_hourly_rate, tp.pt_available FROM users u LEFT JOIN trainer_profiles tp ON u.id = tp.user_id WHERE u.id = ? AND u.role = 'trainer'";
+    $sql = "
+        SELECT 
+            u.id,
+            u.name,
+            u.username,
+            u.email,
+            u.photo,
+            u.active,
+            u.is_admin,
+            tp.bio,
+            tp.specializations,
+            tp.certifications,
+            tp.is_pt,
+            tp.pt_description,
+            tp.pt_hourly_rate,
+            tp.pt_available
+        FROM users u
+        LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
+        WHERE u.id = ?
+          AND u.role = 'trainer'
+    ";
+
     $params = [$id];
 
     if ($activeOnly) {
@@ -93,6 +115,7 @@ function getTrainerById($pdo, $id, $activeOnly = true) {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -140,13 +163,32 @@ function createTrainer($pdo, $name, $username, $email, $bio, $specializations, $
     return $userId;
 }
 
-function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications) {
+function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications, $isAdmin = 0) {
     if (trainerUsernameOrEmailExists($pdo, $username, $email, $id)) return false;
 
-    $stmt = $pdo->prepare("UPDATE users SET name = ?, username = ?, email = ?, active = ? WHERE id = ? AND role = 'trainer'");
-    if (!$stmt->execute([$name, $username, $email, $active, $id])) return false;
+    $stmt = $pdo->prepare("
+        UPDATE users
+        SET name = ?,
+            username = ?,
+            email = ?,
+            active = ?,
+            is_admin = ?
+        WHERE id = ?
+          AND role = 'trainer'
+    ");
 
-    $stmt = $pdo->prepare("UPDATE trainer_profiles SET bio = ?, specializations = ?, certifications = ? WHERE user_id = ?");
+    if (!$stmt->execute([$name, $username, $email, $active, $isAdmin, $id])) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare("
+        UPDATE trainer_profiles
+        SET bio = ?,
+            specializations = ?,
+            certifications = ?
+        WHERE user_id = ?
+    ");
+
     return $stmt->execute([$bio, $specializations, $certifications, $id]);
 }
 

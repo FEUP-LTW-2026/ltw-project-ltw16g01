@@ -32,7 +32,23 @@ function getMemberStats($pdo, $memberId) {
 }
 
 function getAllMembersAdmin($pdo, $filters = []) {
-    $sql = "SELECT u.id, u.name, u.username, u.email, u.active, u.created_at, mp.membership_plan, mp.plan_start, mp.plan_end FROM users u LEFT JOIN member_profiles mp ON u.id = mp.user_id WHERE u.role = 'member'";
+    $sql = "
+        SELECT 
+            u.id,
+            u.name,
+            u.username,
+            u.email,
+            u.active,
+            u.is_admin,
+            u.created_at,
+            mp.membership_plan,
+            mp.plan_start,
+            mp.plan_end
+        FROM users u
+        LEFT JOIN member_profiles mp ON u.id = mp.user_id
+        WHERE u.role = 'member'
+    ";
+
     $params = [];
 
     if (!empty($filters['name'])) {
@@ -49,13 +65,32 @@ function getAllMembersAdmin($pdo, $filters = []) {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getMemberById($pdo, $id) {
-    $sql = "SELECT u.id, u.name, u.username, u.email, u.active, u.created_at, mp.membership_plan, mp.plan_start, mp.plan_end FROM users u LEFT JOIN member_profiles mp ON u.id = mp.user_id WHERE u.id = ? AND u.role = 'member'";
+    $sql = "
+        SELECT 
+            u.id,
+            u.name,
+            u.username,
+            u.email,
+            u.active,
+            u.is_admin,
+            u.created_at,
+            mp.membership_plan,
+            mp.plan_start,
+            mp.plan_end
+        FROM users u
+        LEFT JOIN member_profiles mp ON u.id = mp.user_id
+        WHERE u.id = ?
+          AND u.role = 'member'
+    ";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
+
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -92,13 +127,31 @@ function createMember($pdo, $name, $username, $email, $password, $plan, $planEnd
     return $userId;
 }
 
-function updateMember($pdo, $id, $name, $username, $email, $active, $plan, $planEnd) {
+function updateMember($pdo, $id, $name, $username, $email, $active, $plan, $planEnd, $isAdmin = 0) {
     if (memberUsernameOrEmailExists($pdo, $username, $email, $id)) return false;
 
-    $stmt = $pdo->prepare("UPDATE users SET name = ?, username = ?, email = ?, active = ? WHERE id = ? AND role = 'member'");
-    if (!$stmt->execute([$name, $username, $email, $active, $id])) return false;
+    $stmt = $pdo->prepare("
+        UPDATE users
+        SET name = ?,
+            username = ?,
+            email = ?,
+            active = ?,
+            is_admin = ?
+        WHERE id = ?
+          AND role = 'member'
+    ");
 
-    $stmt = $pdo->prepare("UPDATE member_profiles SET membership_plan = ?, plan_end = ? WHERE user_id = ?");
+    if (!$stmt->execute([$name, $username, $email, $active, $isAdmin, $id])) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare("
+        UPDATE member_profiles
+        SET membership_plan = ?,
+            plan_end = ?
+        WHERE user_id = ?
+    ");
+
     return $stmt->execute([$plan, $planEnd, $id]);
 }
 
