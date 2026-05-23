@@ -59,7 +59,7 @@ function output_class_schedule_card($schedule) {
                 <span class="badge badge-<?= $fillClass ?>"><?= $freeSpots ?> spots left</span>
             </div>
 
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member'): ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member' && $_SESSION['is_admin'] === 0): ?>
                 <?php
                 $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $schedule['schedule_id'], 1);
                 if (!empty($sessions)):
@@ -78,7 +78,7 @@ function output_class_schedule_card($schedule) {
                     <button class="disabled-btn secondary-button btn-sm" disabled>No sessions</button>
             <?php endif; endif; ?>
 
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+            <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['is_admin'] === 1)): ?>
                 <div class="admin-actions">
                     <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Edit</a>
                     <a href="delete_class.php?id=<?= $scheduleId ?>" 
