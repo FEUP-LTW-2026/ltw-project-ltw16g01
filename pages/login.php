@@ -31,7 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_photo'] = $user['photo'] ?? null;
 
-            if ($user['role'] === 'admin') {
+            if (!empty($user['is_admin']) && in_array($user['role'], ['member', 'trainer'], true)) {
+                header('Location: choose_area.php');
+            } elseif ($user['role'] === 'admin') {
                 header('Location: ../admin/dashboard.php');
             } elseif ($user['role'] === 'member') {
                 header('Location: ../member/dashboard.php');

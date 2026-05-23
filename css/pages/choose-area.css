@@ -1,0 +1,73 @@
+.choose-area-main {
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-lg);
+}
+
+.choose-area-card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.choose-area-card h1 {
+    color: var(--accent);
+    font-size: clamp(2.4rem, 6vw, 3.8rem);
+    margin-bottom: var(--sp-md);
+}
+
+.choose-area-card p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: var(--sp-xl);
+}
+
+.choose-area-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.choose-area-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 76px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 700;
+    transition: background var(--t), border-color var(--t), color var(--t), transform var(--t);
+}
+
+.choose-area-option:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-a);
+}
+
+.choose-area-logout {
+    margin-top: var(--sp-xl);
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.choose-area-logout a {
+    color: var(--muted);
+    margin-left: 0.25rem;
+}
+
+.choose-area-logout a:hover {
+    color: var(--accent);
+}
