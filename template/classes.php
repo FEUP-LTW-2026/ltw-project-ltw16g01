@@ -59,7 +59,7 @@ function output_class_schedule_card($schedule) {
                 <span class="badge badge-<?= $fillClass ?>"><?= $freeSpots ?> spots left</span>
             </div>
 
-            <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'member'): ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member'): ?>
                 <?php
                 $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $schedule['schedule_id'], 1);
                 if (!empty($sessions)):

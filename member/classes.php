@@ -10,14 +10,11 @@ require_once '../template/classes.php';
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
-$GLOBALS['pdo'] = $pdo; // para uso nas funções de template
+$GLOBALS['pdo'] = $pdo;
 
-// Obter todos os tipos de aula para o filtro
 $types = $pdo->query("SELECT name, label FROM class_types WHERE active = 1 ORDER BY label")->fetchAll();
-// Obter todos os treinadores para o filtro
 $trainers = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")->fetchAll();
 
-// Carregar horários iniciais (sem filtros)
 $schedules = getAllClassSchedules($pdo, []);
 
 output_header('classes.css');
@@ -34,7 +31,6 @@ output_header('classes.css');
             </div>
         </header>
 
-        <!-- Filtros com AJAX -->
         <section>
             <form id="filter-form" class="filter-bar" method="get" action="classes.php">
                 <div class="filter-group">
@@ -70,10 +66,6 @@ output_header('classes.css');
                         <option value="sunday">Sunday</option>
                     </select>
                 </div>
-
-                <div class="filter-group filter-group-end">
-                    <button type="submit" class="main-button full-width">Filter</button>
-                </div>
             </form>
         </section>
 
@@ -86,10 +78,9 @@ output_header('classes.css');
         <div id="class-list-container">
             <?php output_class_schedule_list($schedules); ?>
         </div>
-
     </div>
-
 </main>
-<?php output_footer('../member/'); ?>
 
-<script> src="../js/classes.js"</script>
+<script src="../js/classes.js"></script>
+
+<?php output_footer('../member/'); ?>
