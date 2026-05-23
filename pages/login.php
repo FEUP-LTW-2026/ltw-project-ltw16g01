@@ -31,13 +31,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_photo'] = $user['photo'] ?? null;
 
-            if (!empty($user['is_admin']) && in_array($user['role'], ['member', 'trainer'], true)) {
+            if ($user['is_admin'] === 1 && in_array($user['role'], ['member', 'trainer'], true)) {
                 header('Location: choose_area.php');
             } elseif ($user['role'] === 'admin') {
+                $_SESSION['active_role'] = $user['role'];
                 header('Location: ../admin/dashboard.php');
             } elseif ($user['role'] === 'member') {
+                $_SESSION['active_role'] = $user['role'];
                 header('Location: ../member/dashboard.php');
             } elseif ($user['role'] === 'trainer') {
+                $_SESSION['active_role'] = $user['role'];
                 header('Location: ../trainer/dashboard.php');
             } else {
                 header('Location: ../index.php');
