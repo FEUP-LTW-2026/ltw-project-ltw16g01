@@ -76,12 +76,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
             $updated = updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration, $startTime);
             if ($updated === true) {
                 $changes = [];
+
+                if ($old['start_time'] !== $startTime) {
+                    $changes[] = "time: '{$old['start_time']}' → '$startTime'";
+                }
+
                 if ($old['location'] !== $location) {
                     $changes[] = "location: '{$old['location']}' → '$location'";
                 }
+
                 if ((int)$old['capacity'] !== $capacity) {
                     $changes[] = "capacity: {$old['capacity']} → $capacity";
                 }
+
                 if ((int)$old['duration_min'] !== $duration) {
                     $changes[] = "duration: {$old['duration_min']} → $duration minutes";
                 }
@@ -113,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
                         $insert->execute([$aid, $messageText, $infoTypeId]);
                     }
                 }
+
                 $message = 'Schedule details updated successfully. Notifications sent to affected members and admins.';
             } else {
                 $error = $updated;
@@ -148,6 +156,7 @@ output_header('classes.css');
                 <?php
                 $nextSession = getUpcomingSessions($pdo, $schedule['schedule_id'], 1);
                 $session = $nextSession ? $nextSession[0] : null;
+
                 if ($session) {
                     $enrolledCount = getSessionEnrollmentCount($pdo, $session['id']);
                     $enrolledMembers = getSessionEnrolledMembers($pdo, $session['id'], $trainerId);
@@ -155,6 +164,7 @@ output_header('classes.css');
                     $enrolledCount = 0;
                     $enrolledMembers = [];
                 }
+
                 $spotsLeft = (int)$schedule['capacity'] - $enrolledCount;
                 $editBoxId = 'edit-schedule-' . (int)$schedule['schedule_id'];
                 ?>
@@ -163,9 +173,11 @@ output_header('classes.css');
                     <div class="class-head">
                         <div class="class-time-big"><?= htmlspecialchars($schedule['start_time']) ?></div>
                     </div>
+
                     <div class="class-body">
                         <h3 class="class-name"><?= htmlspecialchars($schedule['class_name']) ?></h3>
                         <p><?= htmlspecialchars(substr($schedule['class_description'] ?? '', 0, 100)) ?>…</p>
+
                         <ul class="class-meta">
                             <li>🧘 <?= htmlspecialchars($schedule['class_type_label'] ?? '') ?></li>
                             <li>📍 <?= htmlspecialchars($schedule['location']) ?></li>
@@ -179,6 +191,7 @@ output_header('classes.css');
                         <button type="button" class="secondary-button btn-sm edit-schedule-button" data-target="<?= $editBoxId ?>">
                             Edit Schedule
                         </button>
+
                         <?php if ($session): ?>
                             <form method="post" class="inline-form" onsubmit="return confirm('Are you sure you want to cancel this session?');">
                                 <input type="hidden" name="action" value="cancel_session">
@@ -192,6 +205,7 @@ output_header('classes.css');
                         <form method="post" class="schedule-edit-form">
                             <input type="hidden" name="action" value="update_schedule_details">
                             <input type="hidden" name="schedule_id" value="<?= (int)$schedule['schedule_id'] ?>">
+
                             <div class="schedule-edit-grid">
                                 <div class="form-group">
                                     <label class="form-label">Start Time</label>
@@ -213,6 +227,14 @@ output_header('classes.css');
                                     <input type="number" name="duration_min" class="form-control" min="1" value="<?= (int)$schedule['duration_min'] ?>" required>
                                 </div>
                             </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="main-button btn-sm">Save Changes</button>
+
+                                <button type="button" class="secondary-button btn-sm cancel-edit-schedule-button" data-target="<?= $editBoxId ?>">
+                                    Cancel Edit
+                                </button>
+                            </div>
                         </form>
                     </div>
 
@@ -221,6 +243,7 @@ output_header('classes.css');
                             <span class="badge badge-muted">No upcoming session</span>
                         <?php else: ?>
                             <span class="badge badge-info"><?= $enrolledCount ?> / <?= (int)$schedule['capacity'] ?> enrolled</span>
+
                             <?php if ($spotsLeft <= 0): ?>
                                 <span class="badge badge-danger">Full</span>
                             <?php elseif ($spotsLeft <= ceil((int)$schedule['capacity'] * 0.2)): ?>
@@ -234,12 +257,20 @@ output_header('classes.css');
                     <?php if ($session): ?>
                         <div class="roster-box">
                             <h4>Enrolled Members</h4>
+
                             <?php if (empty($enrolledMembers)): ?>
                                 <p class="text-muted">No members enrolled yet.</p>
                             <?php else: ?>
                                 <div class="table-wrap">
                                     <table class="roster-table">
-                                        <thead><tr><th>Name</th><th>Email</th><th>Enrolled At</th></tr></thead>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Enrolled At</th>
+                                            </tr>
+                                        </thead>
+
                                         <tbody>
                                             <?php foreach ($enrolledMembers as $member): ?>
                                                 <tr>
