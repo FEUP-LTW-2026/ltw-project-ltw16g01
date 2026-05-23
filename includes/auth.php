@@ -9,7 +9,7 @@ function currentUserId() {
 }
 
 function isAdmin() {
-    return !empty($_SESSION['is_admin']) || ($_SESSION['role'] ?? '') === 'admin';
+    return (!empty($_SESSION['is_admin']) || ($_SESSION['role'] ?? '') === 'admin') && $_SESSION['active_role'] === 'admin';
 }
 
 function currentUser() {
@@ -47,5 +47,6 @@ function requireAuth($roles = null) {
     }
 
     http_response_code(403);
-    die('Acesso negado.');
+    session_destroy();
+    header('Location: ../pages/login.php');
 }
