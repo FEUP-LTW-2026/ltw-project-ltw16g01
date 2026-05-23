@@ -1,0 +1,142 @@
+/* class-details.css – for member/class_details.php */
+
+/* Add top spacing for the back button */
+.class-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--sp-lg);
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    margin-top: var(--sp-lg);   /* ← space from top */
+}
+
+/* Main class detail card */
+.class-detail-card {
+    margin-bottom: var(--sp-xl);
+}
+
+.class-detail-info {
+    margin-bottom: var(--sp-lg);
+}
+
+.class-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    margin: var(--sp-md) 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.class-description {
+    margin-top: var(--sp-md);
+    padding-top: var(--sp-md);
+    border-top: 1px solid var(--border);
+}
+.class-description p {
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+/* Trainer section (no photo) */
+.class-trainer-info {
+    margin-top: var(--sp-lg);
+    padding-top: var(--sp-md);
+    border-top: 1px solid var(--border);
+}
+.class-trainer-info h3 {
+    margin-bottom: var(--sp-sm);
+    font-size: 1rem;
+}
+.trainer-simple-card {
+    background: var(--surface);
+    padding: var(--sp-md);
+    border-radius: var(--r-md);
+    margin-top: var(--sp-sm);
+}
+.trainer-info {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+}
+.trainer-info strong {
+    font-size: 1rem;
+}
+.trainer-info .secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.9rem;
+    min-height: 36px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+/* Reviews section */
+.reviews-card {
+    margin-bottom: var(--sp-xl);
+}
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+.review-item {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-md);
+}
+.review-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-xs);
+}
+.review-author {
+    font-weight: 600;
+    color: var(--text);
+}
+.stars-display {
+    color: var(--warning);
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+}
+.review-date {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-left: auto;
+}
+.review-comment {
+    margin-top: var(--sp-xs);
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.6;
+}
+.text-muted {
+    color: var(--muted);
+}
+.badge-warning {
+    background: rgba(255, 165, 2, 0.12);
+    color: var(--warning);
+    border: 1px solid rgba(255, 165, 2, 0.25);
+}
+
+@media (max-width: 640px) {
+    .class-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .review-date {
+        margin-left: 0;
+    }
+}

@@ -301,3 +301,17 @@ function updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, 
 
     return $success ? true : 'Could not update schedule details.';
 }
+
+function getClassReviews($pdo, $scheduleId) {
+    $sql = "
+        SELECT r.rating, r.comment, r.created_at, u.name AS member_name
+        FROM reviews r
+        JOIN class_sessions sess ON r.session_id = sess.id
+        JOIN users u ON r.member_id = u.id
+        WHERE sess.schedule_id = ?
+        ORDER BY r.created_at DESC
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$scheduleId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
