@@ -62,7 +62,7 @@
 
                         outputFeatureCard('👤', 'Personal Trainers', 'Detailed profiles with specializations, ratings and session bookings.', 'pages/pt.php', 'feature-card');
 
-                        outputFeatureCard('⭐', 'Ratings & Reviews', 'Review your classes and help other members choose better.', 'pages/ratings-reviews.php', 'feature-card');
+                        outputFeatureCard('⭐', 'Ratings & Reviews', 'Review your classes and help other members choose better.', 'pages/classes.php', 'feature-card');
 
                         outputFeatureCard('🏋️', 'Equipment Availability', 'Check equipment availability before leaving home.', 'pages/equipment.php', 'feature-card');
 
