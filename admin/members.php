@@ -11,13 +11,18 @@ require_once '../template/members.php';
 requireAuth('admin');
 
 $pdo = getDatabaseConnection();
-$filters = ['name' => $_GET['name'] ?? '', 'plan' => $_GET['plan'] ?? ''];
+
+$filters = [
+    'name' => $_GET['name'] ?? '',
+    'plan' => $_GET['plan'] ?? ''
+];
+
 $members = getAllMembersAdmin($pdo, $filters);
 
 output_header('admin-members.css');
 ?>
 
-<link rel="stylesheet" href= "../css/pages/form.css">
+<link rel="stylesheet" href="../css/pages/form.css">
 
 <main class="main">
     <div class="container">
@@ -32,26 +37,35 @@ output_header('admin-members.css');
             </div>
         </header>
 
-        <form method="get" class="filter-bar members-filter">
+        <form id="filter-form" method="get" class="filter-bar members-filter">
             <div class="filter-group">
-                <label class="form-label">Name</label>
-                <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($filters['name']) ?>">
+                <label class="form-label" for="f-name">Name</label>
+                <input 
+                    type="text" 
+                    id="f-name"
+                    name="name" 
+                    class="form-control" 
+                    value="<?= htmlspecialchars($filters['name']) ?>"
+                    placeholder="Search member name..."
+                >
             </div>
 
             <div class="filter-group">
-                <label class="form-label">Plan</label>
-                <select name="plan" class="form-select">
+                <label class="form-label" for="f-plan">Plan</label>
+                <select id="f-plan" name="plan" class="form-select">
                     <option value="">All plans</option>
                     <option value="basic" <?= $filters['plan'] === 'basic' ? 'selected' : '' ?>>Basic</option>
                     <option value="premium" <?= $filters['plan'] === 'premium' ? 'selected' : '' ?>>Premium</option>
                     <option value="vip" <?= $filters['plan'] === 'vip' ? 'selected' : '' ?>>VIP</option>
                 </select>
             </div>
-
-            <div class="filter-group filter-group-end">
-                <button type="submit" class="main-button full-width">Filter</button>
-            </div>
         </form>
+
+        <div class="results-bar">
+            <p class="results-count">
+                Showing <strong id="member-count"><?= count($members) ?></strong> members
+            </p>
+        </div>
 
         <div class="table-wrap">
             <table>
@@ -66,7 +80,7 @@ output_header('admin-members.css');
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="member-table-body">
                     <?php output_members_admin_table($members); ?>
                 </tbody>
             </table>

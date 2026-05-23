@@ -10,6 +10,7 @@ function getAllTrainers($pdo, $filters = []) {
             u.email,
             u.photo,
             u.active,
+            u.is_admin,
             tp.bio,
             tp.specializations,
             tp.certifications,
@@ -31,6 +32,11 @@ function getAllTrainers($pdo, $filters = []) {
 
     if (!empty($filters['active_only'])) {
         $sql .= " AND u.active = 1";
+    }
+
+    if (!empty($filters['name'])) {
+        $sql .= " AND u.name LIKE ?";
+        $params[] = '%' . $filters['name'] . '%';
     }
 
     if (!empty($filters['specialization'])) {
@@ -108,6 +114,7 @@ function getTrainerById($pdo, $id, $activeOnly = true) {
             u.email,
             u.photo,
             u.active,
+            u.is_admin,
             tp.bio,
             tp.specializations,
             tp.certifications,
@@ -177,7 +184,7 @@ function createTrainer($pdo, $name, $username, $email, $bio, $specializations, $
     return $userId;
 }
 
-function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications) {
+function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications, $isAdmin = 0) {
     if (trainerUsernameOrEmailExists($pdo, $username, $email, $id)) return false;
 
     $stmt = $pdo->prepare("
@@ -185,12 +192,13 @@ function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $spec
         SET name = ?,
             username = ?,
             email = ?,
-            active = ?
+            active = ?,
+            is_admin = ?
         WHERE id = ?
           AND role = 'trainer'
     ");
 
-    if (!$stmt->execute([$name, $username, $email, $active, $id])) {
+    if (!$stmt->execute([$name, $username, $email, $active, $isAdmin, $id])) {
         return false;
     }
 

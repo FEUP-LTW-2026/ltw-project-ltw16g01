@@ -11,11 +11,19 @@ require_once '../template/trainers.php';
 requireAuth('admin');
 
 $pdo = getDatabaseConnection();
-$specializations = getDistinctSpecializations($pdo);
-$selectedSpec = $_GET['specialization'] ?? '';
-$selectedName = $_GET['name'] ?? '';
 
-$filters = ['specialization' => $selectedSpec, 'name' => $selectedName];
+$specializations = getDistinctSpecializations($pdo);
+
+$filters = [
+    'specialization' => $_GET['specialization'] ?? '',
+    'name' => $_GET['name'] ?? '',
+    'is_pt' => $_GET['is_pt'] ?? ''
+];
+
+$selectedSpec = $filters['specialization'];
+$selectedName = $filters['name'];
+$selectedIsPt = $filters['is_pt'];
+
 $trainers = getAllTrainers($pdo, $filters);
 
 output_header('admin-trainers.css');
@@ -36,28 +44,50 @@ output_header('admin-trainers.css');
             </div>
         </header>
 
-        <form method="get" class="filter-bar trainers-filter">
+        <form id="filter-form" method="get" class="filter-bar trainers-filter">
             <div class="filter-group">
-                <label class="form-label">Name</label>
-                <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($filters['name']) ?>">
+                <label class="form-label" for="f-name">Name</label>
+                <input 
+                    type="text" 
+                    id="f-name"
+                    name="name" 
+                    class="form-control" 
+                    value="<?= htmlspecialchars($selectedName) ?>"
+                    placeholder="Search trainer name..."
+                >
             </div>
 
             <div class="filter-group">
                 <label class="form-label" for="f-specialization">Specialization</label>
                 <select id="f-specialization" name="specialization" class="form-select">
                     <option value="">All specializations</option>
+
                     <?php foreach ($specializations as $spec): ?>
-                        <option value="<?= htmlspecialchars($spec) ?>" <?= $selectedSpec === $spec ? 'selected' : '' ?>>
+                        <option 
+                            value="<?= htmlspecialchars($spec) ?>" 
+                            <?= $selectedSpec === $spec ? 'selected' : '' ?>
+                        >
                             <?= htmlspecialchars($spec) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
-            <div class="filter-group filter-group-end">
-                <button type="submit" class="main-button full-width">Filter</button>
+            <div class="filter-group">
+                <label class="form-label" for="f-is-pt">Personal Trainer</label>
+                <select id="f-is-pt" name="is_pt" class="form-select">
+                    <option value="" <?= $selectedIsPt === '' ? 'selected' : '' ?>>All</option>
+                    <option value="1" <?= $selectedIsPt === '1' ? 'selected' : '' ?>>PT only</option>
+                    <option value="0" <?= $selectedIsPt === '0' ? 'selected' : '' ?>>Not PT</option>
+                </select>
             </div>
         </form>
+
+        <div class="results-bar">
+            <p class="results-count">
+                Showing <strong id="trainer-count"><?= count($trainers) ?></strong> trainers
+            </p>
+        </div>
 
         <div class="table-wrap">
             <table>
@@ -72,7 +102,7 @@ output_header('admin-trainers.css');
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="trainer-table-body">
                     <?php output_trainers_admin_table($trainers); ?>
                 </tbody>
             </table>
