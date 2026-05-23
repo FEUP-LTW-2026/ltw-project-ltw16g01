@@ -26,9 +26,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
-            $_SESSION['role'] = $user['role'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_photo'] = $user['photo'] ?? null;
+
+            $role = $user['role'];
+            if (strpos($role, '-') !== false) {
+                $roles = array_map('trim', explode('-', $role));
+                $_SESSION['user_roles'] = $roles;       
+                header('Location: choose_role.php');
+                exit;
+            } else {
+                $_SESSION['role'] = $role;
+            }
 
             if ($user['role'] === 'admin') {
                 header('Location: ../admin/dashboard.php');
@@ -39,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 header('Location: ../index.php');
             }
+            
             exit;
         }
     }

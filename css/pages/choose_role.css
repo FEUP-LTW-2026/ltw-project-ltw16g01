@@ -1,0 +1,132 @@
+.choose-role-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: var(--sp-xl) var(--sp-md);
+}
+
+/* Card central – mais espaçoso e com sombra */
+.choose-role-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-xl);
+    max-width: 550px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    transition: transform var(--t), box-shadow var(--t);
+}
+
+.choose-role-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* Título – maior e com destaque */
+.choose-role-card h1 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-family: var(--ff-display);
+    letter-spacing: 0.04em;
+    margin-bottom: var(--sp-md);
+    color: var(--accent);
+}
+
+/* Subtítulo */
+.choose-role-card p {
+    color: var(--muted);
+    margin-bottom: var(--sp-xl);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Botões maiores e empilhados */
+.role-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-lg);
+    margin-bottom: var(--sp-xl);
+}
+
+.role-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--r-sm);
+    transition: all var(--t);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    letter-spacing: 0.03em;
+    cursor: pointer;
+}
+
+.role-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-a);
+}
+
+/* Cores específicas para cada role (opcional) */
+.role-btn[data-role="admin"]:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+.role-btn[data-role="member"]:hover {
+    border-color: var(--success);
+    color: var(--success);
+}
+.role-btn[data-role="trainer"]:hover {
+    border-color: var(--info);
+    color: var(--info);
+}
+
+/* Link de logout */
+.logout-link {
+    margin-top: var(--sp-md);
+    font-size: 0.9rem;
+}
+
+.logout-link a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color var(--t);
+}
+
+.logout-link a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .choose-role-card {
+        padding: var(--sp-lg);
+    }
+    .role-btn {
+        padding: 0.85rem 1rem;
+        font-size: 1rem;
+    }
+}
+
+/* Animação suave de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.choose-role-card {
+    animation: fadeInUp 0.4s ease-out;
+}
