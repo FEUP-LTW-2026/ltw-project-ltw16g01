@@ -1,5 +1,4 @@
 <?php
-// template/classes.php
 
 function output_class_schedule_list($schedules) {
     if (empty($schedules)) {
@@ -59,7 +58,7 @@ function output_class_schedule_card($schedule) {
                 <span class="badge badge-<?= $fillClass ?>"><?= $freeSpots ?> spots left</span>
             </div>
 
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member' && $_SESSION['is_admin'] === 0): ?>
+            <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'member'): ?>
                 <?php
                 $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $schedule['schedule_id'], 1);
                 if (!empty($sessions)):
@@ -82,7 +81,7 @@ function output_class_schedule_card($schedule) {
                 <a href="class_details.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Details</a>
             <?php endif; ?>
 
-            <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['is_admin'] === 1)): ?>
+            <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
                 <div class="admin-actions">
                     <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Edit</a>
                     <a href="delete_class.php?id=<?= $scheduleId ?>" 
@@ -104,7 +103,7 @@ function output_class_schedule_card($schedule) {
         if (btn.disabled) return;
 
         const scheduleId = btn.dataset.scheduleId;
-        const action = btn.dataset.action; // 'enroll' ou 'cancel'
+        const action = btn.dataset.action;
         if (!scheduleId || !action) return;
 
         btn.disabled = true;
@@ -120,13 +119,11 @@ function output_class_schedule_card($schedule) {
         .then(data => {
             if (data.success) {
                 if (action === 'enroll') {
-                    // Mudar para botão de cancelar
                     btn.textContent = '✅ Enrolled';
                     btn.classList.remove('enroll-btn', 'secondary-button');
                     btn.classList.add('enrolled-btn');
                     btn.dataset.action = 'cancel';
                 } else {
-                    // Mudar para botão de inscrever
                     btn.textContent = 'Enroll';
                     btn.classList.remove('enrolled-btn');
                     btn.classList.add('enroll-btn', 'secondary-button');
