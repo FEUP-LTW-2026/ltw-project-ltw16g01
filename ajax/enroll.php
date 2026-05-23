@@ -6,7 +6,7 @@ require_once '../db/connection.php';
 
 header('Content-Type: application/json');
 
-if (!isLoggedIn() || ($_SESSION['role'] ?? '') !== 'member') {
+if (!isLoggedIn() || ($_SESSION['active_role'] ?? '') !== 'member') {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Not authorized.']);
     exit;

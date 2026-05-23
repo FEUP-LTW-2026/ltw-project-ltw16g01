@@ -38,7 +38,7 @@ function output_equipment_card($item) {
             <p class="equip-notes"><?= $notes ?></p>
         <?php endif; ?>
 
-        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+        <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
             <div class="equip-actions">
                 <a href="edit_equipment.php?id=<?= $id ?>" class="secondary-button btn-sm">Edit</a>
                 <a href="delete_equipment.php?id=<?= $id ?>" class="delete-btn btn-sm delete-equipment-link">Delete</a>

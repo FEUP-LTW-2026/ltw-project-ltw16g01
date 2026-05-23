@@ -59,7 +59,7 @@ function output_class_schedule_card($schedule) {
                 <span class="badge badge-<?= $fillClass ?>"><?= $freeSpots ?> spots left</span>
             </div>
 
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member'): ?>
+            <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'member'): ?>
                 <?php
                 $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $schedule['schedule_id'], 1);
                 if (!empty($sessions)):
@@ -77,8 +77,18 @@ function output_class_schedule_card($schedule) {
                 <?php endif; else: ?>
                     <button class="disabled-btn secondary-button btn-sm" disabled>No sessions</button>
             <?php endif; endif; ?>
-        </div>
 
+            <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
+                <div class="admin-actions">
+                    <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Edit</a>
+                    <a href="delete_class.php?id=<?= $scheduleId ?>" 
+                       class="delete-btn btn-sm" 
+                       onclick="return confirm('Are you sure you want to delete this class schedule? This action cannot be undone.');">
+                        Delete
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
     </article>
 
     <script>
