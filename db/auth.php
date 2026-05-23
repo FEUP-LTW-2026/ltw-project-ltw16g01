@@ -67,7 +67,6 @@ function registerMember($pdo, $name, $username, $email, $password, $plan = 'basi
 }
 
 function createPasswordResetToken($pdo, $email) {
-    // Verificar se o email existe
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -76,11 +75,9 @@ function createPasswordResetToken($pdo, $email) {
     }
     $userId = $user['id'];
 
-    // Gerar token único (32 bytes hex)
     $token = bin2hex(random_bytes(32));
     $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-    // Inserir na tabela
     $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)");
     if ($stmt->execute([$userId, $token, $expiresAt])) {
         return $token;
