@@ -145,7 +145,7 @@ function output_register_form($error = '', $old = []) {
 
             <p class="auth-terms">
                 By signing up, you agree to our
-                <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                <a href="terms.php">Terms of Service</a> and <a href="privacy.php">Privacy Policy</a>.
             </p>
         </form>
 
