@@ -12,7 +12,7 @@ requireAuth('admin');
 
 $pdo = getDatabaseConnection();
 $id = (int)($_GET['id'] ?? 0);
-$trainer = getTrainerById($pdo, $id);
+$trainer = getTrainerById($pdo, $id, false); // buscar mesmo que inativo
 
 if (!$trainer) {
     header('Location: trainers.php?error=notfound');
@@ -31,18 +31,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $specializations = trim($_POST['specializations'] ?? '');
     $certifications = trim($_POST['certifications'] ?? '');
     $active = (int)($_POST['active'] ?? 1);
-    $isAdmin = isset($_POST['is_admin']) ? 1 : 0;
 
     $old = [
-    'name' => $name,
-    'username' => $username,
-    'email' => $email,
-    'bio' => $bio,
-    'specializations' => $specializations,
-    'certifications' => $certifications,
-    'active' => $active,
-    'is_admin' => $isAdmin
-];
+        'name' => $name,
+        'username' => $username,
+        'email' => $email,
+        'bio' => $bio,
+        'specializations' => $specializations,
+        'certifications' => $certifications,
+        'active' => $active
+    ];
 
     if ($name === '' || $username === '' || $email === '') {
         $errors[] = 'Name, username and email are required.';
@@ -51,15 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = 'Please enter a valid email address.';
     } else {
-        $result = updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications, $isAdmin);
+        $result = updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications);
+        if ($result === false) {
             $errors[] = 'Username or email already in use.';
         } else {
             $success = 'Trainer updated successfully.';
-            $trainer = getTrainerById($pdo, $id);
+            $trainer = getTrainerById($pdo, $id, false);
             $old = [];
         }
     }
-
+}
 
 output_header('form.css');
 ?>
@@ -68,4 +67,4 @@ output_header('form.css');
     <?php output_trainer_form($trainer, $errors, $success, $old); ?>
 </main>
 
-<?php output_footer('../admin/'); ?>
+<?php output_footer(); ?>
