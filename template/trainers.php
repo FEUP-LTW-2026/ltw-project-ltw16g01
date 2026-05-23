@@ -85,7 +85,18 @@ function output_trainers_admin_table($trainers) {
             <td><?= htmlspecialchars($t['username']) ?></td>
             <td><?= htmlspecialchars($t['email']) ?></td>
             <td><?= htmlspecialchars(substr($t['specializations'] ?? '', 0, 50)) ?></td>
-            <td><?= $t['active'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>' ?></td>
+            <td>
+                <div class="status-badges">
+                    <?= $t['active'] 
+                        ? '<span class="badge badge-success">Active</span>' 
+                        : '<span class="badge badge-danger">Inactive</span>' 
+                    ?>
+
+                    <?php if (!empty($t['is_admin'])): ?>
+                        <span class="badge badge-admin">Admin</span>
+                    <?php endif; ?>
+                </div>
+            </td>
             <td>
                 <a href="edit_trainer.php?id=<?= $id ?>" class="action-link">Edit</a>
                 <a href="delete_trainer.php?id=<?= $id ?>" class="action-link danger delete-trainer-link">Delete</a>
@@ -106,6 +117,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
     $specializations = htmlspecialchars($old['specializations'] ?? ($trainer['specializations'] ?? ''));
     $certifications = htmlspecialchars($old['certifications'] ?? ($trainer['certifications'] ?? ''));
     $active = $old['active'] ?? ($trainer['active'] ?? 1);
+    $isAdmin = $old['is_admin'] ?? ($trainer['is_admin'] ?? 0);
     ?>
 
     <div class="container form-container">
@@ -191,12 +203,12 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
                 <div class="form-group">
                     <label class="form-label">Admin Access</label>
 
-                    <label style="display:flex; align-items:center; gap:0.6rem;">
+                    <label class="checkbox-row">
                         <input 
                             type="checkbox" 
                             name="is_admin" 
                             value="1"
-                            <?= !empty($trainer['is_admin']) ? 'checked' : '' ?>
+                            <?= !empty($isAdmin) ? 'checked' : '' ?>
                         >
                         <span>Allow this trainer to access the admin dashboard</span>
                     </label>

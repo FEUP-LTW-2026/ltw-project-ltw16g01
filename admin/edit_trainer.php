@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $specializations = trim($_POST['specializations'] ?? '');
     $certifications = trim($_POST['certifications'] ?? '');
     $active = (int)($_POST['active'] ?? 1);
+    $isAdmin = isset($_POST['is_admin']) ? 1 : 0;
 
     $old = [
         'name' => $name,
@@ -39,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'bio' => $bio,
         'specializations' => $specializations,
         'certifications' => $certifications,
-        'active' => $active
+        'active' => $active,
+        'is_admin' => $isAdmin
     ];
 
     if ($name === '' || $username === '' || $email === '') {
@@ -49,7 +51,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = 'Please enter a valid email address.';
     } else {
-        $result = updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $specializations, $certifications);
+        $result = updateTrainer(
+            $pdo,
+            $id,
+            $name,
+            $username,
+            $email,
+            $active,
+            $bio,
+            $specializations,
+            $certifications,
+            $isAdmin
+        );
+
         if ($result === false) {
             $errors[] = 'Username or email already in use.';
         } else {
@@ -67,4 +81,4 @@ output_header('form.css');
     <?php output_trainer_form($trainer, $errors, $success, $old); ?>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../admin/'); ?>
