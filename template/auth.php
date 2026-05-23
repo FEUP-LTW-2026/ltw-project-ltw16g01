@@ -52,11 +52,12 @@ function output_login_form($error = '', $postedIdentifier = '') {
         <div class="auth-footer">
             Don't have an account? <a href="register.php">Sign up for free</a>
         </div>
+        <div class="auth-footer">
+            <a href="forgot_password.php">Forgot password?</a>
+        </div>
     </div>
     <?php
 }
-
-// template/auth.php – adicionar esta função
 
 function output_register_form($error = '', $old = []) {
     ?>
