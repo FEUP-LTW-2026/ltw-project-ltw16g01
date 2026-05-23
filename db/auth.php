@@ -65,3 +65,57 @@ function registerMember($pdo, $name, $username, $email, $password, $plan = 'basi
 
     return $userId;
 }
+
+function createPasswordResetToken($pdo, $email) {
+    // Verificar se o email existe
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$user) {
+        return false;
+    }
+    $userId = $user['id'];
+
+    // Gerar token único (32 bytes hex)
+    $token = bin2hex(random_bytes(32));
+    $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+    // Inserir na tabela
+    $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)");
+    if ($stmt->execute([$userId, $token, $expiresAt])) {
+        return $token;
+    }
+    return false;
+}
+
+function validateResetToken($pdo, $token) {
+    $stmt = $pdo->prepare("
+        SELECT user_id FROM password_resets
+        WHERE token = ? AND used = 0 AND expires_at > CURRENT_TIMESTAMP
+        LIMIT 1
+    ");
+    $stmt->execute([$token]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row) {
+        return (int)$row['user_id'];
+    }
+    return false;
+}
+
+function resetPassword($pdo, $token, $newPassword) {
+    $userId = validateResetToken($pdo, $token);
+    if (!$userId) {
+        return false;
+    }
+
+    $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+    if (!$stmt->execute([$hash, $userId])) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare("UPDATE password_resets SET used = 1 WHERE token = ?");
+    $stmt->execute([$token]);
+    return true;
+}
