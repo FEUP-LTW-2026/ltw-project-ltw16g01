@@ -53,7 +53,6 @@ output_header('class-details.css');
                     <li><span><?= htmlspecialchars($schedule['class_name']) ?></span></li>
                 </ol>
             </nav>
-            <a href="classes.php" class="secondary-button btn-sm">← Back to Classes</a>
         </div>
 
         <div class="card class-detail-card">
@@ -81,7 +80,7 @@ output_header('class-details.css');
                         <div class="trainer-simple-card">
                             <div class="trainer-info">
                                 <strong><?= htmlspecialchars($trainer['name']) ?></strong>
-                                <a href="trainer-profile.php?id=<?= $trainer['id'] ?>" class="secondary-button btn-sm">View Profile</a>
+                                <a href="trainer_profile.php?id=<?= $trainer['id'] ?>" class="secondary-button btn-sm">View Profile</a>
                             </div>
                         </div>
                     </div>
