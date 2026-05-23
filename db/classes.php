@@ -64,10 +64,11 @@ function getUpcomingSessionsBySchedule($pdo, $scheduleId, $limit = 5) {
             sess.status,
             (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') AS enrolled_count
         FROM class_sessions sess
+        JOIN class_schedules sch ON sess.schedule_id = sch.id
         WHERE sess.schedule_id = ? 
-          AND sess.session_date >= date('now')
+          AND datetime(sess.session_date || ' ' || sch.start_time) >= datetime('now')
           AND sess.status = 'scheduled'
-        ORDER BY sess.session_date ASC
+        ORDER BY sess.session_date ASC, sch.start_time ASC
         LIMIT ?
     ";
     $stmt = $pdo->prepare($sql);
