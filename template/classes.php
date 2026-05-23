@@ -79,7 +79,7 @@ function output_class_schedule_card($schedule) {
             <?php endif; endif; ?>
 
             <?php if (isset($_SESSION['role'])): ?>
-                <a href="class_details.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Details</a>
+                <a href="/member/class_details.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Details</a>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['is_admin'] === 1)): ?>

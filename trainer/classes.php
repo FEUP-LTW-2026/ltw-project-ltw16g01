@@ -191,6 +191,7 @@ output_header('classes.css');
                         <button type="button" class="secondary-button btn-sm edit-schedule-button" data-target="<?= $editBoxId ?>">
                             Edit Schedule
                         </button>
+                        <a href="../trainer/class_details.php?id=<?= $schedule['schedule_id'] ?>" class="secondary-button btn-sm">Details</a>
 
                         <?php if ($session): ?>
                             <form method="post" class="inline-form" onsubmit="return confirm('Are you sure you want to cancel this session?');">
