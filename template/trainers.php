@@ -118,6 +118,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
     $certifications = htmlspecialchars($old['certifications'] ?? ($trainer['certifications'] ?? ''));
     $active = $old['active'] ?? ($trainer['active'] ?? 1);
     $isAdmin = $old['is_admin'] ?? ($trainer['is_admin'] ?? 0);
+    $isEditingSelfAdmin = $isEdit && isset($_SESSION['user_id']) && (int)$_SESSION['user_id'] === (int)($trainer['id'] ?? 0) && !empty($isAdmin);
     ?>
 
     <div class="container form-container">
@@ -203,19 +204,37 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
                 <div class="form-group">
                     <label class="form-label">Admin Access</label>
 
-                    <label class="checkbox-row">
-                        <input 
-                            type="checkbox" 
-                            name="is_admin" 
-                            value="1"
-                            <?= !empty($isAdmin) ? 'checked' : '' ?>
-                        >
-                        <span>Allow this trainer to access the admin dashboard</span>
-                    </label>
+                    <?php if ($isEditingSelfAdmin): ?>
+                        <input type="hidden" name="is_admin" value="1">
 
-                    <small class="text-muted">
-                        The user will remain a trainer, but will also have full admin permissions.
-                    </small>
+                        <label class="checkbox-row">
+                            <input 
+                                type="checkbox" 
+                                value="1"
+                                checked
+                                disabled
+                            >
+                            <span>Allow this trainer to access the admin dashboard</span>
+                        </label>
+
+                        <small class="text-muted">
+                            You cannot remove your own admin access.
+                        </small>
+                    <?php else: ?>
+                        <label class="checkbox-row">
+                            <input 
+                                type="checkbox" 
+                                name="is_admin" 
+                                value="1"
+                                <?= !empty($isAdmin) ? 'checked' : '' ?>
+                            >
+                            <span>Allow this trainer to access the admin dashboard</span>
+                        </label>
+
+                        <small class="text-muted">
+                            The user will remain a trainer, but will also have full admin permissions.
+                        </small>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 

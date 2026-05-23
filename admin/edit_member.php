@@ -30,17 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $plan = $_POST['plan'] ?? 'basic';
     $planEnd = trim($_POST['plan_end'] ?? '');
     $active = (int)($_POST['active'] ?? 1);
-    $isAdmin = isset($_POST['is_admin']) ? 1 : 0;
+
+    $isEditingSelf = ((int)$_SESSION['user_id'] === $id);
+
+    if ($isEditingSelf && !empty($member['is_admin'])) {
+        $isAdmin = 1;
+    } else {
+        $isAdmin = isset($_POST['is_admin']) ? 1 : 0;
+    }
 
     $old = [
-    'name' => $name,
-    'username' => $username,
-    'email' => $email,
-    'plan' => $plan,
-    'plan_end' => $planEnd,
-    'active' => $active,
-    'is_admin' => $isAdmin
-];
+        'name' => $name,
+        'username' => $username,
+        'email' => $email,
+        'plan' => $plan,
+        'plan_end' => $planEnd,
+        'active' => $active,
+        'is_admin' => $isAdmin
+    ];
 
     if ($name === '' || $username === '' || $email === '') {
         $errors[] = 'Name, username and email are required.';

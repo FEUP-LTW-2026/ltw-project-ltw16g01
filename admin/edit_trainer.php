@@ -31,7 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $specializations = trim($_POST['specializations'] ?? '');
     $certifications = trim($_POST['certifications'] ?? '');
     $active = (int)($_POST['active'] ?? 1);
-    $isAdmin = isset($_POST['is_admin']) ? 1 : 0;
+
+    $isEditingSelf = ((int)$_SESSION['user_id'] === $id);
+
+    if ($isEditingSelf && !empty($trainer['is_admin'])) {
+        $isAdmin = 1;
+    } else {
+        $isAdmin = isset($_POST['is_admin']) ? 1 : 0;
+    }
 
     $old = [
         'name' => $name,

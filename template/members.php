@@ -46,6 +46,8 @@ function output_member_form($member = null, $errors = [], $success = '', $old = 
     $plan = $old['plan'] ?? ($member['membership_plan'] ?? 'basic');
     $planEnd = $old['plan_end'] ?? ($member['plan_end'] ?? date('Y-m-d', strtotime('+1 year')));
     $active = $old['active'] ?? ($member['active'] ?? 1);
+    $isAdmin = $old['is_admin'] ?? ($member['is_admin'] ?? 0);
+    $isEditingSelfAdmin = $isEdit&& isset($_SESSION['user_id'])&& (int)$_SESSION['user_id'] === (int)($member['id'] ?? 0)&& !empty($isAdmin);
     ?>
 
     <div class="container form-container">
@@ -132,19 +134,37 @@ function output_member_form($member = null, $errors = [], $success = '', $old = 
                 <div class="form-group form-spaced">
                     <label class="form-label">Admin Access</label>
 
-                    <label style="display:flex; align-items:center; gap:0.6rem;">
-                        <input 
-                            type="checkbox" 
-                            name="is_admin" 
-                            value="1"
-                            <?= !empty($member['is_admin']) ? 'checked' : '' ?>
-                        >
-                        <span>Allow this member to access the admin dashboard</span>
-                    </label>
+                    <?php if ($isEditingSelfAdmin): ?>
+                        <input type="hidden" name="is_admin" value="1">
 
-                    <small class="text-muted">
-                        The user will remain a member, but will also have full admin permissions.
-                    </small>
+                        <label class="checkbox-row">
+                            <input 
+                                type="checkbox" 
+                                value="1"
+                                checked
+                                disabled
+                            >
+                            <span>Allow this member to access the admin dashboard</span>
+                        </label>
+
+                        <small class="text-muted">
+                            You cannot remove your own admin access.
+                        </small>
+                    <?php else: ?>
+                        <label class="checkbox-row">
+                            <input 
+                                type="checkbox" 
+                                name="is_admin" 
+                                value="1"
+                                <?= !empty($isAdmin) ? 'checked' : '' ?>
+                            >
+                            <span>Allow this member to access the admin dashboard</span>
+                        </label>
+
+                        <small class="text-muted">
+                            The user will remain a member, but will also have full admin permissions.
+                        </small>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
