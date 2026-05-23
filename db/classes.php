@@ -20,6 +20,11 @@ function getAllClassSchedules($pdo, $filters = []) {
         $params[] = ucfirst(strtolower($filters['day']));
     }
 
+    if (!empty($filters['time'])) {
+        $sql .= " AND cs.start_time = ?";
+        $params[] = $filters['time'];
+    }
+
     $sql .= " ORDER BY CASE cs.day_of_week WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 WHEN 'Sunday' THEN 7 ELSE 8 END, cs.start_time";
 
     $stmt = $pdo->prepare($sql);

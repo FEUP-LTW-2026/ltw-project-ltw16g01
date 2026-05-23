@@ -14,6 +14,11 @@ $GLOBALS['pdo'] = $pdo;
 
 $types = $pdo->query("SELECT name, label FROM class_types WHERE active = 1 ORDER BY label")->fetchAll();
 $trainers = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")->fetchAll();
+$times = $pdo->query("
+    SELECT DISTINCT start_time 
+    FROM class_schedules 
+    ORDER BY start_time
+")->fetchAll(PDO::FETCH_COLUMN);
 
 $schedules = getAllClassSchedules($pdo, []);
 
@@ -64,6 +69,18 @@ output_header('classes.css');
                         <option value="friday">Friday</option>
                         <option value="saturday">Saturday</option>
                         <option value="sunday">Sunday</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="form-label" for="f-time">Time</label>
+                    <select id="f-time" name="time" class="form-select">
+                        <option value="">Any Time</option>
+                        <?php foreach ($times as $time): ?>
+                            <option value="<?= htmlspecialchars($time) ?>">
+                                <?= htmlspecialchars(substr($time, 0, 5)) ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </form>
