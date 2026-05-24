@@ -256,3 +256,7 @@
 .equipment-legend{
     margin-bottom: var(--sp-lg);
 }
+
+.equipment-reservations-card {
+    margin-bottom: 1.5rem;
+}

@@ -64,7 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($duration < 30 || $duration > 120) {
         $error = 'Duration must be between 30 and 120 minutes.';
     } else {
-        if (createPTRequest($pdo, $memberId, $trainerId, $bookingDate, $startTime, $duration, $notes)) {
+        $ptValidation = getMemberPTRequestValidation($pdo, $memberId, $bookingDate);
+
+        if (!$ptValidation['allowed']) {
+            $error = $ptValidation['message'];
+        } elseif (createPTRequest($pdo, $memberId, $trainerId, $bookingDate, $startTime, $duration, $notes)) {
             $success = 'Your personal training request has been sent to the trainer.';
         } else {
             $error = 'Failed to submit request. Please try again.';

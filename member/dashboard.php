@@ -90,6 +90,12 @@ output_header('member-dashboard.css');
                     <p class="membership-note">
                         You have full access to all FitPeak member features.
                     </p>
+
+                    <div class="form-actions" style="margin-top: 1rem;">
+                        <a href="equipment.php" class="main-button btn-sm">
+                            Reserve Equipment
+                        </a>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

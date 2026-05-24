@@ -6,7 +6,7 @@ function equipment_width_class($percentage) {
     return 'avail-w-' . (round($percentage / 10) * 10);
 }
 
-function output_equipment_card($item) {
+function output_equipment_card($item, $memberPlan = null) {
     $id = (int)$item['id'];
     $name = htmlspecialchars($item['name']);
     $notes = htmlspecialchars($item['notes'] ?? '');
@@ -17,8 +17,17 @@ function output_equipment_card($item) {
     $barLevel = $percentage <= 25 ? 'low' : ($percentage <= 60 ? 'medium' : '');
     $widthClass = equipment_width_class($percentage);
 
-    $statusLabel = ['available' => 'Available', 'maintenance' => 'Maintenance', 'unavailable' => 'Unavailable'][$effectiveStatus] ?? 'Unknown';
-    $statusBadge = ['available' => 'badge-success', 'maintenance' => 'badge-warning', 'unavailable' => 'badge-danger'][$effectiveStatus] ?? 'badge-muted';
+    $statusLabel = [
+        'available' => 'Available',
+        'maintenance' => 'Maintenance',
+        'unavailable' => 'Unavailable'
+    ][$effectiveStatus] ?? 'Unknown';
+
+    $statusBadge = [
+        'available' => 'badge-success',
+        'maintenance' => 'badge-warning',
+        'unavailable' => 'badge-danger'
+    ][$effectiveStatus] ?? 'badge-muted';
     ?>
 
     <article class="equip-card status-<?= htmlspecialchars($effectiveStatus) ?>" data-eq-id="<?= $id ?>">
@@ -31,17 +40,69 @@ function output_equipment_card($item) {
             <div class="avail-bar">
                 <div class="avail-fill <?= $barLevel ?> <?= $widthClass ?>"></div>
             </div>
-            <span class="text-muted avail-text" data-avail><?= $available ?> / <?= $quantity ?></span>
+
+            <span class="text-muted avail-text" data-avail>
+                <?= $available ?> / <?= $quantity ?>
+            </span>
         </div>
 
         <?php if ($notes !== ''): ?>
             <p class="equip-notes"><?= $notes ?></p>
         <?php endif; ?>
 
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member'): ?>
+            <?php if ($memberPlan === 'vip' && $effectiveStatus === 'available' && $available > 0): ?>
+                <form class="reserve-equipment-form equip-actions">
+                    <input type="hidden" name="equipment_id" value="<?= $id ?>">
+
+                    <input
+                        type="date"
+                        name="reservation_date"
+                        class="form-control"
+                        min="<?= date('Y-m-d') ?>"
+                        required
+                    >
+
+                    <input
+                        type="time"
+                        name="reservation_time"
+                        class="form-control"
+                        required
+                    >
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        class="form-control"
+                        min="1"
+                        max="<?= $available ?>"
+                        value="1"
+                        required
+                    >
+
+                    <button type="submit" class="main-button btn-sm">
+                        Reserve
+                    </button>
+                </form>
+            <?php elseif ($memberPlan !== 'vip'): ?>
+                <div class="equip-actions">
+                    <span class="badge badge-warning">VIP only</span>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
             <div class="equip-actions">
-                <a href="edit_equipment.php?id=<?= $id ?>" class="secondary-button btn-sm">Edit</a>
-                <a href="delete_equipment.php?id=<?= $id ?>" class="delete-btn btn-sm delete-equipment-link">Delete</a>
+                <a href="edit_equipment.php?id=<?= $id ?>" class="secondary-button btn-sm">
+                    Edit
+                </a>
+
+                <a 
+                    href="delete_equipment.php?id=<?= $id ?>" 
+                    class="delete-btn btn-sm delete-equipment-link"
+                >
+                    Delete
+                </a>
             </div>
         <?php endif; ?>
     </article>
@@ -49,7 +110,7 @@ function output_equipment_card($item) {
     <?php
 }
 
-function output_equipment_grid($equipment, $categories) {
+function output_equipment_grid($equipment, $categories, $memberPlan = null) {
     foreach ($categories as $cat) {
         $catId = (int)$cat['id'];
         $catLabel = htmlspecialchars($cat['label']);
@@ -58,14 +119,16 @@ function output_equipment_grid($equipment, $categories) {
             return (int)$item['category_id'] === $catId;
         });
 
-        if (empty($catItems)) continue;
+        if (empty($catItems)) {
+            continue;
+        }
         ?>
 
         <h3 class="category-title"><?= $catLabel ?></h3>
 
         <div class="equip-grid" data-category-id="<?= $catId ?>">
             <?php foreach ($catItems as $item): ?>
-                <?php output_equipment_card($item); ?>
+                <?php output_equipment_card($item, $memberPlan); ?>
             <?php endforeach; ?>
         </div>
 
@@ -115,10 +178,15 @@ function output_equipment_form($categories, $equipment = null, $errors = [], $su
 
             <div class="form-group form-spaced">
                 <label class="form-label">Category *</label>
+
                 <select name="category_id" class="form-select" required>
                     <option value="">-- Select category --</option>
+
                     <?php foreach ($categories as $cat): ?>
-                        <option value="<?= (int)$cat['id'] ?>" <?= (string)$categoryId === (string)$cat['id'] ? 'selected' : '' ?>>
+                        <option 
+                            value="<?= (int)$cat['id'] ?>" 
+                            <?= (string)$categoryId === (string)$cat['id'] ? 'selected' : '' ?>
+                        >
                             <?= htmlspecialchars($cat['label']) ?>
                         </option>
                     <?php endforeach; ?>
@@ -139,6 +207,7 @@ function output_equipment_form($categories, $equipment = null, $errors = [], $su
 
             <div class="form-group form-spaced">
                 <label class="form-label">Status</label>
+
                 <select name="status" class="form-select">
                     <option value="available" <?= $status === 'available' ? 'selected' : '' ?>>Available</option>
                     <option value="maintenance" <?= $status === 'maintenance' ? 'selected' : '' ?>>Maintenance</option>
@@ -152,8 +221,13 @@ function output_equipment_form($categories, $equipment = null, $errors = [], $su
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="main-button"><?= $isEdit ? 'Update Equipment' : 'Add Equipment' ?></button>
-                <a href="equipment.php" class="secondary-button">Cancel</a>
+                <button type="submit" class="main-button">
+                    <?= $isEdit ? 'Update Equipment' : 'Add Equipment' ?>
+                </button>
+
+                <a href="equipment.php" class="secondary-button">
+                    Cancel
+                </a>
             </div>
         </form>
     </div>

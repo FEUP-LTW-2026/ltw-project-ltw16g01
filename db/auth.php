@@ -1,11 +1,49 @@
 <?php
 
 function authenticateUser($pdo, $identifier, $password) {
-    $stmt = $pdo->prepare("SELECT id, name, email, username, password, role, is_admin, active FROM users WHERE (email = ? OR username = ?) AND active = 1");
+    $stmt = $pdo->prepare("
+        SELECT id, name, email, username, password, role, is_admin, active
+        FROM users
+        WHERE (email = ? OR username = ?)
+          AND active = 1
+        LIMIT 1
+    ");
+
     $stmt->execute([$identifier, $identifier]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$user) return false;
-    if (!password_verify($password, $user['password'])) return false;
+
+    if (!$user) {
+        return false;
+    }
+
+    $storedPassword = $user['password'];
+    $passwordIsValid = false;
+
+    // Caso normal: password guardada com password_hash()
+    if (password_verify($password, $storedPassword)) {
+        $passwordIsValid = true;
+    }
+
+    // Caso antigo: passwords antigas guardadas em texto normal
+    // Se bater certo, deixa entrar e converte logo para hash.
+    elseif (hash_equals($storedPassword, $password)) {
+        $passwordIsValid = true;
+
+        $newHash = password_hash($password, PASSWORD_DEFAULT);
+
+        $update = $pdo->prepare("
+            UPDATE users
+            SET password = ?
+            WHERE id = ?
+        ");
+
+        $update->execute([$newHash, $user['id']]);
+    }
+
+    if (!$passwordIsValid) {
+        return false;
+    }
+
     unset($user['password']);
     return $user;
 }
@@ -51,49 +89,74 @@ function createPasswordResetToken($pdo, $email) {
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if (!$user) {
         return false;
     }
+
     $userId = $user['id'];
 
     $token = bin2hex(random_bytes(32));
     $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-    $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)");
+    $stmt = $pdo->prepare("
+        INSERT INTO password_resets (user_id, token, expires_at)
+        VALUES (?, ?, ?)
+    ");
+
     if ($stmt->execute([$userId, $token, $expiresAt])) {
         return $token;
     }
+
     return false;
 }
 
 function validateResetToken($pdo, $token) {
     $stmt = $pdo->prepare("
-        SELECT user_id FROM password_resets
-        WHERE token = ? AND used = 0 AND expires_at > CURRENT_TIMESTAMP
+        SELECT user_id
+        FROM password_resets
+        WHERE token = ?
+          AND used = 0
+          AND expires_at > CURRENT_TIMESTAMP
         LIMIT 1
     ");
+
     $stmt->execute([$token]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if ($row) {
         return (int)$row['user_id'];
     }
+
     return false;
 }
 
 function resetPassword($pdo, $token, $newPassword) {
     $userId = validateResetToken($pdo, $token);
+
     if (!$userId) {
         return false;
     }
 
     $hash = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+    $stmt = $pdo->prepare("
+        UPDATE users
+        SET password = ?
+        WHERE id = ?
+    ");
+
     if (!$stmt->execute([$hash, $userId])) {
         return false;
     }
 
-    $stmt = $pdo->prepare("UPDATE password_resets SET used = 1 WHERE token = ?");
+    $stmt = $pdo->prepare("
+        UPDATE password_resets
+        SET used = 1
+        WHERE token = ?
+    ");
+
     $stmt->execute([$token]);
+
     return true;
 }

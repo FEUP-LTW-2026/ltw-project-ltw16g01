@@ -203,25 +203,44 @@ function canMemberEnrollInClass($pdo, $memberId, $sessionId) {
     }
 
     $stmt = $pdo->prepare("
-        SELECT session_date
-        FROM class_sessions
-        WHERE id = ?
+        SELECT 
+            sess.session_date,
+            cs.start_time,
+            cs.duration_min
+        FROM class_sessions sess
+        JOIN class_schedules cs ON sess.schedule_id = cs.id
+        WHERE sess.id = ?
         LIMIT 1
     ");
 
     $stmt->execute([$sessionId]);
-    $sessionDate = $stmt->fetchColumn();
+    $session = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$sessionDate) {
+    if (!$session) {
         return [
             'allowed' => false,
             'message' => 'Invalid session.'
         ];
     }
 
+    $sessionDate = $session['session_date'];
+    $startTime = $session['start_time'];
+    $duration = (int)$session['duration_min'];
+
+    $classStart = strtotime($sessionDate . ' ' . $startTime);
+    $classEnd = strtotime("+{$duration} minutes", $classStart);
+    $basicLimit = strtotime($sessionDate . ' 17:00:00');
+
+    if ($classEnd > $basicLimit) {
+        return [
+            'allowed' => false,
+            'message' => 'Your Basic plan only allows classes that finish by 17:00. Upgrade to Premium or VIP for full-day access.'
+        ];
+    }
+
     $weeklyCount = getMemberWeeklyClassCount($pdo, $memberId, $sessionDate);
 
-    if ($plan === 'basic' && $weeklyCount >= 2) {
+    if ($weeklyCount >= 2) {
         return [
             'allowed' => false,
             'message' => 'Your Basic plan only allows 2 classes per week. Upgrade to Premium or VIP for unlimited classes.'

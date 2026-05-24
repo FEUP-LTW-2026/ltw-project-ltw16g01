@@ -131,6 +131,21 @@ CREATE TABLE IF NOT EXISTS equipment (
     FOREIGN KEY(category_id) REFERENCES equipment_categories(id)
 );
 
+-- Reservas de equipamento, disponíveis apenas para membros VIP
+CREATE TABLE IF NOT EXISTS equipment_reservations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL,
+    equipment_id INTEGER NOT NULL,
+    reservation_date DATE NOT NULL,
+    reservation_time TEXT NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','cancelled','completed')),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY(member_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(equipment_id) REFERENCES equipment(id) ON DELETE CASCADE
+);
+
 -- Avaliações (por sessão, não por aula)
 CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
