@@ -57,9 +57,14 @@ output_header('member-dashboard.css');
         <div class="card full-width-card membership-card">
             <div class="card-head">
                 <h2 class="card-title">Your Membership Plan</h2>
-                <span class="badge badge-admin"><?= htmlspecialchars($planFeatures['label']) ?></span>
-            </div>
 
+                <div class="form-actions">
+                    <span class="badge badge-admin"><?= htmlspecialchars($planFeatures['label']) ?></span>
+                    <a href="upgrade_membership.php" class="secondary-button btn-sm">
+                        Change Plan
+                    </a>
+                </div>
+            </div>
             <div class="membership-body">
                 <ul class="membership-features">
                     <li>

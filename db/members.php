@@ -277,3 +277,24 @@ function getMemberPlanFeatures($plan) {
 
     return $features[$plan] ?? $features['basic'];
 }
+
+function upgradeMemberPlan($pdo, $memberId, $newPlan) {
+    $allowedPlans = ['basic', 'premium', 'vip'];
+
+    if (!in_array($newPlan, $allowedPlans, true)) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare("
+        UPDATE member_profiles
+        SET membership_plan = ?,
+            plan_start = date('now'),
+            plan_end = date('now', '+1 year')
+        WHERE user_id = ?
+    ");
+
+    return $stmt->execute([
+        $newPlan,
+        $memberId
+    ]);
+}
