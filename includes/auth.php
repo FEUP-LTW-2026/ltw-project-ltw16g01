@@ -9,7 +9,7 @@ function currentUserId() {
 }
 
 function isAdmin() {
-    return (!empty($_SESSION['is_admin']) || ($_SESSION['role'] ?? '') === 'admin') && $_SESSION['active_role'] === 'admin';
+    return $_SESSION['active_role'] === 'admin';
 }
 
 function currentUser() {
@@ -18,7 +18,7 @@ function currentUser() {
     return [
         'id' => $_SESSION['user_id'],
         'name' => $_SESSION['user_name'] ?? '',
-        'role' => $_SESSION['role'] ?? '',
+        'role' => $_SESSION['active_role'] ?? '',
         'is_admin' => (int)($_SESSION['is_admin'] ?? 0),
         'email' => $_SESSION['user_email'] ?? '',
         'photo' => $_SESSION['user_photo'] ?? null
@@ -36,7 +36,7 @@ function requireAuth($roles = null) {
     }
 
     $allowedRoles = (array)$roles;
-    $userRole = $_SESSION['role'] ?? '';
+    $userRole = $_SESSION['active_role'] ?? '';
 
     if (in_array($userRole, $allowedRoles, true)) {
         return;
