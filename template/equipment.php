@@ -30,6 +30,7 @@ function output_equipment_card($item, $memberPlan = null) {
     ][$effectiveStatus] ?? 'badge-muted';
     ?>
 
+    <link rel="stylesheet" href="/css/pages/form.css">
     <article class="equip-card status-<?= htmlspecialchars($effectiveStatus) ?>" data-eq-id="<?= $id ?>">
         <div class="equip-card-header">
             <h4 class="equip-name"><?= $name ?></h4>
@@ -86,7 +87,6 @@ function output_equipment_card($item, $memberPlan = null) {
                 </form>
             <?php elseif ($memberPlan !== 'vip'): ?>
                 <div class="equip-actions">
-                    <span class="badge badge-warning">VIP only</span>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
