@@ -67,7 +67,18 @@ function createPTRequest($pdo, $memberId, $trainerId, $bookingDate, $startTime, 
         INSERT INTO personal_bookings (member_id, trainer_id, booking_date, start_time, duration_min, notes, status, created_at)
         VALUES (?, ?, ?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
     ");
-    return $stmt->execute([$memberId, $trainerId, $bookingDate, $startTime, $duration, $notes]);
+    if ($stmt->execute([$memberId, $trainerId, $bookingDate, $startTime, $duration, $notes])) {
+        $memberName = $pdo->prepare("SELECT name FROM users WHERE id = ?");
+        $memberName->execute([$memberId]);
+        $member = $memberName->fetchColumn();
+        $trainerNameStmt = $pdo->prepare("SELECT name FROM users WHERE id = ?");
+        $trainerNameStmt->execute([$trainerId]);
+        $trainer = $trainerNameStmt->fetchColumn();
+        $message = "New PT request from {$member} to {$trainer} on {$bookingDate} at {$startTime}.";
+        notifyAllAdmins($pdo, $message, 'info');
+        return true;
+    }
+    return false;
 }
 
 function getTrainerPendingRequests($pdo, $trainerId) {
@@ -155,7 +166,7 @@ function trainerHasClassConflict($pdo, $trainerId, $bookingDate, $startTime, $du
 function updatePTRequestStatus($pdo, $requestId, $trainerId, $newStatus) {
     if (!in_array($newStatus, ['confirmed', 'cancelled'], true)) return false;
     if ($newStatus === 'confirmed') {
-        $stmt = $pdo->prepare("SELECT booking_date, start_time, duration_min FROM personal_bookings WHERE id = ? AND trainer_id = ? AND status = 'pending'");
+        $stmt = $pdo->prepare("SELECT booking_date, start_time, duration_min, member_id FROM personal_bookings WHERE id = ? AND trainer_id = ? AND status = 'pending'");
         $stmt->execute([$requestId, $trainerId]);
         $request = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$request) return false;
@@ -164,7 +175,24 @@ function updatePTRequestStatus($pdo, $requestId, $trainerId, $newStatus) {
     }
     $stmt = $pdo->prepare("UPDATE personal_bookings SET status = ? WHERE id = ? AND trainer_id = ? AND status = 'pending'");
     $stmt->execute([$newStatus, $requestId, $trainerId]);
-    return $stmt->rowCount() > 0;
+    if ($stmt->rowCount() > 0) {
+        $stmt = $pdo->prepare("SELECT member_id, trainer_id FROM personal_bookings WHERE id = ?");
+        $stmt->execute([$requestId]);
+        $req = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($req) {
+            $memberName = $pdo->prepare("SELECT name FROM users WHERE id = ?");
+            $memberName->execute([$req['member_id']]);
+            $member = $memberName->fetchColumn();
+            $trainerName = $pdo->prepare("SELECT name FROM users WHERE id = ?");
+            $trainerName->execute([$trainerId]);
+            $trainer = $trainerName->fetchColumn();
+            $action = $newStatus === 'confirmed' ? 'accepted' : 'declined';
+            $message = "PT request from {$member} to {$trainer} was {$action}.";
+            notifyAllAdmins($pdo, $message, $newStatus === 'confirmed' ? 'success' : 'warning');
+        }
+        return true;
+    }
+    return false;
 }
 
 function getMemberPTRequests($pdo, $memberId) {
@@ -189,4 +217,40 @@ function getMemberConfirmedPT($pdo, $memberId) {
     ");
     $stmt->execute([$memberId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getAllPTRequests($pdo, $status = null) {
+    $sql = "
+        SELECT pb.*, 
+               m.name AS member_name, 
+               t.name AS trainer_name
+        FROM personal_bookings pb
+        JOIN users m ON pb.member_id = m.id
+        JOIN users t ON pb.trainer_id = t.id
+    ";
+    if ($status !== null && in_array($status, ['pending', 'confirmed', 'cancelled'])) {
+        $sql .= " WHERE pb.status = ? ORDER BY pb.created_at DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$status]);
+    } else {
+        $sql .= " ORDER BY pb.created_at DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    }
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function notifyAllAdmins($pdo, $message, $type = 'info') {
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin'");
+    $stmt->execute();
+    $admins = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    if (empty($admins)) return;
+    $stmt = $pdo->prepare("SELECT id FROM notification_types WHERE name = ?");
+    $stmt->execute([$type]);
+    $typeId = $stmt->fetchColumn();
+    if (!$typeId) $typeId = 1;
+    $insert = $pdo->prepare("INSERT INTO notifications (user_id, message, notification_type_id, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
+    foreach ($admins as $adminId) {
+        $insert->execute([$adminId, $message, $typeId]);
+    }
 }

@@ -1,0 +1,33 @@
+/* admin-pt-requests.css */
+.requests-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.requests-table th, .requests-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.requests-table th {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+.filter-bar {
+    display: flex;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-lg);
+    align-items: flex-end;
+}
+.filter-group {
+    flex: 1;
+}
+@media (max-width: 640px) {
+    .filter-bar {
+        flex-direction: column;
+    }
+}
+
+main {
+    padding: var(--sp-xl);
+}

@@ -131,6 +131,7 @@ if (!function_exists('output_header')) {
                 <li><a href="../admin/classes.php">Classes</a></li>
                 <li><a href="../admin/members.php">Members</a></li>
                 <li><a href="../admin/trainers.php">Trainers</a></li>
+                <li><a href="../admin/pt_requests.php">PT Requests</a></li>
                 <li><a href="../admin/equipment.php">Equipment</a></li>
 
                 <?php if ($userRole === 'member' || $userRole === 'trainer'): ?>
