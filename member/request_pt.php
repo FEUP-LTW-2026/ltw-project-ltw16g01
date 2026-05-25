@@ -59,8 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please select a trainer, date and time.';
     } elseif ($duration < 30 || $duration > 120) {
         $error = 'Duration must be between 30 and 120 minutes.';
-    } elseif (memberHasPendingRequest($pdo, $memberId)) {
-        $error = 'You already have a pending PT request. Please wait for it to be processed before requesting another.';
     } elseif (memberHasBookingConflict($pdo, $memberId, $bookingDate, $startTime, $duration)) {
         $error = 'You already have a PT session (pending or confirmed) at this time.';
     } elseif (trainerHasBookingConflict($pdo, $trainerId, $bookingDate, $startTime, $duration)) {
