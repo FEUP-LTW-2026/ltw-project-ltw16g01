@@ -165,16 +165,10 @@ function deleteMember($pdo, $id) {
    ========================= */
 
 function getMemberPlan($pdo, $memberId) {
-    $stmt = $pdo->prepare("
-        SELECT membership_plan
-        FROM member_profiles
-        WHERE user_id = ?
-        LIMIT 1
-    ");
-
+    $stmt = $pdo->prepare("SELECT membership_plan FROM member_profiles WHERE user_id = ?");
     $stmt->execute([$memberId]);
-
-    return $stmt->fetchColumn() ?: 'basic';
+    $plan = $stmt->fetchColumn();
+    return $plan ?: 'basic';
 }
 
 function getMemberWeeklyClassCount($pdo, $memberId, $sessionDate) {

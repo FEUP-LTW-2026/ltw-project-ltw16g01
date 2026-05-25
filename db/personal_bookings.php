@@ -117,27 +117,11 @@ function canMemberRequestPT($pdo, $memberId, $bookingDate = null) {
 }
 
 function createPTRequest($pdo, $memberId, $trainerId, $bookingDate, $startTime, $duration, $notes = '') {
-    $validation = getMemberPTRequestValidation($pdo, $memberId, $bookingDate);
-
-    if (!$validation['allowed']) {
-        return false;
-    }
-
     $stmt = $pdo->prepare("
-        INSERT INTO personal_bookings
-            (member_id, trainer_id, booking_date, start_time, duration_min, notes, status, created_at)
-        VALUES
-            (?, ?, ?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
+        INSERT INTO personal_bookings (member_id, trainer_id, booking_date, start_time, duration_min, notes, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
     ");
-
-    return $stmt->execute([
-        $memberId,
-        $trainerId,
-        $bookingDate,
-        $startTime,
-        $duration,
-        $notes
-    ]);
+    return $stmt->execute([$memberId, $trainerId, $bookingDate, $startTime, $duration, $notes]);
 }
 
 function getTrainerPendingRequests($pdo, $trainerId) {
@@ -227,4 +211,69 @@ function getMemberConfirmedPT($pdo, $memberId) {
 
     $stmt->execute([$memberId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function memberHasBookingConflict($pdo, $memberId, $bookingDate, $startTime, $duration, $excludeId = null) {
+    $endTime = date('H:i:s', strtotime($startTime . ' + ' . $duration . ' minutes'));
+    $sql = "
+        SELECT id FROM personal_bookings
+        WHERE member_id = ?
+          AND booking_date = ?
+          AND status IN ('pending', 'confirmed')
+          AND (
+              (start_time <= ? AND datetime(booking_date || ' ' || start_time, '+' || duration_min || ' minutes') > datetime(?))
+              OR
+              (start_time >= ? AND start_time < datetime(?))
+          )
+    ";
+    if ($excludeId) {
+        $sql .= " AND id != ?";
+    }
+    $stmt = $pdo->prepare($sql);
+    $params = [$memberId, $bookingDate, $startTime, $bookingDate . ' ' . $startTime, $startTime, $bookingDate . ' ' . $endTime];
+    if ($excludeId) $params[] = $excludeId;
+    $stmt->execute($params);
+    return $stmt->fetch() !== false;
+}
+
+function memberHasPendingRequest($pdo, $memberId) {
+    $stmt = $pdo->prepare("SELECT id FROM personal_bookings WHERE member_id = ? AND status = 'pending'");
+    $stmt->execute([$memberId]);
+    return $stmt->fetch() !== false;
+}
+
+function trainerHasBookingConflict($pdo, $trainerId, $bookingDate, $startTime, $duration, $excludeId = null) {
+    $endTime = date('H:i:s', strtotime($startTime . ' + ' . $duration . ' minutes'));
+    $sql = "SELECT id FROM personal_bookings
+            WHERE trainer_id = ?
+              AND booking_date = ?
+              AND status IN ('pending', 'confirmed')
+              AND (
+                  (start_time <= ? AND datetime(booking_date || ' ' || start_time, '+' || duration_min || ' minutes') > datetime(?))
+                  OR
+                  (start_time >= ? AND start_time < datetime(?))
+              )";
+    if ($excludeId) $sql .= " AND id != ?";
+    $stmt = $pdo->prepare($sql);
+    $params = [$trainerId, $bookingDate, $startTime, $bookingDate . ' ' . $startTime, $startTime, $bookingDate . ' ' . $endTime];
+    if ($excludeId) $params[] = $excludeId;
+    $stmt->execute($params);
+    return $stmt->fetch() !== false;
+}
+
+function trainerHasClassConflict($pdo, $trainerId, $bookingDate, $startTime, $duration) {
+    $dayOfWeek = date('l', strtotime($bookingDate));
+    $endTime = date('H:i:s', strtotime($startTime . ' + ' . $duration . ' minutes'));
+    $sql = "SELECT cs.id
+            FROM class_schedules cs
+            WHERE cs.trainer_id = ?
+              AND cs.day_of_week = ?
+              AND (
+                  (cs.start_time <= ? AND datetime(? || ' ' || cs.start_time, '+' || cs.duration_min || ' minutes') > datetime(? || ' ' || ?))
+                  OR
+                  (cs.start_time >= ? AND cs.start_time < datetime(? || ' ' || ?))
+              )";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$trainerId, $dayOfWeek, $startTime, $bookingDate, $startTime, $bookingDate, $endTime, $startTime, $bookingDate, $endTime]);
+    return $stmt->fetch() !== false;
 }

@@ -31,11 +31,7 @@ if ($memberPlan === 'basic') {
                 <div class="alert alert-danger">
                     Your Basic plan does not include access to Personal Training sessions.
                 </div>
-
-                <p>
-                    Upgrade to Premium or VIP to request personal training sessions with our trainers.
-                </p>
-
+                <p>Upgrade to Premium or VIP to request personal training sessions with our trainers.</p>
                 <div class="form-actions">
                     <a href="dashboard.php" class="secondary-button">Back to Dashboard</a>
                 </div>
@@ -63,16 +59,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please select a trainer, date and time.';
     } elseif ($duration < 30 || $duration > 120) {
         $error = 'Duration must be between 30 and 120 minutes.';
+    } elseif (memberHasPendingRequest($pdo, $memberId)) {
+        $error = 'You already have a pending PT request. Please wait for it to be processed before requesting another.';
+    } elseif (memberHasBookingConflict($pdo, $memberId, $bookingDate, $startTime, $duration)) {
+        $error = 'You already have a PT session (pending or confirmed) at this time.';
+    } elseif (trainerHasBookingConflict($pdo, $trainerId, $bookingDate, $startTime, $duration)) {
+        $error = 'The selected trainer is not available at this time (already booked for another PT).';
+    } elseif (trainerHasClassConflict($pdo, $trainerId, $bookingDate, $startTime, $duration)) {
+        $error = 'The selected trainer is teaching a group class at this time.';
+    } elseif (createPTRequest($pdo, $memberId, $trainerId, $bookingDate, $startTime, $duration, $notes)) {
+        $success = 'Your personal training request has been sent to the trainer.';
     } else {
-        $ptValidation = getMemberPTRequestValidation($pdo, $memberId, $bookingDate);
-
-        if (!$ptValidation['allowed']) {
-            $error = $ptValidation['message'];
-        } elseif (createPTRequest($pdo, $memberId, $trainerId, $bookingDate, $startTime, $duration, $notes)) {
-            $success = 'Your personal training request has been sent to the trainer.';
-        } else {
-            $error = 'Failed to submit request. Please try again.';
-        }
+        $error = 'Failed to submit request. Please try again.';
     }
 }
 
@@ -97,10 +95,8 @@ output_header('request_pt.css');
         <form method="post" class="auth-form card form-card">
             <div class="form-group">
                 <label class="form-label">Select Trainer *</label>
-
                 <select name="trainer_id" class="form-select" required>
                     <option value="">-- Choose a trainer --</option>
-
                     <?php foreach ($trainers as $t): ?>
                         <option value="<?= (int)$t['id'] ?>">
                             <?= htmlspecialchars($t['name']) ?>
@@ -112,31 +108,16 @@ output_header('request_pt.css');
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Date *</label>
-
-                    <input 
-                        type="date" 
-                        name="booking_date" 
-                        class="form-control" 
-                        required 
-                        min="<?= date('Y-m-d') ?>"
-                    >
+                    <input type="date" name="booking_date" class="form-control" required min="<?= date('Y-m-d') ?>">
                 </div>
-
                 <div class="form-group">
                     <label class="form-label">Start Time *</label>
-
-                    <input 
-                        type="time" 
-                        name="start_time" 
-                        class="form-control" 
-                        required
-                    >
+                    <input type="time" name="start_time" class="form-control" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Duration (minutes)</label>
-
                 <select name="duration_min" class="form-select">
                     <option value="30">30 minutes</option>
                     <option value="45">45 minutes</option>
@@ -148,13 +129,7 @@ output_header('request_pt.css');
 
             <div class="form-group">
                 <label class="form-label">Notes (optional)</label>
-
-                <textarea 
-                    name="notes" 
-                    class="form-control" 
-                    rows="3" 
-                    placeholder="e.g., Focus on back strength, injury history, etc."
-                ></textarea>
+                <textarea name="notes" class="form-control" rows="3" placeholder="e.g., Focus on back strength, injury history, etc."></textarea>
             </div>
 
             <div class="form-actions">
