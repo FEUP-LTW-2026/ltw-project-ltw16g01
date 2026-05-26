@@ -138,4 +138,4 @@ output_header('request_pt.css');
     </div>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../member/'); ?>

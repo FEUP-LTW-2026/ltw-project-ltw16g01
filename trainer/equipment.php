@@ -49,4 +49,4 @@ output_header("equipment.css");
 
 <?php require_once '../includes/footer.php'; output_footer('../trainer/'); ?>
 
-<script> src="../js/equipment.js"</script>
+<script src="../js/equipment.js"></script>

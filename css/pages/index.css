@@ -277,6 +277,13 @@
     margin: var(--sp-sm) 0 var(--sp-xl);
 }
 
+.feature-card-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 375px) {
     .buttons-row { flex-direction: column; }
@@ -291,7 +298,29 @@
     .plans-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); }
 }
 @media (max-width: 899px) {
-    .stats-grid { display: none; } /* Hide stats on smaller screens */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: var(--sp-lg);
+    }
+
+    .stat-box {
+        padding: var(--sp-md);
+    }
+
+    .stat-number {
+        font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    .stat-label {
+        font-size: 0.62rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
 }
 @media (min-width: 900px) {
     .intro-layout { grid-template-columns: 1fr 1fr; }

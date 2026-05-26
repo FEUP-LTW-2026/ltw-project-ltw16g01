@@ -33,7 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($error === '') {
-            $result = updateBasicProfile($pdo, $userId, $_POST['name'] ?? '', $_POST['username'] ?? '', $_POST['email'] ?? '', $photoPath);
+            $result = updateBasicProfile(
+                $pdo,
+                $userId,
+                $_POST['name'] ?? '',
+                $_POST['username'] ?? '',
+                $_POST['email'] ?? '',
+                $photoPath
+            );
 
             if ($result === true) {
                 $_SESSION['user_name'] = trim($_POST['name'] ?? '');
@@ -47,7 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'update_password') {
-        $result = updateUserPassword($pdo, $userId, $_POST['current_password'] ?? '', $_POST['new_password'] ?? '', $_POST['confirm_password'] ?? '');
+        $result = updateUserPassword(
+            $pdo,
+            $userId,
+            $_POST['current_password'] ?? '',
+            $_POST['new_password'] ?? '',
+            $_POST['confirm_password'] ?? ''
+        );
+
         $result === true ? $message = 'Password updated successfully.' : $error = $result;
     }
 }
@@ -69,8 +83,6 @@ output_header('profile.css');
 
 <main class="main profile-page">
     <div class="container">
-        <header class="page-header">
-
         <?php output_profile_alert($message, 'success'); ?>
         <?php output_profile_alert($error, 'error'); ?>
         <?php output_profile_hero($user, 'Update your profile details and password.'); ?>

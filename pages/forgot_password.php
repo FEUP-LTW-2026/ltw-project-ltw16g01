@@ -43,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 output_header('auth.css');
 ?>
 
-<link rel="stylesheet" href="../css/pages/form.css">
 <main class="auth-main">
     <div class="auth-card">
         <div class="auth-header">

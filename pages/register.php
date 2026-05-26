@@ -49,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $userId;
             $_SESSION['user_name'] = $name;
             $_SESSION['role'] = 'member';
+            $_SESSION['is_admin'] = 0;
+            $_SESSION['active_role'] = 'member';
             $_SESSION['user_email'] = $email;
             $_SESSION['user_photo'] = null;
 

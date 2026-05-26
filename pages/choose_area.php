@@ -11,7 +11,7 @@ if (!isLoggedIn()) {
 }
 
 $userRole = $_SESSION['role'] ?? '';
-$userIsAdmin = ($_SESSION['is_admin'] ?? 0) == 1;
+$userIsAdmin = (int)($_SESSION['is_admin'] ?? 0) == 1;
 $userName = $_SESSION['user_name'] ?? 'User';
 $firstName = explode(' ', trim($userName))[0] ?? $userName;
 

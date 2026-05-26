@@ -4,14 +4,14 @@
 function outputStatsGrid($stats) { ?>
     <div class="stats-grid">
         <?php foreach ($stats as $stat): ?>
-            <div class="stat-box">
+            <article class="stat-box">
                 <p class="stat-number">
                     <?= htmlspecialchars((string)$stat['number']) ?><?= htmlspecialchars($stat['suffix']) ?>
                 </p>
                 <p class="stat-label">
                     <?= htmlspecialchars($stat['label']) ?>
                 </p>
-            </div>
+            </article>
         <?php endforeach; ?>
     </div>
 <?php }
@@ -32,13 +32,13 @@ function outputClassTicker($classTypes) { ?>
     </section>
 <?php }
 
-function outputFeatureCard($icon, $title, $text, $link = null, $class = 'feature-card-two') {
-    $tag = $link ? 'a' : 'article';
-    $href = $link ? ' href="' . htmlspecialchars($link) . '"' : '';
-?>
-    <<?= $tag ?><?= $href ?> class="<?= htmlspecialchars($class) ?>">
-        <div class="feature-icon"><?= htmlspecialchars($icon) ?></div>
-        <h3><?= htmlspecialchars($title) ?></h3>
-        <p><?= htmlspecialchars($text) ?></p>
-    </<?= $tag ?>>
+function outputFeatureCard($icon, $title, $text, $link = null, $class = 'feature-card') {
+    ?>
+    <article class="<?= htmlspecialchars($class) ?>">
+        <a href="<?= htmlspecialchars($link ?? '#') ?>" class="feature-card-link">
+            <div class="feature-icon"><?= htmlspecialchars($icon) ?></div>
+            <h3><?= htmlspecialchars($title) ?></h3>
+            <p><?= htmlspecialchars($text) ?></p>
+        </a>
+    </article>
 <?php }

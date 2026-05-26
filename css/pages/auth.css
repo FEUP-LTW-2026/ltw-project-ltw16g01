@@ -260,3 +260,12 @@
 #loginHeader {
     margin-top: 12%;
 }
+
+.auth-success-center {
+    text-align: center;
+}
+
+.reset-demo-link {
+    display: inline-block;
+    margin-top: 10px;
+}

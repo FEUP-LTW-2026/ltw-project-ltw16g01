@@ -166,7 +166,6 @@ output_header('upgrade-membership.css');
                                     name="plan"
                                     value="<?= htmlspecialchars($planKey) ?>"
                                     class="main-button full-button"
-                                    onclick="return confirm('Change your membership to <?= htmlspecialchars($plan['label']) ?>?')"
                                 >
                                     Choose <?= htmlspecialchars($plan['label']) ?>
                                 </button>

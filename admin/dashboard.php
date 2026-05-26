@@ -191,4 +191,4 @@ output_header('admin-dashboard.css');
     </div>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../admin/'); ?>

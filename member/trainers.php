@@ -8,11 +8,6 @@ require_once '../db/trainers.php';
 require_once '../template/trainers.php';
 
 $pdo = getDatabaseConnection();
-$specializations = getDistinctSpecializations($pdo);
-$selectedSpec = $_GET['specialization'] ?? '';
-$selectedName = $_GET['name'] ?? '';
-
-$filters = ['specialization' => $selectedSpec, 'name' => $selectedName];
 
 $filters = [
     'specialization' => $_GET['specialization'] ?? '',
@@ -20,6 +15,10 @@ $filters = [
     'is_pt' => $_GET['is_pt'] ?? '',
     'active_only' => true
 ];
+
+$selectedSpec = $filters['specialization'];
+$selectedTrainerId = $filters['trainer_id'];
+$selectedIsPt = $filters['is_pt'];
 
 $trainers = getAllTrainers($pdo, $filters);
 $specializations = getTrainerSpecializationOptions($pdo);

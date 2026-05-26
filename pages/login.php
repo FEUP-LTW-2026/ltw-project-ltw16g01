@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_photo'] = $user['photo'] ?? null;
 
-            if ($user['is_admin'] === 1 && in_array($user['role'], ['member', 'trainer'], true)) {
+            if ((int)$user['is_admin'] === 1 && in_array($user['role'], ['member', 'trainer'], true)) {
                 header('Location: choose_area.php');
             } elseif ($user['role'] === 'admin') {
                 $_SESSION['active_role'] = $user['role'];

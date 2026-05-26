@@ -1,11 +1,14 @@
 <?php
 session_start();
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/personal_bookings.php';
 require_once '../template/admin.php';
+
+requireAuth('admin');
 
 function render_requests_table($requests) {
     if (empty($requests)) {
@@ -17,9 +20,17 @@ function render_requests_table($requests) {
         <table class="requests-table">
             <thead>
                 <tr>
-                    <th>Member</th><th>Trainer</th><th>Date</th><th>Time</th><th>Duration</th><th>Notes</th><th>Status</th><th>Created</th>
+                    <th>Member</th>
+                    <th>Trainer</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Duration</th>
+                    <th>Notes</th>
+                    <th>Status</th>
+                    <th>Created</th>
                 </tr>
             </thead>
+
             <tbody>
                 <?php foreach ($requests as $req): ?>
                     <tr>
@@ -27,7 +38,7 @@ function render_requests_table($requests) {
                         <td><?= htmlspecialchars($req['trainer_name']) ?></td>
                         <td><?= date('d/m/Y', strtotime($req['booking_date'])) ?></td>
                         <td><?= htmlspecialchars($req['start_time']) ?></td>
-                        <td><?= $req['duration_min'] ?> min</td>
+                        <td><?= (int)$req['duration_min'] ?> min</td>
                         <td><?= htmlspecialchars($req['notes'] ?: '—') ?></td>
                         <td>
                             <?php if ($req['status'] === 'pending'): ?>
@@ -47,25 +58,8 @@ function render_requests_table($requests) {
     <?php
 }
 
-// Processar requisição AJAX
-if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
-    $pdo = getDatabaseConnection();
-    $filter = $_GET['filter'] ?? 'all';
-    $requests = getAllPTRequests($pdo, $filter === 'all' ? null : $filter);
-    ob_start();
-    render_requests_table($requests);
-    $html = ob_get_clean();
-    header('Content-Type: application/json');
-    echo json_encode([
-        'success' => true,
-        'html' => $html,
-        'count' => count($requests)
-    ]);
-    exit;
-}
-
-requireAuth('admin');
 $pdo = getDatabaseConnection();
+
 $filter = $_GET['filter'] ?? 'all';
 $requests = getAllPTRequests($pdo, $filter === 'all' ? null : $filter);
 
@@ -99,6 +93,7 @@ output_header('admin-pt-requests.css');
             <div class="card-head">
                 <h2>PT Requests (<span id="request-count"><?= count($requests) ?></span>)</h2>
             </div>
+
             <div class="card-body" id="requests-table-container">
                 <?php render_requests_table($requests); ?>
             </div>
@@ -106,30 +101,6 @@ output_header('admin-pt-requests.css');
     </div>
 </main>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterSelect = document.getElementById('status-filter');
-        const tableContainer = document.getElementById('requests-table-container');
-        const countSpan = document.getElementById('request-count');
+<script src="../js/pt-requests.js"></script>
 
-        function loadRequests() {
-            const filter = filterSelect.value;
-            fetch(window.location.pathname + '?filter=' + encodeURIComponent(filter) + '&ajax=1')
-                .then(response => {
-                    if (!response.ok) throw new Error('HTTP error ' + response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        tableContainer.innerHTML = data.html;
-                        countSpan.innerText = data.count;
-                    }
-                })
-                .catch(err => console.error('AJAX error:', err));
-        }
-
-        filterSelect.addEventListener('change', loadRequests);
-    });
-</script>
-
-<?php output_footer(); ?>
+<?php output_footer('../admin/'); ?>

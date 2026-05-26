@@ -5,6 +5,7 @@ require_once '../db/connection.php';
 require_once '../db/equipment.php';
 require_once '../template/equipment.php';
 require_once '../includes/header.php';
+require_once '../includes/footer.php';
 
 $pdo = getDatabaseConnection();
 
@@ -50,6 +51,6 @@ output_header("equipment.css");
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; output_footer('../pages/'); ?>
+<?php output_footer('../pages/'); ?>
 
-<script> src="../js/equipment.js"</script>
+<script src="../js/equipment.js"> </script>

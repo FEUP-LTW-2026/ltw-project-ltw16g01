@@ -9,7 +9,7 @@ function currentUserId() {
 }
 
 function isAdmin() {
-    return $_SESSION['active_role'] === 'admin';
+    return ($_SESSION['active_role'] ?? '') === 'admin';
 }
 
 function currentUser() {
@@ -49,4 +49,5 @@ function requireAuth($roles = null) {
     http_response_code(403);
     session_destroy();
     header('Location: ../pages/login.php');
+    exit;
 }

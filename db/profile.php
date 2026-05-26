@@ -58,7 +58,7 @@ function getMemberProfile($pdo, $userId) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function getMemberStats($pdo, $userId) {
+function getMemberProfileStats($pdo, $userId) {
     $stats = [];
 
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM enrollments e JOIN class_sessions s ON e.session_id = s.id WHERE e.member_id = ? AND e.status = 'enrolled' AND s.session_date >= date('now')");

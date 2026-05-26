@@ -95,7 +95,7 @@ output_header('pt_requests.css');
                                             </form>
                                             <form method="post" style="display: inline-block;">
                                                 <input type="hidden" name="request_id" value="<?= $req['id'] ?>">
-                                                <button type="submit" name="action" value="reject" class="delete-btn btn-sm" onclick="return confirm('Reject this request?')">Decline</button>
+                                                <button type="submit" name="action" value="reject" class="delete-btn btn-sm" >Decline</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -138,4 +138,4 @@ output_header('pt_requests.css');
     </div>
 </main>
 
-<?php output_footer(); ?>
+<?php output_footer('../trainer/'); ?>

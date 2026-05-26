@@ -146,20 +146,26 @@ function trainerHasBookingConflict($pdo, $trainerId, $bookingDate, $startTime, $
 
 function trainerHasClassConflict($pdo, $trainerId, $bookingDate, $startTime, $duration) {
     $dayOfWeek = date('l', strtotime($bookingDate));
-    $endTime = date('H:i:s', strtotime($startTime . ' + ' . $duration . ' minutes'));
+
     $sql = "
         SELECT cs.id
         FROM class_schedules cs
         WHERE cs.trainer_id = ?
           AND cs.day_of_week = ?
-          AND (
-              (cs.start_time <= ? AND cs.start_time >= ?)
-              OR
-              (cs.start_time >= ? AND cs.start_time <= ?)
-          )
+          AND time(cs.start_time) < time(?, '+' || ? || ' minutes')
+          AND time(cs.start_time, '+' || cs.duration_min || ' minutes') > time(?)
+        LIMIT 1
     ";
+
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$trainerId, $dayOfWeek, $endTime, $startTime, $startTime, $endTime]);
+    $stmt->execute([
+        $trainerId,
+        $dayOfWeek,
+        $startTime,
+        $duration,
+        $startTime
+    ]);
+
     return $stmt->fetch() !== false;
 }
 

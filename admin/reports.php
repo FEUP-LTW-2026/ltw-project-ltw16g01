@@ -19,7 +19,6 @@ $planDistribution = getMembershipPlanDistribution($pdo);
 $occupancyByDay = getOccupancyByDay($pdo);
 $criticalClasses = getCriticalClasses($pdo);
 $lowEquipment = getLowAvailabilityEquipment($pdo);
-$recentActivity = getRecentActivity($pdo);
 
 output_header('reports.css');
 ?>
