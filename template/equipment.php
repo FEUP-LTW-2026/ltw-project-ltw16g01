@@ -51,7 +51,7 @@ function output_equipment_card($item, $memberPlan = null) {
             <p class="equip-notes"><?= $notes ?></p>
         <?php endif; ?>
 
-        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'member'): ?>
+        <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'member'): ?>
             <?php if ($memberPlan === 'vip' && $effectiveStatus === 'available' && $available > 0): ?>
                 <form class="reserve-equipment-form equip-actions">
                     <input type="hidden" name="equipment_id" value="<?= $id ?>">
@@ -91,7 +91,7 @@ function output_equipment_card($item, $memberPlan = null) {
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+        <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
             <div class="equip-actions">
                 <a href="edit_equipment.php?id=<?= $id ?>" class="secondary-button btn-sm">
                     Edit

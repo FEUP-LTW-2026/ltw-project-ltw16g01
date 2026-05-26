@@ -66,6 +66,8 @@ $requests = getAllPTRequests($pdo, $filter === 'all' ? null : $filter);
 output_header('admin-pt-requests.css');
 ?>
 
+<link rel="stylesheet" href="../css/pages/form.css">
+
 <main class="main">
     <div class="container">
         <header class="page-header">

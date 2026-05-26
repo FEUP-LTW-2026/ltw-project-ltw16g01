@@ -51,10 +51,46 @@
 }
 
 @media (max-width: 640px) {
-    .filter-bar {
-        flex-direction: column;
+    .form-card {
+        padding: var(--sp-md);
     }
-    .filter-group-end {
+
+    .form-row {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-md);
+    }
+
+    .form-group {
         width: 100%;
     }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-actions .main-button,
+    .form-actions .secondary-button {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .checkbox-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+}
+
+.form-control, .form-select {
+    width: 100%;
 }
