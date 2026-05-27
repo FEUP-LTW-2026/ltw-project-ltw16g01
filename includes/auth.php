@@ -36,7 +36,7 @@ function requireAuth($roles = null) {
     }
 
     $allowedRoles = (array)$roles;
-    $userRole = $_SESSION['active_role'] ?? '';
+    $userRole = $_SESSION['active_role'] ?? ($_SESSION['role'] ?? '');
 
     if (in_array($userRole, $allowedRoles, true)) {
         return;
@@ -47,7 +47,22 @@ function requireAuth($roles = null) {
     }
 
     http_response_code(403);
-    session_destroy();
+
+    if ($userRole === 'trainer') {
+        header('Location: ../trainer/dashboard.php');
+        exit;
+    }
+
+    if ($userRole === 'member') {
+        header('Location: ../member/dashboard.php');
+        exit;
+    }
+
+    if ($userRole === 'admin') {
+        header('Location: ../admin/dashboard.php');
+        exit;
+    }
+
     header('Location: ../pages/login.php');
     exit;
 }
