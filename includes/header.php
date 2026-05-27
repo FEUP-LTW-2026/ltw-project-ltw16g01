@@ -7,7 +7,7 @@ if (!function_exists('output_header')) {
     function output_header($pageCss) {
         $loggedIn = isset($_SESSION['user_id']);
         $userName = $_SESSION['user_name'] ?? '';
-        $userRole = $_SESSION['active_role'] ?? ($_SESSION['role'] ?? '');
+        $userRole = $_SESSION['role'] ?? '';
         $userPhoto = $_SESSION['user_photo'] ?? null;
         $userIsAdmin = !empty($_SESSION['is_admin']) || $userRole === 'admin';
 
@@ -23,7 +23,7 @@ if (!function_exists('output_header')) {
             }
         }
 
-        if ($loggedIn && $isAdminArea && $userIsAdmin) {
+        if ($loggedIn && $userIsAdmin) {
             $headerArea = 'admin';
         } elseif ($loggedIn && $userRole === 'member') {
             $headerArea = 'member';
