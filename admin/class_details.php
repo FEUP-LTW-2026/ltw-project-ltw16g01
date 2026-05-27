@@ -119,4 +119,4 @@ output_header('class-details.css');
     </div>
 </main>
 
-<?php output_footer('../member/'); ?>
+<?php output_footer('../admin/'); ?>
