@@ -22,7 +22,7 @@ function output_footer($basePath = '') {
                 <div class="footer-box">
                     <h3>Contact</h3>
                     <p>Avenida da Boavista, 1203<br>4100-130 Porto, Portugal</p>
-                    <p>info@fitpeak.com</p>
+                    <p>fitpeakgym2026@gmail.com</p>
                     <p>+351 220 145 980</p>
                 </div>
             </div>
