@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once '../includes/session.php';
 
 require_once '../db/connection.php';
 require_once '../db/trainers.php';

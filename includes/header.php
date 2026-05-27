@@ -1,20 +1,15 @@
 <?php
 // includes/header.php
 
+require_once __DIR__ . '/session.php';
+
 if (!function_exists('output_header')) {
     function output_header($pageCss) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         $loggedIn = isset($_SESSION['user_id']);
         $userName = $_SESSION['user_name'] ?? '';
-        $userRole = $_SESSION['role'] ?? '';
+        $userRole = $_SESSION['active_role'] ?? ($_SESSION['role'] ?? '');
         $userPhoto = $_SESSION['user_photo'] ?? null;
         $userIsAdmin = !empty($_SESSION['is_admin']) || $userRole === 'admin';
-
-        $currentPath = $_SERVER['PHP_SELF'] ?? '';
-        $isAdminArea = strpos($currentPath, '/admin/') !== false;
 
         $avatarHtml = '';
 
