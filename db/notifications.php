@@ -1,5 +1,4 @@
 <?php
-// db/notifications.php
 
 function createNotification($pdo, $userId, $message, $type = 'info') {
     $stmt = $pdo->prepare("SELECT id FROM notification_types WHERE name = ?");
@@ -10,14 +9,17 @@ function createNotification($pdo, $userId, $message, $type = 'info') {
     return $stmt->execute([$userId, $message, $typeId]);
 }
 
-function getNotificationsForUser($pdo, $userId, $limit = 100, $offset = 0, $typeFilter = 'all') {
-    $sql = "SELECT n.*, nt.label as type_label, nt.css_class
+function getNotifications($pdo, $limit = 100, $offset = 0, $typeFilter = 'all') {
+    $adminId = $_SESSION['user_id'];
+    $sql = "SELECT n.*, nt.label as type_label, nt.css_class,
+                   CASE WHEN nr.id IS NOT NULL THEN 1 ELSE 0 END as is_read
             FROM notifications n
             JOIN notification_types nt ON n.notification_type_id = nt.id
-            WHERE n.user_id = ?";
-    $params = [$userId];
+            LEFT JOIN notification_reads nr ON n.id = nr.notification_id AND nr.admin_id = ?
+            ";
+    $params = [$adminId];
     if ($typeFilter !== 'all') {
-        $sql .= " AND nt.name = ?";
+        $sql .= " WHERE nt.name = ?";
         $params[] = $typeFilter;
     }
     $sql .= " ORDER BY n.created_at DESC LIMIT ? OFFSET ?";
@@ -28,13 +30,12 @@ function getNotificationsForUser($pdo, $userId, $limit = 100, $offset = 0, $type
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getTotalCountForUser($pdo, $userId, $typeFilter = 'all') {
+function getTotalCountForUser($pdo, $typeFilter = 'all') {
     $sql = "SELECT COUNT(*) FROM notifications n
-            JOIN notification_types nt ON n.notification_type_id = nt.id
-            WHERE n.user_id = ?";
-    $params = [$userId];
+            JOIN notification_types nt ON n.notification_type_id = nt.id";
+    $params = [];
     if ($typeFilter !== 'all') {
-        $sql .= " AND nt.name = ?";
+        $sql .= " WHERE nt.name = ?";
         $params[] = $typeFilter;
     }
     $stmt = $pdo->prepare($sql);
@@ -42,28 +43,32 @@ function getTotalCountForUser($pdo, $userId, $typeFilter = 'all') {
     return (int)$stmt->fetchColumn();
 }
 
-function getUnreadCountForUser($pdo, $userId) {
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = ? AND read_at IS NULL");
-    $stmt->execute([$userId]);
+function getUnreadCount($pdo) {
+    $adminId = $_SESSION['user_id'];
+    $sql = "SELECT COUNT(*) FROM notifications n
+            WHERE NOT EXISTS (SELECT 1 FROM notification_reads nr
+                              WHERE nr.notification_id = n.id AND nr.admin_id = ?)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$adminId]);
     return (int)$stmt->fetchColumn();
 }
 
-function markNotificationAsRead($pdo, $notificationId, $userId) {
-    $stmt = $pdo->prepare("UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ?");
-    return $stmt->execute([$notificationId, $userId]);
+function markNotificationAsRead($pdo, $notificationId) {
+    $adminId = $_SESSION['user_id'];
+    $stmt = $pdo->prepare("INSERT OR IGNORE INTO notification_reads (notification_id, admin_id) VALUES (?, ?)");
+    return $stmt->execute([$notificationId, $adminId]);
 }
 
-function markAllNotificationsAsRead($pdo, $userId) {
-    $stmt = $pdo->prepare("UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE user_id = ? AND read_at IS NULL");
-    return $stmt->execute([$userId]);
+function markAllNotificationsAsRead($pdo) {
+    $adminId = $_SESSION['user_id'];
+    $stmt = $pdo->prepare("INSERT OR IGNORE INTO notification_reads (notification_id, admin_id)
+                           SELECT id, ? FROM notifications n
+                           WHERE NOT EXISTS (SELECT 1 FROM notification_reads nr
+                                             WHERE nr.notification_id = n.id AND nr.admin_id = ?)");
+    return $stmt->execute([$adminId, $adminId]);
 }
 
-function deleteNotification($pdo, $notificationId, $userId) {
-    $stmt = $pdo->prepare("DELETE FROM notifications WHERE id = ? AND user_id = ?");
-    return $stmt->execute([$notificationId, $userId]);
-}
-
-function getNotificationTypes($pdo) {
-    $stmt = $pdo->query("SELECT id, name, label, css_class FROM notification_types WHERE active = 1 ORDER BY label");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+function deleteNotification($pdo, $notificationId) {
+    $stmt = $pdo->prepare("DELETE FROM notifications WHERE id = ?");
+    return $stmt->execute([$notificationId]);
 }
