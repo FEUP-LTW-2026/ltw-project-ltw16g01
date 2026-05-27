@@ -44,9 +44,21 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'member' CHECK(role IN ('member','trainer','admin')),
+    is_admin INTEGER NOT NULL DEFAULT 0,
     photo TEXT DEFAULT NULL,
     active INTEGER NOT NULL DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tokens de recuperação de password
+CREATE TABLE IF NOT EXISTS password_resets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    token TEXT NOT NULL UNIQUE,
+    expires_at DATETIME NOT NULL,
+    used INTEGER NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Perfis de treinador (1:1 com users)
@@ -221,28 +233,30 @@ INSERT INTO notification_types (name, label, css_class) VALUES
 -- ============================================================
 
 -- Senha padrão: 12345678 (em texto claro – apenas para demonstração)
-INSERT INTO users (name, username, email, password, role, active) VALUES
+INSERT INTO users (name, username, email, password, role, is_admin, active) VALUES
 -- Treinadores
-('Ana Silva', 'anasilva', 'ana@fitpeak.com', '12345678', 'trainer', 1),
-('Bruno Costa', 'brunocosta', 'bruno@fitpeak.com', '12345678', 'trainer', 1),
-('Carla Mendes', 'carlamendes', 'carla@fitpeak.com', '12345678', 'trainer', 1),
-('Miguel Rocha', 'miguelrocha', 'miguel@fitpeak.com', '12345678', 'trainer', 1),
-('Inês Almeida', 'inesalmeida', 'ines@fitpeak.com', '12345678', 'trainer', 1),
-('Tiago Martins', 'tiagomartins', 'tiago@fitpeak.com', '12345678', 'trainer', 1),
-('Beatriz Ramos', 'beatrizramos', 'beatriz@fitpeak.com', '12345678', 'trainer', 1),
-('Duarte Oliveira', 'duarteoliveira', 'duarte@fitpeak.com', '12345678', 'trainer', 1),
-('Mariana Lopes', 'marianalopes', 'mariana@fitpeak.com', '12345678', 'trainer', 1),
-('Ricardo Nunes', 'ricardonunes', 'ricardo@fitpeak.com', '12345678', 'trainer', 1),
-('Catarina Gomes', 'catarinagomes', 'catarina@fitpeak.com', '12345678', 'trainer', 1),
-('André Ferreira', 'andreferreira', 'andre@fitpeak.com', '12345678', 'trainer', 1),
+('Ana Silva', 'anasilva', 'ana@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Bruno Costa', 'brunocosta', 'bruno@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Carla Mendes', 'carlamendes', 'carla@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Miguel Rocha', 'miguelrocha', 'miguel@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Inês Almeida', 'inesalmeida', 'ines@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Tiago Martins', 'tiagomartins', 'tiago@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Beatriz Ramos', 'beatrizramos', 'beatriz@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Duarte Oliveira', 'duarteoliveira', 'duarte@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Mariana Lopes', 'marianalopes', 'mariana@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Ricardo Nunes', 'ricardonunes', 'ricardo@fitpeak.com', '12345678', 'trainer', 0, 1),
+('Catarina Gomes', 'catarinagomes', 'catarina@fitpeak.com', '12345678', 'trainer', 0, 1),
+('André Ferreira', 'andreferreira', 'andre@fitpeak.com', '12345678', 'trainer', 0, 1),
+
 -- Administrador
-('Admin User', 'admin', 'admin@fitpeak.com', '12345678', 'admin', 1),
--- Membros (5 membros comuns)
-('João Pereira', 'joaop', 'joao@email.com', '12345678', 'member', 1),
-('Maria Santos', 'marias', 'maria@email.com', '12345678', 'member', 1),
-('Rita Ferreira', 'ritaf', 'rita@email.com', '12345678', 'member', 1),
-('Carlos Andrade', 'carlosa', 'carlos@email.com', '12345678', 'member', 1),
-('Sofia Lima', 'sofial', 'sofia@email.com', '12345678', 'member', 1);
+('Admin User', 'admin', 'admin@fitpeak.com', '12345678', 'admin', 1, 1),
+
+-- Membros
+('João Pereira', 'joaop', 'joao@email.com', '12345678', 'member', 0, 1),
+('Maria Santos', 'marias', 'maria@email.com', '12345678', 'member', 0, 1),
+('Rita Ferreira', 'ritaf', 'rita@email.com', '12345678', 'member', 0, 1),
+('Carlos Andrade', 'carlosa', 'carlos@email.com', '12345678', 'member', 0, 1),
+('Sofia Lima', 'sofial', 'sofia@email.com', '12345678', 'member', 0, 1);
 
 -- ============================================================
 -- 5. PERFIS DE TREINADOR

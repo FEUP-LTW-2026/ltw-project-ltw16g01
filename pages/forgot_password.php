@@ -4,13 +4,14 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../db/connection.php';
 require_once '../db/auth.php';
+require_once '../includes/mailer.php';
 
 $error = '';
 $success = '';
-$resetLink = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
+
     if (empty($email)) {
         $error = 'Please enter your email address.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -18,25 +19,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $pdo = getDatabaseConnection();
         $token = createPasswordResetToken($pdo, $email);
-        if ($token === false) {
-            $success = 'If that email address is in our system, we have sent a password reset link.';
-        } else {
-            // Construir link absoluto
+
+        if ($token !== false) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
             $host = $_SERVER['HTTP_HOST'];
             $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+
             $resetLink = $protocol . $host . $base . '/reset_password.php?token=' . urlencode($token);
-            
-            // Enviar email (opcional – pode ser mantido)
-            $subject = 'Password Reset - FitPeak';
-            $message = "Hello,\n\nClick the link below to reset your password:\n$resetLink\n\nThis link expires in 1 hour.\n\nIf you did not request this, please ignore this email.\n\nFitPeak Team";
-            $headers = 'From: no-reply@fitpeak.com' . "\r\n" .
-                       'Reply-To: support@fitpeak.com' . "\r\n" .
-                       'X-Mailer: PHP/' . phpversion();
-            mail($email, $subject, $message, $headers);
-            
-            $success = 'A reset link has been sent to your email address.';
+
+            sendPasswordResetEmail($email, $resetLink);
         }
+
+        $success = 'If that email address is in our system, we have sent a password reset link.';
     }
 }
 
@@ -58,12 +52,6 @@ output_header('auth.css');
         <?php if ($success): ?>
             <div class="auth-alert alert-success" style="text-align: center;">
                 <?= htmlspecialchars($success) ?>
-                <?php if ($resetLink): ?>
-                    <br><br>
-                    <a href="<?= htmlspecialchars($resetLink) ?>" class="main-button" style="display: inline-block; margin-top: 10px;">
-                        🔑 Go to Reset Password Page
-                    </a>
-                <?php endif; ?>
             </div>
         <?php endif; ?>
 
