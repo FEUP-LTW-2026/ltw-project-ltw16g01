@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $pendingRequests = getTrainerPendingRequests($pdo, $trainerId);
 $pastRequests = getTrainerPastRequests($pdo, $trainerId, 10);
 
-output_header('pt_requests.css');
+output_header('request_pt.css');
 ?>
 
 <main class="main">

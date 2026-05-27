@@ -108,11 +108,10 @@ function getRecentNotifications($pdo, $userId, $limit = 5) {
         SELECT n.*, nt.label as type_label, nt.css_class
         FROM notifications n
         JOIN notification_types nt ON n.notification_type_id = nt.id
-        WHERE n.user_id = ?
         ORDER BY n.created_at DESC
         LIMIT ?
     ");
-    $stmt->execute([$userId, $limit]);
+    $stmt->execute([$limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

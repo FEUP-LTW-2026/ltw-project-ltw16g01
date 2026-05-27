@@ -1,6 +1,5 @@
 <?php
 require_once '../includes/session.php';
-
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
@@ -11,13 +10,11 @@ require_once '../template/notifications.php';
 requireAuth('admin');
 
 $pdo = getDatabaseConnection();
-$adminId = $_SESSION['user_id'];
-
 $filter = $_GET['filter'] ?? 'all';
 
-$notifications = getNotificationsForUser($pdo, $adminId, 100, 0, $filter);
-$totalCount = getTotalCountForUser($pdo, $adminId, $filter);
-$unreadCount = getUnreadCountForUser($pdo, $adminId);
+$notifications = getNotifications($pdo, 100, 0, $filter);
+$totalCount = getTotalCountForUser($pdo, $filter);
+$unreadCount = getUnreadCount($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
@@ -29,19 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $notifId = (int)($_POST['notification_id'] ?? 0);
 
     if ($action === 'mark_read' && $notifId) {
-        markNotificationAsRead($pdo, $notifId, $adminId);
+        markNotificationAsRead($pdo, $notifId);
         header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
-
     if ($action === 'mark_all_read') {
-        markAllNotificationsAsRead($pdo, $adminId);
+        markAllNotificationsAsRead($pdo);
         header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
-
     if ($action === 'delete' && $notifId) {
-        deleteNotification($pdo, $notifId, $adminId);
+        deleteNotification($pdo, $notifId);
         header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
@@ -60,15 +55,12 @@ output_header('notifications.css');
                     <h1>Notifications</h1>
                     <p>System notifications for administrators</p>
                 </div>
-
                 <div class="notification-header-actions">
-                    <?php if ($unreadCount > 0): ?>
-                        <form method="post" style="display: inline;">
+                    <form method="post" style="display: inline;">
                             <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
-                            <input type="hidden" name="action" value="mark_all_read">
-                            <button type="submit" class="secondary-button btn-sm">Mark all as read</button>
-                        </form>
-                    <?php endif; ?>
+                        <input type="hidden" name="action" value="mark_all_read">
+                        <button type="submit" class="secondary-button btn-sm">Mark all as read</button>
+                    </form>
                 </div>
             </div>
         </header>
@@ -76,8 +68,7 @@ output_header('notifications.css');
         <div class="filter-bar">
             <div class="filter-group">
                 <label class="form-label">Filter by type</label>
-
-                <select id="type-filter" class="form-select">
+                <select id="type-filter" class="form-select" onchange="window.location.href='notifications.php?filter='+encodeURIComponent(this.value)">
                     <option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All</option>
                     <option value="info" <?= $filter === 'info' ? 'selected' : '' ?>>Info</option>
                     <option value="success" <?= $filter === 'success' ? 'selected' : '' ?>>Success</option>

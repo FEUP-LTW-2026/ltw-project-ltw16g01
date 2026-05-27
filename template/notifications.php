@@ -7,7 +7,7 @@ function output_notifications_list($notifications) {
     ?>
     <div class="notifications-list">
         <?php foreach ($notifications as $notif): ?>
-            <div class="notification-item <?= $notif['read_at'] ? 'read' : 'unread' ?>" data-id="<?= $notif['id'] ?>">
+            <div class="notification-item <?= $notif['is_read'] ? 'read' : 'unread' ?>" data-id="<?= $notif['id'] ?>">
                 <div class="notification-icon">
                     <span class="badge badge-<?= htmlspecialchars($notif['css_class']) ?>">
                         <?= htmlspecialchars($notif['type_label']) ?>
@@ -18,7 +18,7 @@ function output_notifications_list($notifications) {
                     <small class="notification-date"><?= date('d/m/Y H:i', strtotime($notif['created_at'])) ?></small>
                 </div>
                 <div class="notification-actions">
-                    <?php if (!$notif['read_at']): ?>
+                    <?php if (!$notif['is_read']): ?>
                         <button class="mark-read-btn secondary-button btn-sm" data-id="<?= $notif['id'] ?>">Mark read</button>
                     <?php endif; ?>
                     <button class="delete-notif-btn danger-button btn-sm" data-id="<?= $notif['id'] ?>">Delete</button>
@@ -28,4 +28,3 @@ function output_notifications_list($notifications) {
     </div>
     <?php
 }
-?>
