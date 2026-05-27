@@ -20,6 +20,11 @@ $totalCount = getTotalCountForUser($pdo, $adminId, $filter);
 $unreadCount = getUnreadCountForUser($pdo, $adminId);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $action = $_POST['action'] ?? '';
     $notifId = (int)($_POST['notification_id'] ?? 0);
 
@@ -59,6 +64,7 @@ output_header('notifications.css');
                 <div class="notification-header-actions">
                     <?php if ($unreadCount > 0): ?>
                         <form method="post" style="display: inline;">
+                            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                             <input type="hidden" name="action" value="mark_all_read">
                             <button type="submit" class="secondary-button btn-sm">Mark all as read</button>
                         </form>
@@ -91,7 +97,6 @@ output_header('notifications.css');
     </div>
 </main>
 
-<script src="../js/security.js"></script>
 <script src="../js/notifications.js"></script>
 
 <?php output_footer(); ?>

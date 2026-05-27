@@ -53,6 +53,7 @@ if (!function_exists('output_header')) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="<?= htmlspecialchars($_SESSION['csrf']) ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="FitPeak — Gym management platform.">
     <meta name="theme-color" content="#0b0b0b">

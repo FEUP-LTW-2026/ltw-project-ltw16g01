@@ -30,6 +30,17 @@ $pdo = getDatabaseConnection();
 
 $input = json_decode(file_get_contents('php://input'), true) ?? [];
 
+if (!isset($input['csrf']) || $_SESSION['csrf'] !== $input['csrf']) {
+    http_response_code(403);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid CSRF token.'
+    ]);
+
+    exit;
+}
+
 $action = $input['action'] ?? '';
 $scheduleId = (int)($input['schedule_id'] ?? 0);
 $sessionId = (int)($input['session_id'] ?? 0);

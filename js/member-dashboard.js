@@ -1,3 +1,8 @@
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.content : '';
+}
+
 document.querySelectorAll('.btn-cancel-enroll').forEach(button => {
     button.addEventListener('click', function () {
         const sessionId = this.dataset.sessionId;
@@ -56,7 +61,8 @@ document.getElementById('reviewForm')?.addEventListener('submit', function (e) {
     const data = {
         session_id: fd.get('session_id'),
         rating: rating,
-        comment: fd.get('comment')
+        comment: fd.get('comment'),
+        csrf: getCsrfToken()
     };
 
     fetch('../ajax/review.php', {

@@ -15,6 +15,11 @@ $toastMessage = '';
 $toastType = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $requestId = (int)($_POST['request_id'] ?? 0);
     $action = $_POST['action'] ?? '';
 
@@ -23,10 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
             $stmt->execute([$requestId]);
             $memberId = $stmt->fetchColumn();
+
             if ($memberId) {
-                $message = "Your personal training request has been confirmed by trainer " . htmlspecialchars($_SESSION['user_name']) . ".";
+                $trainerName = $_SESSION['user_name'] ?? '';
+                $message = "Your personal training request has been confirmed by trainer " . $trainerName . ".";
                 createNotification($pdo, $memberId, $message, 'success');
             }
+
             $toastMessage = '✓ Request accepted! Member has been notified.';
             $toastType = 'success';
         } else {
@@ -38,10 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
             $stmt->execute([$requestId]);
             $memberId = $stmt->fetchColumn();
+
             if ($memberId) {
-                $message = "Your personal training request has been declined by trainer " . htmlspecialchars($_SESSION['user_name']) . ".";
+                $trainerName = $_SESSION['user_name'] ?? '';
+                $message = "Your personal training request has been declined by trainer " . $trainerName . ".";
                 createNotification($pdo, $memberId, $message, 'warning');
             }
+
             $toastMessage = '✓ Request declined.';
             $toastType = 'warning';
         } else {
@@ -68,6 +79,7 @@ output_header('pt_requests.css');
             <div class="card-head">
                 <h2>Pending Requests (<?= count($pendingRequests) ?>)</h2>
             </div>
+
             <div class="card-body">
                 <?php if (empty($pendingRequests)): ?>
                     <p class="text-muted">No pending requests.</p>
@@ -75,23 +87,34 @@ output_header('pt_requests.css');
                     <div class="table-wrap">
                         <table class="requests-table">
                             <thead>
-                                <tr><th>Member</th><th>Date</th><th>Time</th><th>Duration</th><th>Notes</th><th>Actions</th></tr>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Duration</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
                             </thead>
+
                             <tbody>
                                 <?php foreach ($pendingRequests as $req): ?>
                                     <tr>
                                         <td><?= htmlspecialchars($req['member_name']) ?></td>
                                         <td><?= date('d/m/Y', strtotime($req['booking_date'])) ?></td>
                                         <td><?= htmlspecialchars($req['start_time']) ?></td>
-                                        <td><?= $req['duration_min'] ?> min</td>
+                                        <td><?= (int)$req['duration_min'] ?> min</td>
                                         <td><?= htmlspecialchars($req['notes'] ?: '—') ?></td>
                                         <td>
                                             <form method="post" style="display: inline-block;">
-                                                <input type="hidden" name="request_id" value="<?= $req['id'] ?>">
+                                                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+                                                <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                 <button type="submit" name="action" value="accept" class="main-button btn-sm">Accept</button>
                                             </form>
+
                                             <form method="post" style="display: inline-block;">
-                                                <input type="hidden" name="request_id" value="<?= $req['id'] ?>">
+                                                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+                                                <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                 <button type="submit" name="action" value="reject" id="reject">Decline</button>
                                             </form>
                                         </td>
@@ -108,21 +131,37 @@ output_header('pt_requests.css');
             <div class="card-head">
                 <h2>Past Requests</h2>
             </div>
+
             <div class="card-body">
                 <?php if (empty($pastRequests)): ?>
                     <p class="text-muted">No past requests.</p>
                 <?php else: ?>
                     <div class="table-wrap">
                         <table class="requests-table">
-                            <thead><tr><th>Member</th><th>Date</th><th>Time</th><th>Duration</th><th>Status</th><th>Notes</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+
                             <tbody>
                                 <?php foreach ($pastRequests as $req): ?>
                                     <tr>
                                         <td><?= htmlspecialchars($req['member_name']) ?></td>
                                         <td><?= date('d/m/Y', strtotime($req['booking_date'])) ?></td>
                                         <td><?= htmlspecialchars($req['start_time']) ?></td>
-                                        <td><?= $req['duration_min'] ?> min</td>
-                                        <td><?= $req['status'] === 'confirmed' ? '<span class="badge badge-success">Confirmed</span>' : '<span class="badge badge-danger">Cancelled</span>' ?></td>
+                                        <td><?= (int)$req['duration_min'] ?> min</td>
+                                        <td>
+                                            <?= $req['status'] === 'confirmed'
+                                                ? '<span class="badge badge-success">Confirmed</span>'
+                                                : '<span class="badge badge-danger">Cancelled</span>'
+                                            ?>
+                                        </td>
                                         <td><?= htmlspecialchars($req['notes'] ?: '—') ?></td>
                                     </tr>
                                 <?php endforeach; ?>

@@ -16,6 +16,11 @@ $message = '';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $action = $_POST['action'] ?? '';
 
     if ($action === 'update_basic_profile') {
@@ -33,7 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($error === '') {
-            $result = updateBasicProfile($pdo, $userId, $_POST['name'] ?? '', $_POST['username'] ?? '', $_POST['email'] ?? '', $photoPath);
+            $result = updateBasicProfile(
+                $pdo,
+                $userId,
+                $_POST['name'] ?? '',
+                $_POST['username'] ?? '',
+                $_POST['email'] ?? '',
+                $photoPath
+            );
 
             if ($result === true) {
                 $_SESSION['user_name'] = trim($_POST['name'] ?? '');
@@ -47,12 +59,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'update_password') {
-        $result = updateUserPassword($pdo, $userId, $_POST['current_password'] ?? '', $_POST['new_password'] ?? '', $_POST['confirm_password'] ?? '');
+        $result = updateUserPassword(
+            $pdo,
+            $userId,
+            $_POST['current_password'] ?? '',
+            $_POST['new_password'] ?? '',
+            $_POST['confirm_password'] ?? ''
+        );
+
         $result === true ? $message = 'Password updated successfully.' : $error = $result;
     }
 
     if ($action === 'update_trainer_profile') {
-        updateTrainerPublicProfile($pdo, $userId, $_POST['bio'] ?? '', $_POST['specializations'] ?? '', $_POST['certifications'] ?? '');
+        updateTrainerPublicProfile(
+            $pdo,
+            $userId,
+            $_POST['bio'] ?? '',
+            $_POST['specializations'] ?? '',
+            $_POST['certifications'] ?? ''
+        );
+
         $message = 'Public trainer profile updated successfully.';
     }
 }

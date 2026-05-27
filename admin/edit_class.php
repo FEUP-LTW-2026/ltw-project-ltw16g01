@@ -38,6 +38,11 @@ $data = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $className = trim($_POST['class_name'] ?? '');
     $classDescription = trim($_POST['class_description'] ?? '');
     $classTypeId = (int)($_POST['class_type_id'] ?? 0);
@@ -48,18 +53,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $capacity = (int)($_POST['capacity'] ?? 20);
     $duration = (int)($_POST['duration_min'] ?? 60);
 
-    $data = ['class_name' => $className, 'class_description' => $classDescription, 'class_type_id' => $classTypeId, 'trainer_id' => $trainerId, 'day_of_week' => $dayOfWeek, 'start_time' => $startTime, 'location' => $location, 'capacity' => $capacity, 'duration_min' => $duration];
+    $data = [
+        'class_name' => $className,
+        'class_description' => $classDescription,
+        'class_type_id' => $classTypeId,
+        'trainer_id' => $trainerId,
+        'day_of_week' => $dayOfWeek,
+        'start_time' => $startTime,
+        'location' => $location,
+        'capacity' => $capacity,
+        'duration_min' => $duration
+    ];
 
     if ($className === '' || $classTypeId <= 0 || $dayOfWeek === '' || $startTime === '') {
         $errors[] = 'Please fill in all required fields.';
-    } elseif (!in_array($dayOfWeek, $days)) {
+    } elseif (!in_array($dayOfWeek, $days, true)) {
         $errors[] = 'Invalid day of week.';
     } elseif ($capacity < 1) {
         $errors[] = 'Capacity must be at least 1.';
     } elseif ($duration < 15) {
         $errors[] = 'Duration must be at least 15 minutes.';
     } else {
-        $result = updateClassWithSchedule($pdo, $scheduleId, $schedule['class_id'], $className, $classDescription, $classTypeId, $trainerId, $dayOfWeek, $startTime, $location, $capacity, $duration);
+        $result = updateClassWithSchedule(
+            $pdo,
+            $scheduleId,
+            $schedule['class_id'],
+            $className,
+            $classDescription,
+            $classTypeId,
+            $trainerId,
+            $dayOfWeek,
+            $startTime,
+            $location,
+            $capacity,
+            $duration
+        );
 
         if ($result) {
             $success = 'Class updated successfully.';

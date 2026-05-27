@@ -20,6 +20,11 @@ $pendingPT = getTrainerPendingPTRequests($pdo, $trainerId);
 $confirmedPT = getTrainerConfirmedPT($pdo, $trainerId);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $requestId = (int)($_POST['request_id'] ?? 0);
     $action = $_POST['action'] ?? '';
 
@@ -32,9 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $memberId = $stmt->fetchColumn();
 
             if ($memberId) {
+                $trainerName = $_SESSION['user_name'] ?? '';
+
                 $message = $action === 'accept'
-                    ? "Your personal training request has been confirmed by trainer " . htmlspecialchars($_SESSION['user_name'])
-                    : "Your personal training request has been declined by trainer " . htmlspecialchars($_SESSION['user_name']);
+                    ? "Your personal training request has been confirmed by trainer " . $trainerName
+                    : "Your personal training request has been declined by trainer " . $trainerName;
 
                 createNotification($pdo, $memberId, $message, $action === 'accept' ? 'success' : 'warning');
             }
@@ -115,6 +122,7 @@ output_header('trainer-dashboard.css');
                                             <td><?= htmlspecialchars($req['notes'] ?: '—') ?></td>
                                             <td>
                                                 <form method="post" style="display: inline-block;">
+                                                    <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                     <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                     <button type="submit" name="action" value="accept" class="main-button btn-sm">
                                                         Accept
@@ -122,6 +130,7 @@ output_header('trainer-dashboard.css');
                                                 </form>
 
                                                 <form method="post" style="display: inline-block;">
+                                                    <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                     <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                     <button type="submit" name="action" value="reject" class="decline-btn btn-sm">
                                                         Decline

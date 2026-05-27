@@ -75,6 +75,7 @@ function output_member_form($member = null, $errors = [], $success = '', $old = 
         <?php endif; ?>
 
         <form method="post" class="auth-form card form-card">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
             <div class="form-group form-spaced">
                 <label class="form-label">Full Name *</label>
                 <input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($name) ?>">

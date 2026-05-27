@@ -1,3 +1,8 @@
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.content : '';
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const typeFilter = document.getElementById('type-filter');
 
@@ -24,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         form.method = 'POST';
         form.appendChild(createHiddenInput('action', action));
         form.appendChild(createHiddenInput('notification_id', notificationId));
+        form.appendChild(createHiddenInput('csrf', getCsrfToken()));
 
         document.body.appendChild(form);
         form.submit();

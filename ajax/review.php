@@ -24,6 +24,17 @@ if (!$input) {
     exit;
 }
 
+if (!isset($input['csrf']) || $_SESSION['csrf'] !== $input['csrf']) {
+    http_response_code(403);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid CSRF token.'
+    ]);
+
+    exit;
+}
+
 $sessionId = (int)($input['session_id'] ?? 0);
 $rating = (int)($input['rating'] ?? 0);
 $comment = trim($input['comment'] ?? '');

@@ -1,81 +1,164 @@
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.content : '';
+}
+
 const filterForm = document.getElementById('filter-form');
 const classListContainer = document.getElementById('class-list-container');
 const classCount = document.getElementById('class-count');
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+
+    toast.textContent = message;
+    toast.className = 'toast-message';
+
+    if (type === 'success') {
+        toast.classList.add('toast-success');
+    } else {
+        toast.classList.add('toast-error');
+    }
+
+    document.body.appendChild(toast);
+
+    setTimeout(function () {
+        toast.remove();
+    }, 3000);
+}
 
 function updateClasses() {
     if (!filterForm || !classListContainer || !classCount) {
         return;
     }
+
     const params = new URLSearchParams(new FormData(filterForm));
+
     fetch('../ajax/ajax_get_classes.php?' + params.toString())
-        .then(response => response.text())
-        .then(html => {
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (html) {
             classListContainer.innerHTML = html;
             classCount.innerText = classListContainer.querySelectorAll('.class-card').length;
         })
-        .catch(error => console.error('AJAX error:', error));
+        .catch(function (error) {
+            console.error('AJAX error:', error);
+        });
 }
 
 if (filterForm) {
     filterForm.addEventListener('submit', function (event) {
         event.preventDefault();
+        updateClasses();
     });
+
     filterForm.querySelectorAll('select').forEach(function (select) {
         select.addEventListener('change', updateClasses);
     });
 }
 
 document.addEventListener('click', function (event) {
-    if (event.target.classList.contains('delete-class-link')) {
-        if (!confirm('Delete this class schedule?')) {
+    const deleteLink = event.target.closest('.delete-class-link');
+
+    if (deleteLink) {
+        if (!confirm('Are you sure you want to delete this class schedule? This action cannot be undone.')) {
             event.preventDefault();
         }
+
+        return;
     }
-    if (event.target.classList.contains('edit-schedule-button')) {
-        const targetId = event.target.dataset.target;
+
+    const editButton = event.target.closest('.edit-schedule-button');
+
+    if (editButton) {
+        const targetId = editButton.dataset.target;
         const editBox = document.getElementById(targetId);
+
         if (editBox) {
             editBox.style.display = 'block';
         }
+
+        return;
     }
-    if (event.target.classList.contains('cancel-edit-schedule-button')) {
-        const targetId = event.target.dataset.target;
+
+    const cancelEditButton = event.target.closest('.cancel-edit-schedule-button');
+
+    if (cancelEditButton) {
+        const targetId = cancelEditButton.dataset.target;
         const editBox = document.getElementById(targetId);
+
         if (editBox) {
             editBox.style.display = 'none';
         }
+
+        return;
     }
-    if (event.target.classList.contains('enroll-btn') || event.target.classList.contains('enrolled-btn')) {
-        event.preventDefault();
-        const button = event.target;
-        const scheduleId = button.dataset.scheduleId;
-        const action = button.dataset.action;
-        if (!scheduleId || !action) {
-            return;
-        }
-        button.disabled = true;
-        fetch('../ajax/enroll.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                schedule_id: scheduleId,
-                action: action
-            })
+
+    const enrollButton = event.target.closest('.enroll-btn, .enrolled-btn');
+
+    if (!enrollButton) {
+        return;
+    }
+
+    event.preventDefault();
+
+    if (enrollButton.disabled) {
+        return;
+    }
+
+    const scheduleId = enrollButton.dataset.scheduleId;
+    const action = enrollButton.dataset.action;
+
+    if (!scheduleId || !action) {
+        return;
+    }
+
+    enrollButton.disabled = true;
+
+    const originalText = enrollButton.textContent;
+    enrollButton.textContent = action === 'enroll' ? 'Processing...' : 'Canceling...';
+
+    fetch('../ajax/enroll.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            action: action,
+            schedule_id: scheduleId,
+            csrf: getCsrfToken()
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
+    })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            if (data.success) {
+                if (action === 'enroll') {
+                    enrollButton.textContent = '✅ Enrolled';
+                    enrollButton.classList.remove('enroll-btn', 'secondary-button');
+                    enrollButton.classList.add('enrolled-btn');
+                    enrollButton.dataset.action = 'cancel';
+                } else {
+                    enrollButton.textContent = 'Enroll';
+                    enrollButton.classList.remove('enrolled-btn');
+                    enrollButton.classList.add('enroll-btn', 'secondary-button');
+                    enrollButton.dataset.action = 'enroll';
                 }
-            })
-            .catch(error => {
-                console.error('Enrollment AJAX error:', error);
-                alert('Something went wrong.');
-            })
-            .finally(() => {
-                button.disabled = false;
-            });
-    }
+
+                showToast(data.message, 'success');
+            } else {
+                showToast(data.message || 'Something went wrong.', 'error');
+                enrollButton.textContent = originalText;
+            }
+
+            enrollButton.disabled = false;
+        })
+        .catch(function (error) {
+            console.error('Enrollment AJAX error:', error);
+            showToast('Network error. Please try again.', 'error');
+
+            enrollButton.textContent = originalText;
+            enrollButton.disabled = false;
+        });
 });

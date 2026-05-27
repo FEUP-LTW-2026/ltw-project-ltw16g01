@@ -21,6 +21,7 @@ function output_login_form($error = '', $postedIdentifier = '') {
         <?php endif; ?>
 
         <form class="auth-form" method="post" action="login.php" id="loginForm">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
             <div class="form-group">
                 <label class="form-label" for="identifier">Email or Username</label>
                 <input type="text" id="identifier" name="identifier"
@@ -76,6 +77,7 @@ function output_register_form($error = '', $old = []) {
         <?php endif; ?>
 
         <form class="auth-form" method="post" action="register.php" id="registerForm">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
             <div class="form-group">
                 <label class="form-label" for="name">Full Name</label>
                 <input type="text" id="name" name="name" class="form-input"

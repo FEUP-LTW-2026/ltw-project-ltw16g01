@@ -1,3 +1,8 @@
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.content : '';
+}
+
 function equipmentWidthClass(percentage) {
     const rounded = Math.round(Math.max(0, Math.min(100, percentage)) / 10) * 10;
     return 'avail-w-' + rounded;
@@ -123,7 +128,8 @@ document.addEventListener('submit', function (event) {
             equipment_id: equipmentId,
             reservation_date: reservationDate,
             reservation_time: reservationTime,
-            quantity: quantity
+            quantity: quantity,
+            csrf: getCsrfToken()
         })
     })
         .then(response => response.json())

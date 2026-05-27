@@ -25,6 +25,11 @@ $success = '';
 $old = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $name = trim($_POST['name'] ?? '');
     $categoryId = (int)($_POST['category_id'] ?? 0);
     $quantity = (int)($_POST['quantity'] ?? 1);
@@ -32,7 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $_POST['status'] ?? 'available';
     $notes = trim($_POST['notes'] ?? '');
 
-    $old = ['name' => $name, 'category_id' => $categoryId, 'quantity' => $quantity, 'available' => $available, 'status' => $status, 'notes' => $notes];
+    $old = [
+        'name' => $name,
+        'category_id' => $categoryId,
+        'quantity' => $quantity,
+        'available' => $available,
+        'status' => $status,
+        'notes' => $notes
+    ];
 
     if ($name === '' || $categoryId <= 0) {
         $errors[] = 'Name and category are required.';
@@ -42,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Available count cannot be negative.';
     } elseif ($available > $quantity) {
         $errors[] = 'Available count cannot exceed total quantity.';
-    } elseif (!in_array($status, ['available', 'maintenance', 'unavailable'])) {
+    } elseif (!in_array($status, ['available', 'maintenance', 'unavailable'], true)) {
         $errors[] = 'Invalid status.';
     } else {
         if (updateEquipment($pdo, $id, $name, $categoryId, $quantity, $available, $status, $notes)) {

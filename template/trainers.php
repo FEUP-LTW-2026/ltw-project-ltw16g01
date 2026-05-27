@@ -146,6 +146,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
         <?php endif; ?>
 
         <form method="post" action="<?= $action ?>" class="auth-form card form-panel">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
             <div class="form-group">
                 <label class="form-label">Full Name *</label>
                 <input type="text" name="name" class="form-control" required value="<?= $name ?>">

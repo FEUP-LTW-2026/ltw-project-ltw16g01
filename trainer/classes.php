@@ -18,16 +18,26 @@ $trainerId = $_SESSION['user_id'];
 $message = '';
 $error = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cancel_session') {
     $sessionId = (int)($_POST['session_id'] ?? 0);
+
     if ($sessionId <= 0) {
         $error = 'Invalid session.';
     } else {
         $cancelled = cancelTrainerSession($pdo, $sessionId, $trainerId);
+
         if ($cancelled) {
             $stmt = $pdo->prepare("SELECT DISTINCT e.member_id FROM enrollments e WHERE e.session_id = ? AND e.status = 'enrolled'");
             $stmt->execute([$sessionId]);
             $memberIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
             $admins = $pdo->query("SELECT id FROM users WHERE role = 'admin'")->fetchAll(PDO::FETCH_COLUMN);
 
             $sessInfo = $pdo->prepare("SELECT session_date FROM class_sessions WHERE id = ?");
@@ -39,12 +49,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
 
             $typeStmt = $pdo->query("SELECT id FROM notification_types WHERE name = 'warning'");
             $warningTypeId = $typeStmt->fetchColumn();
-            if (!$warningTypeId) $warningTypeId = 2;
+
+            if (!$warningTypeId) {
+                $warningTypeId = 2;
+            }
 
             $insert = $pdo->prepare("INSERT INTO notifications (user_id, message, notification_type_id, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
+
             foreach ($memberIds as $mid) {
                 $insert->execute([$mid, $messageText, $warningTypeId]);
             }
+
             foreach ($admins as $aid) {
                 $insert->execute([$aid, $messageText, $warningTypeId]);
             }
@@ -58,10 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'update_schedule_details') {
     $scheduleId = (int)($_POST['schedule_id'] ?? 0);
-    $location   = trim($_POST['location'] ?? '');
-    $capacity   = (int)($_POST['capacity'] ?? 0);
-    $duration   = (int)($_POST['duration_min'] ?? 0);
-    $startTime  = trim($_POST['start_time'] ?? '');
+    $location = trim($_POST['location'] ?? '');
+    $capacity = (int)($_POST['capacity'] ?? 0);
+    $duration = (int)($_POST['duration_min'] ?? 0);
+    $startTime = trim($_POST['start_time'] ?? '');
 
     if ($scheduleId <= 0 || $location === '' || $capacity <= 0 || $duration <= 0 || $startTime === '') {
         $error = 'Please fill in all schedule fields correctly.';
@@ -74,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
             $error = 'Schedule not found or you are not the trainer.';
         } else {
             $updated = updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration, $startTime);
+
             if ($updated === true) {
                 $changes = [];
 
@@ -98,7 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
                         SELECT DISTINCT e.member_id
                         FROM enrollments e
                         JOIN class_sessions sess ON e.session_id = sess.id
-                        WHERE sess.schedule_id = ? AND sess.session_date >= date('now') AND e.status = 'enrolled'
+                        WHERE sess.schedule_id = ? 
+                          AND sess.session_date >= date('now') 
+                          AND e.status = 'enrolled'
                     ");
                     $stmt->execute([$scheduleId]);
                     $memberIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -110,12 +128,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
 
                     $typeStmt = $pdo->query("SELECT id FROM notification_types WHERE name = 'info'");
                     $infoTypeId = $typeStmt->fetchColumn();
-                    if (!$infoTypeId) $infoTypeId = 1;
+
+                    if (!$infoTypeId) {
+                        $infoTypeId = 1;
+                    }
 
                     $insert = $pdo->prepare("INSERT INTO notifications (user_id, message, notification_type_id, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
+
                     foreach ($memberIds as $mid) {
                         $insert->execute([$mid, $messageText, $infoTypeId]);
                     }
+
                     foreach ($admins as $aid) {
                         $insert->execute([$aid, $messageText, $infoTypeId]);
                     }
@@ -145,6 +168,7 @@ output_header('classes.css');
         <?php if ($message): ?>
             <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
         <?php endif; ?>
+
         <?php if ($error): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
@@ -191,10 +215,14 @@ output_header('classes.css');
                         <button type="button" class="secondary-button btn-sm edit-schedule-button" data-target="<?= $editBoxId ?>">
                             Edit Schedule
                         </button>
-                        <a href="../trainer/class_details.php?id=<?= $schedule['schedule_id'] ?>" class="secondary-button btn-sm">Details</a>
+
+                        <a href="../trainer/class_details.php?id=<?= (int)$schedule['schedule_id'] ?>" class="secondary-button btn-sm">
+                            Details
+                        </a>
 
                         <?php if ($session): ?>
                             <form method="post" class="inline-form" onsubmit="return confirm('Are you sure you want to cancel this session?');">
+                                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                 <input type="hidden" name="action" value="cancel_session">
                                 <input type="hidden" name="session_id" value="<?= (int)$session['id'] ?>">
                                 <button type="submit" class="secondary-button btn-sm danger-button">Cancel Session</button>
@@ -204,6 +232,7 @@ output_header('classes.css');
 
                     <div id="<?= $editBoxId ?>" class="schedule-edit-box" style="display:none;">
                         <form method="post" class="schedule-edit-form">
+                            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                             <input type="hidden" name="action" value="update_schedule_details">
                             <input type="hidden" name="schedule_id" value="<?= (int)$schedule['schedule_id'] ?>">
 

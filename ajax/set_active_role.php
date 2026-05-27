@@ -7,6 +7,17 @@ $allowedRoles = ['member', 'trainer', 'admin'];
 
 $role = $_POST['role'] ?? '';
 
+if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+    http_response_code(403);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid CSRF token.'
+    ]);
+
+    exit;
+}
+
 if (!in_array($role, $allowedRoles, true)) {
     http_response_code(400);
 

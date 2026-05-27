@@ -16,6 +16,11 @@ $success = '';
 $old = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $name = trim($_POST['name'] ?? '');
     $username = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -25,7 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm = $_POST['confirm_password'] ?? '';
 
-    $old = ['name' => $name, 'username' => $username, 'email' => $email, 'bio' => $bio, 'specializations' => $specializations, 'certifications' => $certifications];
+    $old = [
+        'name' => $name,
+        'username' => $username,
+        'email' => $email,
+        'bio' => $bio,
+        'specializations' => $specializations,
+        'certifications' => $certifications
+    ];
 
     if ($name === '' || $username === '' || $email === '' || $password === '' || $confirm === '') {
         $errors[] = 'Please fill in all required fields.';

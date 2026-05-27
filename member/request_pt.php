@@ -49,6 +49,11 @@ $success = '';
 $trainers = getAvailableTrainersForPT($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $trainerId = (int)($_POST['trainer_id'] ?? 0);
     $bookingDate = trim($_POST['booking_date'] ?? '');
     $startTime = trim($_POST['start_time'] ?? '');
@@ -91,6 +96,8 @@ output_header('request_pt.css');
         <?php endif; ?>
 
         <form method="post" class="auth-form card form-card">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+
             <div class="form-group">
                 <label class="form-label">Select Trainer *</label>
                 <select name="trainer_id" class="form-select" required>

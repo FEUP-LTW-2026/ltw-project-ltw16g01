@@ -21,6 +21,11 @@ if (!$valid) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $password = $_POST['password'] ?? '';
     $confirm = $_POST['confirm_password'] ?? '';
 
@@ -56,17 +61,21 @@ output_header('auth.css');
         <?php endif; ?>
 
         <?php if (!$success): ?>
-        <form method="post" class="auth-form">
-            <div class="form-group">
-                <label class="form-label">New Password</label>
-                <input type="password" name="password" class="form-control" required minlength="8">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control" required minlength="8">
-            </div>
-            <button type="submit" class="main-button full-button">Reset Password</button>
-        </form>
+            <form method="post" class="auth-form">
+                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" name="password" class="form-control" required minlength="8">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control" required minlength="8">
+                </div>
+
+                <button type="submit" class="main-button full-button">Reset Password</button>
+            </form>
         <?php endif; ?>
 
         <div class="auth-footer">

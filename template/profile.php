@@ -68,6 +68,7 @@ function output_basic_profile_form($user) {
 
         <div class="card-body">
             <form method="post" class="profile-form" enctype="multipart/form-data">
+                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                 <input type="hidden" name="action" value="update_basic_profile">
 
                 <div class="profile-form-grid">
@@ -158,6 +159,7 @@ function output_password_form() {
 
         <div class="card-body">
             <form method="post" class="profile-form" id="profilePasswordForm">
+                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                 <input type="hidden" name="action" value="update_password">
 
                 <div class="profile-form-grid">
@@ -216,6 +218,7 @@ function output_trainer_edit_form($trainerProfile) {
 
         <div class="card-body">
             <form method="post" class="profile-form">
+                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                 <input type="hidden" name="action" value="update_trainer_profile">
 
                 <div class="form-group">

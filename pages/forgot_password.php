@@ -10,6 +10,11 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $email = trim($_POST['email'] ?? '');
 
     if (empty($email)) {
@@ -48,7 +53,7 @@ output_header('auth.css');
         <?php if ($error): ?>
             <div class="auth-alert alert-error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
-        
+
         <?php if ($success): ?>
             <div class="auth-alert alert-success" style="text-align: center;">
                 <?= htmlspecialchars($success) ?>
@@ -56,13 +61,16 @@ output_header('auth.css');
         <?php endif; ?>
 
         <?php if (!$success): ?>
-        <form method="post" class="auth-form">
-            <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-            <button type="submit" class="main-button full-button">Send Reset Link</button>
-        </form>
+            <form method="post" class="auth-form">
+                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+
+                <button type="submit" class="main-button full-button">Send Reset Link</button>
+            </form>
         <?php endif; ?>
 
         <div class="auth-footer">

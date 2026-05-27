@@ -11,6 +11,11 @@ $error = '';
 $postedIdentifier = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $identifier = trim($_POST['identifier'] ?? '');
     $password = $_POST['password'] ?? '';
     $postedIdentifier = $identifier;
@@ -45,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 header('Location: ../index.php');
             }
+
             exit;
         }
     }

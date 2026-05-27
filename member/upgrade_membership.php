@@ -57,6 +57,11 @@ $plans = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+        http_response_code(403);
+        exit('Invalid CSRF token.');
+    }
+
     $newPlan = $_POST['plan'] ?? '';
 
     if (!isset($plans[$newPlan])) {
@@ -113,6 +118,8 @@ output_header('upgrade-membership.css');
         </section>
 
         <form method="post">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+
             <section class="plans-upgrade-grid">
                 <?php foreach ($plans as $planKey => $plan): ?>
                     <?php

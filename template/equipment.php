@@ -171,6 +171,7 @@ function output_equipment_form($categories, $equipment = null, $errors = [], $su
         <?php endif; ?>
 
         <form method="post" class="auth-form card form-card">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
             <div class="form-group form-spaced">
                 <label class="form-label">Equipment Name *</label>
                 <input type="text" name="name" class="form-control" required value="<?= $name ?>">
