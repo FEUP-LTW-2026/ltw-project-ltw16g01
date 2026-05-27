@@ -96,6 +96,15 @@ function createPasswordResetToken($pdo, $email) {
 
     $userId = $user['id'];
 
+    $stmt = $pdo->prepare("
+    UPDATE password_resets
+    SET used = 1
+    WHERE user_id = ?
+    AND used = 0
+    ");
+
+    $stmt->execute([$userId]);
+
     $token = bin2hex(random_bytes(32));
     $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
