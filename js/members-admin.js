@@ -1,0 +1,52 @@
+const filterForm = document.getElementById('filter-form');
+const memberTableBody = document.getElementById('member-table-body');
+const memberCount = document.getElementById('member-count');
+
+function updateAdminMembers() {
+    if (!filterForm || !memberTableBody || !memberCount) {
+        return;
+    }
+
+    const params = new URLSearchParams(new FormData(filterForm));
+
+    fetch('../ajax/ajax_get_admin_members.php?' + params.toString())
+        .then(response => response.text())
+        .then(html => {
+            memberTableBody.innerHTML = html;
+
+            const rows = memberTableBody.querySelectorAll('tr');
+            const emptyRow = memberTableBody.querySelector('td[colspan]');
+
+            memberCount.innerText = emptyRow ? 0 : rows.length;
+        })
+        .catch(error => console.error('AJAX error:', error));
+}
+
+if (filterForm) {
+    filterForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        updateAdminMembers();
+    });
+
+    filterForm.querySelectorAll('select').forEach(function (select) {
+        select.addEventListener('change', updateAdminMembers);
+    });
+
+    filterForm.querySelectorAll('input').forEach(function (input) {
+        input.addEventListener('input', function () {
+            clearTimeout(input.dataset.timer);
+
+            input.dataset.timer = setTimeout(function () {
+                updateAdminMembers();
+            }, 300);
+        });
+    });
+}
+
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('delete-member-link')) {
+        if (!confirm('Delete this member?')) {
+            event.preventDefault();
+        }
+    }
+});

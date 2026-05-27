@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg: #0b0b0b;
+    --surface: #141414;
+    --card: #1c1c1c;
+    --border: #272727;
+    --accent: #e84118;
+    --accent-glow: rgba(232, 65, 24, 0.28);
+    --text: #f0ede8;
+    --muted: #7a7571;
+    --ff-display: 'Bebas Neue', sans-serif;
+    --ff-body: 'Outfit', sans-serif;
+    --r-sm: 6px;
+    --r-md: 12px;
+    --sp-md: 1rem;
+    --sp-lg: 1.5rem;
+    --sp-xl: 2.5rem;
+    --shadow-a: 0 0 24px var(--accent-glow);
+    --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--ff-body);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.choose-role-main {
+    min-height: 100vh;
+    background: radial-gradient(circle at center, rgba(232, 65, 24, 0.08), transparent 45%), var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-lg);
+}
+
+.choose-role-card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.choose-role-card h1 {
+    font-family: var(--ff-display);
+    color: var(--accent);
+    font-size: clamp(2.8rem, 7vw, 4rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin: 0 0 var(--sp-md);
+    text-transform: uppercase;
+}
+
+.choose-role-card p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    margin: 0 0 var(--sp-xl);
+}
+
+.role-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.role-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 76px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background var(--t), border-color var(--t), color var(--t), transform var(--t), box-shadow var(--t);
+}
+
+.role-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-a);
+}
+
+.logout-link {
+    margin-top: var(--sp-xl);
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.logout-link a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color var(--t);
+}
+
+.logout-link a:hover {
+    color: var(--accent);
+}
+
+@media (max-width: 520px) {
+    .choose-role-card {
+        padding: 2rem 1.25rem;
+    }
+
+    .role-btn {
+        min-height: 64px;
+        font-size: 1.1rem;
+    }
+}

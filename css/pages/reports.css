@@ -1,0 +1,339 @@
+/* =========================================================
+   REPORTS.CSS
+   Clean responsive stylesheet for reports/dashboard pages
+   ========================================================= */
+
+/* =========================
+   GLOBAL SAFETY
+   ========================= */
+html,
+body {
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.reports-grid,
+.kpi-grid,
+.chart-card,
+.table-card,
+.activity-card,
+.table-wrap {
+    max-width: 100%;
+}
+
+/* =========================
+   PAGE HEADER
+   ========================= */
+.page-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+}
+
+/* =========================
+   EXPORT BUTTONS
+   ========================= */
+.export-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-sm);
+}
+
+/* =========================
+   KPI SECTION
+   ========================= */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+}
+
+.kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+    text-align: center;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-a);
+}
+
+.kpi-value {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    font-weight: 700;
+    color: var(--accent);
+    font-family: var(--ff-display);
+    line-height: 1.1;
+}
+
+.kpi-label {
+    margin-top: var(--sp-xs);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+}
+
+/* =========================
+   REPORT GRID
+   ========================= */
+.reports-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-lg);
+    margin-bottom: var(--sp-xl);
+}
+
+@media (min-width: 960px) {
+    .reports-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================
+   CARD STYLES
+   ========================= */
+.chart-card,
+.table-card,
+.activity-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+    margin-bottom: var(--sp-lg);
+}
+
+.chart-card h3,
+.table-card h3,
+.activity-card h3 {
+    margin-bottom: var(--sp-md);
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-family: var(--ff-body);
+}
+
+/* =========================
+   BAR CHART
+   ========================= */
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.bar-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 55px;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+.bar-label {
+    font-size: 0.85rem;
+    color: var(--text);
+    overflow-wrap: break-word;
+}
+
+.bar-container {
+    width: 100%;
+    height: 10px;
+    background: var(--surface);
+    border-radius: 999px;
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.5s ease;
+}
+
+.bar-value {
+    text-align: right;
+    font-size: 0.82rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* =========================
+   ACTIVITY LIST
+   ========================= */
+.activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.activity-list li {
+    padding: var(--sp-sm) 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.activity-list li:last-child {
+    border-bottom: none;
+}
+
+/* =========================
+   TABLES
+   ========================= */
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* visible scrollbar */
+.table-wrap::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrap::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 999px;
+}
+
+/* actual table */
+.table-wrap table,
+.table-wrap .table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+}
+
+/* cells */
+.table-wrap th,
+.table-wrap td {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* borders */
+.table-wrap th {
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+}
+
+.table-wrap td {
+    border-bottom: 1px solid var(--border);
+}
+
+.reports-col {
+    min-width: 0;
+}
+/* =========================
+   MOBILE RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+
+    .page-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .export-buttons {
+        width: 100%;
+    }
+
+    .export-buttons .btn,
+    .export-buttons button {
+        width: 100%;
+    }
+
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reports-grid {
+        gap: var(--sp-md);
+    }
+
+    .chart-card,
+    .table-card,
+    .activity-card {
+        padding: var(--sp-md);
+    }
+
+    .bar-row {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+    }
+
+    .bar-value {
+        text-align: left;
+    }
+}
+
+/* =========================
+   SMALL PHONE FIXES
+   ========================= */
+@media (max-width: 480px) {
+
+    .kpi-card {
+        padding: var(--sp-md);
+    }
+
+    .kpi-value {
+        font-size: 1.9rem;
+    }
+
+    .chart-card,
+    .table-card,
+    .activity-card {
+        border-radius: var(--r-sm);
+    }
+
+    .bar-label,
+    .bar-value {
+        font-size: 0.8rem;
+    }
+}
+
+/* =========================
+   PRINT STYLES
+   ========================= */
+@media print {
+
+    .export-buttons,
+    .breadcrumb,
+    .live-indicator {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .chart-card,
+    .table-card,
+    .activity-card,
+    .kpi-card {
+        break-inside: avoid;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+
+    .reports-grid {
+        display: block;
+    }
+}

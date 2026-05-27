@@ -4,23 +4,22 @@
 /* CSS Custom Properties (Design Tokens) */
 :root {
     /* Color Palette */
-    --bg: #0b0b0b;           /* Primary background */
-    --surface: #141414;      /* Secondary surfaces */
-    --card: #1c1c1c;         /* Card background */
-    --border: #272727;        /* Border color */
-    --accent: #e84118;        /* Primary accent (orange-red) */
-    --accent-2: #f0932b;      /* Secondary accent */
-    --accent-glow: rgba(232, 65, 24, 0.28); /* Glow effect for accent */
-    --text: #f0ede8;          /* Primary text */
-    --muted: #7a7571;         /* Muted/secondary text */
-    --success: #2ed573;       /* Success state */
-    --warning: #ffa502;       /* Warning state */
-    --danger: #ff4757;        /* Danger/error state */
-    --info: #1e90ff;          /* Information state */
+    --bg: #0b0b0b;
+    --surface: #141414;
+    --card: #1c1c1c;
+    --border: #272727;
+    --accent: #e84118;
+    --accent-glow: rgba(232, 65, 24, 0.28);
+    --text: #f0ede8;
+    --muted: #7a7571;
+    --success: #2ed573;
+    --warning: #ffa502;
+    --danger: #ff4757;
+    --info: #1e90ff;
 
     /* Typography */
-    --ff-display: 'Bebas Neue', sans-serif; /* Headings display font */
-    --ff-body: 'Outfit', sans-serif;        /* Body text font */
+    --ff-display: 'Bebas Neue', sans-serif;
+    --ff-body: 'Outfit', sans-serif;
 
     /* Spacing Scale */
     --sp-xs: 0.25rem;
@@ -31,19 +30,20 @@
     --sp-2xl: clamp(2rem, 7vw, 4rem);
 
     /* Layout & Effects */
-    --nav-h: 60px;            /* Fixed navbar height */
-    --r-sm: 6px;              /* Small border radius */
-    --r-md: 12px;             /* Medium border radius */
-    --r-lg: 20px;             /* Large border radius */
-    --r-pill: 999px;          /* Pill shape radius */
-    --touch: 44px;            /* Minimum touch target size */
-    --max-w: 1200px;          /* Maximum container width */
-    --shadow-a: 0 0 24px var(--accent-glow); /* Accent box shadow */
-    --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1); /* Transition timing */
+    --nav-h: 60px;
+    --r-sm: 6px;
+    --r-md: 12px;
+    --r-pill: 999px;
+    --touch: 44px;
+    --max-w: 1200px;
+    --shadow-a: 0 0 24px var(--accent-glow);
+    --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* CSS Reset & Box Sizing */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -68,7 +68,8 @@ body {
 }
 
 /* Media Elements */
-img, svg {
+img,
+svg {
     display: block;
     max-width: 100%;
     height: auto;
@@ -80,7 +81,8 @@ a {
     text-decoration: none;
 }
 
-ul, ol {
+ul,
+ol {
     list-style: none;
 }
 
@@ -98,29 +100,37 @@ textarea {
     font: inherit;
 }
 
-/* Typography: Headings */
-h1, h2, h3, h4, h5, h6 {
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--ff-display);
     letter-spacing: 0.04em;
     line-height: 1.1;
     font-weight: 400;
 }
 
-h1 { font-size: clamp(2.2rem, 7vw, 5rem); }
-h2 { font-size: clamp(1.6rem, 5vw, 3rem); }
-h3 {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
-    font-family: var(--ff-body);
-    font-weight: 600;
+h1 {
+    font-size: clamp(2.2rem, 7vw, 5rem);
 }
+
+h2 {
+    font-size: clamp(1.6rem, 5vw, 3rem);
+}
+
+h3,
 h4 {
     font-size: clamp(1rem, 2.5vw, 1.2rem);
     font-family: var(--ff-body);
     font-weight: 600;
 }
 
-/* Paragraphs */
-p { line-height: 1.75; }
+p {
+    line-height: 1.75;
+}
 
 /* Layout Containers */
 .container {
@@ -132,66 +142,50 @@ p { line-height: 1.75; }
 
 .main {
     flex: 1;
-    padding-top: var(--nav-h); /* Offset fixed navbar */
+    padding-top: var(--nav-h);
 }
 
 /* Utility Classes */
-.center-text { text-align: center; }
-.full-button { width: 100%; }
+.center-text {
+    text-align: center;
+}
+
+.full-button {
+    width: 100%;
+}
+
+.text-muted {
+    color: var(--muted);
+}
 
 /* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
 }
-::-webkit-scrollbar-track { background: var(--surface); }
+
+::-webkit-scrollbar-track {
+    background: var(--surface);
+}
+
 ::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-/* Section Spacing */
-.section { padding-block: var(--sp-2xl); }
-
-/* Margin Utilities */
-.mt-sm { margin-top: var(--sp-sm); }
-.mt-md { margin-top: var(--sp-md); }
-.mt-lg { margin-top: var(--sp-lg); }
-.mb-md { margin-bottom: var(--sp-md); }
-.mb-lg { margin-bottom: var(--sp-lg); }
-
-/* Text Color Utilities */
-.text-muted { color: var(--muted); }
-.text-accent { color: var(--accent); }
-.text-success { color: var(--success); }
-.text-danger { color: var(--danger); }
-.text-warning { color: var(--warning); }
-
-/* Flex Utilities */
-.flex {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-sm);
-}
-.flex-center {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--sp-sm);
-}
-.flex-between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--sp-md);
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
 }
 
 /* Responsive Container Padding */
 @media (min-width: 640px) {
-    .container { padding-inline: var(--sp-lg); }
+    .container {
+        padding-inline: var(--sp-lg);
+    }
 }
+
 @media (min-width: 1024px) {
-    .container { padding-inline: var(--sp-xl); }
+    .container {
+        padding-inline: var(--sp-xl);
+    }
 }

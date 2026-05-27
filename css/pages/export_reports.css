@@ -1,0 +1,106 @@
+/* EXPORT_REPORTS.CSS */
+/* Print/export styles for FitPeak analytics reports */
+
+body {
+    font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+    margin: 2rem;
+    color: #000;
+    background: #fff;
+}
+
+h1,
+h2 {
+    color: #e84118;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+th {
+    background: #f4f4f4;
+}
+
+.kpi-grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.kpi-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    min-width: 150px;
+    background: #fafafa;
+}
+
+.kpi-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #e84118;
+}
+
+.reports-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.reports-col {
+    flex: 1;
+    min-width: 300px;
+}
+
+.bar-chart {
+    margin-bottom: 1rem;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.bar-label {
+    width: 100px;
+}
+
+.bar-container {
+    flex: 1;
+    height: 20px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background: #e84118;
+    width: 0%;
+}
+
+@media print {
+    body {
+        margin: 0;
+    }
+
+    .no-break {
+        page-break-inside: avoid;
+    }
+
+    h2 {
+        page-break-after: avoid;
+    }
+}

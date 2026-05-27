@@ -1,0 +1,237 @@
+.upgrade-page {
+    padding-bottom: var(--sp-2xl);
+}
+
+.upgrade-container {
+    max-width: 1120px;
+}
+
+.upgrade-hero {
+    padding-block: clamp(2rem, 5vw, 4rem) var(--sp-xl);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--sp-xl);
+}
+
+.upgrade-eyebrow {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: var(--sp-sm);
+}
+
+.upgrade-hero h1 {
+    font-size: clamp(3.2rem, 8vw, 6rem);
+    margin-bottom: var(--sp-sm);
+}
+
+.upgrade-hero p:not(.upgrade-eyebrow) {
+    color: var(--muted);
+    max-width: 620px;
+    font-size: 1rem;
+}
+
+.upgrade-alert {
+    margin-bottom: var(--sp-lg);
+}
+
+.current-plan-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-lg);
+    background:
+        linear-gradient(135deg, rgba(232, 65, 24, 0.12), transparent 45%),
+        var(--card);
+    border: 1px solid rgba(232, 65, 24, 0.3);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+    margin-bottom: var(--sp-xl);
+}
+
+.current-plan-panel h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 0.2rem;
+}
+
+.current-plan-panel p {
+    color: var(--muted);
+}
+
+.current-plan-panel strong {
+    color: var(--text);
+}
+
+.panel-label {
+    color: var(--accent) !important;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+}
+
+.plans-upgrade-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-lg);
+    align-items: stretch;
+}
+
+.upgrade-plan-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    min-height: 100%;
+    transition: transform var(--t), border-color var(--t), box-shadow var(--t);
+}
+
+.upgrade-plan-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(232, 65, 24, 0.45);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.upgrade-plan-card.featured {
+    border-color: rgba(232, 65, 24, 0.65);
+    box-shadow: 0 0 32px rgba(232, 65, 24, 0.13);
+}
+
+.upgrade-plan-card.current {
+    border-color: rgba(46, 213, 115, 0.28);
+}
+
+.plan-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-sm);
+    padding: var(--sp-lg);
+    border-bottom: 1px solid var(--border);
+}
+
+.plan-top h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.plan-tag {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.plan-description {
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: var(--sp-md) var(--sp-lg) 0;
+}
+
+.plan-price {
+    font-family: var(--ff-display);
+    color: var(--accent);
+    font-size: clamp(3rem, 6vw, 4.4rem);
+    line-height: 1;
+    padding: var(--sp-md) var(--sp-lg);
+}
+
+.plan-price span {
+    font-family: var(--ff-body);
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-left: 0.3rem;
+}
+
+.plan-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 0 var(--sp-lg) var(--sp-lg);
+    flex: 1;
+}
+
+.plan-features li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: var(--sp-sm);
+    align-items: start;
+    font-size: 0.95rem;
+}
+
+.plan-features li.included {
+    color: var(--text);
+}
+
+.plan-features li.excluded {
+    color: var(--muted);
+}
+
+.feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+li.included .feature-icon {
+    color: var(--success);
+}
+
+li.excluded .feature-icon {
+    color: var(--danger);
+}
+
+.plan-action {
+    padding: var(--sp-lg);
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+.current-plan-button {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.current-plan-button:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.upgrade-back-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: var(--sp-xl);
+}
+
+@media (min-width: 820px) {
+    .plans-upgrade-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 620px) {
+    .current-plan-panel {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .upgrade-back-row .secondary-button {
+        width: 100%;
+    }
+}

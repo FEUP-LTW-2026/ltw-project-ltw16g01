@@ -1,7 +1,7 @@
 /* CLASSES.CSS */
 /* Styles for the classes listing page: filters, class cards, capacity indicators, legend */
 
-/* Filter Bar (grid of dropdowns and button) */
+/* Filter Bar */
 .filter-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -12,6 +12,7 @@
     padding: var(--sp-md);
     margin-bottom: var(--sp-lg);
 }
+
 .filter-group {
     display: flex;
     flex-direction: column;
@@ -33,11 +34,16 @@ h2 {
     gap: var(--sp-sm);
     margin-bottom: var(--sp-lg);
 }
+
 .results-count {
     font-size: 0.88rem;
     color: var(--muted);
 }
-.results-count strong { color: var(--text); }
+
+.results-count strong {
+    color: var(--text);
+}
+
 .sort-row {
     display: flex;
     align-items: center;
@@ -45,6 +51,7 @@ h2 {
     font-size: 0.82rem;
     color: var(--muted);
 }
+
 .sort-btn {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -58,10 +65,12 @@ h2 {
     min-height: 32px;
     font-family: var(--ff-body);
 }
+
 .sort-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
 }
+
 .sort-btn.active {
     background: var(--accent);
     border-color: var(--accent);
@@ -75,6 +84,7 @@ h2 {
     gap: var(--sp-md);
     margin-bottom: var(--sp-xl);
 }
+
 .class-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -84,13 +94,14 @@ h2 {
     flex-direction: column;
     transition: border-color var(--t), box-shadow var(--t), transform var(--t);
 }
+
 .class-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-a);
     transform: translateY(-2px);
 }
 
-/* Class Card Header (time + type badge) */
+/* Class Card Header */
 .class-head {
     display: flex;
     align-items: center;
@@ -101,6 +112,7 @@ h2 {
     background: linear-gradient(135deg, var(--surface), var(--card));
     border-bottom: 1px solid var(--border);
 }
+
 .class-time-big {
     font-family: var(--ff-display);
     font-size: clamp(1.2rem, 3vw, 1.4rem);
@@ -117,11 +129,22 @@ h2 {
     flex-direction: column;
     gap: var(--sp-sm);
 }
-.class-body h4 { margin-bottom: 0.15rem; }
-.class-body > p {
+
+/* Class Title */
+.class-name {
+    margin-bottom: 0.15rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem); 
+    font-family: var(--ff-body);
+    font-weight: 600;
+}
+
+/* Class Description Text */
+.class-body p {
     color: var(--muted);
     font-size: 0.85rem;
 }
+
+/* Class Metadata */
 .class-meta {
     display: flex;
     flex-wrap: wrap;
@@ -129,6 +152,7 @@ h2 {
     margin-top: auto;
     padding-top: var(--sp-sm);
 }
+
 .class-meta li {
     display: flex;
     align-items: center;
@@ -136,13 +160,15 @@ h2 {
     font-size: 0.78rem;
     color: var(--muted);
 }
+
+/* Class Rating */
 .class-ratings {
     display: flex;
     align-items: center;
     gap: var(--sp-sm);
 }
 
-/* Class Card Footer (capacity + enroll button) */
+/* Class Card Footer */
 .class-foot {
     display: flex;
     align-items: center;
@@ -152,6 +178,8 @@ h2 {
     padding: var(--sp-sm) var(--sp-md);
     border-top: 1px solid var(--border);
 }
+
+/* Capacity Bar */
 .cap-wrap {
     display: flex;
     align-items: center;
@@ -159,6 +187,7 @@ h2 {
     font-size: 0.78rem;
     color: var(--muted);
 }
+
 .cap-bar {
     width: 52px;
     height: 5px;
@@ -166,15 +195,31 @@ h2 {
     border-radius: 3px;
     overflow: hidden;
 }
+
 .cap-fill {
     height: 100%;
     border-radius: 3px;
     background: var(--success);
 }
-.cap-fill.mid { background: var(--warning); }
-.cap-fill.low { background: var(--danger); }
 
-/* Enrolled Button (toggled state for already enrolled classes) */
+.cap-fill.mid {
+    background: var(--warning);
+}
+
+.cap-fill.low {
+    background: var(--danger);
+}
+
+/* Capacity Bar Widths */
+.cap-fill-80 { width: 80%; }
+.cap-fill-33 { width: 33%; }
+.cap-fill-40 { width: 40%; }
+.cap-fill-89 { width: 89%; }
+.cap-fill-43 { width: 43%; }
+.cap-fill-56 { width: 56%; }
+.cap-fill-36 { width: 36%; }
+
+/* Enrolled Button */
 .enrolled-btn {
     display: inline-flex;
     align-items: center;
@@ -193,17 +238,19 @@ h2 {
     cursor: pointer;
     transition: all var(--t);
 }
+
 .enrolled-btn:hover {
     background: rgba(255, 71, 87, 0.10);
     border-color: var(--danger);
     color: var(--danger);
 }
 
-/* Legend Section (explains badges and capacity colors) */
+/* Legend Section */
 .legend-section {
     padding-block: var(--sp-lg);
     border-top: 1px solid var(--border);
 }
+
 .legend-title {
     font-size: 0.7rem;
     font-weight: 700;
@@ -212,6 +259,7 @@ h2 {
     color: var(--muted);
     margin-bottom: var(--sp-md);
 }
+
 .legend-row {
     display: flex;
     flex-wrap: wrap;
@@ -219,47 +267,418 @@ h2 {
     align-items: center;
 }
 
-/* Additional Utility Classes */
-.page-header-row { margin-top: var(--sp-sm); }
-.filter-group-end { justify-content: flex-end; }
-.full-width { width: 100%; }
-.rating-text { font-size: 0.75rem; }
+/* Small Helper Classes */
+.page-header-row {
+    margin-top: var(--sp-sm);
+}
+
+.filter-group-end {
+    justify-content: flex-end;
+}
+
+.rating-text {
+    font-size: 0.75rem;
+}
+
 .capacity-warning {
     color: var(--warning);
     font-weight: 600;
 }
+
 .enrollment-note {
     font-size: 0.72rem;
     margin-top: 3px;
 }
+
 .legend-capacity-text {
     font-size: 0.8rem;
     color: var(--muted);
     margin-left: auto;
 }
-.dot-success { color: var(--success); }
-.dot-warning { color: var(--warning); }
-.dot-danger { color: var(--danger); }
+
+.dot-success {
+    color: var(--success);
+}
+
+.dot-warning {
+    color: var(--warning);
+}
+
+.dot-danger {
+    color: var(--danger);
+}
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.page-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 /* Responsive Grid Adjustments */
 @media (min-width: 480px) {
-    .filter-bar { grid-template-columns: 1fr 1fr; }
-    .class-head { padding: var(--sp-md) var(--sp-lg); }
-    .class-body { padding: var(--sp-lg); }
-    .class-foot { padding: var(--sp-md) var(--sp-lg); }
+    .filter-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .class-head {
+        padding: var(--sp-md) var(--sp-lg);
+    }
+
+    .class-body {
+        padding: var(--sp-lg);
+    }
+
+    .class-foot {
+        padding: var(--sp-md) var(--sp-lg);
+    }
 }
+
 @media (min-width: 540px) {
-    .class-grid { grid-template-columns: repeat(2, 1fr); }
+    .class-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
+
 @media (min-width: 768px) {
-    .filter-bar { grid-template-columns: repeat(4, 1fr); align-items: end; }
+    .filter-bar {
+        grid-template-columns: repeat(4, 1fr);
+        align-items: end;
+    }
 }
+
 @media (min-width: 860px) {
-    .class-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); }
+    .class-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--sp-lg);
+    }
 }
+
 @media (max-width: 375px) {
-    .class-foot { flex-direction: column; align-items: stretch; }
-    .class-foot .main-button, .class-foot .secondary-button, .class-foot .enrolled-btn {
+    .class-foot {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .class-foot .main-button,
+    .class-foot .secondary-button,
+    .class-foot .enrolled-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+/* HIIT Showcase Section */
+.hiit-showcase {
+    margin-top: var(--sp-2xl);
+    padding-block: var(--sp-xl);
+    background: linear-gradient(135deg, rgba(232,65,24,0.05), transparent);
+    border-top: 1px solid var(--border);
+}
+
+.hiit-featured h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin-bottom: var(--sp-lg);
+    color: var(--accent);
+}
+
+/* Garantir que a legend-section existente (se houver) não conflita */
+.legend-section {
+    margin-bottom: var(--sp-xl);
+    padding-bottom: var(--sp-md);
+    border-bottom: 1px solid var(--border);
+}
+
+.legend-row {
+    display: flex;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Ajustes responsivos para a secção HIIT */
+@media (max-width: 540px) {
+    .hiit-showcase .class-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.delete-btn {
+    background: var(--danger);
+    color: white;
+    border: none;
+}
+.delete-btn:hover {
+    background: #ff3344;
+    transform: translateY(-1px);
+}
+
+/* Botão Enroll (não inscrito) */
+.enroll-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 0.4rem 0.9rem;
+    min-height: 36px;
+    border-radius: var(--r-sm);
+    font-family: var(--ff-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--t);
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text);
+}
+.enroll-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: transparent;
+    transform: translateY(-1px);
+}
+
+/* Botão Enrolled (já inscrito) – sem hover vermelho */
+.enrolled-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 0.4rem 0.9rem;
+    min-height: 36px;
+    border-radius: var(--r-sm);
+    font-family: var(--ff-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--t);
+    background: rgba(46, 213, 115, 0.08);
+    border: 2px solid var(--success);
+    color: var(--success);
+}
+/* Hover suave sem vermelho – apenas um leve destaque */
+.enrolled-btn:hover {
+    background: rgba(46, 213, 115, 0.15);
+    transform: translateY(-1px);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+/* Botão desabilitado durante processamento (mesmo tamanho) */
+.enroll-btn:disabled, .enrolled-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+}
+
+/* TRAINER CLASS ACTIONS */
+
+.class-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0 var(--sp-md) var(--sp-md);
+}
+
+.inline-form {
+    display: inline-flex;
+}
+
+/* Edit schedule box hidden by default */
+.schedule-edit-box {
+    display: none;
+    margin: 0 var(--sp-md) var(--sp-md);
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.schedule-edit-box.is-visible {
+    display: block;
+}
+
+.schedule-edit-form {
+    margin: 0;
+}
+
+.schedule-edit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.schedule-edit-box .form-control {
+    width: 100%;
+    min-width: 0;
+}
+
+.schedule-edit-box .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule-edit-box .form-label {
+    margin-bottom: 0.4rem;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.schedule-edit-box .form-control {
+    width: 100%;
+    min-height: 40px;
+    padding: 0.65rem 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color var(--t), box-shadow var(--t), background var(--t);
+}
+
+.schedule-edit-box .form-control:focus {
+    border-color: var(--accent);
+    background: #101010;
+    box-shadow: 0 0 0 3px rgba(232, 65, 24, 0.14);
+}
+
+.schedule-edit-box .form-actions {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.schedule-edit-box .main-button,
+.schedule-edit-box .secondary-button {
+    min-height: 38px;
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+}
+
+/* Cancel Session button */
+.danger-button {
+    border-color: rgba(255, 71, 87, 0.65);
+    color: var(--danger);
+    background: rgba(255, 71, 87, 0.04);
+}
+
+.danger-button:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(255, 71, 87, 0.22);
+}
+
+/* Roster box */
+.roster-box {
+    margin-top: 0;
+    padding: var(--sp-md);
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.roster-box h4 {
+    margin-bottom: 0.85rem;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-family: var(--ff-body);
+    font-weight: 700;
+}
+
+.roster-box .table-wrap {
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.roster-table {
+    width: 100%;
+    min-width: 420px;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.roster-table th {
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.roster-table td {
+    color: var(--text);
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.roster-table tr:last-child td {
+    border-bottom: none;
+}
+
+.roster-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+/* Alerts */
+.alert {
+    padding: 0.9rem 1rem;
+    border-radius: var(--r-md);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.alert-success {
+    background: rgba(46, 213, 115, 0.10);
+    border: 1px solid rgba(46, 213, 115, 0.32);
+    color: var(--success);
+}
+
+.alert-danger {
+    background: rgba(255, 71, 87, 0.10);
+    border: 1px solid rgba(255, 71, 87, 0.32);
+    color: var(--danger);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .schedule-edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .class-actions {
+        padding: 0 var(--sp-md) var(--sp-md);
+    }
+
+    .schedule-edit-box {
+        margin-inline: var(--sp-md);
+    }
+
+    .class-actions .secondary-button,
+    .class-actions .danger-button,
+    .inline-form {
+        width: 100%;
+    }
+
+    .inline-form button {
         width: 100%;
         justify-content: center;
     }

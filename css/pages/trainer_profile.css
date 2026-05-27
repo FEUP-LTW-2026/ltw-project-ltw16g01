@@ -1,0 +1,263 @@
+/* TRAINER_PROFILE.CSS */
+/* Styles for individual trainer profile page */
+
+.trainer-profile-hero {
+    padding-block: var(--sp-2xl);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+.trainer-profile-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 75% 45%, rgba(232, 65, 24, 0.12), transparent),
+        radial-gradient(ellipse 60% 80% at 10% 90%, rgba(240, 147, 43, 0.06), transparent);
+    pointer-events: none;
+}
+
+.trainer-profile-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-xl);
+    align-items: center;
+}
+
+.trainer-profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    background: var(--surface);
+    box-shadow: var(--shadow-a);
+}
+
+.trainer-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.small-text {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    margin-bottom: var(--sp-md);
+}
+
+.small-text::before {
+    content: "";
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    flex-shrink: 0;
+}
+
+.trainer-profile-content h1 {
+    margin-bottom: var(--sp-md);
+}
+
+.profile-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xs);
+    color: var(--text);
+    margin-bottom: var(--sp-md);
+    flex-wrap: wrap;
+}
+
+.profile-rating .stars {
+    color: var(--warning);
+}
+
+.rating-muted {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.profile-specializations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-xs);
+    margin-bottom: var(--sp-lg);
+}
+
+.spec-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--r-pill);
+    background: rgba(232, 65, 24, 0.14);
+    border: 1px solid rgba(232, 65, 24, 0.28);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.profile-description {
+    color: var(--muted);
+    max-width: 70ch;
+    margin-bottom: var(--sp-xl);
+}
+
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-sm);
+}
+
+.trainer-profile-section {
+    padding-block: var(--sp-2xl);
+}
+
+.profile-details-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+}
+
+.profile-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+}
+
+.profile-card h2 {
+    margin-bottom: var(--sp-sm);
+}
+
+.profile-card p {
+    color: var(--muted);
+}
+
+.profile-contact {
+    margin-top: var(--sp-md);
+    color: var(--accent) !important;
+    font-weight: 600;
+}
+
+.profile-schedule-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-lg);
+}
+
+.profile-schedule-head {
+    margin-bottom: var(--sp-lg);
+}
+
+.profile-schedule-head p {
+    color: var(--muted);
+    margin-top: var(--sp-xs);
+}
+
+.schedule-list {
+    display: grid;
+    gap: var(--sp-sm);
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: var(--sp-md);
+}
+
+.schedule-item h3 {
+    margin-bottom: 0.15rem;
+}
+
+.schedule-item p {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.schedule-location {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--r-pill);
+    background: rgba(232, 65, 24, 0.14);
+    border: 1px solid rgba(232, 65, 24, 0.28);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.empty-message {
+    color: var(--muted);
+}
+
+.profile-error-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: var(--sp-xl);
+    text-align: center;
+}
+
+.profile-error-card h1 {
+    margin-bottom: var(--sp-sm);
+}
+
+.profile-error-card p {
+    color: var(--muted);
+    margin-bottom: var(--sp-lg);
+}
+
+@media (min-width: 760px) {
+    .trainer-profile-layout {
+        grid-template-columns: auto 1fr;
+    }
+
+    .profile-details-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 420px) {
+    .trainer-profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .profile-actions .main-button,
+    .profile-actions .secondary-button {
+        width: 100%;
+    }
+}

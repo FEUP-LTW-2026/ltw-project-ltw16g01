@@ -1,0 +1,78 @@
+/* form.css - Estilos para formulários administrativos */
+
+.alert {
+    padding: var(--sp-md);
+    border-radius: var(--r-sm);
+    margin-bottom: var(--sp-lg);
+}
+
+.alert-danger {
+    background: rgba(255, 71, 87, 0.1);
+    border-left: 3px solid var(--danger);
+    color: var(--danger);
+}
+
+.alert-success {
+    background: rgba(46, 213, 115, 0.1);
+    border-left: 3px solid var(--success);
+    color: var(--success);
+}
+
+.form-container {
+    max-width: 700px;
+}
+
+.form-container-large {
+    max-width: 800px;
+}
+
+.form-card,
+.form-panel {
+    padding: var(--sp-lg);
+}
+
+.form-control {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.form-spaced {
+    margin-bottom: var(--sp-lg);
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--sp-md);
+    margin-top: var(--sp-md);
+}
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.page-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+main {
+    padding-bottom: var(--sp-2xl);
+}
