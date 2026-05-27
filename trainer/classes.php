@@ -8,7 +8,7 @@ require_once '../db/connection.php';
 require_once '../db/classes.php';
 require_once '../db/class_sessions.php';
 require_once '../db/trainers.php';
-require_once '../db/notifications.php'; // funções de notificação
+require_once '../db/notifications.php';
 
 requireAuth('trainer');
 
