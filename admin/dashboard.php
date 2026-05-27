@@ -141,7 +141,7 @@ output_header('admin-dashboard.css');
                     <div class="table-wrap">
                         <table>
                             <thead>
-                                <tr><th>Member</th><th>Username</th><th>Joined</th><th>Status</th><th>Actions</th></tr>
+                                <tr><th>Member</th><th>Username</th><th>Joined</th><th>Status</th></tr>
                             </thead>
                             <tbody>
                                 <?php 

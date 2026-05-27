@@ -15,7 +15,6 @@ function output_admin_member_row($member) { ?>
         <td class="table-muted"><?= htmlspecialchars($member['username']) ?></td>
         <td class="table-muted table-small"><?= htmlspecialchars($member['created_at']) ?></td>
         <td><?= $member['active'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>' ?></td>
-        <td class="table-small"><a href="members.php" class="action-link">View</a></td>
     </tr>
 <?php }
 

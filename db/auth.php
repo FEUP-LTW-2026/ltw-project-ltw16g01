@@ -2,7 +2,7 @@
 
 function authenticateUser($pdo, $identifier, $password) {
     $stmt = $pdo->prepare("
-        SELECT id, name, email, username, password, role, is_admin, active
+        SELECT id, name, email, username, password, role, is_admin, active, photo
         FROM users
         WHERE (email = ? OR username = ?)
           AND active = 1
@@ -19,13 +19,9 @@ function authenticateUser($pdo, $identifier, $password) {
     $storedPassword = $user['password'];
     $passwordIsValid = false;
 
-    // Caso normal: password guardada com password_hash()
     if (password_verify($password, $storedPassword)) {
         $passwordIsValid = true;
     }
-
-    // Caso antigo: passwords antigas guardadas em texto normal
-    // Se bater certo, deixa entrar e converte logo para hash.
     elseif (hash_equals($storedPassword, $password)) {
         $passwordIsValid = true;
 
