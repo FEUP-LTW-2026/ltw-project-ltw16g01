@@ -11,8 +11,8 @@ requireAuth('trainer');
 $pdo = getDatabaseConnection();
 $trainerId = $_SESSION['user_id'];
 
-$error = '';
-$success = '';
+$toastMessage = '';
+$toastType = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $requestId = (int)($_POST['request_id'] ?? 0);
@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'accept') {
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, 'confirmed')) {
-            // Get member info for notification
             $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
             $stmt->execute([$requestId]);
             $memberId = $stmt->fetchColumn();
@@ -28,9 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = "Your personal training request has been confirmed by trainer " . htmlspecialchars($_SESSION['user_name']) . ".";
                 createNotification($pdo, $memberId, $message, 'success');
             }
-            $success = 'Request accepted. Member notified.';
+            $toastMessage = '✓ Request accepted! Member has been notified.';
+            $toastType = 'success';
         } else {
-            $error = 'Could not accept request.';
+            $toastMessage = '✗ Could not accept request.';
+            $toastType = 'error';
         }
     } elseif ($action === 'reject') {
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, 'cancelled')) {
@@ -41,9 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = "Your personal training request has been declined by trainer " . htmlspecialchars($_SESSION['user_name']) . ".";
                 createNotification($pdo, $memberId, $message, 'warning');
             }
-            $success = 'Request declined.';
+            $toastMessage = '✓ Request declined.';
+            $toastType = 'warning';
         } else {
-            $error = 'Could not decline request.';
+            $toastMessage = '✗ Could not decline request.';
+            $toastType = 'error';
         }
     }
 }
@@ -60,12 +63,6 @@ output_header('pt_requests.css');
             <h1>Personal Training Requests</h1>
             <p>Manage pending PT requests from members.</p>
         </header>
-
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-        <?php elseif ($success): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-        <?php endif; ?>
 
         <div class="card">
             <div class="card-head">
@@ -95,7 +92,7 @@ output_header('pt_requests.css');
                                             </form>
                                             <form method="post" style="display: inline-block;">
                                                 <input type="hidden" name="request_id" value="<?= $req['id'] ?>">
-                                                <button type="submit" name="action" value="reject" class="delete-btn btn-sm" >Decline</button>
+                                                <button type="submit" name="action" value="reject" id="reject">Decline</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -107,7 +104,7 @@ output_header('pt_requests.css');
             </div>
         </div>
 
-        <div class="card" id ="past-requests">
+        <div class="card" id="past-requests">
             <div class="card-head">
                 <h2>Past Requests</h2>
             </div>
@@ -138,4 +135,21 @@ output_header('pt_requests.css');
     </div>
 </main>
 
-<?php output_footer('../trainer/'); ?>
+<div id="toast" class="toast-notification"></div>
+
+<script>
+    const toastMessage = <?= json_encode($toastMessage) ?>;
+    const toastType = <?= json_encode($toastType) ?>;
+
+    if (toastMessage) {
+        const toast = document.getElementById('toast');
+        toast.textContent = toastMessage;
+        toast.className = 'toast-notification toast-' + (toastType || 'info');
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 5000);
+    }
+</script>
+
+<?php output_footer(); ?>
