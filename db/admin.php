@@ -103,17 +103,16 @@ function getEquipment($pdo) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getRecentNotifications($pdo, $limit = 5) {
+function getRecentNotifications($pdo, $userId, $limit = 5) {
     $stmt = $pdo->prepare("
         SELECT n.*, nt.label as type_label, nt.css_class
         FROM notifications n
         JOIN notification_types nt ON n.notification_type_id = nt.id
-        WHERE n.user_id = (SELECT id FROM users WHERE role = 'admin' LIMIT 1)
+        WHERE n.user_id = ?
         ORDER BY n.created_at DESC
         LIMIT ?
     ");
-
-    $stmt->execute([$limit]);
+    $stmt->execute([$userId, $limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

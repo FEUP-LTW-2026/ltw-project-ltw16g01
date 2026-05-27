@@ -1,6 +1,4 @@
 <?php
-// template/notifications.php
-
 function output_notifications_list($notifications) {
     if (empty($notifications)) {
         echo '<div class="card"><div class="card-body center-text"><p>No notifications found.</p></div></div>';
@@ -21,12 +19,13 @@ function output_notifications_list($notifications) {
                 </div>
                 <div class="notification-actions">
                     <?php if (!$notif['read_at']): ?>
-                        <button class="mark-read-btn secondary-button btn-sm" data-id="<?= (int)$notif['id'] ?>">Mark read</button>
+                        <button class="mark-read-btn secondary-button btn-sm" data-id="<?= $notif['id'] ?>">Mark read</button>
                     <?php endif; ?>
-                    <button class="delete-notif-btn danger-button btn-sm" data-id="<?= (int)$notif['id'] ?>">Delete</button>
+                    <button class="delete-notif-btn danger-button btn-sm" data-id="<?= $notif['id'] ?>">Delete</button>
                 </div>
             </div>
         <?php endforeach; ?>
     </div>
     <?php
 }
+?>

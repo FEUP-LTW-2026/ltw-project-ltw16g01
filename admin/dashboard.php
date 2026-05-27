@@ -19,6 +19,8 @@ $equipment = getEquipment($pdo);
 $notifications = getRecentNotifications($pdo, 5);
 $monthlyGrowth = getMonthlyGrowth($pdo);
 $monthlyEnrollments = getMonthlyEnrollments($pdo);
+$adminId = $_SESSION['user_id'];
+$notifications = getRecentNotifications($pdo, $adminId, 5);
 
 output_header('admin-dashboard.css');
 ?>

@@ -12,34 +12,35 @@ requireAuth('admin');
 $pdo = getDatabaseConnection();
 $adminId = $_SESSION['user_id'];
 
-// Processar ações POST (AJAX pode ser usado, mas aqui faremos via POST simples)
+$filter = $_GET['filter'] ?? 'all';
+$notifications = getNotificationsForUser($pdo, $adminId, 100, 0, $filter);
+$totalCount = getTotalCountForUser($pdo, $adminId, $filter);
+$unreadCount = getUnreadCountForUser($pdo, $adminId);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $notifId = (int)($_POST['notification_id'] ?? 0);
 
     if ($action === 'mark_read' && $notifId) {
         markNotificationAsRead($pdo, $notifId, $adminId);
-        header('Location: notifications.php');
+        header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
     if ($action === 'mark_all_read') {
         markAllNotificationsAsRead($pdo, $adminId);
-        header('Location: notifications.php');
+        header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
     if ($action === 'delete' && $notifId) {
         deleteNotification($pdo, $notifId, $adminId);
-        header('Location: notifications.php');
+        header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
 }
 
-$notifications = getNotificationsForUser($pdo, $adminId);
-$unreadCount = getUnreadCountForUser($pdo, $adminId);
-
 output_header('notifications.css');
 ?>
-
+<link rel="stylesheet" href="../css/pages/form.css">
 <main class="main">
     <div class="container">
         <header class="page-header">
@@ -59,14 +60,54 @@ output_header('notifications.css');
             </div>
         </header>
 
-        <div class="results-bar">
-            <p class="results-count">Total: <?= count($notifications) ?> notifications (<?= $unreadCount ?> unread)</p>
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label class="form-label">Filter by type</label>
+                <select id="type-filter" class="form-select">
+                    <option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All</option>
+                    <option value="info" <?= $filter === 'info' ? 'selected' : '' ?>>Info</option>
+                    <option value="success" <?= $filter === 'success' ? 'selected' : '' ?>>Success</option>
+                    <option value="warning" <?= $filter === 'warning' ? 'selected' : '' ?>>Warning</option>
+                    <option value="error" <?= $filter === 'error' ? 'selected' : '' ?>>Error</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-bar" style="margin-bottom: 15px; margin-top: 15px;">
+            <p class="results-count">Total: <?= $totalCount ?> notifications (<?= $unreadCount ?> unread)</p>
         </div>
 
         <?php output_notifications_list($notifications); ?>
     </div>
 </main>
 
-<script src="../js/notifications.js"></script>
+<script>
+    document.getElementById('type-filter').addEventListener('change', function() {
+        const filter = this.value;
+        window.location.href = 'notifications.php?filter=' + encodeURIComponent(filter);
+    });
 
-<?php output_footer('../admin/'); ?>
+    document.querySelectorAll('.mark-read-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.innerHTML = `<input type="hidden" name="action" value="mark_read"><input type="hidden" name="notification_id" value="${id}">`;
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+    document.querySelectorAll('.delete-notif-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (!confirm('Delete this notification?')) return;
+            const id = this.dataset.id;
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.innerHTML = `<input type="hidden" name="action" value="delete"><input type="hidden" name="notification_id" value="${id}">`;
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+</script>
+
+<?php output_footer(); ?>
