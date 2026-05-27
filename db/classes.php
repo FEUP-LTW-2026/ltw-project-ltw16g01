@@ -33,12 +33,27 @@ function getAllClassSchedules($pdo, $filters = []) {
 }
 
 function getClassTypes($pdo) {
-    $stmt = $pdo->query("SELECT id, name, label FROM class_types WHERE active = 1 ORDER BY label");
+    $stmt = $pdo->prepare("
+        SELECT id, name, label
+        FROM class_types
+        WHERE active = 1
+        ORDER BY label
+    ");
+
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getActiveTrainersForClasses($pdo) {
-    $stmt = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name");
+    $stmt = $pdo->prepare("
+        SELECT id, name
+        FROM users
+        WHERE role = 'trainer'
+          AND active = 1
+        ORDER BY name
+    ");
+
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

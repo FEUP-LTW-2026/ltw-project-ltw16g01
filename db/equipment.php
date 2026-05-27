@@ -2,13 +2,14 @@
 // db/equipment.php
 
 function getAllEquipmentCategories($pdo) {
-    $stmt = $pdo->query("
+    $stmt = $pdo->prepare("
         SELECT id, name, label 
         FROM equipment_categories 
         WHERE active = 1 
         ORDER BY label
     ");
 
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -23,7 +24,8 @@ function getAllEquipment($pdo) {
         ORDER BY ec.label, e.name
     ";
 
-    $stmt = $pdo->query($sql);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

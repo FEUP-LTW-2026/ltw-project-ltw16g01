@@ -219,14 +219,16 @@ function deleteTrainer($pdo, $id) {
 }
 
 function getTrainerSpecializationOptions($pdo) {
-    $stmt = $pdo->query("
+    $stmt = $pdo->prepare("
         SELECT specializations
         FROM trainer_profiles
         WHERE specializations IS NOT NULL
           AND TRIM(specializations) <> ''
     ");
 
+    $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     $specializations = [];
 
     foreach ($rows as $row) {
@@ -248,7 +250,7 @@ function getTrainerSpecializationOptions($pdo) {
 }
 
 function getTrainerNameOptions($pdo) {
-    $stmt = $pdo->query("
+    $stmt = $pdo->prepare("
         SELECT id, name
         FROM users
         WHERE role = 'trainer'
@@ -256,18 +258,32 @@ function getTrainerNameOptions($pdo) {
         ORDER BY name ASC
     ");
 
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getDistinctSpecializations($pdo) {
-    $stmt = $pdo->query("SELECT specializations FROM trainer_profiles WHERE specializations IS NOT NULL AND specializations != ''");
+    $stmt = $pdo->prepare("
+        SELECT specializations
+        FROM trainer_profiles
+        WHERE specializations IS NOT NULL
+          AND specializations != ''
+    ");
+
+    $stmt->execute();
+
     $specs = [];
+
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $parts = array_map('trim', explode(',', $row['specializations']));
+
         foreach ($parts as $part) {
-            if (!empty($part)) $specs[$part] = $part;
+            if (!empty($part)) {
+                $specs[$part] = $part;
+            }
         }
     }
+
     asort($specs);
     return array_keys($specs);
 }

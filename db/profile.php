@@ -153,16 +153,39 @@ function getTrainerSchedulesForProfile($pdo, $trainerId, $limit = 8) {
 function getAdminProfileStats($pdo) {
     $stats = [];
 
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'member' AND active = 1");
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM users
+        WHERE role = 'member'
+          AND active = 1
+    ");
+    $stmt->execute();
     $stats['members'] = (int)$stmt->fetchColumn();
 
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'trainer' AND active = 1");
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM users
+        WHERE role = 'trainer'
+          AND active = 1
+    ");
+    $stmt->execute();
     $stats['trainers'] = (int)$stmt->fetchColumn();
 
-    $stmt = $pdo->query("SELECT COUNT(*) FROM classes WHERE active = 1");
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM classes
+        WHERE active = 1
+    ");
+    $stmt->execute();
     $stats['classes'] = (int)$stmt->fetchColumn();
 
-    $stmt = $pdo->query("SELECT COUNT(*) FROM equipment WHERE status IN ('maintenance', 'unavailable') OR available = 0");
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM equipment
+        WHERE status IN ('maintenance', 'unavailable')
+           OR available = 0
+    ");
+    $stmt->execute();
     $stats['equipment_issues'] = (int)$stmt->fetchColumn();
 
     return $stats;
