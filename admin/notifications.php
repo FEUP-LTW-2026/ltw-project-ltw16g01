@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
@@ -13,6 +14,7 @@ $pdo = getDatabaseConnection();
 $adminId = $_SESSION['user_id'];
 
 $filter = $_GET['filter'] ?? 'all';
+
 $notifications = getNotificationsForUser($pdo, $adminId, 100, 0, $filter);
 $totalCount = getTotalCountForUser($pdo, $adminId, $filter);
 $unreadCount = getUnreadCountForUser($pdo, $adminId);
@@ -26,11 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
+
     if ($action === 'mark_all_read') {
         markAllNotificationsAsRead($pdo, $adminId);
         header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
+
     if ($action === 'delete' && $notifId) {
         deleteNotification($pdo, $notifId, $adminId);
         header('Location: notifications.php?filter=' . urlencode($filter));
@@ -40,7 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 output_header('notifications.css');
 ?>
+
 <link rel="stylesheet" href="../css/pages/form.css">
+
 <main class="main">
     <div class="container">
         <header class="page-header">
@@ -49,6 +55,7 @@ output_header('notifications.css');
                     <h1>Notifications</h1>
                     <p>System notifications for administrators</p>
                 </div>
+
                 <div class="notification-header-actions">
                     <?php if ($unreadCount > 0): ?>
                         <form method="post" style="display: inline;">
@@ -63,6 +70,7 @@ output_header('notifications.css');
         <div class="filter-bar">
             <div class="filter-group">
                 <label class="form-label">Filter by type</label>
+
                 <select id="type-filter" class="form-select">
                     <option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All</option>
                     <option value="info" <?= $filter === 'info' ? 'selected' : '' ?>>Info</option>
@@ -74,40 +82,16 @@ output_header('notifications.css');
         </div>
 
         <div class="results-bar" style="margin-bottom: 15px; margin-top: 15px;">
-            <p class="results-count">Total: <?= $totalCount ?> notifications (<?= $unreadCount ?> unread)</p>
+            <p class="results-count">
+                Total: <?= (int)$totalCount ?> notifications (<?= (int)$unreadCount ?> unread)
+            </p>
         </div>
 
         <?php output_notifications_list($notifications); ?>
     </div>
 </main>
 
-<script>
-    document.getElementById('type-filter').addEventListener('change', function() {
-        const filter = this.value;
-        window.location.href = 'notifications.php?filter=' + encodeURIComponent(filter);
-    });
-
-    document.querySelectorAll('.mark-read-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.innerHTML = `<input type="hidden" name="action" value="mark_read"><input type="hidden" name="notification_id" value="${id}">`;
-            document.body.appendChild(form);
-            form.submit();
-        });
-    });
-    document.querySelectorAll('.delete-notif-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (!confirm('Delete this notification?')) return;
-            const id = this.dataset.id;
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.innerHTML = `<input type="hidden" name="action" value="delete"><input type="hidden" name="notification_id" value="${id}">`;
-            document.body.appendChild(form);
-            form.submit();
-        });
-    });
-</script>
+<script src="../js/security.js"></script>
+<script src="../js/notifications.js"></script>
 
 <?php output_footer(); ?>

@@ -9,7 +9,7 @@ if (!function_exists('output_header')) {
 
         $loggedIn = isset($_SESSION['user_id']);
         $userName = $_SESSION['user_name'] ?? '';
-        $userRole = $_SESSION['active_role'] ?? ($_SESSION['role'] ?? '');
+        $userRole = $_SESSION['role'] ?? '';
         $userPhoto = $_SESSION['user_photo'] ?? null;
         $userIsAdmin = !empty($_SESSION['is_admin']) || $userRole === 'admin';
 
