@@ -226,3 +226,7 @@
 #logout-button {
     width: 100%;
 }
+
+main {
+    margin-top: var(--sp-xl);
+}
