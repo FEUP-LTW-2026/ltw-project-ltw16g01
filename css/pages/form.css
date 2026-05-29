@@ -145,3 +145,9 @@ textarea.form-input {
 main {
     padding-bottom: var(--sp-2xl);
 }
+
+/* Makes the membership plan field span the full form width */
+.member-plan-field {
+    grid-column: 1 / -1;
+    margin-bottom: var(--sp-lg);
+}
