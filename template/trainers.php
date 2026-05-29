@@ -1,6 +1,12 @@
 <?php
-// template/trainers.php
+/**
+ * trainers.php – Template functions for listing trainers.
+ * Includes public list, admin table, and a form for creating/editing trainers.
+ */
 
+/**
+ * Renders the list of trainers (public view) inside a grid.
+ */
 function output_trainer_list($trainers) {
     if (empty($trainers)) {
         echo '<div class="card"><div class="card-body center-text"><p>No trainers found matching your filters.</p></div></div>';
@@ -12,6 +18,10 @@ function output_trainer_list($trainers) {
     echo '</div>';
 }
 
+/**
+ * Outputs a single trainer card for the public list.
+ * Includes avatar, name, specializations, bio, price (if PT), rating, and a link to profile.
+ */
 function output_trainer_card($trainer) {
     $id = (int)$trainer['id'];
     $name = htmlspecialchars($trainer['name']);
@@ -39,6 +49,7 @@ function output_trainer_card($trainer) {
         <div class="trainer-body">
             <h3 class="trainer-name"><?= $name ?></h3>
 
+            <!-- Specialization badges -->
             <div class="trainer-specializations">
                 <?php foreach ($specializations as $spec): ?>
                     <?php if ($spec !== ''): ?>
@@ -47,14 +58,17 @@ function output_trainer_card($trainer) {
                 <?php endforeach; ?>
             </div>
 
+            <!-- Bio (PT description takes priority) -->
             <p class="trainer-bio"><?= nl2br($ptDescription !== '' ? $ptDescription : $bio) ?></p>
 
+            <!-- Show hourly rate if the trainer is a PT -->
             <?php if (!empty($ptRate)): ?>
                 <p class="trainer-price">€<?= number_format($ptRate, 2) ?>/session</p>
             <?php endif; ?>
         </div>
 
         <div class="trainer-foot">
+            <!-- Rating display -->
             <div class="trainer-rating">
                 <div class="stars">
                     <?php for ($i = 1; $i <= 5; $i++): ?>
@@ -64,6 +78,7 @@ function output_trainer_card($trainer) {
                 <span class="rating-text"><?= number_format($rating, 1) ?> (<?= $reviewCount ?>)</span>
             </div>
 
+            <!-- Link to full profile -->
             <a href="trainer_profile.php?id=<?= $id ?>" class="secondary-button btn-sm">View Profile</a>
         </div>
     </article>
@@ -71,6 +86,9 @@ function output_trainer_card($trainer) {
     <?php
 }
 
+/**
+ * Renders the admin table of trainers (used in admin/trainers.php).
+ */
 function output_trainers_admin_table($trainers) {
     if (empty($trainers)) {
         echo '<tr><td colspan="6" class="center-text">No trainers found.</td></tr>';
@@ -106,6 +124,10 @@ function output_trainers_admin_table($trainers) {
     }
 }
 
+/**
+ * Renders the form for creating or editing a trainer.
+ * Handles both new and existing trainers, including admin permission checks.
+ */
 function output_trainer_form($trainer = null, $errors = [], $success = '', $old = []) {
     $isEdit = !is_null($trainer);
     $action = $isEdit ? 'edit_trainer.php?id=' . (int)$trainer['id'] : 'create_trainer.php';
@@ -137,6 +159,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
             </div>
         </header>
 
+        <!-- Display errors or success messages -->
         <?php if ($errors): ?>
             <?php foreach ($errors as $e): ?>
                 <div class="alert alert-danger"><?= htmlspecialchars($e) ?></div>
@@ -146,7 +169,10 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
         <?php endif; ?>
 
         <form method="post" action="<?= $action ?>" class="auth-form card form-panel">
+            <!-- CSRF token -->
             <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+
+            <!-- Basic fields -->
             <div class="form-group">
                 <label class="form-label">Full Name *</label>
                 <input type="text" name="name" class="form-control" required value="<?= $name ?>">
@@ -164,6 +190,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
                 </div>
             </div>
 
+            <!-- Profile text fields -->
             <div class="form-group">
                 <label class="form-label">Bio</label>
                 <textarea name="bio" class="form-control" rows="3"><?= $bio ?></textarea>
@@ -179,6 +206,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
                 <input type="text" name="certifications" class="form-control" value="<?= $certifications ?>">
             </div>
 
+            <!-- Password fields (only for new trainers) -->
             <?php if (!$isEdit): ?>
                 <div class="form-row">
                     <div class="form-group">
@@ -193,6 +221,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
                 </div>
             <?php endif; ?>
 
+            <!-- Edit‑only fields: status and admin access -->
             <?php if ($isEdit): ?>
                 <div class="form-group">
                     <label class="form-label">Status</label>
@@ -206,32 +235,18 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
                     <label class="form-label">Admin Access</label>
 
                     <?php if ($isEditingSelfAdmin): ?>
+                        <!-- Cannot remove own admin rights -->
                         <input type="hidden" name="is_admin" value="1">
-
                         <label class="checkbox-row">
-                            <input 
-                                type="checkbox" 
-                                value="1"
-                                checked
-                                disabled
-                            >
+                            <input type="checkbox" value="1" checked disabled>
                             <span>Allow this trainer to access the admin dashboard</span>
                         </label>
-
-                        <small class="text-muted">
-                            You cannot remove your own admin access.
-                        </small>
+                        <small class="text-muted">You cannot remove your own admin access.</small>
                     <?php else: ?>
                         <label class="checkbox-row">
-                            <input 
-                                type="checkbox" 
-                                name="is_admin" 
-                                value="1"
-                                <?= !empty($isAdmin) ? 'checked' : '' ?>
-                            >
+                            <input type="checkbox" name="is_admin" value="1" <?= !empty($isAdmin) ? 'checked' : '' ?>>
                             <span>Allow this trainer to access the admin dashboard</span>
                         </label>
-
                         <small class="text-muted">
                             The user will remain a trainer, but will also have full admin permissions.
                         </small>
@@ -239,6 +254,7 @@ function output_trainer_form($trainer = null, $errors = [], $success = '', $old 
                 </div>
             <?php endif; ?>
 
+            <!-- Submit and cancel buttons -->
             <div class="form-actions">
                 <button type="submit" class="main-button"><?= $isEdit ? 'Update Trainer' : 'Create Trainer' ?></button>
                 <a href="trainers.php" class="secondary-button">Cancel</a>
