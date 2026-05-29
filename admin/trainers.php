@@ -36,7 +36,7 @@ $selectedIsPt = $filters['is_pt'];
 $trainers = getAllTrainers($pdo, $filters);
 
 // Output page header with trainer-specific CSS
-output_header('admin-trainers.css');
+output_header('admin_trainers.css');
 ?>
 
 <!-- Additional CSS for form elements (filter bar) -->
@@ -126,6 +126,6 @@ output_header('admin-trainers.css');
 </main>
 
 <!-- External JavaScript for filter interactions and AJAX reloading -->
-<script src="../js/trainers-admin.js"></script>
+<script src="../js/trainers_admin.js"></script>
 
 <?php output_footer('../admin/'); ?>

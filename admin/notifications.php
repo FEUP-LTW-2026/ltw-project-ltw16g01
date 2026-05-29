@@ -88,7 +88,7 @@ output_header('notifications.css');
         <div class="filter-bar">
             <div class="filter-group">
                 <label class="form-label">Filter by type</label>
-                <select id="type-filter" class="form-select" onchange="window.location.href='notifications.php?filter='+encodeURIComponent(this.value)">
+                <select id="type-filter" class="form-select">
                     <option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All</option>
                     <option value="info" <?= $filter === 'info' ? 'selected' : '' ?>>Info</option>
                     <option value="success" <?= $filter === 'success' ? 'selected' : '' ?>>Success</option>

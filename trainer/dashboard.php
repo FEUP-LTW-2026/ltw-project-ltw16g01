@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-output_header('trainer-dashboard.css');
+output_header('trainer_dashboard.css');
 ?>
 
 <main class="main">
@@ -281,6 +281,5 @@ output_header('trainer-dashboard.css');
     </div>
 </main>
 
-<script src="../js/trainer-dashboard.js"></script>
 
 <?php output_footer('../trainer/'); ?>

@@ -178,6 +178,6 @@ output_header('request_pt.css');
 
 <div id="toast" class="toast-notification" data-message="<?= htmlspecialchars($toastMessage) ?>" data-type="<?= htmlspecialchars($toastType) ?>"></div>
 
-<script src="../js/pt-requests.js"></script>
+<script src="../js/pt_requests.js"></script>
 
 <?php output_footer('../trainer/'); ?>

@@ -9,10 +9,6 @@ document.querySelectorAll('.btn-cancel-enroll').forEach(function (button) {
     button.addEventListener('click', function () {
         const sessionId = this.dataset.sessionId;
 
-        if (!confirm('Cancel your enrollment?')) {
-            return;
-        }
-
         fetch('../ajax/enroll.php', {
             method: 'POST',
             headers: {

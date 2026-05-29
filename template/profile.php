@@ -48,7 +48,7 @@ function output_profile_hero($user, $subtitle = '') {
 
         <div class="profile-hero-content">
             <span id="role-label" class="badge badge-accent">
-                <?= htmlspecialchars(profile_role_label($user['role'])) ?>
+                <?= htmlspecialchars(profile_role_label($_SESSION['active_role'])) ?>
             </span>
 
             <h1><?= htmlspecialchars($user['name']) ?></h1>

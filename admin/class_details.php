@@ -33,7 +33,7 @@ if ($data === null) {
 extract($data);
 
 // Include header 
-output_header('class-details.css')
+output_header('class_details.css')
 ?>
 
 <main class="main">

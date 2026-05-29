@@ -52,16 +52,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Deletes one notification after confirmation.
+    // Deletes one notification 
     document.querySelectorAll('.delete-notif-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const notificationId = button.dataset.id;
 
             if (!notificationId) {
-                return;
-            }
-
-            if (!confirm('Delete this notification?')) {
                 return;
             }
 

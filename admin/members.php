@@ -27,7 +27,7 @@ $filters = [
 $members = getAllMembersAdmin($pdo, $filters);
 
 // Output page header with member-specific CSS
-output_header('admin-members.css');
+output_header('admin_members.css');
 ?>
 
 <!-- Additional CSS for form elements (filter bar) -->
@@ -102,6 +102,6 @@ output_header('admin-members.css');
 </main>
 
 <!-- External JavaScript for filter interactions and AJAX reloading -->
-<script src="../js/members-admin.js"></script>
+<script src="../js/members_admin.js"></script>
 
 <?php output_footer('../admin/'); ?>

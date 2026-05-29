@@ -43,7 +43,7 @@ $adminAreaLink = '../admin/dashboard.php';
     <title>Choose Area - FitPeak</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?= htmlspecialchars($_SESSION['csrf']) ?>">
-    <link rel="stylesheet" href="../css/pages/choose-area.css">
+    <link rel="stylesheet" href="../css/pages/choose_area.css">
 </head>
 
 <body>
@@ -77,6 +77,6 @@ $adminAreaLink = '../admin/dashboard.php';
         </div>
     </main>
 
-    <script src="../js/choose-area.js"></script>
+    <script src="../js/choose_area.js"></script>
 </body>
 </html>

@@ -44,7 +44,7 @@ if ($reviewCount > 0) {
     $avgRating = round($sum / $reviewCount, 1);
 }
 
-output_header('class-details.css');
+output_header('class_details.css');
 ?>
 
 <main class="main">

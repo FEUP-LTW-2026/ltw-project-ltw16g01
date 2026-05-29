@@ -386,15 +386,26 @@ function getTrainerPendingPTRequests($pdo, $trainerId) {
 }
 
 function getTrainerConfirmedPT($pdo, $trainerId, $limit = 10) {
+    // Returns only future confirmed PT sessions for the trainer dashboard.
     $stmt = $pdo->prepare("
         SELECT pb.*, u.name as member_name
         FROM personal_bookings pb
         JOIN users u ON pb.member_id = u.id
-        WHERE pb.trainer_id = ? AND pb.status = 'confirmed'
-        ORDER BY pb.booking_date DESC, pb.start_time DESC
+        WHERE pb.trainer_id = ?
+          AND pb.status = 'confirmed'
+          AND (
+                date(pb.booking_date) > date('now', 'localtime')
+                OR (
+                    date(pb.booking_date) = date('now', 'localtime')
+                    AND time(pb.start_time) > time('now', 'localtime')
+                )
+          )
+        ORDER BY pb.booking_date ASC, pb.start_time ASC
         LIMIT ?
     ");
+
     $stmt->execute([$trainerId, $limit]);
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>

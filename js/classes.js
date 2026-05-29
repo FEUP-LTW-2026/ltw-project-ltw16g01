@@ -64,14 +64,6 @@ if (filterForm) {
 document.addEventListener('click', function (event) {
     const deleteLink = event.target.closest('.delete-class-link');
 
-    if (deleteLink) {
-        if (!confirm('Are you sure you want to delete this class schedule? This action cannot be undone.')) {
-            event.preventDefault();
-        }
-
-        return;
-    }
-
     const editButton = event.target.closest('.edit-schedule-button');
 
     if (editButton) {

@@ -48,11 +48,3 @@ if (filterForm) {
     });
 }
 
-// Handles member delete confirmation.
-document.addEventListener('click', function (event) {
-    if (event.target.classList.contains('delete-member-link')) {
-        if (!confirm('Delete this member?')) {
-            event.preventDefault();
-        }
-    }
-});

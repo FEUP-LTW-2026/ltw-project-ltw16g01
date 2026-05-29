@@ -23,7 +23,7 @@ function updateEquipmentWidth(fill, percentage) {
 
 // Refreshes equipment availability through AJAX.
 function refreshEquipment() {
-    fetch('../ajax/equipment-status.php')
+    fetch('../ajax/equipment_status.php')
         .then(function (response) {
             return response.json();
         })
@@ -97,15 +97,6 @@ function refreshEquipment() {
             console.warn('Live update error:', error);
         });
 }
-
-// Handles equipment delete confirmation.
-document.addEventListener('click', function (event) {
-    if (event.target.classList.contains('delete-equipment-link')) {
-        if (!confirm('Delete this equipment?')) {
-            event.preventDefault();
-        }
-    }
-});
 
 // Handles equipment reservation forms.
 document.addEventListener('submit', function (event) {

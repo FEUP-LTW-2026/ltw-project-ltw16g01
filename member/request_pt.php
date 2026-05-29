@@ -66,9 +66,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $startTime = trim($_POST['start_time'] ?? '');
     $duration = (int)($_POST['duration_min'] ?? 60);
     $notes = trim($_POST['notes'] ?? '');
+    $bookingDateTime = DateTime::createFromFormat('Y-m-d H:i', $bookingDate . ' ' . $startTime);
+    $minimumDateTime = new DateTime('+3 hours');
 
     if ($trainerId <= 0 || empty($bookingDate) || empty($startTime)) {
         $error = 'Please select a trainer, date and time.';
+    } elseif (!$bookingDateTime) {
+        $error = 'Please choose a valid date and time.';
+    } elseif ($bookingDateTime <= new DateTime()) {
+        $error = 'You cannot request a PT session for a date or time that has already passed.';
+    } elseif ($bookingDateTime < $minimumDateTime) {
+        $error = 'PT sessions must be requested at least 3 hours in advance.';
     } elseif ($duration < 30 || $duration > 120) {
         $error = 'Duration must be between 30 and 120 minutes.';
     } elseif (memberHasBookingConflict($pdo, $memberId, $bookingDate, $startTime, $duration)) {

@@ -34,7 +34,7 @@ $adminId = $_SESSION['user_id'];
 $notifications = getRecentNotifications($pdo, $adminId, 5);
 
 // Output page header (loads external CSS, no inline styles)
-output_header('admin-dashboard.css');
+output_header('admin_dashboard.css');
 ?>
 
 <main class="main">

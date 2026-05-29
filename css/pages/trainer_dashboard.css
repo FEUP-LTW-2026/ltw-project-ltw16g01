@@ -1,5 +1,5 @@
-/* MEMBER-DASHBOARD.CSS */
-/* Page-specific styles for member and trainer dashboard layouts. */
+/* TRAINER_DASHBOARD.CSS */
+/* Page-specific styles for trainer dashboard layouts. */
 
 .dash-header {
     background: linear-gradient(135deg, var(--surface) 0%, transparent 55%);
@@ -178,177 +178,28 @@
     color: var(--warning);
 }
 
-.full-width-card {
-    margin-bottom: var(--sp-lg);
-}
-
-.rating-cell {
-    min-width: 120px;
-}
-.stars-display {
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    color: var(--warning);
-}
-.no-rating {
-    color: var(--muted);
-    font-style: italic;
-    font-size: 0.8rem;
-}
-.rate-link {
-    background: none;
-    border: none;
-    color: var(--accent);
-    cursor: pointer;
-    font-size: 0.8rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 1rem;
-    transition: background 0.2s;
-}
-.rate-link:hover {
-    background: rgba(232, 65, 24, 0.1);
-    color: var(--warning);
-}
-.rate-edit {
-    color: var(--muted);
-}
-.rate-edit:hover {
-    color: var(--accent);
-}
-
-.modal-body textarea {
-    min-height: 120px;
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-sm);
-    color: var(--text);
-    resize: vertical;
-    font-family: var(--ff-body);
-    font-size: 0.9rem;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.2s, opacity 0.2s;
-}
-.modal-overlay.open {
-    visibility: visible;
-    opacity: 1;
-}
-.modal {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--r-md);
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--sp-md);
-    border-bottom: 1px solid var(--border);
-}
-.modal-close {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.25rem;
-}
-.modal-body {
-    padding: var(--sp-md);
-}
-.star {
-    color: var(--border);
-    transition: color 0.2s;
-    cursor: pointer;
-}
-.star.filled {
-    color: var(--warning);
-}
-.w-full {
-    width: 100%;
-}
-.btn-accent {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: var(--r-sm);
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.btn-accent:hover {
-    background: #c73615;
-}
-
-.membership-card {
-    overflow: hidden;
-}
-
-.membership-card .card-head {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.membership-body {
-    padding: 1.35rem 1.5rem 1.5rem;
-}
-
-.membership-features {
-    display: grid;
-    gap: 0.85rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.membership-features li {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--text);
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-.membership-icon {
-    width: 1.5rem;
-    display: inline-flex;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.membership-note {
-    margin-top: 1.25rem;
-    margin-bottom: 0;
-    color: var(--muted);
-    font-size: 0.98rem;
-    line-height: 1.6;
-}
-
 @media (min-width: 480px) {
     .kpi-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 900px) {
     .dash-layout { grid-template-columns: 3fr 2fr; }
+}
+
+.decline-btn {
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--r-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--t);
+}
+.decline-btn:hover {
+    background: rgba(255, 71, 87, 0.1);
+    transform: translateY(-1px);
+}
+
+.schedule-edit-box.is-hidden {
+    display: none;
 }

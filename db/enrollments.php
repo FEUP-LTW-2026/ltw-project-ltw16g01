@@ -9,7 +9,7 @@ function getNextScheduledSessionByScheduleId($pdo, $scheduleId) {
         FROM class_sessions cs
         JOIN class_schedules sch ON cs.schedule_id = sch.id
         WHERE cs.schedule_id = ?
-          AND datetime(cs.session_date || ' ' || sch.start_time) >= datetime('now')
+          AND datetime(cs.session_date || ' ' || sch.start_time) > datetime('now')
           AND cs.status = 'scheduled'
         ORDER BY cs.session_date ASC, sch.start_time ASC
         LIMIT 1

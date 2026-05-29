@@ -78,7 +78,7 @@ $filter = $_GET['filter'] ?? 'all';
 $requests = getAllPTRequests($pdo, $filter === 'all' ? null : $filter);
 
 // Output page header with PT requests specific CSS
-output_header('admin-pt-requests.css');
+output_header('admin_pt_requests.css');
 ?>
 
 <!-- Additional CSS for form elements (filter bar) -->
@@ -123,6 +123,6 @@ output_header('admin-pt-requests.css');
 </main>
 
 <!-- External JavaScript for filter interactions and AJAX reloading -->
-<script src="../js/pt-requests.js"></script>
+<script src="../js/pt_requests.js"></script>
 
 <?php output_footer('../admin/'); ?>

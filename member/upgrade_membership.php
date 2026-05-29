@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-output_header('upgrade-membership.css');
+output_header('upgrade_membership.css');
 ?>
 
 <main class="main upgrade-page">

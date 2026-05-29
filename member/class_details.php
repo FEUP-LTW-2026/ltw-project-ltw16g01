@@ -52,7 +52,7 @@ if ($reviewCount > 0) {
 }
 
 // Output header with dedicated CSS
-output_header('class-details.css');
+output_header('class_details.css');
 ?>
 
 <main class="main">

@@ -28,7 +28,7 @@ $confirmedPT = getMemberConfirmedPT($pdo, $memberId);
 $memberPlan = getMemberPlan($pdo, $memberId);
 $planFeatures = getMemberPlanFeatures($memberPlan);
 
-output_header('member-dashboard.css');
+output_header('member_dashboard.css');
 ?>
 
 <main class="main">
@@ -388,6 +388,6 @@ output_header('member-dashboard.css');
     </div>
 </main>
 
-<script src="../js/member-dashboard.js"></script>
+<script src="../js/member_dashboard.js"></script>
 
 <?php output_footer('../member/'); ?>

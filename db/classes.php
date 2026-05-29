@@ -111,7 +111,7 @@ function getUpcomingSessionsBySchedule($pdo, $scheduleId, $limit = 5) {
         FROM class_sessions sess
         JOIN class_schedules sch ON sess.schedule_id = sch.id
         WHERE sess.schedule_id = ? 
-          AND datetime(sess.session_date || ' ' || sch.start_time) >= datetime('now')
+          AND datetime(sess.session_date || ' ' || sch.start_time) > datetime('now')
           AND sess.status = 'scheduled'
         ORDER BY sess.session_date ASC, sch.start_time ASC
         LIMIT ?
