@@ -1,4 +1,7 @@
 <?php
+/**
+ * personal_bookings.php – Functions for personal training (PT) requests and management.
+ */
 
 function getAvailableTrainersForPT($pdo) {
     $stmt = $pdo->prepare("
@@ -146,7 +149,6 @@ function trainerHasBookingConflict($pdo, $trainerId, $bookingDate, $startTime, $
 
 function trainerHasClassConflict($pdo, $trainerId, $bookingDate, $startTime, $duration) {
     $dayOfWeek = date('l', strtotime($bookingDate));
-
     $sql = "
         SELECT cs.id
         FROM class_schedules cs
@@ -156,7 +158,6 @@ function trainerHasClassConflict($pdo, $trainerId, $bookingDate, $startTime, $du
           AND time(cs.start_time, '+' || cs.duration_min || ' minutes') > time(?)
         LIMIT 1
     ";
-
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         $trainerId,
@@ -165,7 +166,6 @@ function trainerHasClassConflict($pdo, $trainerId, $bookingDate, $startTime, $du
         $duration,
         $startTime
     ]);
-
     return $stmt->fetch() !== false;
 }
 

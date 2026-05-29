@@ -1,4 +1,9 @@
 <?php
+/**
+ * choose_area.php – Landing page for users who have both normal (member/trainer) and admin privileges.
+ * Allows them to choose which area to enter.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/auth.php';

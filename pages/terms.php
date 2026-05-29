@@ -1,4 +1,8 @@
 <?php
+/**
+ * terms.php – Static page displaying Terms of Service.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';

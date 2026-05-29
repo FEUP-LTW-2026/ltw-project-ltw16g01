@@ -1,5 +1,7 @@
 <?php
-// db/equipment.php
+/**
+ * equipment.php – Functions for managing equipment and reservations (VIP only).
+ */
 
 function getAllEquipmentCategories($pdo) {
     $stmt = $pdo->prepare("
@@ -131,11 +133,6 @@ function deleteEquipment($pdo, $id) {
 
     return $stmt->execute([$id]);
 }
-
-/* =========================
-   EQUIPMENT RESERVATIONS
-   VIP ONLY
-   ========================= */
 
 function getMemberEquipmentReservations($pdo, $memberId) {
     $stmt = $pdo->prepare("

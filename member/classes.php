@@ -1,4 +1,9 @@
 <?php
+/**
+ * classes.php – Member page for browsing and filtering classes.
+ * Displays a grid of class schedules with enrolment buttons.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';
@@ -8,19 +13,23 @@ require_once '../db/connection.php';
 require_once '../db/classes.php';
 require_once '../template/classes.php';
 
+// Only logged‑in members
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
-$GLOBALS['pdo'] = $pdo;
+$GLOBALS['pdo'] = $pdo; // used by template functions
 
+// Retrieve all class types for the filter dropdown
 $types = $pdo
     ->query("SELECT name, label FROM class_types WHERE active = 1 ORDER BY label")
     ->fetchAll(PDO::FETCH_ASSOC);
 
+// Retrieve all active trainers for the filter dropdown
 $trainers = $pdo
     ->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")
     ->fetchAll(PDO::FETCH_ASSOC);
 
+// Retrieve all distinct start times for the time filter
 $times = $pdo
     ->query("
         SELECT DISTINCT start_time 
@@ -29,6 +38,7 @@ $times = $pdo
     ")
     ->fetchAll(PDO::FETCH_COLUMN);
 
+// Read filter values from URL
 $filters = [
     'type' => $_GET['type'] ?? '',
     'trainer' => $_GET['trainer'] ?? '',
@@ -36,8 +46,10 @@ $filters = [
     'time' => $_GET['time'] ?? ''
 ];
 
+// Fetch class schedules applying the filters
 $schedules = getAllClassSchedules($pdo, $filters);
 
+// Output the page header with its own CSS
 output_header('classes.css');
 ?>
 
@@ -52,13 +64,13 @@ output_header('classes.css');
             </div>
         </header>
 
+        <!-- Filter form (submitted via AJAX) -->
         <section>
             <form id="filter-form" class="filter-bar" method="get" action="classes.php">
                 <div class="filter-group">
                     <label class="form-label" for="f-type">Class type</label>
                     <select id="f-type" name="type" class="form-select">
                         <option value="">All types</option>
-
                         <?php foreach ($types as $t): ?>
                             <option 
                                 value="<?= htmlspecialchars($t['name']) ?>" 
@@ -74,7 +86,6 @@ output_header('classes.css');
                     <label class="form-label" for="f-trainer">Trainer</label>
                     <select id="f-trainer" name="trainer" class="form-select">
                         <option value="">All trainers</option>
-
                         <?php foreach ($trainers as $tr): ?>
                             <option 
                                 value="<?= (int)$tr['id'] ?>" 
@@ -90,7 +101,6 @@ output_header('classes.css');
                     <label class="form-label" for="f-day">Day</label>
                     <select id="f-day" name="day" class="form-select">
                         <option value="">Any Day</option>
-
                         <?php foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day): ?>
                             <option 
                                 value="<?= $day ?>" 
@@ -106,7 +116,6 @@ output_header('classes.css');
                     <label class="form-label" for="f-time">Time</label>
                     <select id="f-time" name="time" class="form-select">
                         <option value="">Any Time</option>
-
                         <?php foreach ($times as $time): ?>
                             <option 
                                 value="<?= htmlspecialchars($time) ?>" 
@@ -120,12 +129,14 @@ output_header('classes.css');
             </form>
         </section>
 
+        <!-- Results count bar -->
         <div class="results-bar">
             <p class="results-count" id="results-count">
                 Showing <strong id="class-count"><?= count($schedules) ?></strong> classes
             </p>
         </div>
 
+        <!-- List of class cards (updated via AJAX) -->
         <div id="class-list-container">
             <?php output_class_schedule_list($schedules); ?>
         </div>

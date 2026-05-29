@@ -1,14 +1,22 @@
 <?php
+/**
+ * header.php – Reusable page header.
+ * Determines the current area (member/trainer/admin/public) based on session data,
+ * builds the navigation menu, and outputs the HTML head section.
+ */
+
 require_once __DIR__ . '/session.php';
 
 if (!function_exists('output_header')) {
     function output_header($pageCss) {
+        // Load session data
         $loggedIn = isset($_SESSION['user_id']);
         $userName = $_SESSION['user_name'] ?? '';
         $originalRole = $_SESSION['role'] ?? '';
         $userPhoto = $_SESSION['user_photo'] ?? null;
         $userIsAdmin = !empty($_SESSION['is_admin']) || $originalRole === 'admin';
 
+        // Determine which area to display in the menu (active_role overrides original role)
         $activeRole = $_SESSION['active_role'] ?? '';
         if (!$loggedIn) {
             $headerArea = 'public';
@@ -30,6 +38,7 @@ if (!function_exists('output_header')) {
             }
         }
 
+        // Build avatar HTML for the logged‑in user (photo or initial)
         $avatarHtml = '';
         if ($loggedIn) {
             $initial = strtoupper(substr($userName, 0, 1));
@@ -40,6 +49,7 @@ if (!function_exists('output_header')) {
             }
         }
 
+        // Set appropriate links for logo and profile according to the current area
         switch ($headerArea) {
             case 'member':
                 $logoLink = '../member/dashboard.php';
@@ -68,26 +78,32 @@ if (!function_exists('output_header')) {
     <meta name="theme-color" content="#0b0b0b">
     <title>FitPeak</title>
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Core CSS files -->
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/pages/<?= htmlspecialchars($pageCss) ?>">
 </head>
 <body>
 
+<!-- Hidden checkbox for mobile menu toggling -->
 <input type="checkbox" id="nav-toggle" class="nav-toggle">
 
 <header>
     <nav class="navbar" aria-label="Main navigation">
+        <!-- Logo that links to the appropriate dashboard or homepage -->
         <a href="<?= htmlspecialchars($logoLink) ?>" class="logo">FIT<span>PEAK</span></a>
 
+        <!-- Mobile burger menu icon -->
         <label for="nav-toggle" class="burger">
             <span></span><span></span><span></span>
         </label>
 
+        <!-- Main navigation list (depends on headerArea) -->
         <ul class="nav-menu">
             <?php if ($headerArea === 'member'): ?>
                 <li><a href="../member/dashboard.php">Home</a></li>
@@ -134,6 +150,7 @@ if (!function_exists('output_header')) {
                 </li>
 
             <?php else: ?>
+                <!-- Public area (not logged in) -->
                 <li><a href="../index.php">Home</a></li>
                 <li><a href="../pages/classes.php">Classes</a></li>
                 <li><a href="../pages/trainers.php">Trainers</a></li>

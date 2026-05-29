@@ -1,5 +1,7 @@
 <?php
-// db/admin.php
+/**
+ * admin.php – Functions for the admin dashboard.
+ */
 
 function getAdminStats($pdo) {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE role = 'member' AND active = 1");

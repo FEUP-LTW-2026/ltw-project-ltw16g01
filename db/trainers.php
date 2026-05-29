@@ -1,5 +1,7 @@
 <?php
-// db/trainers.php
+/**
+ * trainers.php – Functions for managing trainers (admin and public views).
+ */
 
 function getAllTrainers($pdo, $filters = []) {
     $sql = "
@@ -289,7 +291,6 @@ function getDistinctSpecializations($pdo) {
 }
 
 function getTrainerStats($pdo, $trainerId) {
-    // Upcoming classes (sessions) for this trainer
     $stmt = $pdo->prepare("
         SELECT COUNT(*) 
         FROM class_sessions sess
@@ -299,7 +300,6 @@ function getTrainerStats($pdo, $trainerId) {
     $stmt->execute([$trainerId]);
     $upcoming = $stmt->fetchColumn();
 
-    // Total students enrolled in trainer's upcoming classes
     $stmt = $pdo->prepare("
         SELECT COUNT(DISTINCT e.member_id)
         FROM enrollments e
@@ -310,7 +310,6 @@ function getTrainerStats($pdo, $trainerId) {
     $stmt->execute([$trainerId]);
     $students = $stmt->fetchColumn();
 
-    // Total classes given (past)
     $stmt = $pdo->prepare("
         SELECT COUNT(*) 
         FROM class_sessions sess
@@ -373,6 +372,7 @@ function getTrainerPastClasses($pdo, $trainerId, $limit = 10) {
     $stmt->execute([$trainerId, $limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 function getTrainerPendingPTRequests($pdo, $trainerId) {
     $stmt = $pdo->prepare("
         SELECT pb.*, u.name as member_name, u.email as member_email

@@ -1,4 +1,8 @@
 <?php
+/**
+ * about.php – Static page describing the gym’s story, mission, values and reasons to choose FitPeak.
+ */
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 

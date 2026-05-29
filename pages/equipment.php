@@ -1,4 +1,9 @@
 <?php
+/**
+ * equipment.php – Public page showing real‑time equipment availability.
+ * External JS: ../js/equipment.js
+ */
+
 require_once '../includes/session.php';
 
 require_once '../db/connection.php';
@@ -9,7 +14,7 @@ require_once '../includes/footer.php';
 
 $pdo = getDatabaseConnection();
 
-// Obter categorias e equipamentos
+// Get categories and equipment
 $categories = getAllEquipmentCategories($pdo);
 $equipment = getAllEquipment($pdo);
 
@@ -27,20 +32,20 @@ output_header("equipment.css");
                     <li><span>Equipment</span></li>
                 </ol>
             </nav>
-            <div class="page-header-row flex-between" style="flex-wrap:wrap; gap:1rem;">
+            <div class="page-header-row flex-between">
                 <div>
                     <h1>Equipment</h1>
                     <p>Real‑time availability of the training floor</p>
                 </div>
                 <div class="live-indicator">
                     <span class="live-dot"></span> Live
-                    <span id="lastUpdate" class="text-muted" style="margin-left:0.5rem;font-size:0.7rem;"></span>
+                    <span id="lastUpdate" class="text-muted live-update-text"></span>
                 </div>
             </div>
         </header>
 
         <!-- Legend -->
-        <div class="flex gap-md mb-lg" style="flex-wrap:wrap;">
+        <div class="flex gap-md mb-lg">
             <span class="badge badge-success">● Available</span>
             <span class="badge badge-warning">● Maintenance</span>
             <span class="badge badge-danger">● Unavailable</span>
@@ -53,4 +58,4 @@ output_header("equipment.css");
 
 <?php output_footer('../pages/'); ?>
 
-<script src="../js/equipment.js"> </script>
+<script src="../js/equipment.js"></script>

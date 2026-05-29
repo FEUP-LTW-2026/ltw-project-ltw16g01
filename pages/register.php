@@ -1,4 +1,9 @@
 <?php
+/**
+ * register.php – Member registration page.
+ * Creates a new user account and member profile, then redirects to the member dashboard.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../db/connection.php';

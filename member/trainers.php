@@ -1,4 +1,9 @@
 <?php
+/**
+ * trainers.php – Member page listing all trainers.
+ * Includes filtering by specialization, name, and PT availability.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';
@@ -9,6 +14,7 @@ require_once '../template/trainers.php';
 
 $pdo = getDatabaseConnection();
 
+// Read filter values from URL
 $filters = [
     'specialization' => $_GET['specialization'] ?? '',
     'trainer_id' => $_GET['trainer_id'] ?? '',
@@ -20,6 +26,7 @@ $selectedSpec = $filters['specialization'];
 $selectedTrainerId = $filters['trainer_id'];
 $selectedIsPt = $filters['is_pt'];
 
+// Fetch trainers based on filters
 $trainers = getAllTrainers($pdo, $filters);
 $specializations = getTrainerSpecializationOptions($pdo);
 $trainerNames = getTrainerNameOptions($pdo);
@@ -30,16 +37,15 @@ output_header('trainers.css');
 <main class="main">
     <div class="container">
         <header class="page-header">
-
             <div class="page-header-row">
                 <h1>Our Trainers</h1>
                 <p>Meet our certified coaches and book a personal session</p>
             </div>
         </header>
 
+        <!-- Filter form (submitted via AJAX) -->
         <section>
             <form id="filter-form" class="filter-bar" method="get" action="trainers.php">
-
                 <div class="filter-group">
                     <label class="form-label" for="f-specialization">Specialization</label>
                     <select id="f-specialization" name="specialization" class="form-select">
@@ -56,7 +62,6 @@ output_header('trainers.css');
                     <label class="form-label" for="f-trainer">Trainer name</label>
                     <select id="f-trainer" name="trainer_id" class="form-select">
                         <option value="">All trainers</option>
-
                         <?php foreach ($trainerNames as $trainer): ?>
                             <option value="<?= htmlspecialchars($trainer['id']) ?>"
                                 <?= (string)$filters['trainer_id'] === (string)$trainer['id'] ? 'selected' : '' ?>>
@@ -74,16 +79,17 @@ output_header('trainers.css');
                         <option value="0" <?= $filters['is_pt'] === '0' ? 'selected' : '' ?>>Not PT</option>
                     </select>
                 </div>
-
             </form>
         </section>
 
+        <!-- Results count -->
         <div class="results-bar">
             <p class="results-count" id="results-count">
                 Showing <strong id="trainer-count"><?= count($trainers) ?></strong> trainers
             </p>
         </div>
 
+        <!-- Trainers list (updated via AJAX) -->
         <div id="trainer-list-container">
             <?php output_trainer_list($trainers); ?>
         </div>
