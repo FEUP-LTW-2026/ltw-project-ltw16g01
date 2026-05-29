@@ -1,4 +1,8 @@
 <?php
+/**
+ * pt.php – Public page listing personal trainers (PTs) with call‑to‑action.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';

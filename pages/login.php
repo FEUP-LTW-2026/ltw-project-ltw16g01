@@ -1,4 +1,9 @@
 <?php
+/**
+ * login.php – User login page.
+ * Handles authentication and redirects based on role and admin status.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../db/connection.php';

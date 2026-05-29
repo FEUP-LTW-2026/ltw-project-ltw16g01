@@ -1,6 +1,12 @@
 <?php
-// template/reports.php
+/**
+ * reports.php – Template functions for rendering admin reports.
+ * Includes KPI cards, bar charts, and simple tables.
+ */
 
+/**
+ * Renders a grid of KPI cards (active members, trainers, classes, occupancy, equipment issues).
+ */
 function renderKpiCards($kpis) {
     ?>
     <div class="kpi-grid">
@@ -13,13 +19,16 @@ function renderKpiCards($kpis) {
     <?php
 }
 
+/**
+ * Renders a horizontal bar chart.
+ */
 function renderBarChart($data, $labelKey, $valueKey, $title, $valueSuffix = '') {
     if (empty($data)) {
         echo '<div class="chart-card"><h3>' . htmlspecialchars($title) . '</h3><p>No data available.</p></div>';
         return;
     }
     $maxValue = max(array_column($data, $valueKey));
-    if ($maxValue == 0) $maxValue = 1; // evitar divisão por zero
+    if ($maxValue == 0) $maxValue = 1;
     ?>
     <div class="chart-card">
         <h3><?= htmlspecialchars($title) ?></h3>
@@ -42,6 +51,9 @@ function renderBarChart($data, $labelKey, $valueKey, $title, $valueSuffix = '') 
     <?php
 }
 
+/**
+ * Renders a simple table from an array of data.
+ */
 function renderSimpleTable($data, $columns, $title) {
     if (empty($data)) {
         echo '<div class="table-card"><h3>' . htmlspecialchars($title) . '</h3><p>No classes with critical capacity issues.</p></div>';

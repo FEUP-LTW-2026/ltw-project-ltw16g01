@@ -1,31 +1,38 @@
 <?php
+/**
+ * mailer.php – Email sending helper using PHPMailer.
+ * Provides a function to send password reset emails via Gmail SMTP.
+ */
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+// Load Composer autoloader for PHPMailer
 require_once __DIR__ . '/../vendor/autoload.php';
 
 function sendPasswordResetEmail($toEmail, $resetLink) {
     $mail = new PHPMailer(true);
 
     try {
+        // SMTP configuration using Gmail
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
 
-        // Email default da aplicação FitPeak
+        // FitPeak default email account (app password)
         $mail->Username = 'fitpeakgym2026@gmail.com';
         $mail->Password = 'wglj bhev xmnb jyvt';
 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        // Remetente do email
+        // Sender information
         $mail->setFrom('fitpeakgym2026@gmail.com', 'FitPeak');
 
-        // Email do utilizador que pediu reset
+        // Recipient
         $mail->addAddress($toEmail);
 
+        // Email content
         $mail->isHTML(true);
         $mail->Subject = 'Password Reset - FitPeak';
 

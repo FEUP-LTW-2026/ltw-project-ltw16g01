@@ -1,4 +1,9 @@
 <?php
+/**
+ * forgot_password.php – Allows a user to request a password reset link.
+ * Sends an email with a secure token.
+ */
+
 require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
@@ -55,9 +60,7 @@ output_header('auth.css');
         <?php endif; ?>
 
         <?php if ($success): ?>
-            <div class="auth-alert alert-success" style="text-align: center;">
-                <?= htmlspecialchars($success) ?>
-            </div>
+            <div class="auth-alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
 
         <?php if (!$success): ?>

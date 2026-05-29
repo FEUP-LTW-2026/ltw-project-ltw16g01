@@ -1,15 +1,24 @@
 <?php
+/**
+ * footer.php – Reusable footer component.
+ * Renders the site footer with logo, platform links, contact info and copyright.
+ * The $basePath parameter allows dynamic prefixing of internal links (e.g. '../pages/').
+ */
+
 function output_footer($basePath = '') {
+    // Prevent XSS in the base path parameter
     $safeBasePath = htmlspecialchars($basePath, ENT_QUOTES);
 ?>
     <footer class="site-footer">
         <div class="container">
             <div class="footer-grid">
+                <!-- Logo and tagline -->
                 <div class="footer-box">
                     <span class="logo">FIT<span>PEAK</span></span>
                     <p>Your gym, your evolution. Technology, performance and community in one place.</p>
                 </div>
 
+                <!-- Platform navigation links -->
                 <div class="footer-box">
                     <h3>Platform</h3>
                     <ul>
@@ -19,6 +28,7 @@ function output_footer($basePath = '') {
                     </ul>
                 </div>
 
+                <!-- Contact information -->
                 <div class="footer-box">
                     <h3>Contact</h3>
                     <p>Avenida da Boavista, 1203<br>4100-130 Porto, Portugal</p>
@@ -27,6 +37,7 @@ function output_footer($basePath = '') {
                 </div>
             </div>
 
+            <!-- Copyright line -->
             <div class="footer-bottom">
                 <p>&copy; 2026 FitPeak Gym. All rights reserved.</p>
             </div>
@@ -35,5 +46,4 @@ function output_footer($basePath = '') {
 
     </body>
     </html>
-
 <?php } ?>

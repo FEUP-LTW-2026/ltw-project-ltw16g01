@@ -1,4 +1,8 @@
 <?php
+/**
+ * privacy.php – Static page displaying the Privacy Policy.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';

@@ -1,5 +1,7 @@
 <?php
-// db/enrollments.php
+/**
+ * enrollments.php – Functions for class enrolment and cancellation.
+ */
 
 function getNextScheduledSessionByScheduleId($pdo, $scheduleId) {
     $stmt = $pdo->prepare("
@@ -16,7 +18,6 @@ function getNextScheduledSessionByScheduleId($pdo, $scheduleId) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-
 function getEnrollmentCountForSession($pdo, $sessionId) {
     $stmt = $pdo->prepare("
         SELECT COUNT(*)
@@ -28,7 +29,6 @@ function getEnrollmentCountForSession($pdo, $sessionId) {
     $stmt->execute([$sessionId]);
     return (int)$stmt->fetchColumn();
 }
-
 
 function getSessionCapacityForEnrollment($pdo, $sessionId) {
     $stmt = $pdo->prepare("
@@ -42,7 +42,6 @@ function getSessionCapacityForEnrollment($pdo, $sessionId) {
     return (int)$stmt->fetchColumn();
 }
 
-
 function getMemberEnrollmentForSession($pdo, $memberId, $sessionId) {
     $stmt = $pdo->prepare("
         SELECT id, status
@@ -55,7 +54,6 @@ function getMemberEnrollmentForSession($pdo, $memberId, $sessionId) {
     $stmt->execute([$memberId, $sessionId]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
 
 function enrollMemberInSession($pdo, $memberId, $sessionId) {
     $capacity = getSessionCapacityForEnrollment($pdo, $sessionId);
@@ -105,7 +103,6 @@ function enrollMemberInSession($pdo, $memberId, $sessionId) {
         'message' => 'Enrolled successfully!'
     ];
 }
-
 
 function cancelMemberEnrollment($pdo, $memberId, $sessionId) {
     $stmt = $pdo->prepare("

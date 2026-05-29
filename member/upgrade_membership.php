@@ -1,4 +1,9 @@
 <?php
+/**
+ * upgrade_membership.php – Member page to change membership plan.
+ * Shows available plans (Basic, Premium, VIP) and allows switching.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';
@@ -7,6 +12,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/members.php';
 
+// Only logged‑in members
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
@@ -17,6 +23,7 @@ $currentPlan = getMemberPlan($pdo, $memberId);
 $error = '';
 $success = '';
 
+// Plan definitions (name, price, features, etc.)
 $plans = [
     'basic' => [
         'label' => 'Basic',
@@ -56,7 +63,9 @@ $plans = [
     ]
 ];
 
+// Process upgrade request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF protection
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
         exit('Invalid CSRF token.');
@@ -102,6 +111,7 @@ output_header('upgrade-membership.css');
             </div>
         <?php endif; ?>
 
+        <!-- Current plan panel -->
         <section class="current-plan-panel">
             <div>
                 <p class="panel-label">Current Plan</p>
@@ -117,6 +127,7 @@ output_header('upgrade-membership.css');
             </span>
         </section>
 
+        <!-- Plan selection form -->
         <form method="post">
             <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * notifications.php – Functions for creating and managing notifications.
+ * Handles storing, marking as read, and retrieving notifications for users.
+ */
 
 function createNotification($pdo, $userId, $message, $type = 'info') {
     $stmt = $pdo->prepare("SELECT id FROM notification_types WHERE name = ?");

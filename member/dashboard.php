@@ -1,4 +1,9 @@
 <?php
+/**
+ * dashboard.php – Member dashboard.
+ * Shows KPIs, upcoming classes, PT requests, confirmed PT, recent classes, and membership plan.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';
@@ -8,11 +13,13 @@ require_once '../db/connection.php';
 require_once '../db/members.php';
 require_once '../db/personal_bookings.php';
 
+// Only logged‑in members
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
 $memberId = $_SESSION['user_id'];
 
+// Gather data from helper functions (defined in db/members.php and db/personal_bookings.php)
 $stats = getMemberStats($pdo, $memberId);
 $upcoming = getMemberUpcomingEnrollments($pdo, $memberId);
 $pastClasses = getMemberPastClasses($pdo, $memberId);
@@ -37,6 +44,7 @@ output_header('member-dashboard.css');
     </header>
 
     <div class="dashboard-content">
+        <!-- KPI Cards -->
         <div class="kpi-grid">
             <div class="kpi-card">
                 <p class="kpi-num"><?= (int)$stats['upcoming'] ?></p>
@@ -54,6 +62,7 @@ output_header('member-dashboard.css');
             </div>
         </div>
 
+        <!-- Membership Plan Card -->
         <div class="card full-width-card membership-card">
             <div class="card-head">
                 <h2 class="card-title">Your Membership Plan</h2>
@@ -96,7 +105,7 @@ output_header('member-dashboard.css');
                         You have full access to all FitPeak member features.
                     </p>
 
-                    <div class="form-actions" style="margin-top: 1rem;">
+                    <div class="form-actions">
                         <a href="equipment.php" class="main-button btn-sm">
                             Reserve Equipment
                         </a>
@@ -105,7 +114,7 @@ output_header('member-dashboard.css');
             </div>
         </div>
 
-        <!-- Tabela de próximas aulas -->
+        <!-- Upcoming Classes Table -->
         <div class="card full-width-card">
             <div class="card-head">
                 <h2 class="card-title">Your Upcoming Classes</h2>
@@ -156,7 +165,7 @@ output_header('member-dashboard.css');
             </div>
         </div>
 
-        <!-- Pedidos de PT -->
+        <!-- Personal Training Requests Table -->
         <div class="card full-width-card">
             <div class="card-head">
                 <h2 class="card-title">Your Personal Training Requests</h2>
@@ -221,7 +230,7 @@ output_header('member-dashboard.css');
             </div>
         </div>
 
-        <!-- Sessões PT confirmadas -->
+        <!-- Confirmed PT Sessions Table -->
         <div class="card full-width-card">
             <div class="card-head">
                 <h2 class="card-title">Confirmed Personal Training Sessions</h2>
@@ -270,7 +279,7 @@ output_header('member-dashboard.css');
             </div>
         </div>
 
-        <!-- Aulas recentes -->
+        <!-- Recent Classes Table (with rating links) -->
         <div class="card full-width-card">
             <div class="card-head">
                 <h2 class="card-title">Recent Classes</h2>
@@ -336,6 +345,7 @@ output_header('member-dashboard.css');
         </div>
     </div>
 
+    <!-- Modal for adding/editing a review -->
     <div class="modal-overlay" id="reviewModal">
         <div class="modal">
             <div class="modal-header">
@@ -350,11 +360,11 @@ output_header('member-dashboard.css');
                     <div class="form-group">
                         <label class="form-label">Rating</label>
 
-                        <div class="star-input-group" style="display:flex;gap:0.3rem;">
+                        <div class="star-input-group">
                             <input type="hidden" name="rating" id="ratingInput" value="0">
 
                             <?php for ($i = 1; $i <= 5; $i++): ?>
-                                <span class="star" style="font-size:2rem;cursor:pointer;">★</span>
+                                <span class="star">★</span>
                             <?php endfor; ?>
                         </div>
                     </div>

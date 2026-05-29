@@ -1,5 +1,7 @@
 <?php
-// db/class_sessions.php
+/**
+ * class_sessions.php – Functions for working with class sessions.
+ */
 
 function getUpcomingSessions($pdo, $scheduleId, $limit = 1) {
     $sql = "SELECT id, session_date, status FROM class_sessions WHERE schedule_id = ? AND session_date >= date('now') AND status = 'scheduled' ORDER BY session_date ASC LIMIT ?";
@@ -24,5 +26,12 @@ function getNextSessionWithCapacity($pdo, $schedule) {
     $capacity = (int)$schedule['capacity'];
     $percent = $capacity > 0 ? round(($enrolled / $capacity) * 100) : 100;
 
-    return ['session_id' => $session['id'], 'session_date' => $session['session_date'], 'enrolled' => $enrolled, 'capacity' => $capacity, 'percent_filled' => $percent, 'status' => $session['status']];
+    return [
+        'session_id' => $session['id'],
+        'session_date' => $session['session_date'],
+        'enrolled' => $enrolled,
+        'capacity' => $capacity,
+        'percent_filled' => $percent,
+        'status' => $session['status']
+    ];
 }

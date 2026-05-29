@@ -1,5 +1,7 @@
 <?php
-// db/classes.php
+/**
+ * classes.php – Functions for managing class schedules and sessions.
+ */
 
 function getAllClassSchedules($pdo, $filters = []) {
     $sql = "SELECT cs.id AS schedule_id, cs.day_of_week, cs.start_time, cs.location, cs.capacity, cs.duration_min, c.id AS class_id, c.name AS class_name, c.description AS class_description, ct.id AS class_type_id, ct.name AS class_type_name, ct.label AS class_type_label, u.id AS trainer_id, u.name AS trainer_name, (SELECT COUNT(*) FROM enrollments e JOIN class_sessions sess ON e.session_id = sess.id WHERE sess.schedule_id = cs.id AND e.status = 'enrolled') AS enrolled_count FROM class_schedules cs JOIN classes c ON cs.class_id = c.id JOIN class_types ct ON c.class_type_id = ct.id LEFT JOIN users u ON cs.trainer_id = u.id WHERE c.active = 1";
@@ -232,7 +234,6 @@ function cancelTrainerSession($pdo, $sessionId, $trainerId) {
         return false;
     }
 }
-
 
 function updateTrainerScheduleDetails($pdo, $scheduleId, $trainerId, $location, $capacity, $duration, $startTime) {
     $location = trim($location);

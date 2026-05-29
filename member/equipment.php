@@ -1,4 +1,9 @@
 <?php
+/**
+ * equipment.php – Member equipment page.
+ * Shows real‑time availability of equipment, and VIP reservation section.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/auth.php';
@@ -9,11 +14,13 @@ require_once '../db/equipment.php';
 require_once '../db/members.php';
 require_once '../template/equipment.php';
 
+// Only logged‑in members
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
 $memberId = (int)$_SESSION['user_id'];
 
+// Fetch equipment data and member plan
 $categories = getAllEquipmentCategories($pdo);
 $equipment = getAllEquipment($pdo);
 $memberPlan = getMemberPlan($pdo, $memberId);
@@ -39,6 +46,7 @@ output_header('equipment.css');
             </div>
         </header>
 
+        <!-- Legend and VIP info -->
         <div class="equipment-legend">
             <span class="badge badge-success">● Available</span>
             <span class="badge badge-warning">● Maintenance</span>
@@ -57,6 +65,7 @@ output_header('equipment.css');
             </div>
         <?php endif; ?>
 
+        <!-- VIP reservations table -->
         <?php if ($memberPlan === 'vip'): ?>
             <section class="card full-width-card equipment-reservations-card">
                 <div class="card-head">
@@ -101,6 +110,7 @@ output_header('equipment.css');
             </section>
         <?php endif; ?>
 
+        <!-- Equipment grid -->
         <?php output_equipment_grid($equipment, $categories, $memberPlan); ?>
     </div>
 </main>

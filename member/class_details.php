@@ -1,4 +1,10 @@
 <?php
+/**
+ * class_details.php – Member view for a single class schedule.
+ * Displays class info, trainer, and member reviews.
+ */
+
+// Start session and load required components
 require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
@@ -6,6 +12,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/classes.php';
 
+// Only logged‑in members can access
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
@@ -15,12 +22,14 @@ if ($scheduleId <= 0) {
     exit;
 }
 
+// Fetch schedule details
 $schedule = getClassScheduleById($pdo, $scheduleId);
 if (!$schedule) {
     header('Location: classes.php');
     exit;
 }
 
+// Fetch trainer info (if any)
 $trainer = null;
 if (!empty($schedule['trainer_id'])) {
     $stmt = $pdo->prepare("SELECT id, name FROM users WHERE id = ?");
@@ -28,10 +37,12 @@ if (!empty($schedule['trainer_id'])) {
     $trainer = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// Get class type label
 $typeStmt = $pdo->prepare("SELECT label FROM class_types WHERE id = ?");
 $typeStmt->execute([$schedule['class_type_id']]);
 $typeLabel = $typeStmt->fetchColumn();
 
+// Get all reviews for this class schedule
 $reviews = getClassReviews($pdo, $scheduleId);
 $avgRating = 0;
 $reviewCount = count($reviews);
@@ -40,11 +51,13 @@ if ($reviewCount > 0) {
     $avgRating = round($sum / $reviewCount, 1);
 }
 
+// Output header with dedicated CSS
 output_header('class-details.css');
 ?>
 
 <main class="main">
     <div class="container">
+        <!-- Breadcrumb and back button -->
         <div class="class-detail-header">
             <nav>
                 <ol class="breadcrumb">
@@ -55,6 +68,7 @@ output_header('class-details.css');
             </nav>
         </div>
 
+        <!-- Main class information card -->
         <div class="card class-detail-card">
             <div class="card-body">
                 <div class="class-detail-info">
@@ -74,6 +88,7 @@ output_header('class-details.css');
                     <?php endif; ?>
                 </div>
 
+                <!-- Trainer section (if assigned) -->
                 <?php if ($trainer): ?>
                     <div class="class-trainer-info">
                         <h3>Instructor</h3>
@@ -88,6 +103,7 @@ output_header('class-details.css');
             </div>
         </div>
 
+        <!-- Reviews section -->
         <div class="card reviews-card">
             <div class="card-head">
                 <h2>Member Reviews</h2>

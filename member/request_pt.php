@@ -1,4 +1,9 @@
 <?php
+/**
+ * request_pt.php – Member page to request a personal training session.
+ * Only available for Premium and VIP members.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';
@@ -8,20 +13,20 @@ require_once '../db/connection.php';
 require_once '../db/personal_bookings.php';
 require_once '../db/members.php';
 
+// Only logged‑in members
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
 $memberId = $_SESSION['user_id'];
 $memberPlan = getMemberPlan($pdo, $memberId);
 
+// Block Basic members
 if ($memberPlan === 'basic') {
     output_header('request_pt.css');
     ?>
 
-    <link rel="stylesheet" href="../css/pages/form.css">
-
     <main class="main">
-        <div class="container" style="max-width: 700px;">
+        <div class="container">
             <header class="page-header">
                 <h1>Personal Training Not Available</h1>
                 <p>Your current membership plan does not include personal training sessions.</p>
@@ -48,7 +53,9 @@ $error = '';
 $success = '';
 $trainers = getAvailableTrainersForPT($pdo);
 
+// Process the request form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF protection
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
         exit('Invalid CSRF token.');
@@ -83,7 +90,7 @@ output_header('request_pt.css');
 <link rel="stylesheet" href="../css/pages/form.css">
 
 <main class="main">
-    <div class="container" style="max-width: 700px;">
+    <div class="container">
         <header class="page-header">
             <h1>Request Personal Training</h1>
             <p>Choose a certified personal trainer and propose a session time.</p>

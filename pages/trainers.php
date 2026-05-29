@@ -1,4 +1,9 @@
 <?php
+/**
+ * trainers.php – Public page listing all trainers with filters.
+ * External JS: ../js/trainers.js
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';

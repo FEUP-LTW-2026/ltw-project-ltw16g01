@@ -1,5 +1,7 @@
 <?php
-// db/reports.php
+/**
+ * reports.php – Functions for generating admin reports and KPIs.
+ */
 
 function getKpis($pdo, $startDate = null, $endDate = null) {
     if (!$startDate) $startDate = date('Y-m-d', strtotime('-30 days'));

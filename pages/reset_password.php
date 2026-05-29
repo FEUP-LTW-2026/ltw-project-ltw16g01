@@ -1,4 +1,8 @@
 <?php
+/**
+ * reset_password.php – Allows a user to set a new password using a valid reset token.
+ */
+
 require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';

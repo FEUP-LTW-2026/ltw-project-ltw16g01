@@ -1,4 +1,7 @@
 <?php
+/**
+ * auth.php – Functions for authentication, registration, and password reset.
+ */
 
 function authenticateUser($pdo, $identifier, $password) {
     $stmt = $pdo->prepare("
@@ -24,15 +27,8 @@ function authenticateUser($pdo, $identifier, $password) {
     }
     elseif (hash_equals($storedPassword, $password)) {
         $passwordIsValid = true;
-
         $newHash = password_hash($password, PASSWORD_DEFAULT);
-
-        $update = $pdo->prepare("
-            UPDATE users
-            SET password = ?
-            WHERE id = ?
-        ");
-
+        $update = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
         $update->execute([$newHash, $user['id']]);
     }
 
@@ -93,12 +89,11 @@ function createPasswordResetToken($pdo, $email) {
     $userId = $user['id'];
 
     $stmt = $pdo->prepare("
-    UPDATE password_resets
-    SET used = 1
-    WHERE user_id = ?
-    AND used = 0
+        UPDATE password_resets
+        SET used = 1
+        WHERE user_id = ?
+          AND used = 0
     ");
-
     $stmt->execute([$userId]);
 
     $token = bin2hex(random_bytes(32));

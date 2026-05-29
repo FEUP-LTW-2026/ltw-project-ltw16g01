@@ -1,5 +1,7 @@
 <?php
-// db/members.php
+/**
+ * members.php – Functions for member‑specific operations and membership plan logic.
+ */
 
 function getMemberUpcomingEnrollments($pdo, $memberId, $limit = 5) {
     $sql = "SELECT cs.id AS schedule_id, c.name AS class_name, cs.day_of_week, cs.start_time, cs.location, cs.duration_min, u.name AS trainer_name, sess.session_date, sess.id AS session_id, e.status, e.enrolled_at FROM enrollments e JOIN class_sessions sess ON e.session_id = sess.id JOIN class_schedules cs ON sess.schedule_id = cs.id JOIN classes c ON cs.class_id = c.id LEFT JOIN users u ON cs.trainer_id = u.id WHERE e.member_id = ? AND e.status = 'enrolled' AND sess.session_date >= date('now') ORDER BY sess.session_date ASC, cs.start_time ASC LIMIT ?";
@@ -159,10 +161,6 @@ function deleteMember($pdo, $id) {
     $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'member'");
     return $stmt->execute([$id]);
 }
-
-/* =========================
-   MEMBERSHIP PLAN LOGIC
-   ========================= */
 
 function getMemberPlan($pdo, $memberId) {
     $stmt = $pdo->prepare("SELECT membership_plan FROM member_profiles WHERE user_id = ?");

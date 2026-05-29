@@ -1,5 +1,7 @@
 <?php
-// db/home.php
+/**
+ * home.php – Functions for the public homepage (stats and class types).
+ */
 
 function getHomeStats($pdo) {
     $stmt = $pdo->prepare("

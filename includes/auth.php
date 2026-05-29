@@ -1,4 +1,8 @@
 <?php
+/**
+ * auth.php – Authentication helper functions.
+ * Provides easy access to session‑based user information and permission checks.
+ */
 
 function isLoggedIn() {
     return isset($_SESSION['user_id']);
@@ -38,16 +42,19 @@ function requireAuth($roles = null) {
     $allowedRoles = (array)$roles;
     $userRole = $_SESSION['active_role'] ?? ($_SESSION['role'] ?? '');
 
+    // Check if the user's role matches directly
     if (in_array($userRole, $allowedRoles, true)) {
         return;
     }
 
+    // Special case: if 'admin' is allowed and the user is an administrator (active area or flag)
     if (in_array('admin', $allowedRoles, true) && isAdmin()) {
         return;
     }
 
     http_response_code(403);
 
+    // Fallback redirects based on detected role
     if ($userRole === 'trainer') {
         header('Location: ../trainer/dashboard.php');
         exit;
@@ -63,6 +70,7 @@ function requireAuth($roles = null) {
         exit;
     }
 
+    // Default: go to login page
     header('Location: ../pages/login.php');
     exit;
 }

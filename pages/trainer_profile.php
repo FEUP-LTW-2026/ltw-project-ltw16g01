@@ -1,4 +1,9 @@
 <?php
+/**
+ * trainer_profile.php – Public profile page for a single trainer.
+ * Used by visitors/members to view trainer details, specializations and upcoming classes.
+ */
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../db/connection.php';

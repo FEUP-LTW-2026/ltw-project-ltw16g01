@@ -1,5 +1,11 @@
 <?php
+/**
+ * class-form-fields.php – Reusable form fields for creating/editing class schedules.
+ * Renders a set of input fields (name, type, description, trainer, day, time, capacity, duration).
+ * Used by admin class creation/editing pages.
+ */
 function classFormFields(array $trainers, array $days, array $types, array $cls = []): void {
+    // Helper to escape HTML safely
     $h = fn($s) => htmlspecialchars($s ?? '', ENT_QUOTES);
     ?>
     <div class="form-row">
@@ -18,10 +24,12 @@ function classFormFields(array $trainers, array $days, array $types, array $cls 
             </select>
         </div>
     </div>
+
     <div class="form-group">
         <label class="form-label">Description</label>
         <textarea name="description" class="form-input" rows="2"><?= $h($cls['description'] ?? '') ?></textarea>
     </div>
+
     <div class="form-row">
         <div class="form-group">
             <label class="form-label">Trainer</label>
@@ -39,6 +47,7 @@ function classFormFields(array $trainers, array $days, array $types, array $cls 
             <input type="text" name="location" class="form-input" value="<?= $h($cls['location'] ?? 'Studio A') ?>">
         </div>
     </div>
+
     <div class="form-row">
         <div class="form-group">
             <label class="form-label">Day of Week</label>
@@ -55,6 +64,7 @@ function classFormFields(array $trainers, array $days, array $types, array $cls 
             <input type="time" name="start_time" class="form-input" value="<?= $h($cls['start_time'] ?? '09:00') ?>" required>
         </div>
     </div>
+
     <div class="form-row">
         <div class="form-group">
             <label class="form-label">Capacity</label>

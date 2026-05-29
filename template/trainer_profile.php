@@ -1,6 +1,12 @@
 <?php
-// template/trainer_profile.php
+/**
+ * trainer_profile.php – Template functions for the public trainer profile page.
+ * Renders error messages, hero section, trainer details (bio, certs, status), and a list of their classes.
+ */
 
+/**
+ * Displays an error message when the trainer profile is invalid or not found.
+ */
 function output_trainer_profile_error($title, $message) { ?>
     <main class="main">
         <section class="trainer-profile-section">
@@ -15,6 +21,10 @@ function output_trainer_profile_error($title, $message) { ?>
     </main>
 <?php }
 
+/**
+ * Renders the hero section of the trainer profile: avatar, name, rating, specializations,
+ * description (PT or bio), and action buttons.
+ */
 function output_trainer_profile_hero($trainer, $rating) {
     $name = htmlspecialchars($trainer['name']);
     $bio = htmlspecialchars($trainer['bio'] ?? 'No bio provided yet.');
@@ -41,16 +51,19 @@ function output_trainer_profile_hero($trainer, $rating) {
                 </div>
 
                 <div class="trainer-profile-content">
+                    <!-- Role label (Personal Trainer or Class Instructor) -->
                     <p class="small-text"><?= ($isPt && $ptAvailable) ? 'Personal Trainer' : 'Class Instructor' ?></p>
 
                     <h1><?= $name ?></h1>
 
+                    <!-- Rating stars and count -->
                     <div class="profile-rating">
                         <span class="stars">★</span>
                         <span><?= number_format($ratingValue, 1) ?> / 5</span>
                         <span class="rating-muted">(<?= $reviewCount ?> reviews)</span>
                     </div>
 
+                    <!-- Specializations as badges -->
                     <div class="profile-specializations">
                         <?php foreach ($specializations as $spec): ?>
                             <?php if ($spec !== ''): ?>
@@ -59,17 +72,18 @@ function output_trainer_profile_hero($trainer, $rating) {
                         <?php endforeach; ?>
                     </div>
 
+                    <!-- Description: PT description if available, otherwise regular bio -->
                     <?php if ($isPt && $ptAvailable && $ptDescription !== ''): ?>
                         <p class="profile-description"><?= nl2br($ptDescription) ?></p>
                     <?php else: ?>
                         <p class="profile-description"><?= nl2br($bio) ?></p>
                     <?php endif; ?>
 
+                    <!-- Action buttons -->
                     <div class="profile-actions">
                         <?php if ($isPt && $ptAvailable): ?>
                             <a href="register.php" class="main-button">Create Account to Book</a>
                         <?php endif; ?>
-
                         <a href="trainers.php" class="secondary-button">Back to Trainers</a>
                     </div>
                 </div>
@@ -80,6 +94,10 @@ function output_trainer_profile_hero($trainer, $rating) {
 
 <?php }
 
+/**
+ * Renders the detailed section of the trainer profile:
+ * About (bio), Certifications, Status (PT availability), and a schedule list of assigned classes.
+ */
 function output_trainer_profile_details($trainer, $schedules) {
     $bio = htmlspecialchars($trainer['bio'] ?? 'No bio provided yet.');
     $certifications = htmlspecialchars($trainer['certifications'] ?? 'No certifications added yet.');
@@ -92,16 +110,19 @@ function output_trainer_profile_details($trainer, $schedules) {
         <div class="container">
             <div class="profile-details-grid">
 
+                <!-- About card -->
                 <article class="profile-card">
                     <h2>About</h2>
                     <p><?= nl2br($bio) ?></p>
                 </article>
 
+                <!-- Certifications card -->
                 <article class="profile-card">
                     <h2>Certifications</h2>
                     <p><?= nl2br($certifications) ?></p>
                 </article>
 
+                <!-- Status card (PT availability or instructor info) -->
                 <article class="profile-card">
                     <h2>Status</h2>
 
@@ -118,6 +139,7 @@ function output_trainer_profile_details($trainer, $schedules) {
 
             </div>
 
+            <!-- Classes schedule section -->
             <div class="profile-schedule-card">
                 <div class="profile-schedule-head">
                     <h2>Classes & Schedule</h2>
@@ -141,7 +163,6 @@ function output_trainer_profile_details($trainer, $schedules) {
                                         <?= htmlspecialchars($schedule['duration_min']) ?> min
                                     </p>
                                 </div>
-
                                 <span class="schedule-location"><?= htmlspecialchars($schedule['location']) ?></span>
                             </div>
                         <?php endforeach; ?>

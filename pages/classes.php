@@ -1,4 +1,9 @@
 <?php
+/**
+ * classes.php – Public page listing all class schedules.
+ * External JS: ../js/classes.js
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/header.php';

@@ -1,5 +1,7 @@
 <?php
-// db/profile.php
+/**
+ * profile.php – Functions for managing user profiles (member, trainer, admin).
+ */
 
 function getUserProfileById($pdo, $userId) {
     $stmt = $pdo->prepare("SELECT id, name, username, email, role, photo, active, created_at FROM users WHERE id = ? AND active = 1");

@@ -1,4 +1,9 @@
 <?php
+/**
+ * profile.php – Member profile page.
+ * Allows editing personal info, changing password, and uploading a profile photo.
+ */
+
 require_once '../includes/session.php';
 
 require_once '../includes/auth.php';
@@ -8,6 +13,7 @@ require_once '../db/connection.php';
 require_once '../db/profile.php';
 require_once '../template/profile.php';
 
+// Only logged‑in members
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
@@ -15,7 +21,9 @@ $userId = $_SESSION['user_id'];
 $message = '';
 $error = '';
 
+// Process form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF protection
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
         exit('Invalid CSRF token.');
@@ -23,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $action = $_POST['action'] ?? '';
 
+    // Update basic profile (name, username, email, photo)
     if ($action === 'update_basic_profile') {
         $photoPath = $_POST['current_photo'] ?? null;
 
@@ -58,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Update password
     if ($action === 'update_password') {
         $result = updateUserPassword(
             $pdo,
@@ -71,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Get fresh user data
 $user = getUserProfileById($pdo, $userId);
 
 if (!$user) {
@@ -79,6 +90,7 @@ if (!$user) {
     exit;
 }
 
+// Update session with latest data
 $_SESSION['user_name'] = $user['name'];
 $_SESSION['user_email'] = $user['email'];
 $_SESSION['user_photo'] = $user['photo'] ?? null;
@@ -102,4 +114,4 @@ output_header('profile.css');
 
 <script src="../js/profile.js"></script>
 
-<?php output_footer('../member/'); ?>   
+<?php output_footer('../member/'); ?>

@@ -1,4 +1,9 @@
 <?php
+/**
+ * trainer_profile.php – Public profile page for a single trainer.
+ * Used by members to view trainer details, specializations, and upcoming classes.
+ */
+
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../db/connection.php';
@@ -8,6 +13,7 @@ require_once '../template/trainer_profile.php';
 $pdo = getDatabaseConnection();
 $trainerId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
+// Validate trainer ID
 if (!$trainerId) {
     output_header('trainer_profile.css');
     output_trainer_profile_error('Invalid Trainer', 'The trainer profile you are trying to access is not valid.');
@@ -24,6 +30,7 @@ if (!$trainer) {
     exit;
 }
 
+// Fetch rating and upcoming class schedules for this trainer
 $rating = getTrainerRating($pdo, $trainerId);
 $schedules = getUpcomingSchedulesForTrainer($pdo, $trainerId, 5);
 
