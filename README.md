@@ -52,19 +52,24 @@ To open the Admin Dashboard page, manually change the browser URL to:
 
 **Extra:**
 - [x] Personal Training Bookings: Members can browse trainer availability and book one-on-one personal training sessions.
-- [x] Membership Plans: Define tiered membership plans (e.g., basic, premium) with different access levels, and allow members to subscribe to or upgrade their plan.
-- [x] Equipment Reservation: Members can reserve a specific piece of equipment for a time slot in the main training area.
-- [x] Forgot Password: If a user forgets their password, they can request a password reset email containing instructions to create a new password.
-- [x] Notification System: Send in-app or email notifications for class reminders, booking confirmations, waitlist updates, or membership renewals.
-- [x] Trainer Analytics Dashboard: Trainers can view attendance statistics, ratings summaries, and engagement data for their classes.
+- [x] Membership Plans: The system supports tiered membership plans (Basic, Premium, and VIP), each with different access levels. Members can subscribe to a plan or upgrade their current membership.
+- [x] Equipment Reservation: Members can reserve specific pieces of equipment for selected time slots in the main training area, depending on their membership plan.
+- [x] Forgot Password: Users who forget their password can request a password reset email with instructions to create a new password.
+- [x] Notification System: Admins receive notifications about relevant actions involving members, trainers, classes, equipment, and bookings. Members also receive notifications about important updates, such as class changes, cancellations, and booking-related events.
+- [x] Admin Analytics Dashboard: Admins can view gym-wide metrics, such as the most popular classes, equipment usage, membership statistics, and member retention.
+- [x] Analytics and Reports: Admins can export analytics and reports to CSV and PDF formats.
 
 ## Running
 
-    sqlite3 database/database.db < database/database.sql
+    sqlite3 db/gym.db < db/gym.sql
     php -S localhost:9000
 
 ## Credentials
 
 - admin/12345678
-- member/12345678
+- member/vip/12345678
+- member/premium/12345678
+- member/basic/12345678
+- member/admin/12345678
 - trainer/12345678
+- trainer/admin/12345678

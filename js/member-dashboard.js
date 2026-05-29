@@ -20,7 +20,7 @@ document.querySelectorAll('.btn-cancel-enroll').forEach(function (button) {
             },
             body: JSON.stringify({
                 action: 'cancel',
-                schedule_id: sessionId,
+                session_id: sessionId,
                 csrf: getCsrfToken()
             })
         })
