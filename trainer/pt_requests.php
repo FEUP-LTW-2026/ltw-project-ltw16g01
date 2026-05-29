@@ -31,10 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Get the member affected by this PT request through a database helper.
             $memberId = getPTRequestMemberId($pdo, $requestId);
 
-            if ($memberId) {
-                $trainerName = $_SESSION['user_name'] ?? '';
-                $message = "Your personal training request has been confirmed by trainer " . $trainerName . ".";
-                createNotification($pdo, $memberId, $message, 'success');
+            if ($memberId > 0) {
+                $trainerName = $_SESSION['user_name'] ?? 'Trainer';
+                $message = "Your personal training request has been confirmed by trainer {$trainerName}.";
+                try {
+                    createNotification(
+                        $pdo,
+                        $message,
+                        'success',
+                        $memberId,
+                        null,
+                        'personal',
+                        'PT Request Confirmed'
+                    );
+                } catch (Throwable $e) {
+                    // Do not block the main action if notification insertion fails.
+                }
             }
 
             $toastMessage = '✓ Request accepted! Member has been notified.';
@@ -48,10 +60,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Get the member affected by this PT request through a database helper.
             $memberId = getPTRequestMemberId($pdo, $requestId);
 
-            if ($memberId) {
-                $trainerName = $_SESSION['user_name'] ?? '';
-                $message = "Your personal training request has been declined by trainer " . $trainerName . ".";
-                createNotification($pdo, $memberId, $message, 'warning');
+            if ($memberId > 0) {
+                $trainerName = $_SESSION['user_name'] ?? 'Trainer';
+                $message = "Your personal training request has been declined by trainer {$trainerName}.";
+                try {
+                    createNotification(
+                        $pdo,
+                        $message,
+                        'warning',
+                        $memberId,
+                        null,
+                        'personal',
+                        'PT Request Declined'
+                    );
+                } catch (Throwable $e) {
+                    // Keep the PT status change even if notification fails.
+                }
             }
 
             $toastMessage = '✓ Request declined.';

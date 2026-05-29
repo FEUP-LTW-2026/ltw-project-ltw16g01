@@ -5,6 +5,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/enrollments.php';
 require_once '../db/members.php';
+require_once '../db/notifications.php';
 
 header('Content-Type: application/json');
 
@@ -105,6 +106,30 @@ if ($action === 'enroll') {
 
     $result = enrollMemberInSession($pdo, $memberId, $sessionId);
 
+    if (!empty($result['success'])) {
+
+        $memberName = $_SESSION['user_name'];
+
+        $sessionInfo = getSessionTrainerInfo(
+            $pdo,
+            $sessionId
+        );
+
+        if (
+            $sessionInfo &&
+            !empty($sessionInfo['trainer_id'])
+        ) {
+
+            notifyTrainerClassEnrollment(
+                $pdo,
+                (int)$sessionInfo['trainer_id'],
+                $memberName,
+                $sessionInfo['class_name'],
+                'enroll'
+            );
+        }
+    }
+
     echo json_encode($result);
     exit;
 }
@@ -112,6 +137,30 @@ if ($action === 'enroll') {
 // Cancel the member enrollment.
 if ($action === 'cancel') {
     $result = cancelMemberEnrollment($pdo, $memberId, $sessionId);
+
+    if (!empty($result['success'])) {
+
+        $memberName = $_SESSION['user_name'];
+
+        $sessionInfo = getSessionTrainerInfo(
+            $pdo,
+            $sessionId
+        );
+
+        if (
+            $sessionInfo &&
+            !empty($sessionInfo['trainer_id'])
+        ) {
+
+            notifyTrainerClassEnrollment(
+                $pdo,
+                (int)$sessionInfo['trainer_id'],
+                $memberName,
+                $sessionInfo['class_name'],
+                'cancel'
+            );
+        }
+    }
 
     echo json_encode($result);
     exit;

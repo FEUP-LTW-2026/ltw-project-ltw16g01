@@ -1,58 +1,63 @@
 <?php
-// File: admin/class_details_queries.php
-// Description: Contains all database queries for the class details page.
+// File: admin/delete_class.php
+// Description: Handles deletion of a class schedule by ID. Redirects after action.
+//              Sends notification to the assigned trainer if the class is deleted.
 
-// Get trainer details by ID
-function getTrainerById($pdo, $trainerId) {
-    $stmt = $pdo->prepare("SELECT id, name FROM users WHERE id = ?");
-    $stmt->execute([$trainerId]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+// Load core dependencies
+require_once '../includes/session.php';
+require_once '../includes/auth.php';
+require_once '../db/connection.php';
+require_once '../db/classes.php';           // Contains getClassScheduleById() and deleteClassSchedule()
+require_once '../db/notifications.php'; // Contains createNotification()
+require_once '../db/class_details.php';
+
+// Restrict access to admin users only
+requireAuth('admin');
+
+// Get database connection
+$pdo = getDatabaseConnection();
+
+// Get class schedule ID from URL query string
+$scheduleId = (int)($_GET['id'] ?? 0);
+
+if ($scheduleId <= 0) {
+    header('Location: classes.php?error=invalid_id');
+    exit;
 }
 
-// Get class type label by type ID
-function getClassTypeLabelById($pdo, $typeId) {
-    $stmt = $pdo->prepare("SELECT label FROM class_types WHERE id = ?");
-    $stmt->execute([$typeId]);
-    return $stmt->fetchColumn();
+// Fetch class schedule details using existing function from db/classes.php
+// This function should return an array containing: id, class_id, trainer_id, day_of_week, start_time, location, capacity, duration_min, and ideally class_name via JOIN
+$schedule = getClassScheduleById($pdo, $scheduleId);
+
+if (!$schedule) {
+    header('Location: classes.php?error=not_found');
+    exit;
 }
 
-// Get all data needed for class details page
-function getClassDetailsData($pdo, $scheduleId) {
-    // Use existing function from db/classes.php
-    require_once '../db/classes.php';
-    $schedule = getClassScheduleById($pdo, $scheduleId);
-    if (!$schedule) {
-        return null;
-    }
+// Extract trainer ID (if any)
+$trainerId = !empty($schedule['trainer_id']) ? (int)$schedule['trainer_id'] : null;
 
-    // Trainer data
-    $trainer = null;
-    if (!empty($schedule['trainer_id'])) {
-        $trainer = getTrainerById($pdo, $schedule['trainer_id']);
-    }
+// Get class name – assuming getClassScheduleById already includes 'class_name'
+// If not, you can add a helper in class_details_queries.php (see note below)
+$className = $schedule['class_name'] ?? 'Unknown class';
+$dayOfWeek = $schedule['day_of_week'] ?? '';
+$startTime = $schedule['start_time'] ?? '';
 
-    // Class type label
-    $typeLabel = getClassTypeLabelById($pdo, $schedule['class_type_id']);
-    if (!$typeLabel) {
-        $typeLabel = 'General';
+// Attempt to delete the schedule
+if (deleteClassSchedule($pdo, $scheduleId)) {
+    // Success: send notification to the trainer if assigned
+    if ($trainerId !== null && $trainerId > 0) {
+        $message = "The class '{$className}' on {$dayOfWeek} at {$startTime} has been removed (schedule ID: {$scheduleId}).";
+        
+        // Using createNotification – the title is optional and will be ignored if your table has no title column
+        createNotification($pdo, $trainerId, $message, 'warning');
     }
-
-    // Reviews and average rating
-    $reviews = getClassReviews($pdo, $scheduleId);
-    $reviewCount = count($reviews);
-    $avgRating = 0;
-    if ($reviewCount > 0) {
-        $sum = array_sum(array_column($reviews, 'rating'));
-        $avgRating = round($sum / $reviewCount, 1);
-    }
-
-    return [
-        'schedule' => $schedule,
-        'trainer' => $trainer,
-        'typeLabel' => $typeLabel,
-        'reviews' => $reviews,
-        'avgRating' => $avgRating,
-        'reviewCount' => $reviewCount,
-    ];
+    
+    header('Location: classes.php?msg=deleted');
+    exit;
 }
+
+// Failure
+header('Location: classes.php?error=delete_failed');
+exit;
 ?>

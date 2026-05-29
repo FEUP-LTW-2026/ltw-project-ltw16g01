@@ -5,13 +5,14 @@
  */
 
 require_once '../includes/session.php';
-
+require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/personal_bookings.php';
 require_once '../db/members.php';
+require_once '../db/notifications.php'; // For trainer notification
 
 // Only logged‑in members
 requireAuth('member');
@@ -53,6 +54,11 @@ $error = '';
 $success = '';
 $trainers = getAvailableTrainersForPT($pdo);
 
+// Fetch member name for the notification (to avoid extra DB call later, do it once)
+$stmt = $pdo->prepare("SELECT name FROM users WHERE id = ?");
+$stmt->execute([$memberId]);
+$memberName = $stmt->fetchColumn();
+
 // Process the request form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF protection
@@ -87,6 +93,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'The selected trainer is teaching a group class at this time.';
     } elseif (createPTRequest($pdo, $memberId, $trainerId, $bookingDate, $startTime, $duration, $notes)) {
         $success = 'Your personal training request has been sent to the trainer.';
+
+        // Notify the selected trainer about the request
+        $formattedDateTime = $bookingDateTime->format('l, F j, Y \a\t g:i A');
+        $message = "{$memberName} has requested a personal training session with you on {$formattedDateTime} (duration: {$duration} min).";
+        createNotification(
+            $pdo,
+            $trainerId,          // recipient – the trainer
+            $message,
+            'info',              // type
+            'PT Request'         // optional title (will be ignored if table lacks column)
+        );
     } else {
         $error = 'Failed to submit request. Please try again.';
     }

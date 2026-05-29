@@ -27,7 +27,6 @@ function getAdminStats($pdo) {
         'equipment_issues' => $equipmentIssues
     ];
 }
-
 function getMembers($pdo) {
     $stmt = $pdo->prepare("SELECT id, name, username, email, created_at, active FROM users WHERE role = 'member' ORDER BY created_at DESC");
     $stmt->execute();
@@ -105,15 +104,34 @@ function getEquipment($pdo) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getRecentNotifications($pdo, $userId, $limit = 5) {
-    $stmt = $pdo->prepare("
-        SELECT n.*, nt.label as type_label, nt.css_class
+function getRecentNotifications(PDO $pdo, int $userId, string $role, int $limit = 5): array
+{
+    $sql = "
+        SELECT
+            n.*,
+            COALESCE(nt.label, 'Info') AS type_label,
+            COALESCE(nt.css_class, 'info') AS css_class,
+            COALESCE(nt.icon, 'bell') AS icon,
+            CASE WHEN nr.id IS NOT NULL THEN 1 ELSE 0 END AS is_read
         FROM notifications n
-        JOIN notification_types nt ON n.notification_type_id = nt.id
+        LEFT JOIN notification_types nt
+            ON nt.id = n.notification_type_id
+        LEFT JOIN notification_reads nr
+            ON nr.notification_id = n.id
+            AND nr.user_id = ?
+        WHERE " . getVisibleNotificationsWhereSql() . "
         ORDER BY n.created_at DESC
         LIMIT ?
-    ");
-    $stmt->execute([$limit]);
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        $userId,   // nr.user_id = ?
+        $userId,   // n.user_id = ?
+        $role,     // n.target_role = ?
+        $limit
+    ]);
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

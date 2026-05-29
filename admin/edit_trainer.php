@@ -10,6 +10,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/trainers.php';
 require_once '../template/trainers.php';
+require_once '../db/notifications.php'; // createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -100,8 +101,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Username or email already in use.';
         } else {
             $success = 'Trainer updated successfully.';
+            
             // Refresh trainer data to show updated values
             $trainer = getTrainerById($pdo, $id, false);
+            
+            // Notify all administrators (role-based notification)
+            $activeLabel = $active ? 'Active' : 'Inactive';
+            $specializationsText = $specializations ?: 'none specified';
+            $certificationsText = $certifications ?: 'none specified';
+            $adminMessage = "Trainer updated: {$name} (username: {$username}, email: {$email}, status: {$activeLabel}, specializations: {$specializationsText}, certifications: {$certificationsText}).";
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'Trainer updated' // optional title
+            );
+            
             $old = []; // Clear old values on success
         }
     }

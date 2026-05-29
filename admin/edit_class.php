@@ -1,6 +1,4 @@
 <?php
-// File: admin/edit_class.php
-// Description: Form to edit an existing class schedule.
 
 // Load core dependencies
 require_once '../includes/session.php';
@@ -8,8 +6,9 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/classes.php';   // Contains database functions for classes
-require_once '../template/classes.php'; // Contains output_class_form()
+require_once '../db/classes.php';         // Database functions for classes
+require_once '../template/classes.php';    // output_class_form()
+require_once '../db/notifications.php';   // createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -36,7 +35,7 @@ $success = '';
 // List of valid days of week
 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-// Fetch form options from database 
+// Fetch form options from database
 $classTypes = getClassTypes($pdo);
 $trainers = getActiveTrainersForClasses($pdo);
 
@@ -52,6 +51,9 @@ $data = [
     'capacity' => $schedule['capacity'],
     'duration_min' => $schedule['duration_min']
 ];
+
+// Store the original trainer ID before any update (used for notifications)
+$oldTrainerId = !empty($schedule['trainer_id']) ? (int)$schedule['trainer_id'] : null;
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -113,9 +115,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result) {
             $success = 'Class updated successfully.';
-            // Refresh schedule data to show updated values
+
+            // Refresh schedule data to get the latest values
             $schedule = getClassScheduleById($pdo, $scheduleId);
-            // Also update $data with fresh values
+            $newTrainerId = !empty($schedule['trainer_id']) ? (int)$schedule['trainer_id'] : null;
+            $className = $schedule['class_name'] ?? 'Unknown class';
+            $dayOfWeek = $schedule['day_of_week'] ?? '';
+            $startTime = $schedule['start_time'] ?? '';
+            $location = $schedule['location'] ?? '';
+            $capacity = $schedule['capacity'] ?? '?';
+            $duration = $schedule['duration_min'] ?? '?';
+
+            // --- Trainer notifications (as before) ---
+            // Case 1: Trainer has changed (including removal or assignment)
+            if ($oldTrainerId !== $newTrainerId) {
+                // Notify the new trainer (if any)
+                if ($newTrainerId !== null && $newTrainerId > 0) {
+                    $trainerMessage = "You have been assigned to the class '{$className}' on {$dayOfWeek} at {$startTime}.";
+                    createNotification($pdo, $newTrainerId, $trainerMessage, 'success');
+                }
+                // Notify the old trainer (if any)
+                if ($oldTrainerId !== null && $oldTrainerId > 0) {
+                    $trainerMessage = "You are no longer assigned to the class '{$className}' on {$dayOfWeek} at {$startTime}.";
+                    createNotification($pdo, $oldTrainerId, $trainerMessage, 'warning');
+                }
+            }
+            // Case 2: Trainer unchanged, but class details were updated (only notify if trainer exists)
+            elseif ($newTrainerId !== null && $newTrainerId > 0) {
+                $trainerMessage = "The class '{$className}' on {$dayOfWeek} at {$startTime} has been updated.";
+                createNotification($pdo, $newTrainerId, $trainerMessage, 'warning');
+            }
+
+            // --- Admin notification (role‑based) ---
+            // Notify all administrators about the class update
+            $adminMessage = "Class updated: {$className} on {$dayOfWeek} at {$startTime}, location: {$location}, capacity: {$capacity}, duration: {$duration} min.";
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'Class updated'  // optional title
+            );
+
+            // Update $data with fresh values for form repopulation
             $data = [
                 'class_name' => $schedule['class_name'],
                 'class_description' => $schedule['class_description'],

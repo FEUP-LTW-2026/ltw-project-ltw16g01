@@ -5,19 +5,20 @@
  */
 
 require_once '../includes/session.php';
-
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/members.php';
+require_once '../db/notifications.php';
 
-// Only logged‑in members
+// Only members can access this page
 requireAuth('member');
 
 $pdo = getDatabaseConnection();
 $memberId = (int)$_SESSION['user_id'];
 
+// Current plan of the logged-in member
 $currentPlan = getMemberPlan($pdo, $memberId);
 
 $error = '';
@@ -66,6 +67,7 @@ $plans = [
 // Process upgrade request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF protection
+    // CSRF protection
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
         exit('Invalid CSRF token.');
@@ -78,9 +80,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($newPlan === $currentPlan) {
         $error = 'You already have this membership plan.';
     } else {
+        // Retrieve member details for the notification message (name, username, email)
+        $stmt = $pdo->prepare("SELECT name, username, email FROM users WHERE id = ?");
+        $stmt->execute([$memberId]);
+        $member = $stmt->fetch(PDO::FETCH_ASSOC);
+        $memberName = $member['name'] ?? 'Member';
+        $memberUsername = $member['username'] ?? 'unknown';
+        $memberEmail = $member['email'] ?? 'unknown';
+
+        $oldPlanLabel = $plans[$currentPlan]['label'];
+        $newPlanLabel = $plans[$newPlan]['label'];
+
+        // Perform the upgrade in the database
         if (upgradeMemberPlan($pdo, $memberId, $newPlan)) {
             $currentPlan = $newPlan;
             $success = 'Your membership plan has been updated successfully.';
+
+            // Notify all administrators about the plan change (role-based notification)
+            $adminMessage = "Member {$memberName} (username: {$memberUsername}, email: {$memberEmail}) changed membership plan from {$oldPlanLabel} to {$newPlanLabel}.";
+            createNotification(
+                $pdo,
+                $adminMessage,
+                'info',
+                null,        // no specific user (role-based)
+                'admin',     // target role
+                'role',      // scope
+                'Plan upgraded'
+            );
         } else {
             $error = 'Could not update your membership plan. Please try again.';
         }

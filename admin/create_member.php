@@ -1,6 +1,4 @@
 <?php
-// File: admin/add_member.php
-// Description: Form to add a new gym member.
 
 // Load core dependencies
 require_once '../includes/session.php';
@@ -8,8 +6,9 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/members.php';    // Contains database functions for members
-require_once '../template/members.php'; // Contains output_member_form()
+require_once '../db/members.php';        // Database functions for members
+require_once '../template/members.php';  // output_member_form()
+require_once '../db//notifications.php'; // createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -71,6 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $success = 'Member created successfully.';
             $old = []; // Clear old values on success
+
+            // Notify all administrators (role-based notification)
+            $planLabel = ucfirst($plan); // 'Basic', 'Premium', 'Vip'
+            $adminMessage = "New member created: {$name} (username: {$username}, email: {$email}, plan: {$planLabel}).";
+            
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'New member'     // title (optional, may be ignored if table lacks column)
+            );
         }
     }
 }

@@ -14,18 +14,33 @@ require_once '../template/notifications.php';
 // Restrict access to admin users only
 requireAuth('admin');
 
+
 // Get database connection
 $pdo = getDatabaseConnection();
+
 
 // Get filter parameter from URL (all, info, success, warning, error)
 $filter = $_GET['filter'] ?? 'all';
 
 // Fetch notifications based on filter (limit 100, offset 0)
-$notifications = getNotifications($pdo, 100, 0, $filter);
+$userId = (int)($_SESSION['user_id'] ?? 0);
+$role = $_SESSION['active_role'] ?? $_SESSION['role'] ?? 'admin';
+
+$notifications = getNotifications(
+    $pdo,
+    $userId,
+    $role,
+    100,
+    0,
+    $filter
+);
 
 // Get total count for current filter and unread count for badge
-$totalCount = getTotalCountForUser($pdo, $filter);
-$unreadCount = getUnreadCount($pdo);
+$userId = (int) $_SESSION['user_id'];
+$role = $_SESSION['active_role'] ?? $_SESSION['role'] ?? 'admin';
+
+$totalCount = getTotalCountForUser($pdo, $userId, $role, $filter);
+$unreadCount = getUnreadCount($pdo, $userId, $role, $filter);
 
 // Handle POST actions (mark as read, mark all read, delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -40,13 +55,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Mark single notification as read
     if ($action === 'mark_read' && $notifId) {
-        markNotificationAsRead($pdo, $notifId);
+        markNotificationAsRead(
+            $pdo,
+            $notifId,
+            $userId
+        );
         header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
     // Mark all notifications as read
     if ($action === 'mark_all_read') {
-        markAllNotificationsAsRead($pdo);
+        markAllNotificationsAsRead(
+            $pdo,
+            $userId,
+            $role
+        );
         header('Location: notifications.php?filter=' . urlencode($filter));
         exit;
     }
