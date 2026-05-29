@@ -7,11 +7,16 @@ require_once '../db/equipment.php';
 
 requireAuth(['member', 'admin']);
 
+// Create the database connection.
 $pdo = getDatabaseConnection();
+
+// Load all equipment availability data.
+// This request only reads data, so CSRF protection is not required.
 $equipment = getAllEquipment($pdo);
 
 $response = [];
 
+// Build a compact JSON response for live equipment updates.
 foreach ($equipment as $item) {
     $response[] = [
         'id' => (int)$item['id'],

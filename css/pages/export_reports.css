@@ -104,3 +104,7 @@ th {
         page-break-after: avoid;
     }
 }
+
+.bar-fill {
+    width: 0;
+}

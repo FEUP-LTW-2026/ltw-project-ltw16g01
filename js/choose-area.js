@@ -1,9 +1,11 @@
+// Gets the CSRF token from the page meta tag.
 function getCsrfToken() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     return meta ? meta.content : '';
 }
 
-document.querySelectorAll('.role-btn').forEach(button => {
+// Handles role/area switching.
+document.querySelectorAll('.role-btn').forEach(function (button) {
     button.addEventListener('click', function (event) {
         event.preventDefault();
 
@@ -16,17 +18,19 @@ document.querySelectorAll('.role-btn').forEach(button => {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: 'role=' + encodeURIComponent(role) +
-                  '&csrf=' + encodeURIComponent(getCsrfToken())
+                '&csrf=' + encodeURIComponent(getCsrfToken())
         })
-            .then(response => response.json())
-            .then(data => {
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
                 if (data.success) {
                     window.location.href = targetUrl;
                 } else {
                     alert(data.message || 'Could not switch area.');
                 }
             })
-            .catch(error => {
+            .catch(function (error) {
                 console.error('Role switch error:', error);
                 alert('Something went wrong.');
             });

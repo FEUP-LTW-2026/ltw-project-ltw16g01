@@ -1,57 +1,70 @@
+// Gets the CSRF token from the page meta tag.
 function getCsrfToken() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     return meta ? meta.content : '';
 }
 
-document.querySelectorAll('.btn-cancel-enroll').forEach(button => {
+// Handles enrollment cancellation from the member dashboard.
+document.querySelectorAll('.btn-cancel-enroll').forEach(function (button) {
     button.addEventListener('click', function () {
         const sessionId = this.dataset.sessionId;
 
-        if (!confirm('Cancel your enrollment?')) return;
+        if (!confirm('Cancel your enrollment?')) {
+            return;
+        }
 
         fetch('../ajax/enroll.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'cancel', schedule_id: sessionId })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'cancel',
+                schedule_id: sessionId,
+                csrf: getCsrfToken()
+            })
         })
-            .then(response => response.json())
-            .then(data => {
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
                 if (data.success) {
                     location.reload();
                 } else {
                     alert(data.message);
                 }
             })
-            .catch(error => {
+            .catch(function (error) {
                 console.error('Cancel enrollment error:', error);
                 alert('Something went wrong.');
             });
     });
 });
 
-// Review modal logic
-document.querySelectorAll('.rate-link').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const sessionId = btn.dataset.sessionId;
-        const className = btn.dataset.className;
+// Opens the review modal and prepares the selected class/session data.
+document.querySelectorAll('.rate-link').forEach(function (button) {
+    button.addEventListener('click', function () {
+        const sessionId = button.dataset.sessionId;
+        const className = button.dataset.className;
 
         document.getElementById('reviewSessionId').value = sessionId;
         document.getElementById('reviewClassName').textContent = className;
         document.getElementById('ratingInput').value = 0;
 
-        document.querySelectorAll('#reviewModal .star').forEach(s => {
-            s.classList.remove('filled');
+        document.querySelectorAll('#reviewModal .star').forEach(function (star) {
+            star.classList.remove('filled');
         });
 
         document.getElementById('reviewModal').classList.add('open');
     });
 });
 
-document.getElementById('reviewForm')?.addEventListener('submit', function (e) {
-    e.preventDefault();
+// Handles review form submission.
+document.getElementById('reviewForm')?.addEventListener('submit', function (event) {
+    event.preventDefault();
 
-    const fd = new FormData(e.target);
-    const rating = parseInt(fd.get('rating'));
+    const formData = new FormData(event.target);
+    const rating = parseInt(formData.get('rating'));
 
     if (rating < 1) {
         alert('Please select a rating.');
@@ -59,19 +72,23 @@ document.getElementById('reviewForm')?.addEventListener('submit', function (e) {
     }
 
     const data = {
-        session_id: fd.get('session_id'),
+        session_id: formData.get('session_id'),
         rating: rating,
-        comment: fd.get('comment'),
+        comment: formData.get('comment'),
         csrf: getCsrfToken()
     };
 
     fetch('../ajax/review.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(data)
     })
-        .then(res => res.json())
-        .then(result => {
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (result) {
             if (result.success) {
                 alert('Review saved!');
                 location.reload();
@@ -79,53 +96,53 @@ document.getElementById('reviewForm')?.addEventListener('submit', function (e) {
                 alert(result.message || 'Error saving review.');
             }
         })
-        .catch(error => {
+        .catch(function (error) {
             console.error('Review error:', error);
             alert('Network error. Please try again.');
         });
 });
 
-// Fechar modal apenas clicando no overlay (fundo escuro), não no conteúdo
+// Closes the modal when clicking the dark overlay.
 const modalOverlay = document.getElementById('reviewModal');
 
 if (modalOverlay) {
-    modalOverlay.addEventListener('click', function (e) {
-        if (e.target === modalOverlay) {
+    modalOverlay.addEventListener('click', function (event) {
+        if (event.target === modalOverlay) {
             modalOverlay.classList.remove('open');
         }
     });
 }
 
-// Botão de fechar também fecha o modal
+// Closes the modal using the close button.
 const modalCloseBtn = document.querySelector('.modal-close');
 
-if (modalCloseBtn) {
+if (modalCloseBtn && modalOverlay) {
     modalCloseBtn.addEventListener('click', function () {
         modalOverlay.classList.remove('open');
     });
 }
 
-// Impedir que cliques dentro do modal fechem o modal (propagação)
+// Prevents clicks inside the modal content from closing the modal.
 const modalContent = document.querySelector('.modal');
 
 if (modalContent) {
-    modalContent.addEventListener('click', function (e) {
-        e.stopPropagation();
+    modalContent.addEventListener('click', function (event) {
+        event.stopPropagation();
     });
 }
 
-// Seleção de estrelas
-document.querySelectorAll('#reviewModal .star').forEach((star, idx) => {
-    star.addEventListener('click', () => {
-        const val = idx + 1;
+// Handles star rating selection.
+document.querySelectorAll('#reviewModal .star').forEach(function (star, index) {
+    star.addEventListener('click', function () {
+        const value = index + 1;
 
-        document.getElementById('ratingInput').value = val;
+        document.getElementById('ratingInput').value = value;
 
-        document.querySelectorAll('#reviewModal .star').forEach((s, i) => {
-            if (i < val) {
-                s.classList.add('filled');
+        document.querySelectorAll('#reviewModal .star').forEach(function (item, itemIndex) {
+            if (itemIndex < value) {
+                item.classList.add('filled');
             } else {
-                s.classList.remove('filled');
+                item.classList.remove('filled');
             }
         });
     });
