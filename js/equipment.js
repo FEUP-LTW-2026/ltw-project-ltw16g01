@@ -1,15 +1,18 @@
+// Gets the CSRF token from the page meta tag.
 function getCsrfToken() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     return meta ? meta.content : '';
 }
 
+// Converts an availability percentage into a CSS width class.
 function equipmentWidthClass(percentage) {
     const rounded = Math.round(Math.max(0, Math.min(100, percentage)) / 10) * 10;
     return 'avail-w-' + rounded;
 }
 
+// Updates the availability bar width class.
 function updateEquipmentWidth(fill, percentage) {
-    fill.classList.forEach(className => {
+    fill.classList.forEach(function (className) {
         if (className.startsWith('avail-w-')) {
             fill.classList.remove(className);
         }
@@ -18,11 +21,14 @@ function updateEquipmentWidth(fill, percentage) {
     fill.classList.add(equipmentWidthClass(percentage));
 }
 
+// Refreshes equipment availability through AJAX.
 function refreshEquipment() {
     fetch('../ajax/equipment-status.php')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(eq => {
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            data.forEach(function (eq) {
                 const card = document.querySelector(`[data-eq-id="${eq.id}"]`);
 
                 if (!card) {
@@ -87,9 +93,12 @@ function refreshEquipment() {
                 lastUpdate.textContent = 'Updated: ' + new Date().toLocaleTimeString('pt-PT');
             }
         })
-        .catch(error => console.warn('Live update error:', error));
+        .catch(function (error) {
+            console.warn('Live update error:', error);
+        });
 }
 
+// Handles equipment delete confirmation.
 document.addEventListener('click', function (event) {
     if (event.target.classList.contains('delete-equipment-link')) {
         if (!confirm('Delete this equipment?')) {
@@ -98,6 +107,7 @@ document.addEventListener('click', function (event) {
     }
 });
 
+// Handles equipment reservation forms.
 document.addEventListener('submit', function (event) {
     const form = event.target.closest('.reserve-equipment-form');
 
@@ -132,19 +142,21 @@ document.addEventListener('submit', function (event) {
             csrf: getCsrfToken()
         })
     })
-        .then(response => response.json())
-        .then(data => {
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
             alert(data.message);
 
             if (data.success) {
                 location.reload();
             }
         })
-        .catch(error => {
+        .catch(function (error) {
             console.error('Equipment reservation error:', error);
             alert('Something went wrong.');
         })
-        .finally(() => {
+        .finally(function () {
             if (submitButton) {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Reserve';

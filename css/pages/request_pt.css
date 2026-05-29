@@ -81,3 +81,8 @@
         text-align: center;
     }
 }
+
+/* Inline action forms used in dashboard tables */
+.action-inline-form {
+    display: inline-block;
+}

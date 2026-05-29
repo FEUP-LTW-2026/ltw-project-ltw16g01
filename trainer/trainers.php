@@ -7,13 +7,12 @@ require_once '../db/connection.php';
 require_once '../db/trainers.php';
 require_once '../template/trainers.php';
 
+// Create the database connection.
 $pdo = getDatabaseConnection();
-$specializations = getDistinctSpecializations($pdo);
+
 $selectedSpec = $_GET['specialization'] ?? '';
-$selectedName = $_GET['name'] ?? '';
 
-$filters = ['specialization' => $selectedSpec, 'name' => $selectedName];
-
+// Build filter values from the query string.
 $filters = [
     'specialization' => $_GET['specialization'] ?? '',
     'trainer_id' => $_GET['trainer_id'] ?? '',
@@ -21,6 +20,7 @@ $filters = [
     'active_only' => true
 ];
 
+// Load trainer data and filter options through database helper functions.
 $trainers = getAllTrainers($pdo, $filters);
 $specializations = getTrainerSpecializationOptions($pdo);
 $trainerNames = getTrainerNameOptions($pdo);

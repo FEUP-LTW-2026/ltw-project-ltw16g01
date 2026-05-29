@@ -1,3 +1,4 @@
+// Gets the CSRF token from the page meta tag.
 function getCsrfToken() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     return meta ? meta.content : '';
@@ -7,6 +8,7 @@ const filterForm = document.getElementById('filter-form');
 const classListContainer = document.getElementById('class-list-container');
 const classCount = document.getElementById('class-count');
 
+// Shows a temporary toast message.
 function showToast(message, type) {
     const toast = document.createElement('div');
 
@@ -26,6 +28,7 @@ function showToast(message, type) {
     }, 3000);
 }
 
+// Reloads class cards using the selected filters.
 function updateClasses() {
     if (!filterForm || !classListContainer || !classCount) {
         return;
@@ -57,6 +60,7 @@ if (filterForm) {
     });
 }
 
+// Handles delete confirmation, schedule editing and class enrollment actions.
 document.addEventListener('click', function (event) {
     const deleteLink = event.target.closest('.delete-class-link');
 
@@ -75,7 +79,7 @@ document.addEventListener('click', function (event) {
         const editBox = document.getElementById(targetId);
 
         if (editBox) {
-            editBox.style.display = 'block';
+            editBox.classList.remove('is-hidden');
         }
 
         return;
@@ -88,7 +92,7 @@ document.addEventListener('click', function (event) {
         const editBox = document.getElementById(targetId);
 
         if (editBox) {
-            editBox.style.display = 'none';
+            editBox.classList.add('is-hidden');
         }
 
         return;

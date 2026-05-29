@@ -1,3 +1,4 @@
+// Gets the CSRF token from the page meta tag.
 function getCsrfToken() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     return meta ? meta.content : '';
@@ -6,6 +7,7 @@ function getCsrfToken() {
 document.addEventListener('DOMContentLoaded', function () {
     const typeFilter = document.getElementById('type-filter');
 
+    // Redirects when the notification type filter changes.
     if (typeFilter) {
         typeFilter.addEventListener('change', function () {
             const filter = typeFilter.value;
@@ -13,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Creates a hidden input for dynamic POST forms.
     function createHiddenInput(name, value) {
         const input = document.createElement('input');
 
@@ -23,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return input;
     }
 
+    // Submits notification actions using a generated POST form.
     function submitNotificationForm(action, notificationId) {
         const form = document.createElement('form');
 
@@ -35,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         form.submit();
     }
 
+    // Marks one notification as read.
     document.querySelectorAll('.mark-read-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const notificationId = button.dataset.id;
@@ -46,15 +51,21 @@ document.addEventListener('DOMContentLoaded', function () {
             submitNotificationForm('mark_read', notificationId);
         });
     });
-    document.querySelectorAll('.delete-notif-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            if (!confirm('Delete this notification?')) return;
-            const id = this.dataset.id;
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.innerHTML = `<input type="hidden" name="action" value="delete"><input type="hidden" name="notification_id" value="${id}">`;
-            document.body.appendChild(form);
-            form.submit();
+
+    // Deletes one notification after confirmation.
+    document.querySelectorAll('.delete-notif-btn').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const notificationId = button.dataset.id;
+
+            if (!notificationId) {
+                return;
+            }
+
+            if (!confirm('Delete this notification?')) {
+                return;
+            }
+
+            submitNotificationForm('delete', notificationId);
         });
     });
 });

@@ -76,3 +76,100 @@ function deleteNotification($pdo, $notificationId) {
     $stmt = $pdo->prepare("DELETE FROM notifications WHERE id = ?");
     return $stmt->execute([$notificationId]);
 }
+
+function getAdminUserIds(PDO $pdo): array {
+    // Get all admin user ids.
+    $stmt = $pdo->prepare("
+        SELECT id
+        FROM users
+        WHERE role = 'admin'
+    ");
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+function getNotificationTypeIdByName(PDO $pdo, string $name, int $fallbackId): int {
+    // Get a notification type id by name, using a fallback if it does not exist.
+    $stmt = $pdo->prepare("
+        SELECT id
+        FROM notification_types
+        WHERE name = ?
+    ");
+
+    $stmt->execute([$name]);
+
+    return (int)($stmt->fetchColumn() ?: $fallbackId);
+}
+
+function createNotificationsForUsers(PDO $pdo, array $userIds, string $message, int $notificationTypeId): void {
+    // Create the same notification for multiple users.
+    $insert = $pdo->prepare("
+        INSERT INTO notifications (user_id, message, notification_type_id, created_at)
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+    ");
+
+    foreach (array_unique(array_filter($userIds)) as $userId) {
+        $insert->execute([(int)$userId, $message, $notificationTypeId]);
+    }
+}
+
+function notifyUsersAboutCancelledTrainerSession(PDO $pdo, int $sessionId): void {
+    // Notify enrolled members and admins when a trainer cancels a class session.
+    $memberStmt = $pdo->prepare("
+        SELECT DISTINCT e.member_id
+        FROM enrollments e
+        WHERE e.session_id = ?
+          AND e.status = 'enrolled'
+    ");
+
+    $memberStmt->execute([$sessionId]);
+    $memberIds = $memberStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $dateStmt = $pdo->prepare("
+        SELECT session_date
+        FROM class_sessions
+        WHERE id = ?
+    ");
+
+    $dateStmt->execute([$sessionId]);
+    $sessionDate = $dateStmt->fetchColumn();
+
+    $formattedDate = $sessionDate ? date('d/m/Y', strtotime($sessionDate)) : '';
+    $message = "The session on $formattedDate has been cancelled by the trainer.";
+    $warningTypeId = getNotificationTypeIdByName($pdo, 'warning', 2);
+
+    createNotificationsForUsers(
+        $pdo,
+        array_merge($memberIds, getAdminUserIds($pdo)),
+        $message,
+        $warningTypeId
+    );
+}
+
+function notifyUsersAboutUpdatedClassSchedule(PDO $pdo, int $scheduleId, array $changes): void {
+    // Notify enrolled members and admins when a future class schedule changes.
+    $memberStmt = $pdo->prepare("
+        SELECT DISTINCT e.member_id
+        FROM enrollments e
+        JOIN class_sessions sess ON e.session_id = sess.id
+        WHERE sess.schedule_id = ?
+          AND sess.session_date >= date('now')
+          AND e.status = 'enrolled'
+    ");
+
+    $memberStmt->execute([$scheduleId]);
+    $memberIds = $memberStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $changeText = implode(', ', $changes);
+    $message = "A class schedule has been updated: $changeText.";
+    $infoTypeId = getNotificationTypeIdByName($pdo, 'info', 1);
+
+    createNotificationsForUsers(
+        $pdo,
+        array_merge($memberIds, getAdminUserIds($pdo)),
+        $message,
+        $infoTypeId
+    );
+}

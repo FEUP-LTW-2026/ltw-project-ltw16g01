@@ -7,6 +7,8 @@ require_once '../db/personal_bookings.php';
 
 requireAuth('admin');
 
+// Renders the PT requests table HTML.
+// This function can later be moved to a template file if you want stricter separation.
 function render_requests_table($requests) {
     if (empty($requests)) {
         echo '<p class="text-muted">No requests found.</p>';
@@ -55,8 +57,11 @@ function render_requests_table($requests) {
     <?php
 }
 
+// Create the database connection.
 $pdo = getDatabaseConnection();
 
+// Validate the selected status filter.
+// This request only reads data, so CSRF protection is not required.
 $filter = $_GET['filter'] ?? 'all';
 $allowedFilters = ['all', 'pending', 'confirmed', 'cancelled'];
 
@@ -64,8 +69,10 @@ if (!in_array($filter, $allowedFilters, true)) {
     $filter = 'all';
 }
 
+// Load PT requests according to the selected filter.
 $requests = getAllPTRequests($pdo, $filter === 'all' ? null : $filter);
 
+// Capture the rendered table HTML so it can be returned as JSON.
 ob_start();
 render_requests_table($requests);
 $html = ob_get_clean();

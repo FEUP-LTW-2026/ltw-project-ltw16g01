@@ -1,12 +1,10 @@
+// Handles the PT requests filter and toast notification.
 document.addEventListener('DOMContentLoaded', function () {
     const filterSelect = document.getElementById('status-filter');
     const tableContainer = document.getElementById('requests-table-container');
     const countSpan = document.getElementById('request-count');
 
-    if (!filterSelect || !tableContainer || !countSpan) {
-        return;
-    }
-
+    // Load filtered PT requests through AJAX.
     function loadRequests() {
         const filter = filterSelect.value;
 
@@ -29,5 +27,29 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    filterSelect.addEventListener('change', loadRequests);
+    if (filterSelect && tableContainer && countSpan) {
+        filterSelect.addEventListener('change', loadRequests);
+    }
+
+    // Display toast notification after accepting or declining a request.
+    const toast = document.getElementById('toast');
+
+    if (!toast) {
+        return;
+    }
+
+    const toastMessage = toast.dataset.message || '';
+    const toastType = toast.dataset.type || 'info';
+
+    if (!toastMessage) {
+        return;
+    }
+
+    toast.textContent = toastMessage;
+    toast.className = 'toast-notification toast-' + toastType;
+    toast.style.display = 'block';
+
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 5000);
 });

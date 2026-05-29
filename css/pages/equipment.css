@@ -311,3 +311,20 @@ body {
         margin-top: 0.5rem;
     }
 }
+
+/* Equipment header layout */
+.equipment-header-row {
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Last update text next to the live indicator */
+.last-update {
+    margin-left: 0.5rem;
+    font-size: 0.7rem;
+}
+
+/* Equipment legend layout */
+.equipment-legend-row {
+    flex-wrap: wrap;
+}

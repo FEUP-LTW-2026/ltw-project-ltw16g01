@@ -703,3 +703,8 @@ h2 {
 .toast-error {
     background: var(--danger);
 }
+
+/* Hide schedule edit form by default */
+.schedule-edit-box.is-hidden {
+    display: none;
+}

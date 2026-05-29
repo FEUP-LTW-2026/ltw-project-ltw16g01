@@ -10,11 +10,14 @@ require_once '../template/profile.php';
 
 requireAuth('trainer');
 
+// Create the database connection and get the logged-in user id.
 $pdo = getDatabaseConnection();
 $userId = $_SESSION['user_id'];
+
 $message = '';
 $error = '';
 
+// Handle profile form submissions while keeping the existing CSRF protection.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
@@ -83,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Reload the user profile after any update.
 $user = getUserProfileById($pdo, $userId);
 
 if (!$user) {
@@ -91,6 +95,7 @@ if (!$user) {
     exit;
 }
 
+// Keep session data synchronized with the database profile.
 $_SESSION['user_name'] = $user['name'];
 $_SESSION['user_email'] = $user['email'];
 $_SESSION['user_photo'] = $user['photo'] ?? null;

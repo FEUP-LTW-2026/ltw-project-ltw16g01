@@ -5,7 +5,10 @@ require_once '../db/connection.php';
 require_once '../db/trainers.php';
 require_once '../template/trainer_profile.php';
 
+// Create the database connection.
 $pdo = getDatabaseConnection();
+
+// Validate the selected trainer id from the URL.
 $trainerId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 if (!$trainerId) {
@@ -15,6 +18,7 @@ if (!$trainerId) {
     exit;
 }
 
+// Load the selected trainer profile.
 $trainer = getTrainerById($pdo, $trainerId);
 
 if (!$trainer) {
@@ -24,6 +28,7 @@ if (!$trainer) {
     exit;
 }
 
+// Load trainer rating and upcoming schedules.
 $rating = getTrainerRating($pdo, $trainerId);
 $schedules = getUpcomingSchedulesForTrainer($pdo, $trainerId, 5);
 

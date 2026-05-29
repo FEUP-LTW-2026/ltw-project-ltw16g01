@@ -12,12 +12,14 @@ require_once '../db/notifications.php';
 
 requireAuth('trainer');
 
+// Create the database connection and get the logged-in trainer id.
 $pdo = getDatabaseConnection();
 $trainerId = $_SESSION['user_id'];
 
 $message = '';
 $error = '';
 
+// Keep the existing CSRF protection for all POST requests.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
@@ -25,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Handle class session cancellation.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cancel_session') {
     $sessionId = (int)($_POST['session_id'] ?? 0);
 
@@ -34,35 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
         $cancelled = cancelTrainerSession($pdo, $sessionId, $trainerId);
 
         if ($cancelled) {
-            $stmt = $pdo->prepare("SELECT DISTINCT e.member_id FROM enrollments e WHERE e.session_id = ? AND e.status = 'enrolled'");
-            $stmt->execute([$sessionId]);
-            $memberIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-            $admins = $pdo->query("SELECT id FROM users WHERE role = 'admin'")->fetchAll(PDO::FETCH_COLUMN);
-
-            $sessInfo = $pdo->prepare("SELECT session_date FROM class_sessions WHERE id = ?");
-            $sessInfo->execute([$sessionId]);
-            $sessionDate = $sessInfo->fetchColumn();
-            $formattedDate = date('d/m/Y', strtotime($sessionDate));
-
-            $messageText = "The session on $formattedDate has been cancelled by the trainer.";
-
-            $typeStmt = $pdo->query("SELECT id FROM notification_types WHERE name = 'warning'");
-            $warningTypeId = $typeStmt->fetchColumn();
-
-            if (!$warningTypeId) {
-                $warningTypeId = 2;
-            }
-
-            $insert = $pdo->prepare("INSERT INTO notifications (user_id, message, notification_type_id, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
-
-            foreach ($memberIds as $mid) {
-                $insert->execute([$mid, $messageText, $warningTypeId]);
-            }
-
-            foreach ($admins as $aid) {
-                $insert->execute([$aid, $messageText, $warningTypeId]);
-            }
+            // Notify affected members and admins through database helper functions.
+            notifyUsersAboutCancelledTrainerSession($pdo, $sessionId);
 
             $message = 'Session cancelled successfully. Notifications sent.';
         } else {
@@ -71,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
     }
 }
 
+// Handle class schedule updates.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'update_schedule_details') {
     $scheduleId = (int)($_POST['schedule_id'] ?? 0);
     $location = trim($_POST['location'] ?? '');
@@ -81,9 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     if ($scheduleId <= 0 || $location === '' || $capacity <= 0 || $duration <= 0 || $startTime === '') {
         $error = 'Please fill in all schedule fields correctly.';
     } else {
-        $oldStmt = $pdo->prepare("SELECT location, capacity, duration_min, start_time FROM class_schedules WHERE id = ? AND trainer_id = ?");
-        $oldStmt->execute([$scheduleId, $trainerId]);
-        $old = $oldStmt->fetch(PDO::FETCH_ASSOC);
+        // Load current schedule details through a database helper before updating.
+        $old = getTrainerScheduleDetailsForUpdate($pdo, $scheduleId, $trainerId);
 
         if (!$old) {
             $error = 'Schedule not found or you are not the trainer.';
@@ -110,38 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
                 }
 
                 if (!empty($changes)) {
-                    $stmt = $pdo->prepare("
-                        SELECT DISTINCT e.member_id
-                        FROM enrollments e
-                        JOIN class_sessions sess ON e.session_id = sess.id
-                        WHERE sess.schedule_id = ? 
-                          AND sess.session_date >= date('now') 
-                          AND e.status = 'enrolled'
-                    ");
-                    $stmt->execute([$scheduleId]);
-                    $memberIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-                    $admins = $pdo->query("SELECT id FROM users WHERE role = 'admin'")->fetchAll(PDO::FETCH_COLUMN);
-
-                    $changeText = implode(', ', $changes);
-                    $messageText = "A class schedule has been updated: $changeText.";
-
-                    $typeStmt = $pdo->query("SELECT id FROM notification_types WHERE name = 'info'");
-                    $infoTypeId = $typeStmt->fetchColumn();
-
-                    if (!$infoTypeId) {
-                        $infoTypeId = 1;
-                    }
-
-                    $insert = $pdo->prepare("INSERT INTO notifications (user_id, message, notification_type_id, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
-
-                    foreach ($memberIds as $mid) {
-                        $insert->execute([$mid, $messageText, $infoTypeId]);
-                    }
-
-                    foreach ($admins as $aid) {
-                        $insert->execute([$aid, $messageText, $infoTypeId]);
-                    }
+                    // Notify affected members and admins through database helper functions.
+                    notifyUsersAboutUpdatedClassSchedule($pdo, $scheduleId, $changes);
                 }
 
                 $message = 'Schedule details updated successfully. Notifications sent to affected members and admins.';
@@ -152,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     }
 }
 
+// Load all schedules assigned to this trainer.
 $filters = ['trainer' => $trainerId];
 $schedules = getAllClassSchedules($pdo, $filters);
 
@@ -230,7 +177,7 @@ output_header('classes.css');
                         <?php endif; ?>
                     </div>
 
-                    <div id="<?= $editBoxId ?>" class="schedule-edit-box" style="display:none;">
+                    <div id="<?= $editBoxId ?>" class="schedule-edit-box is-hidden">
                         <form method="post" class="schedule-edit-form">
                             <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                             <input type="hidden" name="action" value="update_schedule_details">
