@@ -176,7 +176,7 @@ output_header('request_pt.css');
     </div>
 </main>
 
-<div id="toast" class="toast-notification" data-message="<?= htmlspecialchars($toastMessage, ENT_QUOTES) ?>" data-type="<?= htmlspecialchars($toastType, ENT_QUOTES) ?>"></div>
+<div id="toast" class="toast-notification" data-message="<?= htmlspecialchars($toastMessage) ?>" data-type="<?= htmlspecialchars($toastType) ?>"></div>
 
 <script src="../js/pt-requests.js"></script>
 

@@ -7,7 +7,7 @@
 
 function output_footer($basePath = '') {
     // Prevent XSS in the base path parameter
-    $safeBasePath = htmlspecialchars($basePath, ENT_QUOTES);
+    $safeBasePath = htmlspecialchars($basePath);
 ?>
     <footer class="site-footer">
         <div class="container">

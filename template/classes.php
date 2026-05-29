@@ -26,18 +26,18 @@ function output_class_schedule_list($schedules) {
  */
 function output_class_schedule_card($schedule) {
     $scheduleId = (int)$schedule['schedule_id'];
-    $className = htmlspecialchars($schedule['class_name'], ENT_QUOTES, 'UTF-8');
-    $trainerName = htmlspecialchars($schedule['trainer_name'] ?? 'TBD', ENT_QUOTES, 'UTF-8');
-    $day = htmlspecialchars($schedule['day_of_week'], ENT_QUOTES, 'UTF-8');
-    $startTime = htmlspecialchars($schedule['start_time'], ENT_QUOTES, 'UTF-8');
-    $location = htmlspecialchars($schedule['location'], ENT_QUOTES, 'UTF-8');
+    $className = htmlspecialchars($schedule['class_name']);
+    $trainerName = htmlspecialchars($schedule['trainer_name'] ?? 'TBD');
+    $day = htmlspecialchars($schedule['day_of_week']);
+    $startTime = htmlspecialchars($schedule['start_time']);
+    $location = htmlspecialchars($schedule['location']);
     $duration = (int)$schedule['duration_min'];
     $capacity = (int)$schedule['capacity'];
     $enrolled = (int)($schedule['enrolled_count'] ?? 0);
     $freeSpots = max(0, $capacity - $enrolled);
-    $typeLabel = htmlspecialchars($schedule['class_type_label'] ?? ucfirst($schedule['class_type_name']), ENT_QUOTES, 'UTF-8');
+    $typeLabel = htmlspecialchars($schedule['class_type_label'] ?? ucfirst($schedule['class_type_name']));
     $description = trim($schedule['class_description'] ?? '');
-    $shortDescription = htmlspecialchars(substr($description, 0, 100), ENT_QUOTES, 'UTF-8') . (strlen($description) > 100 ? '…' : '');
+    $shortDescription = htmlspecialchars(substr($description, 0, 100)) . (strlen($description) > 100 ? '…' : '');
     $ratingData = getClassScheduleRating($GLOBALS['pdo'], $scheduleId);
     $avgRating = $ratingData['rating'];
     $reviewCount = $ratingData['count'];
@@ -98,7 +98,7 @@ function output_class_schedule_card($schedule) {
 
         <div class="class-foot">
             <div class="cap-wrap">
-                <span class="badge badge-<?= htmlspecialchars($fillClass, ENT_QUOTES, 'UTF-8') ?>">
+                <span class="badge badge-<?= htmlspecialchars($fillClass) ?>">
                     <?= $freeSpots ?> spots left
                 </span>
             </div>
@@ -138,7 +138,7 @@ function output_class_schedule_card($schedule) {
             <!-- Details link for logged‑in members, trainers and admins -->
             <?php if ($showDetailsLink): ?>
                 <a 
-                    href="/<?= htmlspecialchars($activeRole, ENT_QUOTES, 'UTF-8') ?>/class_details.php?id=<?= $scheduleId ?>" 
+                    href="/<?= htmlspecialchars($activeRole) ?>/class_details.php?id=<?= $scheduleId ?>" 
                     class="secondary-button btn-sm"
                 >
                     Details
@@ -170,13 +170,13 @@ function output_class_schedule_card($schedule) {
  * Outputs the form for creating or editing a class schedule (admin area).
  */
 function output_class_form($classTypes, $trainers, $days, $data = [], $errors = [], $success = '', $isEdit = false) {
-    $className = htmlspecialchars($data['class_name'] ?? '', ENT_QUOTES, 'UTF-8');
-    $classDescription = htmlspecialchars($data['class_description'] ?? '', ENT_QUOTES, 'UTF-8');
+    $className = htmlspecialchars($data['class_name'] ?? '');
+    $classDescription = htmlspecialchars($data['class_description'] ?? '');
     $classTypeId = $data['class_type_id'] ?? '';
     $trainerId = $data['trainer_id'] ?? '';
     $dayOfWeek = $data['day_of_week'] ?? '';
-    $startTime = htmlspecialchars($data['start_time'] ?? '', ENT_QUOTES, 'UTF-8');
-    $location = htmlspecialchars($data['location'] ?? 'Studio A', ENT_QUOTES, 'UTF-8');
+    $startTime = htmlspecialchars($data['start_time'] ?? '');
+    $location = htmlspecialchars($data['location'] ?? 'Studio A');
     $capacity = (int)($data['capacity'] ?? 20);
     $duration = (int)($data['duration_min'] ?? 60);
     ?>
@@ -199,10 +199,10 @@ function output_class_form($classTypes, $trainers, $days, $data = [], $errors = 
 
         <?php if ($errors): ?>
             <?php foreach ($errors as $e): ?>
-                <div class="alert alert-danger"><?= htmlspecialchars($e, ENT_QUOTES, 'UTF-8') ?></div>
+                <div class="alert alert-danger"><?= htmlspecialchars($e) ?></div>
             <?php endforeach; ?>
         <?php elseif ($success): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
 
         <form method="post" class="auth-form card form-card">
@@ -221,7 +221,7 @@ function output_class_form($classTypes, $trainers, $days, $data = [], $errors = 
 
                         <?php foreach ($classTypes as $type): ?>
                             <option value="<?= (int)$type['id'] ?>" <?= (string)$classTypeId === (string)$type['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($type['label'], ENT_QUOTES, 'UTF-8') ?>
+                                <?= htmlspecialchars($type['label']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -240,8 +240,8 @@ function output_class_form($classTypes, $trainers, $days, $data = [], $errors = 
                         <option value="">-- Select --</option>
 
                         <?php foreach ($days as $day): ?>
-                            <option value="<?= htmlspecialchars($day, ENT_QUOTES, 'UTF-8') ?>" <?= $dayOfWeek === $day ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($day, ENT_QUOTES, 'UTF-8') ?>
+                            <option value="<?= htmlspecialchars($day) ?>" <?= $dayOfWeek === $day ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($day) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -262,7 +262,7 @@ function output_class_form($classTypes, $trainers, $days, $data = [], $errors = 
 
                         <?php foreach ($trainers as $trainer): ?>
                             <option value="<?= (int)$trainer['id'] ?>" <?= (string)$trainerId === (string)$trainer['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($trainer['name'], ENT_QUOTES, 'UTF-8') ?>
+                                <?= htmlspecialchars($trainer['name']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

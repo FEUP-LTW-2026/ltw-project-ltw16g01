@@ -6,7 +6,7 @@
  */
 function classFormFields(array $trainers, array $days, array $types, array $cls = []): void {
     // Helper to escape HTML safely
-    $h = fn($s) => htmlspecialchars($s ?? '', ENT_QUOTES);
+    $h = fn($s) => htmlspecialchars($s ?? '');
     ?>
     <div class="form-row">
         <div class="form-group">

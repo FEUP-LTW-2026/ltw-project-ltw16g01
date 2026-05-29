@@ -168,7 +168,7 @@ output_header('classes.css');
                         </a>
 
                         <?php if ($session): ?>
-                            <form method="post" class="inline-form" onsubmit="return confirm('Are you sure you want to cancel this session?');">
+                            <form method="post" class="inline-form">
                                 <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                 <input type="hidden" name="action" value="cancel_session">
                                 <input type="hidden" name="session_id" value="<?= (int)$session['id'] ?>">
