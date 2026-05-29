@@ -71,7 +71,7 @@ function output_equipment_card($item, $memberPlan = null) {
                     <input
                         type="date"
                         name="reservation_date"
-                        class="form-control"
+                        class="equipment-reserve-input"
                         min="<?= date('Y-m-d') ?>"
                         required
                     >
@@ -79,14 +79,14 @@ function output_equipment_card($item, $memberPlan = null) {
                     <input
                         type="time"
                         name="reservation_time"
-                        class="form-control"
+                        class="equipment-reserve-input"
                         required
                     >
 
                     <input
                         type="number"
                         name="quantity"
-                        class="form-control"
+                        class="equipment-reserve-input"
                         min="1"
                         max="<?= $available ?>"
                         value="1"

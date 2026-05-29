@@ -1,18 +1,13 @@
 /* EQUIPMENT.CSS */
 /* Page-specific styles for equipment listings, availability bars and reservation controls. */
 
+/* Prevent horizontal overflow on equipment pages */
 html,
 body {
     overflow-x: hidden;
 }
 
-.equipment-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-sm);
-    align-items: center;
-}
-
+/* Main page containers should not create horizontal scroll */
 .container,
 .main,
 .card,
@@ -22,6 +17,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Breadcrumb navigation */
 .breadcrumb {
     display: flex;
     flex-wrap: wrap;
@@ -31,35 +27,43 @@ body {
     color: var(--muted);
     margin-bottom: var(--sp-md);
 }
+
 .breadcrumb a {
     color: var(--muted);
     transition: color var(--t);
 }
+
 .breadcrumb a:hover {
     color: var(--accent);
 }
+
 .breadcrumb-sep {
     font-size: 0.6rem;
     opacity: 0.45;
 }
+
 .breadcrumb span {
     color: var(--text);
 }
 
+/* Page header */
 .page-header {
     padding-block: var(--sp-lg) var(--sp-md);
     border-bottom: 1px solid var(--border);
     margin-bottom: var(--sp-xl);
 }
+
 .page-header h1 {
     margin-bottom: 0.2rem;
 }
+
 .page-header p {
     color: var(--muted);
     font-size: 0.95rem;
 }
 
-.page-header-row {
+.page-header-row,
+.equipment-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -68,6 +72,7 @@ body {
     margin-top: var(--sp-sm);
 }
 
+/* Filter bar */
 .filter-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -78,14 +83,30 @@ body {
     padding: var(--sp-md);
     margin-bottom: var(--sp-lg);
 }
+
 .filter-group {
     display: flex;
     flex-direction: column;
 }
+
 .filter-group-end {
     justify-content: flex-end;
 }
 
+/* Equipment legend */
+.equipment-legend,
+.equipment-legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-sm);
+    align-items: center;
+}
+
+.equipment-legend {
+    margin-bottom: var(--sp-lg);
+}
+
+/* Category title */
 .category-title {
     margin-bottom: 1rem;
     color: var(--muted);
@@ -96,6 +117,7 @@ body {
     font-weight: 700;
 }
 
+/* Live indicator */
 .live-indicator {
     display: flex;
     align-items: center;
@@ -104,6 +126,7 @@ body {
     color: var(--success);
     font-weight: 600;
 }
+
 .live-dot {
     width: 8px;
     height: 8px;
@@ -111,11 +134,34 @@ body {
     background: var(--success);
     animation: live-pulse 2s ease infinite;
 }
+
 @keyframes live-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.4); }
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.4);
+    }
 }
 
+.last-update {
+    margin-left: 0.5rem;
+    font-size: 0.7rem;
+}
+
+/* Equipment grid */
+.equip-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+}
+
+/* Equipment card */
 .equip-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -126,6 +172,7 @@ body {
     flex-direction: column;
     height: 100%;
 }
+
 .equip-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-a);
@@ -140,12 +187,14 @@ body {
     margin-bottom: var(--sp-sm);
     flex-shrink: 0;
 }
+
 .equip-name {
     font-family: var(--ff-body);
     font-weight: 600;
     font-size: 1rem;
 }
 
+/* Availability bar */
 .equip-availability {
     display: flex;
     align-items: center;
@@ -153,6 +202,7 @@ body {
     margin-bottom: var(--sp-sm);
     flex-shrink: 0;
 }
+
 .avail-bar {
     flex: 1;
     height: 6px;
@@ -160,24 +210,74 @@ body {
     border-radius: 3px;
     overflow: hidden;
 }
+
 .avail-fill {
     height: 100%;
     border-radius: 3px;
     background: var(--success);
     transition: width 0.4s ease, background 0.3s;
 }
+
 .avail-fill.medium {
     background: var(--warning);
 }
+
 .avail-fill.low {
     background: var(--danger);
 }
+
 .avail-text {
     font-size: 0.8rem;
     white-space: nowrap;
     color: var(--muted);
 }
 
+/* Availability width helpers */
+.avail-w-0 {
+    width: 0%;
+}
+
+.avail-w-10 {
+    width: 10%;
+}
+
+.avail-w-20 {
+    width: 20%;
+}
+
+.avail-w-30 {
+    width: 30%;
+}
+
+.avail-w-40 {
+    width: 40%;
+}
+
+.avail-w-50 {
+    width: 50%;
+}
+
+.avail-w-60 {
+    width: 60%;
+}
+
+.avail-w-70 {
+    width: 70%;
+}
+
+.avail-w-80 {
+    width: 80%;
+}
+
+.avail-w-90 {
+    width: 90%;
+}
+
+.avail-w-100 {
+    width: 100%;
+}
+
+/* Equipment notes */
 .equip-notes {
     font-size: 0.8rem;
     margin-top: var(--sp-xs);
@@ -185,16 +285,20 @@ body {
     color: var(--muted);
 }
 
+/* Status border colors */
 .status-available {
     border-left: 3px solid var(--success);
 }
+
 .status-maintenance {
     border-left: 3px solid var(--warning);
 }
+
 .status-unavailable {
     border-left: 3px solid var(--danger);
 }
 
+/* Shared equipment actions */
 .equip-actions {
     display: flex;
     justify-content: flex-end;
@@ -203,6 +307,63 @@ body {
     padding-top: 12px;
     border-top: 1px solid var(--border);
 }
+
+/* Reservation form inside equipment cards */
+.reserve-equipment-form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+/* Compact reservation inputs inside equipment cards */
+.reserve-equipment-form .equipment-reserve-input {
+    width: 100%;
+    max-width: 96px;
+    min-height: 36px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    padding: 0.45rem 0.55rem;
+    font-size: 0.8rem;
+    font-family: var(--ff-body);
+    line-height: 1;
+    box-shadow: none;
+}
+
+/* Focus state for reservation inputs */
+.reserve-equipment-form .equipment-reserve-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background-color: var(--card);
+    box-shadow: 0 0 0 3px rgba(232, 65, 24, 0.14);
+}
+
+/* Native date and time picker icons */
+.reserve-equipment-form .equipment-reserve-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.85;
+    cursor: pointer;
+}
+
+/* Quantity input is smaller than date/time fields */
+.reserve-equipment-form input[type="number"].equipment-reserve-input {
+    max-width: 70px;
+}
+
+/* Reserve button alignment */
+.reserve-equipment-form .main-button {
+    min-height: 36px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+/* Delete button */
 .delete-btn {
     background: var(--danger);
     color: white;
@@ -213,42 +374,47 @@ body {
     cursor: pointer;
     transition: all var(--t);
 }
+
 .delete-btn:hover {
     background: #ff3344;
     transform: translateY(-1px);
 }
 
+/* Utility helpers used by equipment pages */
 .flex-between {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .flex {
     display: flex;
 }
+
 .gap-md {
     gap: var(--sp-md);
 }
+
 .mb-lg {
     margin-bottom: var(--sp-lg);
 }
+
 .text-muted {
     color: var(--muted);
 }
-.equipment-legend {
-    margin-bottom: var(--sp-lg);
-}
+
 .equipment-reservations-card {
     margin-bottom: 1.5rem;
 }
 
-.equip-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--sp-md);
-    margin-bottom: var(--sp-xl);
+/* Responsive filter bar */
+@media (min-width: 480px) {
+    .filter-bar {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
+/* Responsive equipment grid */
 @media (min-width: 540px) {
     .equip-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -261,52 +427,37 @@ body {
     }
 }
 
-@media (min-width: 480px) {
-    .filter-bar {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
+/* Tablet and mobile reservation layout */
 @media (max-width: 768px) {
-
-    
     .equip-actions,
-    .reservation-form,
-    .reserve-controls {
+    .reserve-equipment-form {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
         align-items: stretch;
     }
 
-    
-    .reservation-form input,
-    .reservation-form select,
-    .reserve-controls input,
-    .reserve-controls select {
+    .reserve-equipment-form .equipment-reserve-input {
+        max-width: none;
         flex: 1 1 calc(33.33% - 0.5rem);
         min-width: 80px;
     }
 
-    
-    .reservation-form button,
-    .reserve-controls button,
-    .reserve-btn {
+    .reserve-equipment-form .main-button {
         width: 100%;
         margin-top: 0.5rem;
     }
 }
 
-.equipment-header-row {
-    flex-wrap: wrap;
-    gap: 1rem;
-}
+/* Small phone adjustments */
+@media (max-width: 420px) {
+    .page-header-row,
+    .equipment-header-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
 
-.last-update {
-    margin-left: 0.5rem;
-    font-size: 0.7rem;
-}
-
-.equipment-legend-row {
-    flex-wrap: wrap;
+    .reserve-equipment-form .equipment-reserve-input {
+        flex: 1 1 100%;
+    }
 }
