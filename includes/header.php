@@ -94,6 +94,7 @@ if (!function_exists('output_header')) {
                 <li><a href="../member/classes.php">Classes</a></li>
                 <li><a href="../member/trainers.php">Trainers</a></li>
                 <li><a href="../member/equipment.php">Equipment</a></li>
+                <li><a href="../member/notifications.php">Notifications</a></li>
                 <?php if ($userIsAdmin && $originalRole !== 'admin'): ?>
                     <li><a href="../pages/choose_area.php" class="nav-login">Switch Area</a></li>
                 <?php endif; ?>
@@ -108,6 +109,7 @@ if (!function_exists('output_header')) {
                 <li><a href="../trainer/classes.php">Classes</a></li>
                 <li><a href="../trainer/trainers.php">Trainers</a></li>
                 <li><a href="../trainer/equipment.php">Equipment</a></li>
+                <li><a href="../trainer/notifications.php">Notifications</a></li>
                 <?php if ($userIsAdmin && $originalRole !== 'admin'): ?>
                     <li><a href="../pages/choose_area.php" class="nav-login">Switch Area</a></li>
                 <?php endif; ?>

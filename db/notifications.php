@@ -9,17 +9,20 @@ function createNotification($pdo, $userId, $message, $type = 'info') {
     return $stmt->execute([$userId, $message, $typeId]);
 }
 
-function getNotifications($pdo, $limit = 100, $offset = 0, $typeFilter = 'all') {
+function getNotifications($pdo, $limit = 100, $offset = 0, $typeFilter = 'all', $excludePersonal = false) {
     $adminId = $_SESSION['user_id'];
     $sql = "SELECT n.*, nt.label as type_label, nt.css_class,
                    CASE WHEN nr.id IS NOT NULL THEN 1 ELSE 0 END as is_read
             FROM notifications n
             JOIN notification_types nt ON n.notification_type_id = nt.id
             LEFT JOIN notification_reads nr ON n.id = nr.notification_id AND nr.admin_id = ?
-            ";
-    $params = [$adminId];
+            WHERE n.user_id = ?";
+    $params = [$adminId, $adminId];
+    if ($excludePersonal) {
+        $sql .= " AND LOWER(n.message) NOT LIKE 'your%'";
+    }
     if ($typeFilter !== 'all') {
-        $sql .= " WHERE nt.name = ?";
+        $sql .= " AND nt.name = ?";
         $params[] = $typeFilter;
     }
     $sql .= " ORDER BY n.created_at DESC LIMIT ? OFFSET ?";
@@ -30,12 +33,17 @@ function getNotifications($pdo, $limit = 100, $offset = 0, $typeFilter = 'all') 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getTotalCountForUser($pdo, $typeFilter = 'all') {
+function getTotalCountForUser($pdo, $typeFilter = 'all', $excludePersonal = false) {
+    $adminId = $_SESSION['user_id'];
     $sql = "SELECT COUNT(*) FROM notifications n
-            JOIN notification_types nt ON n.notification_type_id = nt.id";
-    $params = [];
+            JOIN notification_types nt ON n.notification_type_id = nt.id
+            WHERE n.user_id = ?";
+    $params = [$adminId];
+    if ($excludePersonal) {
+        $sql .= " AND LOWER(n.message) NOT LIKE 'your%'";
+    }
     if ($typeFilter !== 'all') {
-        $sql .= " WHERE nt.name = ?";
+        $sql .= " AND nt.name = ?";
         $params[] = $typeFilter;
     }
     $stmt = $pdo->prepare($sql);
@@ -43,11 +51,13 @@ function getTotalCountForUser($pdo, $typeFilter = 'all') {
     return (int)$stmt->fetchColumn();
 }
 
-function getUnreadCount($pdo) {
+function getUnreadCount($pdo, $excludePersonal = false) {
     $adminId = $_SESSION['user_id'];
     $sql = "SELECT COUNT(*) FROM notifications n
-            WHERE NOT EXISTS (SELECT 1 FROM notification_reads nr
-                              WHERE nr.notification_id = n.id AND nr.admin_id = ?)";
+            WHERE user_id = ? AND read_at IS NULL";
+    if ($excludePersonal) {
+        $sql .= " AND LOWER(message) NOT LIKE 'your%'";
+    }
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$adminId]);
     return (int)$stmt->fetchColumn();
@@ -71,4 +81,37 @@ function markAllNotificationsAsRead($pdo) {
 function deleteNotification($pdo, $notificationId) {
     $stmt = $pdo->prepare("DELETE FROM notifications WHERE id = ?");
     return $stmt->execute([$notificationId]);
+}
+
+function getMemberNotifications($pdo, $memberId, $limit = 50) {
+    $sql = "SELECT n.*, nt.label as type_label, nt.css_class
+            FROM notifications n
+            JOIN notification_types nt ON n.notification_type_id = nt.id
+            WHERE n.user_id = ?
+            ORDER BY n.created_at DESC
+            LIMIT ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$memberId, $limit]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUnreadMemberNotificationCount($pdo, $memberId) {
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = ? AND read_at IS NULL");
+    $stmt->execute([$memberId]);
+    return (int)$stmt->fetchColumn();
+}
+
+function markMemberNotificationAsRead($pdo, $notificationId, $memberId) {
+    $stmt = $pdo->prepare("UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ? AND read_at IS NULL");
+    return $stmt->execute([$notificationId, $memberId]);
+}
+
+function markAllMemberNotificationsAsRead($pdo, $memberId) {
+    $stmt = $pdo->prepare("UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE user_id = ? AND read_at IS NULL");
+    return $stmt->execute([$memberId]);
+}
+
+function deleteMemberNotification($pdo, $notificationId, $memberId) {
+    $stmt = $pdo->prepare("DELETE FROM notifications WHERE id = ? AND user_id = ?");
+    return $stmt->execute([$notificationId, $memberId]);
 }

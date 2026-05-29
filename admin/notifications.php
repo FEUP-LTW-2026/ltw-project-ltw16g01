@@ -21,11 +21,11 @@ $pdo = getDatabaseConnection();
 $filter = $_GET['filter'] ?? 'all';
 
 // Fetch notifications based on filter (limit 100, offset 0)
-$notifications = getNotifications($pdo, 100, 0, $filter);
+$notifications = getNotifications($pdo, 100, 0, $filter, true);
 
 // Get total count for current filter and unread count for badge
-$totalCount = getTotalCountForUser($pdo, $filter);
-$unreadCount = getUnreadCount($pdo);
+$totalCount = getTotalCountForUser($pdo, $filter, true);
+$unreadCount = getUnreadCount($pdo, true);
 
 // Handle POST actions (mark as read, mark all read, delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
