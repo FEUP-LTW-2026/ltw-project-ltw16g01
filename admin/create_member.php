@@ -8,6 +8,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/members.php';        // Database functions for members
 require_once '../template/members.php';  // output_member_form()
+require_once '../includes/mailer.php';
 require_once '../db//notifications.php'; // createNotification()
 
 // Restrict access to admin users only
@@ -68,8 +69,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Duplicate username or email
             $errors[] = 'Username or email already exists.';
         } else {
-            $success = 'Member created successfully.';
-            $old = []; // Clear old values on success
+            $emailSent = sendAccountCredentialsEmail($email, $name, $username, $password, 'member');
+
+            if ($emailSent) {
+                $success = 'Member created successfully and credentials email sent.';
+            } else {
+                $success = 'Member created successfully, but the credentials email could not be sent.';
+            }
+
+            $old = [];
 
             // Notify all administrators (role-based notification)
             $planLabel = ucfirst($plan); // 'Basic', 'Premium', 'Vip'

@@ -11,6 +11,7 @@ require_once '../db/connection.php';
 require_once '../db/trainers.php';        // Database functions for trainers
 require_once '../template/trainers.php';   // output_trainer_form()
 require_once '../db/notifications.php'; // createNotification()
+require_once '../includes/mailer.php';
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -70,8 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Duplicate username or email
             $errors[] = 'Username or email already exists.';
         } else {
-            $success = 'Trainer created successfully.';
-            $old = []; // Clear old values on success
+            $emailSent = sendAccountCredentialsEmail($email, $name, $username, $password, 'trainer');
+
+            if ($emailSent) {
+                $success = 'Trainer created successfully and credentials email sent.';
+            } else {
+                $success = 'Trainer created successfully, but the credentials email could not be sent.';
+            }
+
+            $old = [];
 
             // Notify all administrators (role-based notification)
             $specializationsText = $specializations ?: 'none specified';
