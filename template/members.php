@@ -102,20 +102,15 @@ function output_member_form($member = null, $errors = [], $success = '', $old = 
                 </div>
             </div>
 
-            <div class="form-row form-spaced">
-                <div class="form-group">
-                    <label class="form-label">Membership Plan</label>
-                    <select name="plan" class="form-select">
-                        <?php foreach ($plans as $p): ?>
-                            <option value="<?= $p ?>" <?= $plan === $p ? 'selected' : '' ?>><?= ucfirst($p) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Plan End Date</label>
-                    <input type="date" name="plan_end" class="form-control" value="<?= htmlspecialchars($planEnd) ?>">
-                </div>
+            <div class="form-group member-plan-field">
+                <label class="form-label">Membership Plan</label>
+                <select name="plan" class="form-select">
+                    <?php foreach ($plans as $p): ?>
+                        <option value="<?= $p ?>" <?= $plan === $p ? 'selected' : '' ?>>
+                            <?= ucfirst($p) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <?php if (!$isEdit): ?>

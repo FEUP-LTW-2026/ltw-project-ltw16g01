@@ -216,7 +216,12 @@ function updateTrainer($pdo, $id, $name, $username, $email, $active, $bio, $spec
 }
 
 function deleteTrainer($pdo, $id) {
-    $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'trainer'");
+    $stmt = $pdo->prepare("
+        DELETE FROM users
+        WHERE id = ?
+          AND role = 'trainer'
+    ");
+
     return $stmt->execute([$id]);
 }
 

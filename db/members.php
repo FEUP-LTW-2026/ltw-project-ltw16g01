@@ -158,10 +158,14 @@ function updateMember($pdo, $id, $name, $username, $email, $active, $plan, $plan
 }
 
 function deleteMember($pdo, $id) {
-    $stmt = $pdo->prepare("UPDATE users SET active = 0 WHERE id = ? AND role = 'member'");
+    $stmt = $pdo->prepare("
+        DELETE FROM users
+        WHERE id = ?
+          AND role = 'member'
+    ");
+
     return $stmt->execute([$id]);
 }
-
 function getMemberPlan($pdo, $memberId) {
     $stmt = $pdo->prepare("SELECT membership_plan FROM member_profiles WHERE user_id = ?");
     $stmt->execute([$memberId]);

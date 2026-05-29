@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $plan = $_POST['plan'] ?? 'basic';
-    $planEnd = trim($_POST['plan_end'] ?? '');
+    $planEnd = '';
     $password = $_POST['password'] ?? '';
     $confirm = $_POST['confirm_password'] ?? '';
 
@@ -44,8 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'name' => $name,
         'username' => $username,
         'email' => $email,
-        'plan' => $plan,
-        'plan_end' => $planEnd
+        'plan' => $plan
     ];
 
     // Validation
