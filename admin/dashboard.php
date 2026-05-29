@@ -8,7 +8,8 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/admin.php';      // Contains all database queries for dashboard
+require_once '../db/admin.php';      // Contains dashboard KPI and list queries
+require_once '../db/notifications.php'; // Shared notification helpers
 require_once '../template/admin.php'; // Contains helper functions for displaying data
 
 // Restrict access to admin users only
@@ -17,21 +18,24 @@ requireAuth('admin');
 // Get database connection
 $pdo = getDatabaseConnection();
 
+// Current admin context
+$userId = (int)($_SESSION['user_id'] ?? 0);
+$role = $_SESSION['active_role'] ?? $_SESSION['role'] ?? 'admin';
+
 // Fetch dashboard data using functions from db/admin.php (no inline SQL)
-$stats = getAdminStats($pdo);                 // KPI numbers (members, trainers, classes, equipment issues)
-$members = getMembers($pdo);                  // List of members
-$trainers = getTrainers($pdo);                // List of trainers
-$classes = getClasses($pdo);                  // List of classes
-$equipment = getEquipment($pdo);              // List of equipment
-$notifications = getRecentNotifications($pdo, 5); // Recent notifications (first call, maybe old)
-$monthlyGrowth = getMonthlyGrowth($pdo);      // Percentage growth of members
-$monthlyEnrollments = getMonthlyEnrollments($pdo); // New enrollments this month
-
-// Get admin ID from session for personalized notifications
-$adminId = $_SESSION['user_id'];
-
-// Overwrite notifications with admin-specific ones (limit 5)
-$notifications = getRecentNotifications($pdo, $adminId, 5);
+$stats = getAdminStats($pdo);                       // KPI numbers (members, trainers, classes, equipment issues)
+$members = getMembers($pdo);                        // List of members
+$trainers = getTrainers($pdo);                      // List of trainers
+$classes = getClasses($pdo);                        // List of classes
+$equipment = getEquipment($pdo);                    // List of equipment
+$notifications = getRecentNotifications(            // Recent notifications
+    $pdo,
+    $userId,
+    $role,
+    5
+);
+$monthlyGrowth = getMonthlyGrowth($pdo);            // Percentage growth of members
+$monthlyEnrollments = getMonthlyEnrollments($pdo);  // New enrollments this month
 
 // Output page header (loads external CSS, no inline styles)
 output_header('admin-dashboard.css');
@@ -100,26 +104,30 @@ output_header('admin-dashboard.css');
                             <div class="activity-feed">
                                 <?php foreach ($notifications as $notif): ?>
                                     <?php
-                                        // Map notification type to an emoji icon
-                                        $icon = match($notif['css_class']) {
+                                        $cssClass = $notif['css_class'] ?? 'info';
+
+                                        $icon = match ($cssClass) {
                                             'warning' => '⚠️',
                                             'success' => '✅',
                                             'danger', 'error' => '❌',
                                             default => '📢'
                                         };
-                                        $typeClass = $notif['css_class'] ?? 'info';
-                                        $message = htmlspecialchars($notif['message']);
-                                        // Trim long messages
-                                        if (strlen($message) > 80) $message = substr($message, 0, 80) . '…';
+
+                                        $message = (string)($notif['message'] ?? '');
+                                        $displayMessage = htmlspecialchars(mb_strimwidth($message, 0, 80, '…'));
+
+                                        $createdAt = !empty($notif['created_at'])
+                                            ? date('d/m/Y H:i', strtotime($notif['created_at']))
+                                            : '';
                                     ?>
                                     <div class="activity-item">
-                                        <div class="activity-icon <?= $typeClass ?>">
+                                        <div class="activity-icon <?= htmlspecialchars($cssClass) ?>">
                                             <?= $icon ?>
                                         </div>
                                         <div class="activity-content">
-                                            <div class="activity-text"><?= $message ?></div>
+                                            <div class="activity-text"><?= $displayMessage ?></div>
                                             <div class="activity-time">
-                                                <?= date('d/m/Y H:i', strtotime($notif['created_at'])) ?>
+                                                <?= htmlspecialchars($createdAt) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +150,6 @@ output_header('admin-dashboard.css');
                             </thead>
                             <tbody>
                                 <?php 
-                                // Display top 5 classes
                                 $topClasses = array_slice($classes, 0, 5);
                                 foreach ($topClasses as $i => $c) output_admin_class_row($c, $i); 
                                 ?>
@@ -167,7 +174,6 @@ output_header('admin-dashboard.css');
                             </thead>
                             <tbody>
                                 <?php 
-                                // Display last 5 members
                                 $recentMembers = array_slice($members, 0, 5);
                                 foreach ($recentMembers as $m) output_admin_member_row($m); 
                                 ?>
@@ -188,7 +194,6 @@ output_header('admin-dashboard.css');
                     <div class="card-body">
                         <div class="equip-list">
                             <?php 
-                            // Display first 10 equipment items
                             $limitedEquipment = array_slice($equipment, 0, 10);
                             foreach ($limitedEquipment as $e) output_admin_equipment_item($e); 
                             ?>
@@ -207,7 +212,6 @@ output_header('admin-dashboard.css');
                             <thead><tr><th>Trainer</th><th>Username</th><th>Email</th></tr></thead>
                             <tbody>
                                 <?php 
-                                // Display first 10 trainers
                                 $recentTrainers = array_slice($trainers, 0, 10);
                                 foreach ($recentTrainers as $t) output_admin_trainer_row($t); 
                                 ?>

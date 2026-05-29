@@ -8,6 +8,7 @@ require_once '../db/personal_bookings.php';
 require_once '../db/notifications.php';
 
 requireAuth('trainer');
+
 $pdo = getDatabaseConnection();
 $trainerId = $_SESSION['user_id'];
 
@@ -27,12 +28,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, 'confirmed')) {
             $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
             $stmt->execute([$requestId]);
-            $memberId = $stmt->fetchColumn();
+            $memberId = (int) $stmt->fetchColumn();
 
-            if ($memberId) {
-                $trainerName = $_SESSION['user_name'] ?? '';
-                $message = "Your personal training request has been confirmed by trainer " . $trainerName . ".";
-                createNotification($pdo, $memberId, $message, 'success');
+            if ($memberId > 0) {
+                $trainerName = $_SESSION['user_name'] ?? 'Trainer';
+                $message = "Your personal training request has been confirmed by trainer {$trainerName}.";
+                try {
+                    createNotification(
+                        $pdo,
+                        $message,
+                        'success',
+                        $memberId,
+                        null,
+                        'personal',
+                        'PT Request Confirmed'
+                    );
+                } catch (Throwable $e) {
+                    // Do not block the main action if notification insertion fails.
+                }
             }
 
             $toastMessage = '✓ Request accepted! Member has been notified.';
@@ -45,12 +58,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, 'cancelled')) {
             $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
             $stmt->execute([$requestId]);
-            $memberId = $stmt->fetchColumn();
+            $memberId = (int) $stmt->fetchColumn();
 
-            if ($memberId) {
-                $trainerName = $_SESSION['user_name'] ?? '';
-                $message = "Your personal training request has been declined by trainer " . $trainerName . ".";
-                createNotification($pdo, $memberId, $message, 'warning');
+            if ($memberId > 0) {
+                $trainerName = $_SESSION['user_name'] ?? 'Trainer';
+                $message = "Your personal training request has been declined by trainer {$trainerName}.";
+                try {
+                    createNotification(
+                        $pdo,
+                        $message,
+                        'warning',
+                        $memberId,
+                        null,
+                        'personal',
+                        'PT Request Declined'
+                    );
+                } catch (Throwable $e) {
+                    // Keep the PT status change even if notification fails.
+                }
             }
 
             $toastMessage = '✓ Request declined.';
