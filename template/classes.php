@@ -54,18 +54,15 @@ function output_class_schedule_card($schedule) {
     $activeRole = $_SESSION['active_role'] ?? '';
     $showDetailsLink = in_array($activeRole, $allowedAreas, true);
     ?>
-
     <article class="class-card" data-schedule-id="<?= $scheduleId ?>">
         <div class="class-head">
             <div class="class-time-big"><?= $startTime ?></div>
-
             <div class="class-ratings">
                 <?php if ($reviewCount > 0): ?>
                     <div class="stars">
                         <?php
                         $fullStars = floor($avgRating);
                         $halfStar = ($avgRating - $fullStars) >= 0.5;
-
                         for ($i = 1; $i <= 5; $i++) {
                             if ($i <= $fullStars) {
                                 echo '★';
@@ -82,11 +79,9 @@ function output_class_schedule_card($schedule) {
                 <?php endif; ?>
             </div>
         </div>
-
         <div class="class-body">
             <h3 class="class-name"><?= $className ?></h3>
             <p><?= $shortDescription ?></p>
-
             <ul class="class-meta">
                 <li>🧘 <?= $typeLabel ?></li>
                 <li>👤 <?= $trainerName ?></li>
@@ -95,7 +90,6 @@ function output_class_schedule_card($schedule) {
                 <li>📅 <?= $day ?> at <?= $startTime ?></li>
             </ul>
         </div>
-
         <div class="class-foot">
             <div class="cap-wrap">
                 <span class="badge badge-<?= htmlspecialchars($fillClass) ?>">
@@ -107,62 +101,48 @@ function output_class_schedule_card($schedule) {
             <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'member'): ?>
                 <?php
                 $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $scheduleId, 1);
-
                 if (!empty($sessions)):
                     $nextSession = $sessions[0];
                     $sessionEnrolled = (int)($nextSession['enrolled_count'] ?? 0);
                     $available = $capacity - $sessionEnrolled;
                     $isEnrolled = isMemberEnrolled($GLOBALS['pdo'], $_SESSION['user_id'], $nextSession['id']);
-
                     if ($isEnrolled):
                 ?>
-                        <button class="enrolled-btn" data-schedule-id="<?= $scheduleId ?>" data-action="cancel">
+                        <button class="enrolled-btn" 
+                                data-schedule-id="<?= $scheduleId ?>" 
+                                data-session-id="<?= $nextSession['id'] ?>"
+                                data-action="cancel">
                             ✅ Enrolled
                         </button>
                     <?php elseif ($available > 0): ?>
-                        <button class="enroll-btn" data-schedule-id="<?= $scheduleId ?>" data-action="enroll">
+                        <button class="enroll-btn" 
+                                data-schedule-id="<?= $scheduleId ?>" 
+                                data-action="enroll">
                             Enroll
                         </button>
                     <?php else: ?>
-                        <button class="disabled-btn secondary-button btn-sm" disabled>
-                            Full
-                        </button>
+                        <button class="disabled-btn secondary-button btn-sm" disabled>Full</button>
                     <?php endif; ?>
                 <?php else: ?>
-                    <button class="disabled-btn secondary-button btn-sm" disabled>
-                        No sessions
-                    </button>
+                    <button class="disabled-btn secondary-button btn-sm" disabled>No sessions</button>
                 <?php endif; ?>
             <?php endif; ?>
 
-            <!-- Details link for logged‑in members, trainers and admins -->
+            <!-- Details link -->
             <?php if ($showDetailsLink): ?>
-                <a 
-                    href="/<?= htmlspecialchars($activeRole) ?>/class_details.php?id=<?= $scheduleId ?>" 
-                    class="secondary-button btn-sm"
-                >
-                    Details
-                </a>
+                <a href="/<?= htmlspecialchars($activeRole) ?>/class_details.php?id=<?= $scheduleId ?>" 
+                   class="secondary-button btn-sm">Details</a>
             <?php endif; ?>
 
-            <!-- Admin actions (Edit / Delete) -->
+            <!-- Admin actions -->
             <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
                 <div class="admin-actions">
-                    <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">
-                        Edit
-                    </a>
-
-                    <a 
-                        href="delete_class.php?id=<?= $scheduleId ?>" 
-                        class="delete-btn btn-sm delete-class-link"
-                    >
-                        Delete
-                    </a>
+                    <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Edit</a>
+                    <a href="delete_class.php?id=<?= $scheduleId ?>" class="delete-btn btn-sm delete-class-link">Delete</a>
                 </div>
             <?php endif; ?>
         </div>
     </article>
-
     <?php
 }
 
