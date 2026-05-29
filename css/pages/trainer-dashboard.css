@@ -209,3 +209,8 @@
     background: rgba(255, 71, 87, 0.1);
     transform: translateY(-1px);
 }
+
+/* Hide schedule edit form by default */
+.schedule-edit-box.is-hidden {
+    display: none;
+}

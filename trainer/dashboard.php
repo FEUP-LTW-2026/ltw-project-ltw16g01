@@ -10,15 +10,18 @@ require_once '../db/notifications.php';
 
 requireAuth('trainer');
 
+// Create the database connection and get the logged-in trainer id.
 $pdo = getDatabaseConnection();
 $trainerId = $_SESSION['user_id'];
 
+// Load dashboard data through database helper functions.
 $stats = getTrainerStats($pdo, $trainerId);
 $upcoming = getTrainerUpcomingClasses($pdo, $trainerId);
 $pastClasses = getTrainerPastClasses($pdo, $trainerId);
 $pendingPT = getTrainerPendingPTRequests($pdo, $trainerId);
 $confirmedPT = getTrainerConfirmedPT($pdo, $trainerId);
 
+// Handle accept/reject actions for personal training requests.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
@@ -32,9 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $newStatus = $action === 'accept' ? 'confirmed' : 'cancelled';
 
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, $newStatus)) {
-            $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
-            $stmt->execute([$requestId]);
-            $memberId = $stmt->fetchColumn();
+            // Get the member affected by this PT request through a database helper.
+            $memberId = getPTRequestMemberId($pdo, $requestId);
 
             if ($memberId) {
                 $trainerName = $_SESSION['user_name'] ?? '';
@@ -121,7 +123,7 @@ output_header('trainer-dashboard.css');
                                             <td><?= (int)$req['duration_min'] ?> min</td>
                                             <td><?= htmlspecialchars($req['notes'] ?: '—') ?></td>
                                             <td>
-                                                <form method="post" style="display: inline-block;">
+                                                <form method="post" class="action-inline-form">
                                                     <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                     <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                     <button type="submit" name="action" value="accept" class="main-button btn-sm">
@@ -129,7 +131,7 @@ output_header('trainer-dashboard.css');
                                                     </button>
                                                 </form>
 
-                                                <form method="post" style="display: inline-block;">
+                                                <form method="post" class="action-inline-form">
                                                     <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                     <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                     <button type="submit" name="action" value="reject" class="decline-btn btn-sm">

@@ -359,3 +359,45 @@ function getClassReviews($pdo, $scheduleId) {
     $stmt->execute([$scheduleId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getScheduleTrainerBasicInfo(PDO $pdo, int $trainerId): ?array {
+    // Get basic trainer information for a class schedule.
+    $stmt = $pdo->prepare("
+        SELECT id, name
+        FROM users
+        WHERE id = ?
+    ");
+
+    $stmt->execute([$trainerId]);
+    $trainer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $trainer ?: null;
+}
+
+function getClassTypeLabelById(PDO $pdo, int $classTypeId): string {
+    // Get the readable label of a class type.
+    $stmt = $pdo->prepare("
+        SELECT label
+        FROM class_types
+        WHERE id = ?
+    ");
+
+    $stmt->execute([$classTypeId]);
+
+    return (string)($stmt->fetchColumn() ?: '');
+}
+
+function getTrainerScheduleDetailsForUpdate(PDO $pdo, int $scheduleId, int $trainerId): ?array {
+    // Get the current schedule data before applying an update.
+    $stmt = $pdo->prepare("
+        SELECT location, capacity, duration_min, start_time
+        FROM class_schedules
+        WHERE id = ?
+          AND trainer_id = ?
+    ");
+
+    $stmt->execute([$scheduleId, $trainerId]);
+    $schedule = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $schedule ?: null;
+}

@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.decline-btn').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
+    // Confirms before rejecting a personal training request.
+    document.querySelectorAll('.decline-btn').forEach(function (button) {
+        button.addEventListener('click', function (event) {
             if (!confirm('Reject this personal training request?')) {
-                e.preventDefault();
+                event.preventDefault();
             }
         });
     });

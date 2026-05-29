@@ -8,12 +8,15 @@ require_once '../db/personal_bookings.php';
 require_once '../db/notifications.php';
 
 requireAuth('trainer');
+
+// Create the database connection and get the logged-in trainer id.
 $pdo = getDatabaseConnection();
 $trainerId = $_SESSION['user_id'];
 
 $toastMessage = '';
 $toastType = '';
 
+// Handle accept/reject actions while keeping the existing CSRF protection.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
@@ -25,9 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'accept') {
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, 'confirmed')) {
-            $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
-            $stmt->execute([$requestId]);
-            $memberId = $stmt->fetchColumn();
+            // Get the member affected by this PT request through a database helper.
+            $memberId = getPTRequestMemberId($pdo, $requestId);
 
             if ($memberId) {
                 $trainerName = $_SESSION['user_name'] ?? '';
@@ -43,9 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'reject') {
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, 'cancelled')) {
-            $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
-            $stmt->execute([$requestId]);
-            $memberId = $stmt->fetchColumn();
+            // Get the member affected by this PT request through a database helper.
+            $memberId = getPTRequestMemberId($pdo, $requestId);
 
             if ($memberId) {
                 $trainerName = $_SESSION['user_name'] ?? '';
@@ -62,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Load pending and past PT requests.
 $pendingRequests = getTrainerPendingRequests($pdo, $trainerId);
 $pastRequests = getTrainerPastRequests($pdo, $trainerId, 10);
 
@@ -106,13 +108,13 @@ output_header('request_pt.css');
                                         <td><?= (int)$req['duration_min'] ?> min</td>
                                         <td><?= htmlspecialchars($req['notes'] ?: '—') ?></td>
                                         <td>
-                                            <form method="post" style="display: inline-block;">
+                                            <form method="post" class="action-inline-form">
                                                 <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                 <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                 <button type="submit" name="action" value="accept" class="main-button btn-sm">Accept</button>
                                             </form>
 
-                                            <form method="post" style="display: inline-block;">
+                                            <form method="post" class="action-inline-form">
                                                 <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                 <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
                                                 <button type="submit" name="action" value="reject" id="reject">Decline</button>
@@ -174,21 +176,8 @@ output_header('request_pt.css');
     </div>
 </main>
 
-<div id="toast" class="toast-notification"></div>
+<div id="toast" class="toast-notification" data-message="<?= htmlspecialchars($toastMessage, ENT_QUOTES) ?>" data-type="<?= htmlspecialchars($toastType, ENT_QUOTES) ?>"></div>
 
-<script>
-    const toastMessage = <?= json_encode($toastMessage) ?>;
-    const toastType = <?= json_encode($toastType) ?>;
+<script src="../js/pt-requests.js"></script>
 
-    if (toastMessage) {
-        const toast = document.getElementById('toast');
-        toast.textContent = toastMessage;
-        toast.className = 'toast-notification toast-' + (toastType || 'info');
-        toast.style.display = 'block';
-        setTimeout(() => {
-            toast.style.display = 'none';
-        }, 5000);
-    }
-</script>
-
-<?php output_footer(); ?>
+<?php output_footer('../trainer/'); ?>

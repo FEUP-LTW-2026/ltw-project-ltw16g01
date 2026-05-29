@@ -260,3 +260,17 @@ function notifyAllAdmins($pdo, $message, $type = 'info') {
         $insert->execute([$adminId, $message, $typeId]);
     }
 }
+
+function getPTRequestMemberId(PDO $pdo, int $requestId): ?int {
+    // Get the member linked to a personal training request.
+    $stmt = $pdo->prepare("
+        SELECT member_id
+        FROM personal_bookings
+        WHERE id = ?
+    ");
+
+    $stmt->execute([$requestId]);
+    $memberId = $stmt->fetchColumn();
+
+    return $memberId ? (int)$memberId : null;
+}

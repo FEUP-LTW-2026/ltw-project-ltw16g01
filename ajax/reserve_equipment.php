@@ -7,6 +7,7 @@ require_once '../db/equipment.php';
 
 header('Content-Type: application/json');
 
+// Only logged-in members can reserve equipment.
 if (!isLoggedIn() || ($_SESSION['role'] ?? '') !== 'member') {
     http_response_code(403);
 
@@ -18,6 +19,7 @@ if (!isLoggedIn() || ($_SESSION['role'] ?? '') !== 'member') {
     exit;
 }
 
+// This endpoint changes state, so only POST requests are allowed.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
 
@@ -29,10 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// Create the database connection.
 $pdo = getDatabaseConnection();
 
+// Decode the JSON request body.
 $input = json_decode(file_get_contents('php://input'), true) ?? [];
 
+// Validate the CSRF token because this request changes state.
 if (!isset($input['csrf']) || $_SESSION['csrf'] !== $input['csrf']) {
     http_response_code(403);
 
@@ -50,6 +55,7 @@ $reservationDate = trim($input['reservation_date'] ?? '');
 $reservationTime = trim($input['reservation_time'] ?? '');
 $quantity = (int)($input['quantity'] ?? 1);
 
+// Create the equipment reservation through the database helper.
 $result = reserveEquipment(
     $pdo,
     $memberId,
