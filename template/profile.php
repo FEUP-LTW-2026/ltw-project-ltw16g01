@@ -1,6 +1,6 @@
 <?php
 /**
- * profile.php – Template functions for user profile pages (member, trainer, admin).
+ * profile.php – Template functions for user profile public (member, trainer, admin).
  * Includes hero section, basic profile form, password change form, trainer public profile form,
  * schedule table, and a public trainer profile view.
  */

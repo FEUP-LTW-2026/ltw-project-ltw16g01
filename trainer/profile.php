@@ -91,7 +91,7 @@ $user = getUserProfileById($pdo, $userId);
 
 if (!$user) {
     session_destroy();
-    header('Location: ../pages/login.php');
+    header('Location: ../public/login.php');
     exit;
 }
 
@@ -119,7 +119,7 @@ output_header('profile.css');
         <?php output_password_form(); ?>
 
         <div class="logout-box">
-            <a href="../pages/logout.php" id="logout-button" class="secondary-button btn-sm logout-button">Logout</a>
+            <a href="../public/logout.php" id="logout-button" class="secondary-button btn-sm logout-button">Logout</a>
         </div>
     </div>
 </main>

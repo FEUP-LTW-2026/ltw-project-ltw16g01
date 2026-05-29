@@ -2,7 +2,7 @@
 /**
  * class-form-fields.php – Reusable form fields for creating/editing class schedules.
  * Renders a set of input fields (name, type, description, trainer, day, time, capacity, duration).
- * Used by admin class creation/editing pages.
+ * Used by admin class creation/editing public.
  */
 function classFormFields(array $trainers, array $days, array $types, array $cls = []): void {
     // Helper to escape HTML safely

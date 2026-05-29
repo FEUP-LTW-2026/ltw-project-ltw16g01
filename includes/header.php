@@ -65,7 +65,7 @@ if (!function_exists('output_header')) {
                 break;
             default:
                 $logoLink = '../index.php';
-                $profileLink = '../pages/login.php';
+                $profileLink = '../public/login.php';
         }
 ?>
 <!DOCTYPE html>
@@ -111,7 +111,7 @@ if (!function_exists('output_header')) {
                 <li><a href="../member/trainers.php">Trainers</a></li>
                 <li><a href="../member/equipment.php">Equipment</a></li>
                 <?php if ($userIsAdmin && $originalRole !== 'admin'): ?>
-                    <li><a href="../pages/choose_area.php" class="nav-login">Switch Area</a></li>
+                    <li><a href="../public/choose_area.php" class="nav-login">Switch Area</a></li>
                 <?php endif; ?>
                 <li class="nav-avatar">
                     <a href="../member/profile.php" class="avatar-link" title="My Profile">
@@ -125,7 +125,7 @@ if (!function_exists('output_header')) {
                 <li><a href="../trainer/trainers.php">Trainers</a></li>
                 <li><a href="../trainer/equipment.php">Equipment</a></li>
                 <?php if ($userIsAdmin && $originalRole !== 'admin'): ?>
-                    <li><a href="../pages/choose_area.php" class="nav-login">Switch Area</a></li>
+                    <li><a href="../public/choose_area.php" class="nav-login">Switch Area</a></li>
                 <?php endif; ?>
                 <li class="nav-avatar">
                     <a href="../trainer/profile.php" class="avatar-link" title="My Profile">
@@ -141,7 +141,7 @@ if (!function_exists('output_header')) {
                 <li><a href="../admin/pt_requests.php">PT Requests</a></li>
                 <li><a href="../admin/equipment.php">Equipment</a></li>
                 <?php if ($userIsAdmin && $originalRole !== 'admin'): ?>
-                    <li><a href="../pages/choose_area.php" class="nav-login">Switch Area</a></li>
+                    <li><a href="../public/choose_area.php" class="nav-login">Switch Area</a></li>
                 <?php endif; ?>
                 <li class="nav-avatar">
                     <a href="<?= htmlspecialchars($profileLink) ?>" class="avatar-link" title="My Profile">
@@ -152,11 +152,11 @@ if (!function_exists('output_header')) {
             <?php else: ?>
                 <!-- Public area (not logged in) -->
                 <li><a href="../index.php">Home</a></li>
-                <li><a href="../pages/classes.php">Classes</a></li>
-                <li><a href="../pages/trainers.php">Trainers</a></li>
-                <li><a href="../pages/equipment.php">Equipment</a></li>
-                <li><a href="../pages/login.php" class="nav-login">Login</a></li>
-                <li><a href="../pages/register.php" class="nav-register">Sign Up</a></li>
+                <li><a href="../public/classes.php">Classes</a></li>
+                <li><a href="../public/trainers.php">Trainers</a></li>
+                <li><a href="../public/equipment.php">Equipment</a></li>
+                <li><a href="../public/login.php" class="nav-login">Login</a></li>
+                <li><a href="../public/register.php" class="nav-register">Sign Up</a></li>
             <?php endif; ?>
         </ul>
     </nav>

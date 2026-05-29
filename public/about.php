@@ -153,4 +153,4 @@ output_header('about.css');
 
 </main>
 
-<?php output_footer('../pages/'); ?>
+<?php output_footer('../public/'); ?>

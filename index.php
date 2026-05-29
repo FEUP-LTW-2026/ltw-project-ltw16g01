@@ -36,8 +36,8 @@ output_header('index.css');
                     </p>
 
                     <div class="buttons-row">
-                        <a href="pages/register.php" class="main-button">Create Free Account</a>
-                        <a href="pages/classes.php" class="secondary-button">View Classes</a>
+                        <a href="public/register.php" class="main-button">Create Free Account</a>
+                        <a href="public/classes.php" class="secondary-button">View Classes</a>
                     </div>
                 </div>
 
@@ -68,7 +68,7 @@ output_header('index.css');
                     '🏠',
                     'About Us',
                     'Learn more about our mission, values and the community behind FitPeak.',
-                    'pages/about.php',
+                    'public/about.php',
                     'feature-card'
                 );
 
@@ -76,7 +76,7 @@ output_header('index.css');
                     '👤',
                     'Personal Trainers',
                     'Detailed profiles with specializations, ratings and session bookings.',
-                    'pages/pt.php',
+                    'public/pt.php',
                     'feature-card'
                 );
 
@@ -84,7 +84,7 @@ output_header('index.css');
                     '⭐',
                     'Ratings & Reviews',
                     'Review your classes and help other members choose better.',
-                    'pages/classes.php',
+                    'public/classes.php',
                     'feature-card'
                 );
 
@@ -92,7 +92,7 @@ output_header('index.css');
                     '🏋️',
                     'Equipment Availability',
                     'Check equipment availability before leaving home.',
-                    'pages/equipment.php',
+                    'public/equipment.php',
                     'feature-card'
                 );
 
@@ -108,7 +108,7 @@ output_header('index.css');
                     '🏃',
                     'Classes & Bookings',
                     'Check the full schedule, filter by type or trainer and join with one click.',
-                    'pages/classes.php',
+                    'public/classes.php',
                     'feature-card'
                 );
                 ?>
@@ -142,7 +142,7 @@ output_header('index.css');
                         <li>✗ Equipment reservation</li>
                     </ul>
 
-                    <a href="pages/register.php" class="secondary-button full-button">Get Started</a>
+                    <a href="public/register.php" class="secondary-button full-button">Get Started</a>
                 </article>
 
                 <!-- Premium membership plan -->
@@ -165,7 +165,7 @@ output_header('index.css');
                         <li>✗ Equipment reservation</li>
                     </ul>
 
-                    <a href="pages/register.php" class="main-button full-button">Choose Premium</a>
+                    <a href="public/register.php" class="main-button full-button">Choose Premium</a>
                 </article>
 
                 <!-- VIP membership plan -->
@@ -184,7 +184,7 @@ output_header('index.css');
                         <li>✓ Equipment reservation</li>
                     </ul>
 
-                    <a href="pages/register.php" class="secondary-button full-button">Choose VIP</a>
+                    <a href="public/register.php" class="secondary-button full-button">Choose VIP</a>
                 </article>
 
             </div>
@@ -196,11 +196,11 @@ output_header('index.css');
         <div class="container center-text">
             <h2>Ready to get started?</h2>
             <p>Sign up for free today and transform your lifestyle.</p>
-            <a href="pages/register.php" class="main-button">Create Account Now</a>
+            <a href="public/register.php" class="main-button">Create Account Now</a>
         </div>
     </section>
 
 </main>
 
 <!-- Load the site footer using paths relative to the root homepage -->
-<?php output_footer('pages/'); ?>
+<?php output_footer('public/'); ?>

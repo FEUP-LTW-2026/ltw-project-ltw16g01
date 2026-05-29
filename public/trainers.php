@@ -104,4 +104,4 @@ output_header('trainers.css');
 
 <script src="../js/trainers.js"></script>
 
-<?php output_footer('../pages/'); ?>
+<?php output_footer('../public/'); ?>

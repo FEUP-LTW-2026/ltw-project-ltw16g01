@@ -2,7 +2,7 @@
 /**
  * footer.php – Reusable footer component.
  * Renders the site footer with logo, platform links, contact info and copyright.
- * The $basePath parameter allows dynamic prefixing of internal links (e.g. '../pages/').
+ * The $basePath parameter allows dynamic prefixing of internal links (e.g. '../public/').
  */
 
 function output_footer($basePath = '') {

@@ -88,4 +88,4 @@ output_header('auth.css');
     </div>
 </main>
 
-<?php output_footer('../pages/'); ?>
+<?php output_footer('../public/'); ?>

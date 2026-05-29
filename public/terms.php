@@ -92,4 +92,4 @@ output_header('legal.css');
     </section>
 </main>
 
-<?php output_footer('../pages/'); ?>
+<?php output_footer('../public/'); ?>

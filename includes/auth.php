@@ -31,7 +31,7 @@ function currentUser() {
 
 function requireAuth($roles = null) {
     if (!isLoggedIn()) {
-        header('Location: ../pages/login.php');
+        header('Location: ../public/login.php');
         exit;
     }
 
@@ -71,6 +71,6 @@ function requireAuth($roles = null) {
     }
 
     // Default: go to login page
-    header('Location: ../pages/login.php');
+    header('Location: ../public/login.php');
     exit;
 }

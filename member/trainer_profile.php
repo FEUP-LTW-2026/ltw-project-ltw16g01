@@ -42,4 +42,4 @@ output_header('trainer_profile.css');
     <?php output_trainer_profile_details($trainer, $schedules); ?>
 </main>
 
-<?php output_footer('../pages/'); ?>
+<?php output_footer('../public/'); ?>

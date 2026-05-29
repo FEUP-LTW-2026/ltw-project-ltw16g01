@@ -56,6 +56,6 @@ output_header("equipment.css");
     </div>
 </main>
 
-<?php output_footer('../pages/'); ?>
+<?php output_footer('../public/'); ?>
 
 <script src="../js/equipment.js"></script>

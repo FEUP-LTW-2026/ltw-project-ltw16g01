@@ -98,7 +98,7 @@ $user = getUserProfileById($pdo, $userId);
 // If user not found, destroy session and redirect to login
 if (!$user) {
     session_destroy();
-    header('Location: ../pages/login.php');
+    header('Location: ../public/login.php');
     exit;
 }
 
@@ -128,7 +128,7 @@ output_header('profile.css');
 
         <!-- Logout button -->
         <div class="logout-box">
-            <a href="../pages/logout.php" id="logout-button" class="secondary-button btn-sm logout-button">Logout</a>
+            <a href="../public/logout.php" id="logout-button" class="secondary-button btn-sm logout-button">Logout</a>
         </div>
     </div>
 </main>
