@@ -10,6 +10,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/members.php';    // Contains database functions for members
 require_once '../template/members.php'; // Contains output_member_form()
+require_once '../includes/mailer.php';
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -69,8 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Duplicate username or email
             $errors[] = 'Username or email already exists.';
         } else {
-            $success = 'Member created successfully.';
-            $old = []; // Clear old values on success
+            $emailSent = sendAccountCredentialsEmail($email, $name, $username, $password, 'member');
+
+            if ($emailSent) {
+                $success = 'Member created successfully and credentials email sent.';
+            } else {
+                $success = 'Member created successfully, but the credentials email could not be sent.';
+            }
+
+            $old = [];
         }
     }
 }
