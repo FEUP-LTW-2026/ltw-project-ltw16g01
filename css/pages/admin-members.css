@@ -1,4 +1,6 @@
-/* admin-members.css - Estilos para a tabela de membros */
+/* ADMIN-MEMBERS.CSS */
+/* Page-specific styles for member administration tables and filters. */
+
 .table-wrap {
     overflow-x: auto;
 }
@@ -22,40 +24,13 @@
     flex: 0 0 auto;
 }
 
-.form-container {
-    max-width: 700px;
-}
-
-.form-card {
-    padding: var(--sp-lg);
-}
-
-.form-spaced {
-    margin-bottom: var(--sp-lg);
-}
-
-.form-actions {
-    display: flex;
-    gap: var(--sp-md);
-    margin-top: var(--sp-md);
-}
-
-.page-header-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .members-filter {
     margin-bottom: var(--sp-lg);
 }
 
 @media (max-width: 640px) {
-    .form-card {
-        padding: var(--sp-md);
-    }
-
-    .form-row {
+    
+.form-row {
         display: flex;
         flex-direction: column;
         gap: var(--sp-md);
@@ -71,12 +46,8 @@
         box-sizing: border-box;
     }
 
-    .form-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .form-actions .main-button,
+    
+.form-actions .main-button,
     .form-actions .secondary-button {
         width: 100%;
         text-align: center;

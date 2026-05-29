@@ -1,7 +1,6 @@
 /* ABOUT.CSS */
-/* Styles for the FitPeak About Us page */
+/* Page-specific styles for the About Us page. */
 
-/* About Hero */
 .about-hero {
     min-height: 70svh;
     display: flex;
@@ -62,7 +61,6 @@
     line-height: 1.85;
 }
 
-/* General About Section */
 .about-section {
     padding-block: var(--sp-2xl);
 }
@@ -101,7 +99,6 @@
     max-width: 68ch;
 }
 
-/* Highlight Card */
 .about-card {
     background: var(--card);
     border: 1px solid var(--accent);
@@ -124,7 +121,6 @@
     font-size: 0.95rem;
 }
 
-/* Values Section */
 .values-section {
     padding-block: var(--sp-2xl);
     background: var(--surface);
@@ -178,7 +174,6 @@
     font-size: 0.9rem;
 }
 
-/* Why Choose Us Section */
 .why-section {
     padding-block: var(--sp-2xl);
 }
@@ -212,7 +207,6 @@
     margin-right: 0.55rem;
 }
 
-/* Stats */
 .why-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -250,7 +244,6 @@
     margin-top: 0.4rem;
 }
 
-/* Responsive */
 @media (min-width: 700px) {
     .values-grid {
         grid-template-columns: repeat(3, 1fr);

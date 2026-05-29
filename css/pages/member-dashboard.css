@@ -1,7 +1,6 @@
-/* member-dashboard.css – based on admin-dashboard.css */
-/* Dark theme, clean cards, member KPIs and tables */
+/* MEMBER-DASHBOARD.CSS */
+/* Page-specific styles for member and trainer dashboard layouts. */
 
-/* Dashboard Header */
 .dash-header {
     background: linear-gradient(135deg, var(--surface) 0%, transparent 55%);
     border-bottom: 1px solid var(--border);
@@ -29,7 +28,6 @@
 }
 .dash-h1 span { color: var(--accent); }
 
-/* Dashboard Layout Containers */
 .dashboard-header, .dashboard-content {
     width: 90%;
     margin-left: auto;
@@ -39,7 +37,6 @@
     padding-bottom: var(--sp-2xl);
 }
 
-/* KPI Grid (Key Performance Indicators) */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -80,7 +77,6 @@
     letter-spacing: 0.1em;
 }
 
-/* Dashboard Two-Column Layout */
 .dash-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -94,7 +90,6 @@
     min-width: 0;
 }
 
-/* Cards */
 .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -124,7 +119,6 @@
     padding: var(--sp-md);
 }
 
-/* Tables */
 .table-wrap {
     overflow-x: auto;
 }
@@ -160,7 +154,6 @@
     text-decoration: underline;
 }
 
-/* Cancel button */
 .btn-cancel-enroll {
     background: var(--danger);
     color: white;
@@ -176,7 +169,6 @@
     opacity: 0.8;
 }
 
-/* Rating link */
 .rate-link {
     color: var(--accent);
     text-decoration: underline;
@@ -186,12 +178,10 @@
     color: var(--warning);
 }
 
-/* Full width card (remove grid restrictions) */
 .full-width-card {
     margin-bottom: var(--sp-lg);
 }
 
-/* Rating cells */
 .rating-cell {
     min-width: 120px;
 }
@@ -226,23 +216,6 @@
     color: var(--accent);
 }
 
-/* Botão cancelar */
-.btn-cancel-enroll {
-    background: var(--danger);
-    color: white;
-    border: none;
-    padding: 0.2rem 0.7rem;
-    border-radius: 1rem;
-    font-size: 0.7rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-.btn-cancel-enroll:hover {
-    opacity: 0.8;
-}
-
-/* Modal styles */
 .modal-body textarea {
     min-height: 120px;
     width: 100%;
@@ -373,11 +346,9 @@
     line-height: 1.6;
 }
 
-/* Responsive */
 @media (min-width: 480px) {
     .kpi-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 900px) {
-    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
     .dash-layout { grid-template-columns: 3fr 2fr; }
 }

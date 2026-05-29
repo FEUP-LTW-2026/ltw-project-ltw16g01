@@ -1,5 +1,5 @@
 /* EXPORT_REPORTS.CSS */
-/* Print/export styles for FitPeak analytics reports */
+/* Print and export styles for FitPeak analytics reports. */
 
 body {
     font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
@@ -103,8 +103,4 @@ th {
     h2 {
         page-break-after: avoid;
     }
-}
-
-.bar-fill {
-    width: 0;
 }

@@ -1,7 +1,6 @@
 /* AUTH.CSS */
-/* Styles for login and register public: centered card layout, form fields, error/success states */
+/* Page-specific styles for login, register and authentication screens. */
 
-/* Auth Page Layout — vertically centered, full viewport */
 .auth-main {
     flex: 1;
     padding-top: var(--nav-h);
@@ -13,7 +12,6 @@
     overflow: hidden;
 }
 
-/* Subtle background glow (matches intro-section aesthetic) */
 .auth-main::before {
     content: "";
     position: absolute;
@@ -24,7 +22,6 @@
     pointer-events: none;
 }
 
-/* Auth Card */
 .auth-card {
     position: relative;
     z-index: 1;
@@ -39,7 +36,6 @@
     margin-top: 2%;
 }
 
-/* Auth Card Header */
 .auth-header {
     text-align: center;
     margin-bottom: var(--sp-xl);
@@ -64,7 +60,6 @@
     line-height: 1.6;
 }
 
-/* Form Groups */
 .auth-form {
     display: flex;
     flex-direction: column;
@@ -76,7 +71,6 @@
     gap: var(--sp-xs);
 }
 
-/* Input Fields */
 .form-input {
     width: 100%;
     min-height: var(--touch);
@@ -99,7 +93,6 @@
     box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.12);
 }
 
-/* Inline field error message */
 .field-error {
     font-size: 0.75rem;
     color: var(--danger);
@@ -107,14 +100,12 @@
 }
 .field-error.visible { display: block; }
 
-/* Two-column row (name fields on register) */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--sp-sm);
 }
 
-/* Alert Boxes (server-side messages) */
 .auth-alert {
     display: flex;
     align-items: flex-start;
@@ -141,12 +132,10 @@
     color: var(--success);
 }
 
-/* Submit Button (full-width) */
 .auth-submit {
     margin-top: var(--sp-sm);
 }
 
-/* Password strength bar */
 .password-strength {
     margin-top: var(--sp-xs);
     display: none;
@@ -176,7 +165,6 @@
 .strength-label.fair   { color: var(--warning); }
 .strength-label.strong { color: var(--success); }
 
-/* Divider */
 .auth-divider {
     display: flex;
     align-items: center;
@@ -193,7 +181,6 @@
     background: var(--border);
 }
 
-/* Footer link (switch between login/register) */
 .auth-footer {
     text-align: center;
     margin-top: var(--sp-lg);
@@ -207,7 +194,6 @@
 }
 .auth-footer a:hover { color: #c73615; }
 
-/* Terms text on register */
 .auth-terms {
     font-size: 0.75rem;
     color: var(--muted);
@@ -223,7 +209,6 @@
 }
 .auth-terms a:hover { color: var(--accent); }
 
-/* Password toggle (show/hide) */
 .input-wrap {
     position: relative;
 }
@@ -246,7 +231,6 @@
 }
 .toggle-pw:hover { color: var(--text); }
 
-/* Responsive */
 @media (max-width: 400px) {
     .auth-card {
         padding: var(--sp-lg) var(--sp-md);

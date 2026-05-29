@@ -1,3 +1,6 @@
+/* UPGRADE-MEMBERSHIP.CSS */
+/* Page-specific styles for membership upgrade pages. */
+
 .upgrade-page {
     padding-bottom: var(--sp-2xl);
 }

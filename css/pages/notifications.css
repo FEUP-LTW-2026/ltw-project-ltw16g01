@@ -1,4 +1,6 @@
-/* notifications.css */
+/* NOTIFICATIONS.CSS */
+/* Page-specific styles for notification lists and actions. */
+
 .notifications-list {
     display: flex;
     flex-direction: column;

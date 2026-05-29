@@ -1,4 +1,6 @@
-/* admin-pt-requests.css */
+/* ADMIN-PT-REQUESTS.CSS */
+/* Page-specific styles for admin PT request management. */
+
 .requests-table {
     width: 100%;
     border-collapse: collapse;
@@ -40,9 +42,6 @@
         align-items: stretch;
     }
     .filter-group {
-        width: 100%;
-    }
-    .filter-group .form-select {
         width: 100%;
     }
     .requests-table th,

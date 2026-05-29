@@ -1,5 +1,7 @@
-/* form.css - Estilos para formulários administrativos */
+/* FORM.CSS */
+/* Shared styles for full form pages: alerts, form containers, input fields, form rows and form actions. */
 
+/* Feedback alerts */
 .alert {
     padding: var(--sp-md);
     border-radius: var(--r-sm);
@@ -18,6 +20,7 @@
     color: var(--success);
 }
 
+/* Form containers */
 .form-container {
     max-width: 700px;
 }
@@ -31,20 +34,58 @@
     padding: var(--sp-lg);
 }
 
-.form-control {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-sm);
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-    color: var(--text);
+/* Form layout helpers */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-md);
 }
 
 .form-spaced {
     margin-bottom: var(--sp-lg);
 }
 
+/* Text inputs and textareas */
+.form-control,
+.form-input {
+    width: 100%;
+    min-height: var(--touch);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-family: var(--ff-body);
+    transition: border-color var(--t), box-shadow var(--t), background var(--t);
+}
+
+.form-control::placeholder,
+.form-input::placeholder {
+    color: var(--muted);
+}
+
+.form-control:focus,
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--card);
+    box-shadow: 0 0 0 3px rgba(232, 65, 24, 0.14);
+}
+
+textarea.form-control,
+textarea.form-input {
+    resize: vertical;
+    min-height: 110px;
+}
+
+/* Form action rows */
 .form-actions {
     display: flex;
     gap: var(--sp-md);
@@ -60,19 +101,47 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--sp-md);
 }
 
+.checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Mobile adjustments */
 @media (max-width: 640px) {
+    .form-card,
+    .form-panel {
+        padding: var(--sp-md);
+    }
+
     .form-row {
         grid-template-columns: 1fr;
-        gap: 0;
+        gap: var(--sp-md);
     }
 
     .form-actions {
         flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-actions .main-button,
+    .form-actions .secondary-button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .page-header-actions {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
 
+/* Extra bottom spacing for form pages */
 main {
     padding-bottom: var(--sp-2xl);
 }

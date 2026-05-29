@@ -1,5 +1,5 @@
 /* PT.CSS */
-/* Styles for the FitPeak Personal Trainers page */
+/* Page-specific styles for the public personal trainers page. */
 
 .pt-hero {
     min-height: 65svh;
@@ -84,7 +84,6 @@
     margin-top: var(--sp-md);
 }
 
-/* Trainer Cards */
 .trainer-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -217,7 +216,6 @@
     font-size: 0.8rem;
 }
 
-/* Benefits */
 .pt-benefits-section {
     padding-block: var(--sp-2xl);
     background: var(--surface);
@@ -259,7 +257,6 @@
     font-size: 0.92rem;
 }
 
-/* CTA */
 .pt-cta-section {
     padding-block: var(--sp-2xl);
 }
@@ -284,7 +281,6 @@
     max-width: 60ch;
 }
 
-/* Responsive */
 @media (max-width: 375px) {
     .pt-hero-actions {
         flex-direction: column;

@@ -1,4 +1,5 @@
 /* ADD-EQUIPMENT.CSS */
+/* Page-specific layout for the add equipment form. Shared form fields come from form.css. */
 
 .add-equipment-layout {
     max-width: 760px;
@@ -15,48 +16,6 @@
     font-weight: 700;
 }
 
-.form-group {
-    margin-bottom: var(--sp-md);
-}
-
-.form-input {
-    width: 100%;
-    min-height: var(--touch);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-sm);
-    color: var(--text);
-    padding: 0.75rem 0.9rem;
-    transition: border-color var(--t), box-shadow var(--t);
-}
-
-.form-input::placeholder {
-    color: var(--muted);
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(232, 65, 24, .14);
-}
-
-textarea.form-input {
-    resize: vertical;
-    min-height: 110px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--sp-md);
-}
-
 .back-button {
     margin-top: var(--sp-sm);
-}
-
-@media (min-width: 640px) {
-    .form-row {
-        grid-template-columns: 1fr 1fr;
-    }
 }

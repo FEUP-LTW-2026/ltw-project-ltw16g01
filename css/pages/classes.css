@@ -1,7 +1,6 @@
 /* CLASSES.CSS */
-/* Styles for the classes listing page: filters, class cards, capacity indicators, legend */
+/* Page-specific styles for class listings, filters, cards and capacity indicators. */
 
-/* Filter Bar */
 .filter-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -25,7 +24,6 @@ h2 {
     margin-bottom: var(--sp-md);
 }
 
-/* Results & Sorting Bar */
 .results-bar {
     display: flex;
     align-items: center;
@@ -77,7 +75,6 @@ h2 {
     color: #fff;
 }
 
-/* Class Card Grid */
 .class-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -101,7 +98,6 @@ h2 {
     transform: translateY(-2px);
 }
 
-/* Class Card Header */
 .class-head {
     display: flex;
     align-items: center;
@@ -121,7 +117,6 @@ h2 {
     line-height: 1;
 }
 
-/* Class Card Body */
 .class-body {
     padding: var(--sp-md);
     flex: 1;
@@ -130,7 +125,6 @@ h2 {
     gap: var(--sp-sm);
 }
 
-/* Class Title */
 .class-name {
     margin-bottom: 0.15rem;
     font-size: clamp(1rem, 2.5vw, 1.2rem); 
@@ -138,13 +132,11 @@ h2 {
     font-weight: 600;
 }
 
-/* Class Description Text */
 .class-body p {
     color: var(--muted);
     font-size: 0.85rem;
 }
 
-/* Class Metadata */
 .class-meta {
     display: flex;
     flex-wrap: wrap;
@@ -161,14 +153,12 @@ h2 {
     color: var(--muted);
 }
 
-/* Class Rating */
 .class-ratings {
     display: flex;
     align-items: center;
     gap: var(--sp-sm);
 }
 
-/* Class Card Footer */
 .class-foot {
     display: flex;
     align-items: center;
@@ -179,7 +169,6 @@ h2 {
     border-top: 1px solid var(--border);
 }
 
-/* Capacity Bar */
 .cap-wrap {
     display: flex;
     align-items: center;
@@ -210,7 +199,6 @@ h2 {
     background: var(--danger);
 }
 
-/* Capacity Bar Widths */
 .cap-fill-80 { width: 80%; }
 .cap-fill-33 { width: 33%; }
 .cap-fill-40 { width: 40%; }
@@ -219,7 +207,6 @@ h2 {
 .cap-fill-56 { width: 56%; }
 .cap-fill-36 { width: 36%; }
 
-/* Enrolled Button */
 .enrolled-btn {
     display: inline-flex;
     align-items: center;
@@ -245,7 +232,6 @@ h2 {
     color: var(--danger);
 }
 
-/* Legend Section */
 .legend-section {
     padding-block: var(--sp-lg);
     border-top: 1px solid var(--border);
@@ -267,7 +253,6 @@ h2 {
     align-items: center;
 }
 
-/* Small Helper Classes */
 .page-header-row {
     margin-top: var(--sp-sm);
 }
@@ -319,7 +304,6 @@ h2 {
     align-items: center;
 }
 
-/* Responsive Grid Adjustments */
 @media (min-width: 480px) {
     .filter-bar {
         grid-template-columns: 1fr 1fr;
@@ -371,7 +355,7 @@ h2 {
         justify-content: center;
     }
 }
-/* HIIT Showcase Section */
+
 .hiit-showcase {
     margin-top: var(--sp-2xl);
     padding-block: var(--sp-xl);
@@ -386,7 +370,6 @@ h2 {
     color: var(--accent);
 }
 
-/* Garantir que a legend-section existente (se houver) não conflita */
 .legend-section {
     margin-bottom: var(--sp-xl);
     padding-bottom: var(--sp-md);
@@ -400,7 +383,6 @@ h2 {
     align-items: center;
 }
 
-/* Ajustes responsivos para a secção HIIT */
 @media (max-width: 540px) {
     .hiit-showcase .class-grid {
         grid-template-columns: 1fr;
@@ -417,7 +399,6 @@ h2 {
     transform: translateY(-1px);
 }
 
-/* Botão Enroll (não inscrito) */
 .enroll-btn {
     display: inline-flex;
     align-items: center;
@@ -443,7 +424,6 @@ h2 {
     transform: translateY(-1px);
 }
 
-/* Botão Enrolled (já inscrito) – sem hover vermelho */
 .enrolled-btn {
     display: inline-flex;
     align-items: center;
@@ -462,7 +442,7 @@ h2 {
     border: 2px solid var(--success);
     color: var(--success);
 }
-/* Hover suave sem vermelho – apenas um leve destaque */
+
 .enrolled-btn:hover {
     background: rgba(46, 213, 115, 0.15);
     transform: translateY(-1px);
@@ -470,14 +450,11 @@ h2 {
     color: var(--success);
 }
 
-/* Botão desabilitado durante processamento (mesmo tamanho) */
 .enroll-btn:disabled, .enrolled-btn:disabled {
     opacity: 0.6;
     cursor: wait;
     transform: none;
 }
-
-/* TRAINER CLASS ACTIONS */
 
 .class-actions {
     display: flex;
@@ -491,7 +468,6 @@ h2 {
     display: inline-flex;
 }
 
-/* Edit schedule box hidden by default */
 .schedule-edit-box {
     display: none;
     margin: 0 var(--sp-md) var(--sp-md);
@@ -568,7 +544,6 @@ h2 {
     font-size: 0.8rem;
 }
 
-/* Cancel Session button */
 .danger-button {
     border-color: rgba(255, 71, 87, 0.65);
     color: var(--danger);
@@ -582,7 +557,6 @@ h2 {
     box-shadow: 0 0 18px rgba(255, 71, 87, 0.22);
 }
 
-/* Roster box */
 .roster-box {
     margin-top: 0;
     padding: var(--sp-md);
@@ -637,7 +611,6 @@ h2 {
     background: rgba(255, 255, 255, 0.025);
 }
 
-/* Alerts */
 .alert {
     padding: 0.9rem 1rem;
     border-radius: var(--r-md);
@@ -658,7 +631,6 @@ h2 {
     color: var(--danger);
 }
 
-/* Mobile */
 @media (max-width: 768px) {
     .schedule-edit-grid {
         grid-template-columns: 1fr;
@@ -704,7 +676,6 @@ h2 {
     background: var(--danger);
 }
 
-/* Hide schedule edit form by default */
 .schedule-edit-box.is-hidden {
     display: none;
 }

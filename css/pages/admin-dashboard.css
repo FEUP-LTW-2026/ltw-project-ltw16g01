@@ -1,7 +1,6 @@
 /* ADMIN-DASHBOARD.CSS */
-/* Styles for the admin dashboard: KPIs, quick actions, charts, activity feed, equipment status, trainer tables */
+/* Page-specific styles for the admin dashboard. */
 
-/* Dashboard Header with gradient */
 .dash-header {
     background: linear-gradient(135deg, var(--surface) 0%, transparent 55%);
     border-bottom: 1px solid var(--border);
@@ -35,7 +34,6 @@
     flex-wrap: wrap;
 }
 
-/* Dashboard Layout Containers */
 .dashboard-header, .dashboard-content {
     width: 90%;
     margin-left: auto;
@@ -57,7 +55,6 @@
     flex-wrap: wrap;
 }
 
-/* KPI Grid (Key Performance Indicators) */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -107,7 +104,6 @@
     letter-spacing: 0.1em;
 }
 
-/* Quick Actions Grid */
 .quick-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -140,7 +136,6 @@
 }
 .quick-icon { font-size: 1.3rem; }
 
-/* Dashboard Two-Column Layout */
 .dash-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -154,7 +149,6 @@
     min-width: 0;
 }
 
-/* Bar Chart Component (enrollment trends) */
 .bar-chart-outer { overflow-x: auto; }
 .bar-chart {
     display: flex;
@@ -194,7 +188,6 @@
 .bar:hover { filter: brightness(1.25); }
 .bar.current { background: linear-gradient(180deg, var(--warning), rgba(255, 165, 2, 0.4)); }
 
-/* Bar chart dynamic heights (simulating data values) */
 .bar-h-52 { height: 52px; }
 .bar-h-61 { height: 61px; }
 .bar-h-56 { height: 56px; }
@@ -222,7 +215,6 @@
 }
 .bar-lbl-warning { color: var(--warning); }
 
-/* Ranking Number Styling */
 .rank-num {
     font-family: var(--ff-display);
     font-size: 1.1rem;
@@ -235,7 +227,6 @@
 .table-small { font-size: 0.82rem; }
 .action-link { color: var(--accent); }
 
-/* Member Cell with Avatar and Text */
 .name-cell {
     display: flex;
     align-items: center;
@@ -255,7 +246,6 @@
     color: var(--muted);
 }
 
-/* Avatar Color Variants */
 .avatar-purple { background: #6c5ce7; }
 .avatar-green { background: #00b894; }
 .avatar-orange { background: #e17055; }
@@ -267,7 +257,6 @@
 .avatar-salmon { background: #e17055; }
 .avatar-teal { background: #00b894; }
 
-/* Activity Feed */
 .activity-feed {
     display: flex;
     flex-direction: column;
@@ -302,7 +291,6 @@
 }
 .activity-stars { color: var(--warning); }
 
-/* Equipment List & Progress Bars */
 .equip-list {
     display: flex;
     flex-direction: column;
@@ -335,7 +323,7 @@
     font-size: 0.72rem;
     white-space: nowrap;
 }
-/* Equipment fill widths (usage percentages) */
+
 .equip-fill-75 { width: 75%; }
 .equip-fill-83 { width: 83%; }
 .equip-fill-30 { width: 30%; }
@@ -354,7 +342,6 @@
 .progress-w-90 { width: 90%; }
 .progress-w-100 { width: 100%; }
 
-/* Responsive Layouts for Dashboard */
 @media (min-width: 480px) {
     .kpi-grid { grid-template-columns: repeat(3, 1fr); }
 }
@@ -366,7 +353,6 @@
     .dash-layout { grid-template-columns: 3fr 2fr; }
 }
 
-/* Activity Feed - Timeline Style */
 .activity-feed {
     display: flex;
     flex-direction: column;
@@ -392,7 +378,6 @@
     transform: translateX(4px);
 }
 
-/* Dot / Icon wrapper */
 .activity-icon {
     flex-shrink: 0;
     width: 40px;
@@ -405,7 +390,6 @@
     background: var(--bg);
 }
 
-/* Colour coding by type (CSS classes) */
 .activity-icon.info { background: rgba(30, 144, 255, 0.15); color: var(--info); }
 .activity-icon.warning { background: rgba(255, 165, 2, 0.15); color: var(--warning); }
 .activity-icon.success { background: rgba(46, 213, 115, 0.15); color: var(--success); }
@@ -437,7 +421,6 @@
     opacity: 0.7;
 }
 
-/* Scrollbar personalizada para a feed */
 .activity-feed::-webkit-scrollbar {
     width: 4px;
 }

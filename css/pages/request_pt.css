@@ -1,3 +1,6 @@
+/* REQUEST-PT.CSS */
+/* Page-specific styles for PT request tables, actions and notifications. */
+
 .requests-table {
     width: 100%;
     border-collapse: collapse;
@@ -33,7 +36,6 @@
     transform: translateY(-1px);
 }
 
-/* Toast notification */
 .toast-notification {
     position: fixed;
     bottom: 30px;
@@ -82,7 +84,6 @@
     }
 }
 
-/* Inline action forms used in dashboard tables */
 .action-inline-form {
     display: inline-block;
 }

@@ -1,11 +1,6 @@
-/* =========================================================
-   REPORTS.CSS
-   Clean responsive stylesheet for reports/dashboard public
-   ========================================================= */
+/* REPORTS.CSS */
+/* Page-specific styles for reports, charts and report tables. */
 
-/* =========================
-   GLOBAL SAFETY
-   ========================= */
 html,
 body {
     overflow-x: hidden;
@@ -24,9 +19,6 @@ body {
     max-width: 100%;
 }
 
-/* =========================
-   PAGE HEADER
-   ========================= */
 .page-header-row {
     display: flex;
     justify-content: space-between;
@@ -35,18 +27,12 @@ body {
     flex-wrap: wrap;
 }
 
-/* =========================
-   EXPORT BUTTONS
-   ========================= */
 .export-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: var(--sp-sm);
 }
 
-/* =========================
-   KPI SECTION
-   ========================= */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -88,9 +74,6 @@ body {
     color: var(--muted);
 }
 
-/* =========================
-   REPORT GRID
-   ========================= */
 .reports-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -104,9 +87,6 @@ body {
     }
 }
 
-/* =========================
-   CARD STYLES
-   ========================= */
 .chart-card,
 .table-card,
 .activity-card {
@@ -126,9 +106,6 @@ body {
     font-family: var(--ff-body);
 }
 
-/* =========================
-   BAR CHART
-   ========================= */
 .bar-chart {
     display: flex;
     flex-direction: column;
@@ -170,9 +147,6 @@ body {
     white-space: nowrap;
 }
 
-/* =========================
-   ACTIVITY LIST
-   ========================= */
 .activity-list {
     list-style: none;
     margin: 0;
@@ -190,10 +164,6 @@ body {
     border-bottom: none;
 }
 
-/* =========================
-   TABLES
-   ========================= */
-
 .table-wrap {
     width: 100%;
     overflow-x: auto;
@@ -201,7 +171,6 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-/* visible scrollbar */
 .table-wrap::-webkit-scrollbar {
     height: 8px;
 }
@@ -211,7 +180,6 @@ body {
     border-radius: 999px;
 }
 
-/* actual table */
 .table-wrap table,
 .table-wrap .table {
     width: max-content;
@@ -219,7 +187,6 @@ body {
     border-collapse: collapse;
 }
 
-/* cells */
 .table-wrap th,
 .table-wrap td {
     padding: 0.9rem 1rem;
@@ -227,7 +194,6 @@ body {
     white-space: nowrap;
 }
 
-/* borders */
 .table-wrap th {
     border-bottom: 1px solid var(--border);
     font-weight: 600;
@@ -240,9 +206,7 @@ body {
 .reports-col {
     min-width: 0;
 }
-/* =========================
-   MOBILE RESPONSIVE
-   ========================= */
+
 @media (max-width: 768px) {
 
     .page-header-row {
@@ -283,9 +247,6 @@ body {
     }
 }
 
-/* =========================
-   SMALL PHONE FIXES
-   ========================= */
 @media (max-width: 480px) {
 
     .kpi-card {
@@ -308,9 +269,6 @@ body {
     }
 }
 
-/* =========================
-   PRINT STYLES
-   ========================= */
 @media print {
 
     .export-buttons,

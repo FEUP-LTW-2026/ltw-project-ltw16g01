@@ -1,6 +1,6 @@
-/* class-details.css – for member/class_details.php */
+/* CLASS-DETAILS.CSS */
+/* Page-specific styles for class detail pages. */
 
-/* Add top spacing for the back button */
 .class-detail-header {
     display: flex;
     justify-content: space-between;
@@ -8,10 +8,9 @@
     margin-bottom: var(--sp-lg);
     flex-wrap: wrap;
     gap: var(--sp-md);
-    margin-top: var(--sp-lg);   /* ← space from top */
+    margin-top: var(--sp-lg);   
 }
 
-/* Main class detail card */
 .class-detail-card {
     margin-bottom: var(--sp-xl);
 }
@@ -39,7 +38,6 @@
     line-height: 1.7;
 }
 
-/* Trainer section (no photo) */
 .class-trainer-info {
     margin-top: var(--sp-lg);
     padding-top: var(--sp-md);
@@ -74,7 +72,6 @@
     white-space: nowrap;
 }
 
-/* Reviews section */
 .reviews-card {
     margin-bottom: var(--sp-xl);
 }

@@ -1,5 +1,11 @@
+/* CHOOSE-AREA.CSS */
+/* Standalone styles for the role selection page. */
+/* This file includes base variables because choose_area.php does not use output_header(). */
+
+/* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
 
+/* Local design tokens used only by this standalone page */
 :root {
     --bg: #0b0b0b;
     --surface: #141414;
@@ -9,23 +15,29 @@
     --accent-glow: rgba(232, 65, 24, 0.28);
     --text: #f0ede8;
     --muted: #7a7571;
+
     --ff-display: 'Bebas Neue', sans-serif;
     --ff-body: 'Outfit', sans-serif;
+
     --r-sm: 6px;
     --r-md: 12px;
+
     --sp-md: 1rem;
     --sp-lg: 1.5rem;
     --sp-xl: 2.5rem;
+
     --shadow-a: 0 0 24px var(--accent-glow);
     --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Local reset for this standalone page */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
 
+/* Standalone page body */
 body {
     margin: 0;
     min-height: 100vh;
@@ -34,11 +46,13 @@ body {
     font-family: var(--ff-body);
 }
 
+/* Local link reset */
 a {
     color: inherit;
     text-decoration: none;
 }
 
+/* Full-page centered role selection layout */
 .choose-role-main {
     min-height: 100vh;
     background: radial-gradient(circle at center, rgba(232, 65, 24, 0.08), transparent 45%), var(--bg);
@@ -48,6 +62,7 @@ a {
     padding: var(--sp-lg);
 }
 
+/* Main role selection card */
 .choose-role-card {
     width: 100%;
     max-width: 680px;
@@ -59,6 +74,7 @@ a {
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
 }
 
+/* Page title */
 .choose-role-card h1 {
     font-family: var(--ff-display);
     color: var(--accent);
@@ -70,6 +86,7 @@ a {
     text-transform: uppercase;
 }
 
+/* Introductory text */
 .choose-role-card p {
     color: var(--muted);
     font-size: 1.05rem;
@@ -77,12 +94,14 @@ a {
     margin: 0 0 var(--sp-xl);
 }
 
+/* Role button list */
 .role-buttons {
     display: flex;
     flex-direction: column;
     gap: var(--sp-md);
 }
 
+/* Individual role button */
 .role-btn {
     display: flex;
     align-items: center;
@@ -105,6 +124,7 @@ a {
     box-shadow: var(--shadow-a);
 }
 
+/* Logout link below role buttons */
 .logout-link {
     margin-top: var(--sp-xl);
     color: var(--muted);
@@ -121,6 +141,7 @@ a {
     color: var(--accent);
 }
 
+/* Mobile adjustments */
 @media (max-width: 520px) {
     .choose-role-card {
         padding: 2rem 1.25rem;

@@ -1,3 +1,6 @@
+/* LEGAL.CSS */
+/* Page-specific styles for legal information pages. */
+
 .legal-section {
     padding-block: var(--sp-xl);
 }

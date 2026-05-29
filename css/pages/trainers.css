@@ -1,5 +1,5 @@
 /* TRAINERS.CSS */
-/* Estilos para a página de treinadores: cards, avatares, especializações, rating */
+/* Page-specific styles for trainer listing cards, ratings and filters. */
 
 .trainer-grid {
     display: grid;
@@ -24,7 +24,6 @@
     transform: translateY(-2px);
 }
 
-/* Avatar / Foto */
 .trainer-avatar {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -53,7 +52,6 @@
     justify-content: center;
 }
 
-/* Corpo do card */
 .trainer-body {
     padding: var(--sp-md);
     flex: 1;
@@ -92,7 +90,6 @@
     color: var(--accent);
 }
 
-/* Rodapé do card */
 .trainer-foot {
     display: flex;
     align-items: center;
@@ -120,7 +117,6 @@
     color: var(--muted);
 }
 
-/* Secção de legenda e treinadores em destaque */
 .featured-trainers {
     margin-top: var(--sp-2xl);
     padding-block: var(--sp-xl);
@@ -148,7 +144,6 @@
     align-items: center;
 }
 
-/* Responsividade */
 @media (min-width: 540px) {
     .trainer-grid {
         grid-template-columns: repeat(2, 1fr);

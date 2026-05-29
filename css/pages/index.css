@@ -1,7 +1,6 @@
 /* INDEX.CSS */
-/* Styles for the FitPeak homepage: intro section, ticker animation, features, pricing plans */
+/* Page-specific styles for the public homepage. */
 
-/* Hero / Intro Section with gradient overlays */
 .intro-section {
     min-height: calc(100svh - var(--nav-h));
     display: flex;
@@ -20,7 +19,6 @@
     pointer-events: none;
 }
 
-/* Intro Layout: two columns on large screens (text + stats) */
 .intro-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -66,7 +64,6 @@
     flex-wrap: wrap;
 }
 
-/* Stats Grid (on the right side of hero) */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -98,7 +95,6 @@
     margin-top: 0.3rem;
 }
 
-/* Animated Ticker (scrolling class types) */
 .classes-section {
     border-block: 1px solid var(--border);
     padding-block: var(--sp-sm);
@@ -133,7 +129,6 @@
     to { transform: translateX(-50%); }
 }
 
-/* Common Section Styling */
 .features-section, .plans-section, .start-section {
     padding-block: var(--sp-2xl);
 }
@@ -148,7 +143,6 @@
     margin-top: var(--sp-md);
 }
 
-/* Features Grid (3 columns on desktop) */
 .features-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -178,7 +172,6 @@
     font-size: 0.9rem;
 }
 
-/* Pricing Plans Section */
 .plans-section {
     background: var(--surface);
     border-top: 1px solid var(--border);
@@ -268,7 +261,6 @@
     color: var(--muted);
 }
 
-/* Call to Action Section */
 .start-section {
     border-top: 1px solid var(--border);
 }
@@ -284,7 +276,6 @@
     height: 100%;
 }
 
-/* Responsive Breakpoints */
 @media (max-width: 375px) {
     .buttons-row { flex-direction: column; }
     .buttons-row .main-button, .buttons-row .secondary-button { width: 100%; }

@@ -1,9 +1,8 @@
 /* BASE.CSS */
-/* Global styles, CSS variables, resets, and base typography for FitPeak Gym platform */
+/* Global styles, design tokens, reset rules, base typography and layout helpers. */
 
-/* CSS Custom Properties (Design Tokens) */
 :root {
-    /* Color Palette */
+    
     --bg: #0b0b0b;
     --surface: #141414;
     --card: #1c1c1c;
@@ -17,11 +16,11 @@
     --danger: #ff4757;
     --info: #1e90ff;
 
-    /* Typography */
+    
     --ff-display: 'Bebas Neue', sans-serif;
     --ff-body: 'Outfit', sans-serif;
 
-    /* Spacing Scale */
+    
     --sp-xs: 0.25rem;
     --sp-sm: 0.5rem;
     --sp-md: 1rem;
@@ -29,7 +28,7 @@
     --sp-xl: clamp(1.5rem, 5vw, 2.5rem);
     --sp-2xl: clamp(2rem, 7vw, 4rem);
 
-    /* Layout & Effects */
+    
     --nav-h: 60px;
     --r-sm: 6px;
     --r-md: 12px;
@@ -40,7 +39,6 @@
     --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* CSS Reset & Box Sizing */
 *,
 *::before,
 *::after {
@@ -49,7 +47,6 @@
     padding: 0;
 }
 
-/* Base HTML & Body Styles */
 html {
     font-size: 16px;
     scroll-behavior: smooth;
@@ -67,7 +64,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Media Elements */
 img,
 svg {
     display: block;
@@ -75,7 +71,6 @@ svg {
     height: auto;
 }
 
-/* Links & Lists */
 a {
     color: inherit;
     text-decoration: none;
@@ -86,7 +81,6 @@ ol {
     list-style: none;
 }
 
-/* Buttons & Form Elements */
 button {
     cursor: pointer;
     border: none;
@@ -100,7 +94,6 @@ textarea {
     font: inherit;
 }
 
-/* Typography */
 h1,
 h2,
 h3,
@@ -132,7 +125,6 @@ p {
     line-height: 1.75;
 }
 
-/* Layout Containers */
 .container {
     width: 100%;
     max-width: var(--max-w);
@@ -145,7 +137,6 @@ p {
     padding-top: var(--nav-h);
 }
 
-/* Utility Classes */
 .center-text {
     text-align: center;
 }
@@ -158,7 +149,6 @@ p {
     color: var(--muted);
 }
 
-/* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
@@ -177,7 +167,6 @@ p {
     background: var(--accent);
 }
 
-/* Responsive Container Padding */
 @media (min-width: 640px) {
     .container {
         padding-inline: var(--sp-lg);

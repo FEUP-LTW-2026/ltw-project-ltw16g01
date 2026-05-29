@@ -1,14 +1,11 @@
 /* EQUIPMENT.CSS */
-/* Styles for equipment listing page – cards, availability bars, status badges */
-/* Responsive grid – media queries at the end */
+/* Page-specific styles for equipment listings, availability bars and reservation controls. */
 
-/* Prevent horizontal overflow */
 html,
 body {
     overflow-x: hidden;
 }
 
-/* Responsive legend */
 .equipment-legend {
     display: flex;
     flex-wrap: wrap;
@@ -25,7 +22,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Breadcrumb */
 .breadcrumb {
     display: flex;
     flex-wrap: wrap;
@@ -50,7 +46,6 @@ body {
     color: var(--text);
 }
 
-/* Page header */
 .page-header {
     padding-block: var(--sp-lg) var(--sp-md);
     border-bottom: 1px solid var(--border);
@@ -64,7 +59,6 @@ body {
     font-size: 0.95rem;
 }
 
-/* Flex row for title + button */
 .page-header-row {
     display: flex;
     justify-content: space-between;
@@ -74,7 +68,6 @@ body {
     margin-top: var(--sp-sm);
 }
 
-/* Filter bar (optional) */
 .filter-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -93,7 +86,6 @@ body {
     justify-content: flex-end;
 }
 
-/* Category title */
 .category-title {
     margin-bottom: 1rem;
     color: var(--muted);
@@ -104,7 +96,6 @@ body {
     font-weight: 700;
 }
 
-/* Live indicator & dot animation */
 .live-indicator {
     display: flex;
     align-items: center;
@@ -125,7 +116,6 @@ body {
     50% { opacity: 0.5; transform: scale(1.4); }
 }
 
-/* Equipment card */
 .equip-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -195,7 +185,6 @@ body {
     color: var(--muted);
 }
 
-/* Status border left */
 .status-available {
     border-left: 3px solid var(--success);
 }
@@ -206,7 +195,6 @@ body {
     border-left: 3px solid var(--danger);
 }
 
-/* Admin actions inside card */
 .equip-actions {
     display: flex;
     justify-content: flex-end;
@@ -230,7 +218,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* Utility classes */
 .flex-between {
     display: flex;
     align-items: center;
@@ -255,7 +242,6 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* ========== RESPONSIVE GRID (media queries at the end) ========== */
 .equip-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -275,7 +261,6 @@ body {
     }
 }
 
-/* Responsive filter bar */
 @media (min-width: 480px) {
     .filter-bar {
         grid-template-columns: 1fr 1fr;
@@ -284,7 +269,7 @@ body {
 
 @media (max-width: 768px) {
 
-    /* Reservation form container */
+    
     .equip-actions,
     .reservation-form,
     .reserve-controls {
@@ -294,7 +279,7 @@ body {
         align-items: stretch;
     }
 
-    /* Inputs stay side by side */
+    
     .reservation-form input,
     .reservation-form select,
     .reserve-controls input,
@@ -303,7 +288,7 @@ body {
         min-width: 80px;
     }
 
-    /* Reserve button goes below */
+    
     .reservation-form button,
     .reserve-controls button,
     .reserve-btn {
@@ -312,19 +297,16 @@ body {
     }
 }
 
-/* Equipment header layout */
 .equipment-header-row {
     flex-wrap: wrap;
     gap: 1rem;
 }
 
-/* Last update text next to the live indicator */
 .last-update {
     margin-left: 0.5rem;
     font-size: 0.7rem;
 }
 
-/* Equipment legend layout */
 .equipment-legend-row {
     flex-wrap: wrap;
 }

@@ -1,7 +1,6 @@
-/* member-dashboard.css – based on admin-dashboard.css */
-/* Dark theme, clean cards, member KPIs and tables */
+/* TRAINER-DASHBOARD.CSS */
+/* Page-specific styles for trainer dashboard layouts. */
 
-/* Dashboard Header */
 .dash-header {
     background: linear-gradient(135deg, var(--surface) 0%, transparent 55%);
     border-bottom: 1px solid var(--border);
@@ -29,7 +28,6 @@
 }
 .dash-h1 span { color: var(--accent); }
 
-/* Dashboard Layout Containers */
 .dashboard-header, .dashboard-content {
     width: 90%;
     margin-left: auto;
@@ -39,7 +37,6 @@
     padding-bottom: var(--sp-2xl);
 }
 
-/* KPI Grid (Key Performance Indicators) */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -80,7 +77,6 @@
     letter-spacing: 0.1em;
 }
 
-/* Dashboard Two-Column Layout */
 .dash-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -94,7 +90,6 @@
     min-width: 0;
 }
 
-/* Cards */
 .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -124,7 +119,6 @@
     padding: var(--sp-md);
 }
 
-/* Tables */
 .table-wrap {
     overflow-x: auto;
 }
@@ -160,7 +154,6 @@
     text-decoration: underline;
 }
 
-/* Cancel button */
 .btn-cancel-enroll {
     background: var(--danger);
     color: white;
@@ -176,7 +169,6 @@
     opacity: 0.8;
 }
 
-/* Rating link */
 .rate-link {
     color: var(--accent);
     text-decoration: underline;
@@ -186,12 +178,10 @@
     color: var(--warning);
 }
 
-/* Responsive */
 @media (min-width: 480px) {
     .kpi-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 900px) {
-    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
     .dash-layout { grid-template-columns: 3fr 2fr; }
 }
 
@@ -210,7 +200,6 @@
     transform: translateY(-1px);
 }
 
-/* Hide schedule edit form by default */
 .schedule-edit-box.is-hidden {
     display: none;
 }

@@ -1,6 +1,7 @@
-/* create_trainer.css - igual ao form.css + compensação navbar */
+/* CREATE-TRAINER.CSS */
+/* Page-specific spacing for trainer form pages. Shared form styles come from form.css. */
+
 .main {
     padding-top: calc(var(--nav-h) + 20px);
     padding-bottom: var(--sp-lg);
 }
-/* Inclua também as regras de formulário que já usava no form.css */
