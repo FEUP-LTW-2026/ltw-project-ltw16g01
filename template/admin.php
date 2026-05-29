@@ -1,6 +1,12 @@
 <?php
-// template/admin.php
+/**
+ * admin.php – Template functions for the admin dashboard tables.
+ * Renders rows for members, classes, trainers, and equipment items.
+ */
 
+/**
+ * Outputs a single member row for the admin members table.
+ */
 function output_admin_member_row($member) { ?>
     <tr>
         <td>
@@ -18,6 +24,9 @@ function output_admin_member_row($member) { ?>
     </tr>
 <?php }
 
+/**
+ * Outputs a single class row for the admin popular classes table.
+ */
 function output_admin_class_row($class, $index) { ?>
     <tr>
         <td><span class="rank-num"><?= $index + 1 ?></span></td>
@@ -33,6 +42,9 @@ function output_admin_class_row($class, $index) { ?>
     </tr>
 <?php }
 
+/**
+ * Outputs a single trainer row for the admin trainers table.
+ */
 function output_admin_trainer_row($trainer) { ?>
     <tr>
         <td>
@@ -46,6 +58,10 @@ function output_admin_trainer_row($trainer) { ?>
     </tr>
 <?php }
 
+/**
+ * Outputs a single equipment item for the admin dashboard equipment list.
+ * Includes a progress bar and availability badge.
+ */
 function output_admin_equipment_item($item) {
     $percentage = $item['quantity'] > 0 ? round(($item['available'] / $item['quantity']) * 100) : 0;
     $percentage = max(0, min(100, $percentage));

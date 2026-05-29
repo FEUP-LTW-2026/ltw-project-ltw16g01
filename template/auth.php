@@ -1,8 +1,11 @@
 <?php
-// template/auth.php
+/**
+ * auth.php – Template functions for login and registration forms.
+ * Renders the login card and the registration card with all necessary fields.
+ */
 
 /**
- * Exibe o formulário de login com uma mensagem de erro opcional.
+ * Outputs the login form.
  */
 function output_login_form($error = '', $postedIdentifier = '') {
     ?>
@@ -60,6 +63,9 @@ function output_login_form($error = '', $postedIdentifier = '') {
     <?php
 }
 
+/**
+ * Outputs the registration form.
+ */
 function output_register_form($error = '', $old = []) {
     ?>
     <div class="auth-card">
@@ -78,6 +84,7 @@ function output_register_form($error = '', $old = []) {
 
         <form class="auth-form" method="post" action="register.php" id="registerForm">
             <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+
             <div class="form-group">
                 <label class="form-label" for="name">Full Name</label>
                 <input type="text" id="name" name="name" class="form-input"

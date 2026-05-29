@@ -1,11 +1,23 @@
 <?php
-// template/equipment.php
+/**
+ * equipment.php – Template functions for equipment listing and management.
+ * Renders equipment cards (with reservation form for VIP members), the equipment grid,
+ * and the add/edit equipment form.
+ */
 
+/**
+ * Returns the CSS class for the availability bar width based on percentage.
+ */
 function equipment_width_class($percentage) {
     $percentage = max(0, min(100, (int)$percentage));
     return 'avail-w-' . (round($percentage / 10) * 10);
 }
 
+/**
+ * Outputs a single equipment card.
+ * Includes name, status badge, availability bar, notes, and (for members) a reservation form (VIP only)
+ * or admin actions (Edit/Delete).
+ */
 function output_equipment_card($item, $memberPlan = null) {
     $id = (int)$item['id'];
     $name = htmlspecialchars($item['name']);
@@ -51,6 +63,7 @@ function output_equipment_card($item, $memberPlan = null) {
             <p class="equip-notes"><?= $notes ?></p>
         <?php endif; ?>
 
+        <!-- Reservation form for VIP members -->
         <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'member'): ?>
             <?php if ($memberPlan === 'vip' && $effectiveStatus === 'available' && $available > 0): ?>
                 <form class="reserve-equipment-form equip-actions">
@@ -91,6 +104,7 @@ function output_equipment_card($item, $memberPlan = null) {
             <?php endif; ?>
         <?php endif; ?>
 
+        <!-- Admin actions -->
         <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
             <div class="equip-actions">
                 <a href="edit_equipment.php?id=<?= $id ?>" class="secondary-button btn-sm">
@@ -110,6 +124,9 @@ function output_equipment_card($item, $memberPlan = null) {
     <?php
 }
 
+/**
+ * Outputs the whole equipment grid, grouped by category.
+ */
 function output_equipment_grid($equipment, $categories, $memberPlan = null) {
     foreach ($categories as $cat) {
         $catId = (int)$cat['id'];
@@ -136,6 +153,9 @@ function output_equipment_grid($equipment, $categories, $memberPlan = null) {
     }
 }
 
+/**
+ * Outputs the form for adding or editing equipment (admin area).
+ */
 function output_equipment_form($categories, $equipment = null, $errors = [], $success = '', $old = []) {
     $isEdit = isset($equipment['id']);
     $name = htmlspecialchars($old['name'] ?? ($equipment['name'] ?? ''));

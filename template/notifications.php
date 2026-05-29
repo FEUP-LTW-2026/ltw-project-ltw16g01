@@ -1,4 +1,13 @@
 <?php
+/**
+ * notifications.php – Template function for displaying a list of notifications.
+ * Used in the admin notifications page.
+ */
+
+/**
+ * Outputs the list of notifications.
+ * Each notification shows its type badge, message, date, and action buttons (Mark read, Delete).
+ */
 function output_notifications_list($notifications) {
     if (empty($notifications)) {
         echo '<div class="card"><div class="card-body center-text"><p>No notifications found.</p></div></div>';

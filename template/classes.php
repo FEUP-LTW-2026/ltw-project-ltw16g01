@@ -1,5 +1,12 @@
 <?php
+/**
+ * classes.php – Template functions for displaying class schedules.
+ * Renders the list of class cards (member view) and the admin class form.
+ */
 
+/**
+ * Outputs the whole list of class schedules inside a grid.
+ */
 function output_class_schedule_list($schedules) {
     if (empty($schedules)) {
         echo '<div class="card"><div class="card-body center-text"><p>No classes found matching your filters.</p></div></div>';
@@ -13,6 +20,10 @@ function output_class_schedule_list($schedules) {
     echo '</div>';
 }
 
+/**
+ * Outputs a single class card.
+ * Includes class info, rating, capacity badge, enrolment button (for members), details link, and admin actions.
+ */
 function output_class_schedule_card($schedule) {
     $scheduleId = (int)$schedule['schedule_id'];
     $className = htmlspecialchars($schedule['class_name'], ENT_QUOTES, 'UTF-8');
@@ -92,6 +103,7 @@ function output_class_schedule_card($schedule) {
                 </span>
             </div>
 
+            <!-- Enrolment buttons for members only -->
             <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'member'): ?>
                 <?php
                 $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $scheduleId, 1);
@@ -123,6 +135,7 @@ function output_class_schedule_card($schedule) {
                 <?php endif; ?>
             <?php endif; ?>
 
+            <!-- Details link for logged‑in members, trainers and admins -->
             <?php if ($showDetailsLink): ?>
                 <a 
                     href="/<?= htmlspecialchars($activeRole, ENT_QUOTES, 'UTF-8') ?>/class_details.php?id=<?= $scheduleId ?>" 
@@ -132,6 +145,7 @@ function output_class_schedule_card($schedule) {
                 </a>
             <?php endif; ?>
 
+            <!-- Admin actions (Edit / Delete) -->
             <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
                 <div class="admin-actions">
                     <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">
@@ -152,6 +166,9 @@ function output_class_schedule_card($schedule) {
     <?php
 }
 
+/**
+ * Outputs the form for creating or editing a class schedule (admin area).
+ */
 function output_class_form($classTypes, $trainers, $days, $data = [], $errors = [], $success = '', $isEdit = false) {
     $className = htmlspecialchars($data['class_name'] ?? '', ENT_QUOTES, 'UTF-8');
     $classDescription = htmlspecialchars($data['class_description'] ?? '', ENT_QUOTES, 'UTF-8');

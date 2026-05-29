@@ -1,6 +1,12 @@
 <?php
-// template/pt.php
+/**
+ * pt.php – Template functions for the public personal training (PT) page.
+ * Renders the hero section, benefits section, and call‑to‑action section.
+ */
 
+/**
+ * Outputs the hero section of the PT page.
+ */
 function output_pt_hero() { ?>
     <section class="pt-hero">
         <div class="container">
@@ -27,6 +33,9 @@ function output_pt_hero() { ?>
     </section>
 <?php }
 
+/**
+ * Outputs the "Why Train With a PT?" benefits section.
+ */
 function output_pt_benefits() { ?>
     <section class="pt-benefits-section">
         <div class="container">
@@ -70,6 +79,9 @@ function output_pt_benefits() { ?>
     </section>
 <?php }
 
+/**
+ * Outputs the call‑to‑action section at the bottom of the PT page.
+ */
 function output_pt_cta() { ?>
     <section class="pt-cta-section">
         <div class="container">
