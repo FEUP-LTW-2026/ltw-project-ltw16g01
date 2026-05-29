@@ -1,6 +1,9 @@
 <?php
-require_once '../includes/session.php';
+// File: admin/personal_training_requests.php
+// Description: Displays personal training requests from members with filtering by status.
 
+// Load core dependencies
+require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
@@ -8,9 +11,16 @@ require_once '../db/connection.php';
 require_once '../db/personal_bookings.php';
 require_once '../template/admin.php';
 
+// Restrict access to admin users only
 requireAuth('admin');
 
+/**
+ * Render a table of PT requests.
+ *
+ * @param array $requests List of request records from database
+ */
 function render_requests_table($requests) {
+    // Show message if no requests found
     if (empty($requests)) {
         echo '<p class="text-muted">No requests found.</p>';
         return;
@@ -58,18 +68,25 @@ function render_requests_table($requests) {
     <?php
 }
 
+// Get database connection
 $pdo = getDatabaseConnection();
 
+// Read filter parameter from URL (all, pending, confirmed, cancelled)
 $filter = $_GET['filter'] ?? 'all';
+
+// Fetch PT requests based on filter (null = all statuses)
 $requests = getAllPTRequests($pdo, $filter === 'all' ? null : $filter);
 
+// Output page header with PT requests specific CSS
 output_header('admin-pt-requests.css');
 ?>
 
+<!-- Additional CSS for form elements (filter bar) -->
 <link rel="stylesheet" href="../css/pages/form.css">
 
 <main class="main">
     <div class="container">
+        <!-- Page header with title -->
         <header class="page-header">
             <div class="page-header-row">
                 <div>
@@ -79,6 +96,7 @@ output_header('admin-pt-requests.css');
             </div>
         </header>
 
+        <!-- Filter bar for request status -->
         <div class="filter-bar">
             <div class="filter-group">
                 <label class="form-label">Filter by status</label>
@@ -91,6 +109,7 @@ output_header('admin-pt-requests.css');
             </div>
         </div>
 
+        <!-- Card containing the requests table -->
         <div class="card">
             <div class="card-head">
                 <h2>PT Requests (<span id="request-count"><?= count($requests) ?></span>)</h2>
@@ -103,6 +122,7 @@ output_header('admin-pt-requests.css');
     </div>
 </main>
 
+<!-- External JavaScript for filter interactions and AJAX reloading -->
 <script src="../js/pt-requests.js"></script>
 
 <?php output_footer('../admin/'); ?>

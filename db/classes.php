@@ -32,6 +32,16 @@ function getAllClassSchedules($pdo, $filters = []) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getTrainers($pdo) {
+    $stmt = $pdo->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getDistinctTimes($pdo) {
+    $stmt = $pdo->query("SELECT DISTINCT start_time FROM class_schedules ORDER BY start_time");
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
 function getClassTypes($pdo) {
     $stmt = $pdo->prepare("
         SELECT id, name, label

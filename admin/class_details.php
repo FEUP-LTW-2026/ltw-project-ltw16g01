@@ -1,50 +1,44 @@
 <?php
+// File: admin/class_details.php
+// Description: Controller for class details page.
+
 require_once '../includes/session.php';
-require_once '../includes/header.php';
-require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/classes.php';
+require_once '../includes/header.php';
+require_once '../includes/footer.php';
+require_once '../db/class_details.php'; // All database queries for this page
 
+// Restrict access to admin only
 requireAuth('admin');
 
-$pdo = getDatabaseConnection();
+// Get schedule ID from URL
 $scheduleId = (int)($_GET['id'] ?? 0);
 if ($scheduleId <= 0) {
     header('Location: classes.php');
     exit;
 }
 
-$schedule = getClassScheduleById($pdo, $scheduleId);
-if (!$schedule) {
+// Fetch all data using the queries file
+$pdo = getDatabaseConnection();
+$data = getClassDetailsData($pdo, $scheduleId);
+
+// If schedule not found, redirect
+if ($data === null) {
     header('Location: classes.php');
     exit;
 }
 
-$trainer = null;
-if (!empty($schedule['trainer_id'])) {
-    $stmt = $pdo->prepare("SELECT id, name FROM users WHERE id = ?");
-    $stmt->execute([$schedule['trainer_id']]);
-    $trainer = $stmt->fetch(PDO::FETCH_ASSOC);
-}
+// Extract data for view variables
+extract($data);
 
-$typeStmt = $pdo->prepare("SELECT label FROM class_types WHERE id = ?");
-$typeStmt->execute([$schedule['class_type_id']]);
-$typeLabel = $typeStmt->fetchColumn();
-
-$reviews = getClassReviews($pdo, $scheduleId);
-$avgRating = 0;
-$reviewCount = count($reviews);
-if ($reviewCount > 0) {
-    $sum = array_sum(array_column($reviews, 'rating'));
-    $avgRating = round($sum / $reviewCount, 1);
-}
-
-output_header('class-details.css');
+// Include header 
+output_header('class-details.css')
 ?>
 
 <main class="main">
     <div class="container">
+        <!-- Breadcrumb -->
         <div class="class-detail-header">
             <nav>
                 <ol class="breadcrumb">
@@ -55,6 +49,7 @@ output_header('class-details.css');
             </nav>
         </div>
 
+        <!-- Class info card -->
         <div class="card class-detail-card">
             <div class="card-body">
                 <div class="class-detail-info">
@@ -74,6 +69,7 @@ output_header('class-details.css');
                     <?php endif; ?>
                 </div>
 
+                <!-- Trainer info -->
                 <?php if ($trainer): ?>
                     <div class="class-trainer-info">
                         <h3>Instructor</h3>
@@ -88,6 +84,7 @@ output_header('class-details.css');
             </div>
         </div>
 
+        <!-- Reviews card -->
         <div class="card reviews-card">
             <div class="card-head">
                 <h2>Member Reviews</h2>
@@ -119,4 +116,4 @@ output_header('class-details.css');
     </div>
 </main>
 
-<?php output_footer('../admin/'); ?>
+<?php require_once '../includes/footer.php'; ?>

@@ -1,6 +1,9 @@
 <?php
-require_once '../includes/session.php';
+// File: admin/classes.php
+// Description: Controller for listing, filtering, and managing class schedules.
 
+// Load core dependencies
+require_once '../includes/session.php';
 require_once '../includes/auth.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
@@ -8,36 +11,35 @@ require_once '../db/connection.php';
 require_once '../db/classes.php';
 require_once '../template/classes.php';
 
+// Restrict access to admin users only
 requireAuth('admin');
 
+// Get database connection
 $pdo = getDatabaseConnection();
 
-$types = $pdo
-    ->query("SELECT name, label FROM class_types WHERE active = 1 ORDER BY label")
-    ->fetchAll(PDO::FETCH_ASSOC);
+// Fetch all required data using separate query functions 
+$types = getClassTypes($pdo);      // Class type filter options
+$trainers = getTrainers($pdo);     // Trainer filter options
+$times = getDistinctTimes($pdo);   // Time filter options (unique start times)
 
-$trainers = $pdo
-    ->query("SELECT id, name FROM users WHERE role = 'trainer' AND active = 1 ORDER BY name")
-    ->fetchAll(PDO::FETCH_ASSOC);
-
-$times = $pdo
-    ->query("SELECT DISTINCT start_time FROM class_schedules ORDER BY start_time")
-    ->fetchAll(PDO::FETCH_COLUMN);
-
+// Read and sanitize filter values from URL query string
 $filters = [
-    'type' => $_GET['type'] ?? '',
+    'type'    => $_GET['type'] ?? '',
     'trainer' => $_GET['trainer'] ?? '',
-    'day' => $_GET['day'] ?? '',
-    'time' => $_GET['time'] ?? ''
+    'day'     => $_GET['day'] ?? '',
+    'time'    => $_GET['time'] ?? ''
 ];
 
+// Get filtered class schedules using the existing function from db/classes.php
 $schedules = getAllClassSchedules($pdo, $filters);
 
+// Output the page header
 output_header('classes.css');
 ?>
 
 <main class="main">
     <div class="container">
+        <!-- Page header with title and "New Class" button -->
         <header class="page-header">
             <div class="page-header-row page-header-actions">
                 <div>
@@ -49,8 +51,10 @@ output_header('classes.css');
             </div>
         </header>
 
+        <!-- Filter form – uses GET to preserve filters in URL -->
         <section>
             <form id="filter-form" class="filter-bar" method="get" action="classes.php">
+                <!-- Class type dropdown -->
                 <div class="filter-group">
                     <label class="form-label" for="f-type">Class type</label>
                     <select id="f-type" name="type" class="form-select">
@@ -67,6 +71,7 @@ output_header('classes.css');
                     </select>
                 </div>
 
+                <!-- Trainer dropdown -->
                 <div class="filter-group">
                     <label class="form-label" for="f-trainer">Trainer</label>
                     <select id="f-trainer" name="trainer" class="form-select">
@@ -83,6 +88,7 @@ output_header('classes.css');
                     </select>
                 </div>
 
+                <!-- Day of week dropdown -->
                 <div class="filter-group">
                     <label class="form-label" for="f-day">Day</label>
                     <select id="f-day" name="day" class="form-select">
@@ -99,6 +105,7 @@ output_header('classes.css');
                     </select>
                 </div>
 
+                <!-- Time dropdown (distinct start times) -->
                 <div class="filter-group">
                     <label class="form-label" for="f-time">Time</label>
                     <select id="f-time" name="time" class="form-select">
@@ -117,18 +124,21 @@ output_header('classes.css');
             </form>
         </section>
 
+        <!-- Results count bar (updated by JavaScript when filters change) -->
         <div class="results-bar">
             <p class="results-count" id="results-count">
                 Showing <strong id="class-count"><?= count($schedules) ?></strong> classes
             </p>
         </div>
 
+        <!-- Container for the dynamic class list (reloaded via AJAX in classes.js) -->
         <div id="class-list-container">
             <?php output_class_schedule_list($schedules); ?>
         </div>
     </div>
 </main>
 
+<!-- External JavaScript for filter interactions and AJAX loading -->
 <script src="../js/classes.js"></script>
 
 <?php output_footer('../admin/'); ?>

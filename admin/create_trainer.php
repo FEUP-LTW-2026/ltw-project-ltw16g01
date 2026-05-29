@@ -1,26 +1,36 @@
 <?php
-require_once '../includes/session.php';
+// File: admin/add_trainer.php
+// Description: Form to add a new trainer.
 
+// Load core dependencies
+require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/trainers.php';
+require_once '../db/trainers.php';   // Contains database functions for trainers
 require_once '../template/trainers.php';
 
+// Restrict access to admin users only
 requireAuth('admin');
 
+// Get database connection
 $pdo = getDatabaseConnection();
+
+// Initialize variables
 $errors = [];
 $success = '';
-$old = [];
+$old = []; // Stores old form input for repopulation on error
 
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF protection
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
         exit('Invalid CSRF token.');
     }
 
+    // Get and sanitize form inputs
     $name = trim($_POST['name'] ?? '');
     $username = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -30,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm = $_POST['confirm_password'] ?? '';
 
+    // Save old values to repopulate form in case of error
     $old = [
         'name' => $name,
         'username' => $username,
@@ -39,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'certifications' => $certifications
     ];
 
+    // Validation
     if ($name === '' || $username === '' || $email === '' || $password === '' || $confirm === '') {
         $errors[] = 'Please fill in all required fields.';
     } elseif (strlen($username) < 3) {
@@ -50,17 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($password !== $confirm) {
         $errors[] = 'Passwords do not match.';
     } else {
+        // Insert trainer using function from db/trainers.php
         $result = createTrainer($pdo, $name, $username, $email, $bio, $specializations, $certifications, $password);
 
         if ($result === false) {
+            // Duplicate username or email
             $errors[] = 'Username or email already exists.';
         } else {
             $success = 'Trainer created successfully.';
-            $old = [];
+            $old = []; // Clear old values on success
         }
     }
 }
 
+// Output page header
 output_header('form.css');
 ?>
 

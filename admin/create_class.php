@@ -1,29 +1,45 @@
 <?php
-require_once '../includes/session.php';
+// File: admin/create_class.php
+// Description: Form to create a new class schedule.
 
+// Load core dependencies
+require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/classes.php';
-require_once '../template/classes.php';
+require_once '../db/classes.php';   // Contains all database functions
+require_once '../template/classes.php'; // Contains output_class_form()
 
+// Restrict access to admin users only
 requireAuth('admin');
 
+// Get database connection
 $pdo = getDatabaseConnection();
+
+// Initialize variables
 $errors = [];
 $success = '';
+
+// List of valid days of week
 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-$classTypes = getClassTypes($pdo);
-$trainers = getActiveTrainersForClasses($pdo);
+
+// Fetch data from database (no inline SQL – uses functions from db/classes.php)
+$classTypes = getClassTypes($pdo);                // All active class types
+$trainers = getActiveTrainersForClasses($pdo);   // All active trainers
+
+// Store old form input for repopulation in case of error
 $old = [];
 
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF protection
     if (!isset($_POST['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
         http_response_code(403);
         exit('Invalid CSRF token.');
     }
 
+    // Get and sanitize input
     $className = trim($_POST['class_name'] ?? '');
     $classDescription = trim($_POST['class_description'] ?? '');
     $classTypeId = (int)($_POST['class_type_id'] ?? 0);
@@ -34,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $capacity = (int)($_POST['capacity'] ?? 20);
     $duration = (int)($_POST['duration_min'] ?? 60);
 
+    // Store old values for form repopulation
     $old = [
         'class_name' => $className,
         'class_description' => $classDescription,
@@ -46,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'duration_min' => $duration
     ];
 
+    // Validation
     if ($className === '' || $classTypeId <= 0 || $dayOfWeek === '' || $startTime === '') {
         $errors[] = 'Please fill in all required fields.';
     } elseif (!in_array($dayOfWeek, $days, true)) {
@@ -55,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($duration < 15) {
         $errors[] = 'Duration must be at least 15 minutes.';
     } else {
+        // Create class using function from db/classes.php 
         $result = createClassWithSchedule(
             $pdo,
             $className,
@@ -70,13 +89,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result) {
             $success = 'Class created successfully.';
-            $old = [];
+            $old = []; // Clear old values on success
         } else {
             $errors[] = 'Could not create class.';
         }
     }
 }
 
+// Output the page header
 output_header('form.css');
 ?>
 

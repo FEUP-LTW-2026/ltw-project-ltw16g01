@@ -1,4 +1,7 @@
 <?php
+// File: admin/export_reports.php
+// Description: Exports analytics reports in CSV or PDF format.
+
 require_once '../includes/session.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
@@ -6,13 +9,13 @@ require_once '../db/reports.php';
 
 requireAuth('admin');
 
-// Limpar qualquer buffer de saída que possa ter sido iniciado
+// Clear any output buffers that might have been started
 if (ob_get_level()) ob_end_clean();
 
 $pdo = getDatabaseConnection();
 $format = $_GET['format'] ?? 'csv';
 
-// Recolher todos os dados
+// Fetch all required data
 $kpis = getKpis($pdo);
 $enrollmentEvolution = getEnrollmentEvolution($pdo);
 $topClasses = getTopClasses($pdo);
@@ -23,16 +26,16 @@ $lowEquipment = getLowAvailabilityEquipment($pdo);
 $recentActivity = getRecentActivity($pdo);
 
 if ($format === 'csv') {
-    // Cabeçalhos para download CSV
+    // CSV headers for download
     header('Content-Type: text/csv; charset=UTF-8');
     header('Content-Disposition: attachment; filename="fitpeak_reports_' . date('Y-m-d') . '.csv"');
     
     $output = fopen('php://output', 'w');
 
-    // Escrever o BOM para UTF-8, ajuda no Excel
+    // Write UTF-8 BOM for Excel compatibility
     fwrite($output, "\xEF\xBB\xBF");
     
-    // Parâmetros para fputcsv compatíveis com PHP 8.2+
+    // Parameters for fputcsv (compatible with PHP 8.2+)
     $sep = ',';
     $enclosure = '"';
     $escape = "\\";
@@ -40,7 +43,7 @@ if ($format === 'csv') {
     fputcsv($output, ['FitPeak Reports - ' . date('Y-m-d H:i:s')], $sep, $enclosure, $escape);
     fputcsv($output, [], $sep, $enclosure, $escape);
     
-    // KPIs
+    // KPIs section
     fputcsv($output, ['=== KEY PERFORMANCE INDICATORS ==='], $sep, $enclosure, $escape);
     fputcsv($output, ['Metric', 'Value'], $sep, $enclosure, $escape);
     fputcsv($output, ['Active Members', $kpis['activeMembers']], $sep, $enclosure, $escape);
@@ -50,7 +53,7 @@ if ($format === 'csv') {
     fputcsv($output, ['Equipment Issues', $kpis['equipmentIssues']], $sep, $enclosure, $escape);
     fputcsv($output, [], $sep, $enclosure, $escape);
     
-    // Evolução de inscrições
+    // Enrollment evolution section
     fputcsv($output, ['=== ENROLLMENT EVOLUTION (Last 6 months) ==='], $sep, $enclosure, $escape);
     fputcsv($output, ['Month', 'Total Enrollments'], $sep, $enclosure, $escape);
 
@@ -60,7 +63,7 @@ if ($format === 'csv') {
 
     fputcsv($output, [], $sep, $enclosure, $escape);
     
-    // Top aulas
+    // Top classes section
     fputcsv($output, ['=== TOP 5 CLASSES ==='], $sep, $enclosure, $escape);
     fputcsv($output, ['Class Name', 'Enrollments'], $sep, $enclosure, $escape);
 
@@ -70,7 +73,7 @@ if ($format === 'csv') {
 
     fputcsv($output, [], $sep, $enclosure, $escape);
     
-    // Distribuição de planos
+    // Membership plan distribution section
     fputcsv($output, ['=== MEMBERSHIP PLAN DISTRIBUTION ==='], $sep, $enclosure, $escape);
     fputcsv($output, ['Plan', 'Count', 'Percentage (%)'], $sep, $enclosure, $escape);
 
@@ -80,7 +83,7 @@ if ($format === 'csv') {
 
     fputcsv($output, [], $sep, $enclosure, $escape);
     
-    // Ocupação por dia
+    // Occupancy by day section
     fputcsv($output, ['=== AVERAGE OCCUPANCY BY DAY OF WEEK ==='], $sep, $enclosure, $escape);
     fputcsv($output, ['Day', 'Avg Occupancy (%)'], $sep, $enclosure, $escape);
 
@@ -90,7 +93,7 @@ if ($format === 'csv') {
 
     fputcsv($output, [], $sep, $enclosure, $escape);
     
-    // Aulas com capacidade crítica
+    // Critical capacity classes section
     fputcsv($output, ['=== CLASSES WITH CRITICAL CAPACITY (<20% free) ==='], $sep, $enclosure, $escape);
     fputcsv($output, ['Class', 'Day', 'Time', 'Capacity', 'Enrolled', 'Free Spots', 'Free %'], $sep, $enclosure, $escape);
 
@@ -108,7 +111,7 @@ if ($format === 'csv') {
 
     fputcsv($output, [], $sep, $enclosure, $escape);
     
-    // Equipamento com baixa disponibilidade
+    // Low availability equipment section
     fputcsv($output, ['=== LOW AVAILABILITY EQUIPMENT (<30%) ==='], $sep, $enclosure, $escape);
     fputcsv($output, ['Equipment', 'Available', 'Quantity', 'Available %'], $sep, $enclosure, $escape);
 
@@ -127,7 +130,7 @@ if ($format === 'csv') {
     exit;
 }
 
-// Formato PDF: gerar HTML com CSS de impressão
+// PDF format: generate HTML with print CSS
 if ($format === 'pdf') {
     ?>
     <!DOCTYPE html>
@@ -142,7 +145,7 @@ if ($format === 'pdf') {
         <h1>FitPeak Analytics Reports</h1>
         <p>Generated on <?= date('d/m/Y H:i:s') ?></p>
         
-        <!-- KPIs -->
+        <!-- KPIs grid -->
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-value"><?= $kpis['activeMembers'] ?></div>
@@ -172,7 +175,7 @@ if ($format === 'pdf') {
 
         <div class="reports-grid">
             <div class="reports-col">
-                <!-- Evolução inscrições -->
+                <!-- Enrollment evolution table -->
                 <h2>Enrollment Evolution (Last 6 Months)</h2>
 
                 <table>
@@ -193,7 +196,7 @@ if ($format === 'pdf') {
                     </tbody>
                 </table>
 
-                <!-- Top Classes -->
+                <!-- Top classes table -->
                 <h2>Top 5 Most Popular Classes</h2>
 
                 <table>
@@ -214,7 +217,7 @@ if ($format === 'pdf') {
                     </tbody>
                 </table>
 
-                <!-- Critical Classes -->
+                <!-- Critical classes table -->
                 <h2>Classes with Critical Capacity (&lt;20% free)</h2>
 
                 <table>
@@ -241,7 +244,7 @@ if ($format === 'pdf') {
             </div>
 
             <div class="reports-col">
-                <!-- Plan distribution -->
+                <!-- Plan distribution bar chart -->
                 <h2>Membership Plan Distribution</h2>
 
                 <div class="bar-chart">
@@ -258,7 +261,7 @@ if ($format === 'pdf') {
                     <?php endforeach; ?>
                 </div>
 
-                <!-- Occupancy by day -->
+                <!-- Occupancy by day bar chart -->
                 <h2>Avg Occupancy by Day of Week</h2>
 
                 <div class="bar-chart">
@@ -275,7 +278,7 @@ if ($format === 'pdf') {
                     <?php endforeach; ?>
                 </div>
 
-                <!-- Low equipment -->
+                <!-- Low equipment table -->
                 <h2>Low Availability Equipment (&lt;30%)</h2>
 
                 <table>
@@ -311,6 +314,7 @@ if ($format === 'pdf') {
     exit;
 }
 
-// Fallback: redirecionar para reports
+// Fallback: redirect to reports page
 header('Location: reports.php');
 exit;
+?>

@@ -1,6 +1,9 @@
 <?php
-require_once '../includes/session.php';
+// File: admin/members.php
+// Description: Listing page for members with filtering and management options.
 
+// Load core dependencies
+require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
@@ -8,24 +11,31 @@ require_once '../db/connection.php';
 require_once '../db/members.php';
 require_once '../template/members.php';
 
+// Restrict access to admin users only
 requireAuth('admin');
 
+// Get database connection
 $pdo = getDatabaseConnection();
 
+// Read and sanitize filter values from URL query string
 $filters = [
     'name' => $_GET['name'] ?? '',
     'plan' => $_GET['plan'] ?? ''
 ];
 
+// Fetch members using filters (no inline SQL)
 $members = getAllMembersAdmin($pdo, $filters);
 
+// Output page header with member-specific CSS
 output_header('admin-members.css');
 ?>
 
+<!-- Additional CSS for form elements (filter bar) -->
 <link rel="stylesheet" href="../css/pages/form.css">
 
 <main class="main">
     <div class="container">
+        <!-- Page header with title and "Add Member" button -->
         <header class="page-header">
             <div class="page-header-row page-header-actions">
                 <div>
@@ -37,6 +47,7 @@ output_header('admin-members.css');
             </div>
         </header>
 
+        <!-- Filter form (GET method, preserves filters in URL) -->
         <form id="filter-form" method="get" class="filter-bar members-filter">
             <div class="filter-group">
                 <label class="form-label" for="f-name">Name</label>
@@ -61,12 +72,14 @@ output_header('admin-members.css');
             </div>
         </form>
 
+        <!-- Results count bar (updated by JavaScript when filters change) -->
         <div class="results-bar">
             <p class="results-count">
                 Showing <strong id="member-count"><?= count($members) ?></strong> members
             </p>
         </div>
 
+        <!-- Members table -->
         <div class="table-wrap">
             <table>
                 <thead>
@@ -88,6 +101,7 @@ output_header('admin-members.css');
     </div>
 </main>
 
+<!-- External JavaScript for filter interactions and AJAX reloading -->
 <script src="../js/members-admin.js"></script>
 
 <?php output_footer('../admin/'); ?>
