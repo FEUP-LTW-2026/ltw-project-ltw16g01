@@ -21,12 +21,6 @@ function renderKpiCards($kpis) {
 
 /**
  * Renders a horizontal bar chart.
- *
- * @param array  $data       Array of data items.
- * @param string $labelKey   Key for the label column.
- * @param string $valueKey   Key for the numeric value.
- * @param string $title      Chart title.
- * @param string $valueSuffix Suffix to append to the value (e.g., '%').
  */
 function renderBarChart($data, $labelKey, $valueKey, $title, $valueSuffix = '') {
     if (empty($data)) {
@@ -59,10 +53,6 @@ function renderBarChart($data, $labelKey, $valueKey, $title, $valueSuffix = '') 
 
 /**
  * Renders a simple table from an array of data.
- *
- * @param array  $data    Array of rows (associative).
- * @param array  $columns List of column keys to display.
- * @param string $title   Table title.
  */
 function renderSimpleTable($data, $columns, $title) {
     if (empty($data)) {
