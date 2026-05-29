@@ -10,6 +10,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/members.php';
 require_once '../template/members.php';
+require_once '../db/notifications.php'; // createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -88,8 +89,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Username or email already in use.';
         } else {
             $success = 'Member updated successfully.';
+            
             // Refresh member data to show updated values
             $member = getMemberById($pdo, $id);
+            
+            // Notify all administrators (role-based notification)
+            $planLabel = ucfirst($plan); // 'Basic', 'Premium', 'Vip'
+            $activeLabel = $active ? 'Active' : 'Inactive';
+            $adminMessage = "Member updated: {$name} (username: {$username}, email: {$email}, plan: {$planLabel}, status: {$activeLabel}).";
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'Member updated' // optional title
+            );
+            
             $old = []; // Clear old values on success
         }
     }

@@ -10,6 +10,7 @@ require_once '../includes/auth.php';
 require_once '../db/connection.php';
 require_once '../db/equipment.php';
 require_once '../template/equipment.php';
+require_once '../db/notifications.php'; // createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -31,6 +32,12 @@ if (!$equipment) {
 
 // Fetch equipment categories for dropdown
 $categories = getAllEquipmentCategories($pdo);
+
+// Build a quick lookup array for category labels (id => label)
+$categoryLabels = [];
+foreach ($categories as $cat) {
+    $categoryLabels[$cat['id']] = $cat['label'] ?? $cat['name'];
+}
 
 // Initialize variables
 $errors = [];
@@ -78,8 +85,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update equipment using function from db/equipment.php
         if (updateEquipment($pdo, $id, $name, $categoryId, $quantity, $available, $status, $notes)) {
             $success = 'Equipment updated successfully.';
+            
             // Refresh equipment data to show updated values
             $equipment = getEquipmentById($pdo, $id);
+            
+            // Get category label for the notification
+            $categoryLabel = $categoryLabels[$categoryId] ?? 'General';
+            $statusLabel = ucfirst($status); // 'Available', 'Maintenance', 'Unavailable'
+            
+            // Notify all administrators (role-based notification)
+            $adminMessage = "Equipment updated: {$name} (Category: {$categoryLabel}, Total: {$quantity}, Available: {$available}, Status: {$statusLabel}).";
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'Equipment updated' // optional title
+            );
+            
             $old = []; // Clear old values on success
         } else {
             $errors[] = 'Could not update equipment.';

@@ -8,8 +8,9 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/trainers.php';   // Contains database functions for trainers
-require_once '../template/trainers.php';
+require_once '../db/trainers.php';        // Database functions for trainers
+require_once '../template/trainers.php';   // output_trainer_form()
+require_once '../db/notifications.php'; // createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -71,6 +72,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $success = 'Trainer created successfully.';
             $old = []; // Clear old values on success
+
+            // Notify all administrators (role-based notification)
+            $specializationsText = $specializations ?: 'none specified';
+            $certificationsText = $certifications ?: 'none specified';
+            $adminMessage = "New trainer created: {$name} (username: {$username}, email: {$email}, specializations: {$specializationsText}, certifications: {$certificationsText}).";
+            
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'New trainer'    // title (optional, may be ignored if table lacks column)
+            );
         }
     }
 }

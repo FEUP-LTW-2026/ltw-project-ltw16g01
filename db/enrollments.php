@@ -130,3 +130,24 @@ function cancelMemberEnrollment($pdo, $memberId, $sessionId) {
         'message' => 'You were not enrolled in this class.'
     ];
 }
+
+function getSessionTrainerInfo(PDO $pdo, int $sessionId): ?array
+{
+    $stmt = $pdo->prepare("
+        SELECT
+            cs.trainer_id,
+            c.name AS class_name
+        FROM class_sessions s
+        JOIN class_schedules cs
+            ON cs.id = s.schedule_id
+        JOIN classes c
+            ON c.id = cs.class_id
+        WHERE s.id = ?
+    ");
+
+    $stmt->execute([$sessionId]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result ?: null;
+}

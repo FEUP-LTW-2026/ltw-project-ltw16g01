@@ -1,6 +1,4 @@
 <?php
-// File: admin/add_equipment.php
-// Description: Form to add new gym equipment.
 
 // Load core dependencies
 require_once '../includes/session.php';
@@ -8,8 +6,9 @@ require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/equipment.php';   // Contains database functions for equipment
-require_once '../template/equipment.php'; // Contains output_equipment_form()
+require_once '../db/equipment.php';        // Database functions for equipment
+require_once '../template/equipment.php';  // output_equipment_form()
+require_once '../db/notifications.php'; // createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -19,6 +18,12 @@ $pdo = getDatabaseConnection();
 
 // Fetch equipment categories 
 $categories = getAllEquipmentCategories($pdo);
+
+// Build a quick lookup array for category labels (id => label)
+$categoryLabels = [];
+foreach ($categories as $cat) {
+    $categoryLabels[$cat['id']] = $cat['label'] ?? $cat['name'];
+}
 
 // Initialize variables
 $errors = [];
@@ -68,6 +73,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (createEquipment($pdo, $name, $categoryId, $quantity, $available, $status, $notes)) {
             $success = 'Equipment added successfully.';
             $old = []; // Clear old values on success
+
+            // Notify all administrators (role-based notification)
+            // Get category label for a nicer message
+            $categoryLabel = $categoryLabels[$categoryId] ?? 'General';
+            $statusLabel = ucfirst($status); // 'Available', 'Maintenance', 'Unavailable'
+            $adminMessage = "New equipment added: {$name} ({$categoryLabel}), quantity {$quantity}, available {$available}, status: {$statusLabel}.";
+            
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'New equipment'  // title (optional, may be ignored if table lacks column)
+            );
         } else {
             $errors[] = 'Could not add equipment.';
         }

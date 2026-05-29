@@ -350,3 +350,24 @@ function deleteMemberNotification(PDO $pdo, int $notificationId, int $memberId):
     $stmt = $pdo->prepare("DELETE FROM notifications WHERE id = ? AND user_id = ?");
     return $stmt->execute([$notificationId, $memberId]);
 }
+
+function notifyTrainerClassEnrollment(
+    PDO $pdo,
+    int $trainerId,
+    string $memberName,
+    string $className,
+    string $action
+): bool {
+
+    $message = $action === 'enroll'
+        ? "{$memberName} enrolled in your class '{$className}'."
+        : "{$memberName} cancelled enrollment in your class '{$className}'.";
+
+    return createNotification(
+        $pdo,
+        $trainerId,
+        $message,
+        'info',
+        'Class Enrollment'
+    );
+}

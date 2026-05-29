@@ -1,15 +1,13 @@
 <?php
-// File: admin/create_class.php
-// Description: Form to create a new class schedule.
-
 // Load core dependencies
 require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
 require_once '../includes/auth.php';
 require_once '../db/connection.php';
-require_once '../db/classes.php';   // Contains all database functions
-require_once '../template/classes.php'; // Contains output_class_form()
+require_once '../db/classes.php';       // Contains all database functions
+require_once '../template/classes.php';  // Contains output_class_form()
+require_once '../db/notifications.php';  // Contains createNotification()
 
 // Restrict access to admin users only
 requireAuth('admin');
@@ -89,7 +87,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result) {
             $success = 'Class created successfully.';
-            $old = []; // Clear old values on success
+            $old = [];
+
+            // 1. Notify the assigned trainer (if any)
+            if ($trainerId !== null && $trainerId > 0) {
+                $trainerMessage = "You have been assigned to the class '{$className}' on {$dayOfWeek} at {$startTime}.";
+                createNotification(
+                    $pdo,
+                    $trainerId,          // recipient user_id (trainer)
+                    $trainerMessage,
+                    'info',              // notification type
+                    'New class assigned' // optional title
+                );
+            }
+
+            // 2. Notify all administrators (role-based notification)
+            $adminMessage = "A new class '{$className}' has been created on {$dayOfWeek} at {$startTime}.";
+            createNotification(
+                $pdo,
+                $adminMessage,   // message
+                'info',          // type
+                null,            // no specific user
+                'admin',         // target_role = 'admin'
+                'role',          // scope = 'role'
+                'New class created' // title
+            );
         } else {
             $errors[] = 'Could not create class.';
         }
