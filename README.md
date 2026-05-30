@@ -65,11 +65,16 @@ To open the Admin Dashboard page, manually change the browser URL to:
     php -S localhost:9000
 
 ## Credentials
+(username/password)
+- Admins:
+    - admin/12345678
 
-- admin/12345678
-- member/vip/12345678
-- member/premium/12345678
-- member/basic/12345678
-- member/admin/12345678
-- trainer/12345678
-- trainer/admin/12345678
+- Members:
+    - member_vip/12345678
+    - member_premium/12345678
+    - member_basic/12345678
+    - member_admin/12345678
+
+- Trainers:
+    - trainer/12345678
+    - trainer_admin/12345678
