@@ -113,6 +113,7 @@ output_header('admin_trainers.css');
                         <th>Email</th>
                         <th>Specializations</th>
                         <th>Status</th>
+                        <th>Profile</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

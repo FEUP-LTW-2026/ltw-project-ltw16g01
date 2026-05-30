@@ -102,6 +102,9 @@ function output_trainers_admin_table($trainers) {
                 </div>
             </td>
             <td>
+                <a href="../admin/trainer_profile.php?id=<?= $id ?>" class="action-link">View Profile</a>
+            </td>
+            <td>
                 <a href="edit_trainer.php?id=<?= $id ?>" class="action-link">Edit</a>
                 <a href="delete_trainer.php?id=<?= $id ?>" class="action-link danger delete-trainer-link">Delete</a>
             </td>
