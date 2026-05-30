@@ -142,6 +142,7 @@ if (!function_exists('output_header')) {
                 <li><a href="../admin/trainers.php">Trainers</a></li>
                 <li><a href="../admin/pt_requests.php">PT Requests</a></li>
                 <li><a href="../admin/equipment.php">Equipment</a></li>
+                <li><a href="../admin/notifications.php">Notifications</a></li>
                 <?php if ($userIsAdmin && $originalRole !== 'admin'): ?>
                     <li><a href="../public/choose_area.php" class="nav-login">Switch Area</a></li>
                 <?php endif; ?>
