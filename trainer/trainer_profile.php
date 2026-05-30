@@ -28,15 +28,14 @@ if (!$trainer) {
     exit;
 }
 
-// Load trainer rating and upcoming schedules.
-$rating = getTrainerRating($pdo, $trainerId);
+// Load upcoming schedules.
 $schedules = getUpcomingSchedulesForTrainer($pdo, $trainerId, 5);
 
 output_header('trainer_profile.css');
 ?>
 
 <main class="main">
-    <?php output_trainer_profile_hero($trainer, $rating); ?>
+    <?php output_trainer_profile_hero($trainer); ?>
     <?php output_trainer_profile_details($trainer, $schedules); ?>
 </main>
 

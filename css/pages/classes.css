@@ -1,6 +1,7 @@
 /* CLASSES.CSS */
-/* Page-specific styles for class listings, filters, cards and capacity indicators. */
+/* Page-specific styles for class listings, filters, cards and trainer schedule editing. */
 
+/* Filters */
 .filter-bar {
     display: grid;
     grid-template-columns: 1fr;
@@ -17,6 +18,11 @@
     flex-direction: column;
 }
 
+.filter-group-end {
+    justify-content: flex-end;
+}
+
+/* Page headings and results */
 h2 {
     font-size: clamp(1rem, 2.5vw, 1.2rem);
     font-family: var(--ff-body);
@@ -42,6 +48,17 @@ h2 {
     color: var(--text);
 }
 
+.page-header-row {
+    margin-top: var(--sp-sm);
+}
+
+.page-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Sorting */
 .sort-row {
     display: flex;
     align-items: center;
@@ -75,6 +92,7 @@ h2 {
     color: #fff;
 }
 
+/* Class grid */
 .class-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -82,6 +100,7 @@ h2 {
     margin-bottom: var(--sp-xl);
 }
 
+/* Class card */
 .class-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -127,7 +146,7 @@ h2 {
 
 .class-name {
     margin-bottom: 0.15rem;
-    font-size: clamp(1rem, 2.5vw, 1.2rem); 
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
     font-family: var(--ff-body);
     font-weight: 600;
 }
@@ -159,6 +178,25 @@ h2 {
     gap: var(--sp-sm);
 }
 
+/* Card actions */
+.class-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0 var(--sp-md) var(--sp-md);
+}
+
+.inline-form {
+    display: inline-flex;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Card footer */
 .class-foot {
     display: flex;
     align-items: center;
@@ -199,14 +237,36 @@ h2 {
     background: var(--danger);
 }
 
-.cap-fill-80 { width: 80%; }
-.cap-fill-33 { width: 33%; }
-.cap-fill-40 { width: 40%; }
-.cap-fill-89 { width: 89%; }
-.cap-fill-43 { width: 43%; }
-.cap-fill-56 { width: 56%; }
-.cap-fill-36 { width: 36%; }
+.cap-fill-80 {
+    width: 80%;
+}
 
+.cap-fill-33 {
+    width: 33%;
+}
+
+.cap-fill-40 {
+    width: 40%;
+}
+
+.cap-fill-89 {
+    width: 89%;
+}
+
+.cap-fill-43 {
+    width: 43%;
+}
+
+.cap-fill-56 {
+    width: 56%;
+}
+
+.cap-fill-36 {
+    width: 36%;
+}
+
+/* Enrolment buttons */
+.enroll-btn,
 .enrolled-btn {
     display: inline-flex;
     align-items: center;
@@ -219,204 +279,16 @@ h2 {
     font-size: 0.8rem;
     font-weight: 600;
     white-space: nowrap;
-    border: 2px solid var(--success);
-    color: var(--success);
-    background: rgba(46, 213, 115, 0.08);
     cursor: pointer;
     transition: all var(--t);
-}
-
-.enrolled-btn:hover {
-    background: rgba(255, 71, 87, 0.10);
-    border-color: var(--danger);
-    color: var(--danger);
-}
-
-.legend-section {
-    padding-block: var(--sp-lg);
-    border-top: 1px solid var(--border);
-}
-
-.legend-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    margin-bottom: var(--sp-md);
-}
-
-.legend-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-md);
-    align-items: center;
-}
-
-.page-header-row {
-    margin-top: var(--sp-sm);
-}
-
-.filter-group-end {
-    justify-content: flex-end;
-}
-
-.rating-text {
-    font-size: 0.75rem;
-}
-
-.capacity-warning {
-    color: var(--warning);
-    font-weight: 600;
-}
-
-.enrollment-note {
-    font-size: 0.72rem;
-    margin-top: 3px;
-}
-
-.legend-capacity-text {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin-left: auto;
-}
-
-.dot-success {
-    color: var(--success);
-}
-
-.dot-warning {
-    color: var(--warning);
-}
-
-.dot-danger {
-    color: var(--danger);
-}
-
-.admin-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.page-header-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-@media (min-width: 480px) {
-    .filter-bar {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .class-head {
-        padding: var(--sp-md) var(--sp-lg);
-    }
-
-    .class-body {
-        padding: var(--sp-lg);
-    }
-
-    .class-foot {
-        padding: var(--sp-md) var(--sp-lg);
-    }
-}
-
-@media (min-width: 540px) {
-    .class-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 768px) {
-    .filter-bar {
-        grid-template-columns: repeat(4, 1fr);
-        align-items: end;
-    }
-}
-
-@media (min-width: 860px) {
-    .class-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--sp-lg);
-    }
-}
-
-@media (max-width: 375px) {
-    .class-foot {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .class-foot .main-button,
-    .class-foot .secondary-button,
-    .class-foot .enrolled-btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-.hiit-showcase {
-    margin-top: var(--sp-2xl);
-    padding-block: var(--sp-xl);
-    background: linear-gradient(135deg, rgba(232,65,24,0.05), transparent);
-    border-top: 1px solid var(--border);
-}
-
-.hiit-featured h2 {
-    font-family: var(--ff-display);
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    margin-bottom: var(--sp-lg);
-    color: var(--accent);
-}
-
-.legend-section {
-    margin-bottom: var(--sp-xl);
-    padding-bottom: var(--sp-md);
-    border-bottom: 1px solid var(--border);
-}
-
-.legend-row {
-    display: flex;
-    gap: var(--sp-md);
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-@media (max-width: 540px) {
-    .hiit-showcase .class-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.delete-btn {
-    background: var(--danger);
-    color: white;
-    border: none;
-}
-.delete-btn:hover {
-    background: #ff3344;
-    transform: translateY(-1px);
 }
 
 .enroll-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4em;
-    padding: 0.4rem 0.9rem;
-    min-height: 36px;
-    border-radius: var(--r-sm);
-    font-family: var(--ff-body);
-    font-size: 0.8rem;
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all var(--t);
     background: transparent;
     border: 2px solid var(--border);
     color: var(--text);
 }
+
 .enroll-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
@@ -425,19 +297,6 @@ h2 {
 }
 
 .enrolled-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4em;
-    padding: 0.4rem 0.9rem;
-    min-height: 36px;
-    border-radius: var(--r-sm);
-    font-family: var(--ff-body);
-    font-size: 0.8rem;
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all var(--t);
     background: rgba(46, 213, 115, 0.08);
     border: 2px solid var(--success);
     color: var(--success);
@@ -450,36 +309,51 @@ h2 {
     color: var(--success);
 }
 
-.enroll-btn:disabled, .enrolled-btn:disabled {
+.enroll-btn:disabled,
+.enrolled-btn:disabled {
     opacity: 0.6;
     cursor: wait;
     transform: none;
 }
 
-.class-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    padding: 0 var(--sp-md) var(--sp-md);
+/* Delete and danger actions */
+.delete-btn {
+    background: var(--danger);
+    color: white;
+    border: none;
 }
 
-.inline-form {
-    display: inline-flex;
+.delete-btn:hover {
+    background: #ff3344;
+    transform: translateY(-1px);
 }
 
+.danger-button {
+    border-color: rgba(255, 71, 87, 0.65);
+    color: var(--danger);
+    background: rgba(255, 71, 87, 0.04);
+}
+
+.danger-button:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(255, 71, 87, 0.22);
+}
+
+/* Utility class used by JavaScript to hide/show the trainer schedule edit form */
+.is-hidden {
+    display: none !important;
+}
+
+/* Trainer schedule edit box */
 .schedule-edit-box {
-    display: none;
-    margin: 0 var(--sp-md) var(--sp-md);
-    padding: 1rem;
-    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    margin: var(--sp-md) var(--sp-md) var(--sp-md);
+    padding: var(--sp-md);
     border: 1px solid var(--border);
     border-radius: var(--r-md);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-}
-
-.schedule-edit-box.is-visible {
-    display: block;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .schedule-edit-form {
@@ -488,14 +362,9 @@ h2 {
 
 .schedule-edit-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
-    margin-bottom: 1rem;
-}
-
-.schedule-edit-box .form-control {
-    width: 100%;
-    min-width: 0;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-md);
 }
 
 .schedule-edit-box .form-group {
@@ -513,6 +382,7 @@ h2 {
 
 .schedule-edit-box .form-control {
     width: 100%;
+    min-width: 0;
     min-height: 40px;
     padding: 0.65rem 0.75rem;
     background: var(--surface);
@@ -520,6 +390,7 @@ h2 {
     border-radius: var(--r-sm);
     color: var(--text);
     font-size: 0.88rem;
+    font-family: var(--ff-body);
     outline: none;
     transition: border-color var(--t), box-shadow var(--t), background var(--t);
 }
@@ -544,19 +415,7 @@ h2 {
     font-size: 0.8rem;
 }
 
-.danger-button {
-    border-color: rgba(255, 71, 87, 0.65);
-    color: var(--danger);
-    background: rgba(255, 71, 87, 0.04);
-}
-
-.danger-button:hover {
-    background: var(--danger);
-    border-color: var(--danger);
-    color: #fff;
-    box-shadow: 0 0 18px rgba(255, 71, 87, 0.22);
-}
-
+/* Roster */
 .roster-box {
     margin-top: 0;
     padding: var(--sp-md);
@@ -611,6 +470,7 @@ h2 {
     background: rgba(255, 255, 255, 0.025);
 }
 
+/* Alerts */
 .alert {
     padding: 0.9rem 1rem;
     border-radius: var(--r-md);
@@ -631,31 +491,79 @@ h2 {
     color: var(--danger);
 }
 
-@media (max-width: 768px) {
-    .schedule-edit-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .class-actions {
-        padding: 0 var(--sp-md) var(--sp-md);
-    }
-
-    .schedule-edit-box {
-        margin-inline: var(--sp-md);
-    }
-
-    .class-actions .secondary-button,
-    .class-actions .danger-button,
-    .inline-form {
-        width: 100%;
-    }
-
-    .inline-form button {
-        width: 100%;
-        justify-content: center;
-    }
+/* Legend */
+.legend-section {
+    margin-bottom: var(--sp-xl);
+    padding-block: var(--sp-lg);
+    padding-bottom: var(--sp-md);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
+.legend-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: var(--sp-md);
+}
+
+.legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    align-items: center;
+}
+
+.rating-text {
+    font-size: 0.75rem;
+}
+
+.capacity-warning {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.enrollment-note {
+    font-size: 0.72rem;
+    margin-top: 3px;
+}
+
+.legend-capacity-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-left: auto;
+}
+
+.dot-success {
+    color: var(--success);
+}
+
+.dot-warning {
+    color: var(--warning);
+}
+
+.dot-danger {
+    color: var(--danger);
+}
+
+/* HIIT showcase */
+.hiit-showcase {
+    margin-top: var(--sp-2xl);
+    padding-block: var(--sp-xl);
+    background: linear-gradient(135deg, rgba(232, 65, 24, 0.05), transparent);
+    border-top: 1px solid var(--border);
+}
+
+.hiit-featured h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin-bottom: var(--sp-lg);
+    color: var(--accent);
+}
+
+/* Toast messages */
 .toast-message {
     position: fixed;
     bottom: 20px;
@@ -676,6 +584,88 @@ h2 {
     background: var(--danger);
 }
 
-.schedule-edit-box.is-hidden {
-    display: none;
+/* Responsive layout */
+@media (min-width: 480px) {
+    .filter-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .class-head {
+        padding: var(--sp-md) var(--sp-lg);
+    }
+
+    .class-body {
+        padding: var(--sp-lg);
+    }
+
+    .class-foot {
+        padding: var(--sp-md) var(--sp-lg);
+    }
+}
+
+@media (min-width: 540px) {
+    .class-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .filter-bar {
+        grid-template-columns: repeat(4, 1fr);
+        align-items: end;
+    }
+}
+
+@media (min-width: 860px) {
+    .class-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--sp-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .class-actions {
+        padding: 0 var(--sp-md) var(--sp-md);
+    }
+
+    .schedule-edit-box {
+        margin-inline: var(--sp-md);
+    }
+
+    .class-actions .secondary-button,
+    .class-actions .danger-button,
+    .inline-form {
+        width: 100%;
+    }
+
+    .inline-form button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .schedule-edit-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 540px) {
+    .hiit-showcase .class-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 375px) {
+    .class-foot {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .class-foot .main-button,
+    .class-foot .secondary-button,
+    .class-foot .enrolled-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }

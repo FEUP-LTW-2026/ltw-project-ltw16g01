@@ -31,10 +31,6 @@ function output_trainer_card($trainer) {
     $specializations = array_map('trim', explode(',', $trainer['specializations'] ?? ''));
     $photo = !empty($trainer['photo']) ? htmlspecialchars($trainer['photo']) : null;
     $initials = htmlspecialchars(strtoupper(substr($trainer['name'], 0, 2)));
-    $rating = (float)($trainer['rating'] ?? 0);
-    $reviewCount = (int)($trainer['review_count'] ?? 0);
-    $fullStars = floor($rating);
-    $halfStar = ($rating - $fullStars) >= 0.5;
     ?>
 
     <article class="trainer-card">
@@ -67,17 +63,7 @@ function output_trainer_card($trainer) {
             <?php endif; ?>
         </div>
 
-        <div class="trainer-foot">
-            <!-- Rating display -->
-            <div class="trainer-rating">
-                <div class="stars">
-                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                        <?php if ($i <= $fullStars): ?>★<?php elseif ($halfStar && $i == $fullStars + 1): ?>½<?php else: ?>☆<?php endif; ?>
-                    <?php endfor; ?>
-                </div>
-                <span class="rating-text"><?= number_format($rating, 1) ?> (<?= $reviewCount ?>)</span>
-            </div>
-
+        <div class="trainer-foot trainer-foot-end">
             <!-- Link to full profile -->
             <a href="trainer_profile.php?id=<?= $id ?>" class="secondary-button btn-sm">View Profile</a>
         </div>
