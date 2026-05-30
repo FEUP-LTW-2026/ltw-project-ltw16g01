@@ -92,3 +92,33 @@ document.addEventListener('click', function (event) {
             enrollButton.disabled = false;
         });
 });
+
+// Handles opening and closing the trainer schedule edit form.
+document.addEventListener('click', function (event) {
+    const editButton = event.target.closest('.edit-schedule-button');
+
+    if (editButton) {
+        const targetId = editButton.dataset.target;
+        const editBox = document.getElementById(targetId);
+
+        if (!editBox) {
+            return;
+        }
+
+        editBox.classList.toggle('is-hidden');
+        return;
+    }
+
+    const cancelButton = event.target.closest('.cancel-edit-schedule-button');
+
+    if (cancelButton) {
+        const targetId = cancelButton.dataset.target;
+        const editBox = document.getElementById(targetId);
+
+        if (!editBox) {
+            return;
+        }
+
+        editBox.classList.add('is-hidden');
+    }
+});

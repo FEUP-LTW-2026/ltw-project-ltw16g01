@@ -22,10 +22,10 @@ function output_trainer_profile_error($title, $message) { ?>
 <?php }
 
 /**
- * Renders the hero section of the trainer profile: avatar, name, rating, specializations,
+ * Renders the hero section of the trainer profile: avatar, name, specializations,
  * description (PT or bio), and action buttons.
  */
-function output_trainer_profile_hero($trainer, $rating) {
+function output_trainer_profile_hero($trainer) {
     $name = htmlspecialchars($trainer['name']);
     $bio = htmlspecialchars($trainer['bio'] ?? 'No bio provided yet.');
     $ptDescription = htmlspecialchars($trainer['pt_description'] ?? '');
@@ -33,8 +33,6 @@ function output_trainer_profile_hero($trainer, $rating) {
     $initials = htmlspecialchars(strtoupper(substr($trainer['name'], 0, 2)));
     $isPt = !empty($trainer['is_pt']);
     $ptAvailable = !empty($trainer['pt_available']);
-    $ratingValue = $rating['rating'] ?? 0;
-    $reviewCount = $rating['count'] ?? 0;
     $specializations = array_map('trim', explode(',', $trainer['specializations'] ?? ''));
     ?>
 
@@ -51,17 +49,10 @@ function output_trainer_profile_hero($trainer, $rating) {
                 </div>
 
                 <div class="trainer-profile-content">
-                    <!-- Role label (Personal Trainer or Class Instructor) -->
+                    <!-- Role label -->
                     <p class="small-text"><?= ($isPt && $ptAvailable) ? 'Personal Trainer' : 'Class Instructor' ?></p>
 
                     <h1><?= $name ?></h1>
-
-                    <!-- Rating stars and count -->
-                    <div class="profile-rating">
-                        <span class="stars">★</span>
-                        <span><?= number_format($ratingValue, 1) ?> / 5</span>
-                        <span class="rating-muted">(<?= $reviewCount ?> reviews)</span>
-                    </div>
 
                     <!-- Specializations as badges -->
                     <div class="profile-specializations">
@@ -93,7 +84,6 @@ function output_trainer_profile_hero($trainer, $rating) {
     </section>
 
 <?php }
-
 /**
  * Renders the detailed section of the trainer profile:
  * About (bio), Certifications, Status (PT availability), and a schedule list of assigned classes.
