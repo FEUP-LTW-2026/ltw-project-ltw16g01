@@ -122,20 +122,16 @@ CREATE TABLE IF NOT EXISTS classes (
     REFERENCES class_types (id) 
 );
 
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (1, 'Morning Yoga', 'Start your day with calm and flexibility', 1, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (2, 'Power HIIT', 'Burn calories and build strength', 3, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (3, 'Spinning Class', 'High-energy cycling for all levels', 4, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (4, 'Pilates Core', 'Strengthen your core with controlled movements', 2, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (5, 'CrossFit WOD', 'Workout of the day — push your limits', 6, 0);
+INSERT INTO classes (id, name, description, class_type_id, active) VALUES (1, 'Morning Yoga', 'Start your day with calm and flexibility', 1, 1);
+INSERT INTO classes (id, name, description, class_type_id, active) VALUES (2, 'Power HIIT', 'Burn calories and build strength', 3, 1);
+INSERT INTO classes (id, name, description, class_type_id, active) VALUES (3, 'Spinning Class', 'High-energy cycling for all levels', 4, 1);
+INSERT INTO classes (id, name, description, class_type_id, active) VALUES (4, 'Pilates Core', 'Strengthen your core with controlled movements', 2, 1);
+INSERT INTO classes (id, name, description, class_type_id, active) VALUES (5, 'CrossFit WOD', 'Workout of the day — push your limits', 6, 1);
 INSERT INTO classes (id, name, description, class_type_id, active) VALUES (6, 'Evening Yoga', 'Wind down and restore with evening yoga', 1, 1);
 INSERT INTO classes (id, name, description, class_type_id, active) VALUES (7, 'Saturday Spin', 'Weekend ride to start your Saturday right', 4, 1);
 INSERT INTO classes (id, name, description, class_type_id, active) VALUES (8, 'Strength Basics', 'Build strength with proper technique and progressive overload', 5, 1);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (9, 'Boxing Conditioning', 'Improve endurance, speed and coordination with boxing drills', 7, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (10, 'Senior Fitness', 'Low-impact training focused on mobility, balance and strength', 8, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (11, 'Teste', 'teste', 6, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (12, 'teste notificações', 'adds', 7, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (13, 'teste no', 'ad', 4, 0);
-INSERT INTO classes (id, name, description, class_type_id, active) VALUES (14, 'teste noite', 'sda', 6, 1);
+INSERT INTO classes (id, name, description, class_type_id, active) VALUES (9, 'Boxing Conditioning', 'Improve endurance, speed and coordination with boxing drills', 7, 1);
+INSERT INTO classes (id, name, description, class_type_id, active) VALUES (10, 'Senior Fitness', 'Low-impact training focused on mobility, balance and strength', 8, 1);
 
 -- Table: enrollments
 DROP TABLE IF EXISTS enrollments;
@@ -577,8 +573,6 @@ INSERT INTO trainer_profiles (id, user_id, bio, specializations, certifications,
 INSERT INTO trainer_profiles (id, user_id, bio, specializations, certifications, is_pt, pt_description, pt_hourly_rate, pt_available) VALUES (10, 10, 'Personal trainer specialized in strength training, fat loss and nutrition guidance.', 'Strength, Fat Loss, Nutrition', 'ACE CPT, Nutrition Coach', 1, 'Personal training focused on strength, fat loss and nutrition guidance.', NULL, 1);
 INSERT INTO trainer_profiles (id, user_id, bio, specializations, certifications, is_pt, pt_description, pt_hourly_rate, pt_available) VALUES (11, 11, 'Trainer focused on women fitness, glute training and full-body strength.', 'Women Fitness, Glutes, Strength', 'NASM CPT', 1, 'PT sessions focused on glute training, full-body strength and confidence.', NULL, 1);
 INSERT INTO trainer_profiles (id, user_id, bio, specializations, certifications, is_pt, pt_description, pt_hourly_rate, pt_available) VALUES (12, 12, 'Boxing and conditioning coach focused on endurance, agility and coordination.', 'Boxing, Cardio, Agility', 'Boxing Coach, ACE', 1, 'Personal training focused on boxing, cardio, agility and endurance.', NULL, 1);
-INSERT INTO trainer_profiles (id, user_id, bio, specializations, certifications, is_pt, pt_description, pt_hourly_rate, pt_available) VALUES (13, 21, 'teste', 'teste', 'test', 0, NULL, NULL, 1);
-INSERT INTO trainer_profiles (id, user_id, bio, specializations, certifications, is_pt, pt_description, pt_hourly_rate, pt_available) VALUES (14, 24, 'ewwre', 'were', 'were', 0, NULL, NULL, 1);
 
 -- Table: users
 DROP TABLE IF EXISTS users;
@@ -620,11 +614,6 @@ INSERT INTO users (id, name, username, email, password, role, is_admin, photo, a
 INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (16, 'Rita Ferreira', 'ritaf', 'rita@email.com', '12345678', 'member', 0, NULL, 1, '2026-05-27 14:49:20');
 INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (17, 'Carlos Andrade', 'carlosa', 'carlos@email.com', '12345678', 'member', 0, NULL, 1, '2026-05-27 14:49:20');
 INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (18, 'Sofia Lima', 'sofial', 'sofia@email.com', '$2y$12$FiWJ2Eojwr0h0Gp.81ijweuDitpEahfW64jxT/xt0t0WiWdOd01Cq', 'member', 0, NULL, 1, '2026-05-27 14:49:20');
-INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (20, 'João Costa', 'jctc', 'voureceberemails@gmail.com', '$2y$12$PR0ITodgiM5l6cZfbMn8vOvakDy7C8WJulzZhOz8WT7bUgG7ftGvm', 'member', 1, '../uploads/profiles/profile_dba0069db0f1bd8d44fb44d8.jpg', 1, '2026-05-27 15:17:19');
-INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (21, 'teste', 'teste', 'teste@teste.teste', '$2y$12$0ntA4b1L6RAhESf76rm96.qUo8/GIovdNzEX.td8MoxbdFf.XC5CS', 'trainer', 0, NULL, 0, '2026-05-29 13:51:42');
-INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (22, 'teste', 'teste2', 'teste@test.pt', '$2y$12$vq5TdpyeSQVQMW4zKGlsLeTdfPz1V5TaUe7QQdAX0RZ4IsLwBvC5u', 'member', 0, NULL, 1, '2026-05-29 14:50:59');
-INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (23, 'teste notif', 'teste1232', '123@123.ppt', '$2y$12$Ctv92UR9ZL.cuFaDzODV8ONbsH23LxK8XV96w3YSCJf66fGe3o4Um', 'member', 0, NULL, 0, '2026-05-29 22:12:09');
-INSERT INTO users (id, name, username, email, password, role, is_admin, photo, active, created_at) VALUES (24, 'teste notif', 'teste n', 'trainer@tr.pt', '$2y$12$YJSCVtGQKWEpvBdRWtZ0ouHWUzjwS/wR2W9UbsjWgZZGRpG8i6kEa', 'trainer', 0, NULL, 1, '2026-05-29 22:13:45');
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
