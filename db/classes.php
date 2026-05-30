@@ -355,48 +355,47 @@ function getTrainerScheduleDetailsForUpdate(PDO $pdo, int $scheduleId, int $trai
     return $schedule ?: null;
 }
 
-function createNextSessionForSchedule(PDO $pdo, int $scheduleId): ?int
+function createNextSessionForSchedule(PDO $pdo, int $scheduleId, ?string $afterDate = null): ?int
 {
-    // Obter os detalhes do horário
+    // Get schedule details
     $schedule = getClassScheduleById($pdo, $scheduleId);
     if (!$schedule) {
         return null;
     }
 
-    $dayOfWeek = $schedule['day_of_week']; // "Monday", "Tuesday", etc.
+    $dayOfWeek = $schedule['day_of_week']; // e.g., "Monday"
     $startTime = $schedule['start_time'];
 
-    // Calcular a próxima data com base no dia da semana
+    // Set the starting date for search
     $timezone = new DateTimeZone('Europe/Lisbon');
-    $now = new DateTime('now', $timezone);
-    // A partir de amanhã (para não pegar hoje se já passou o horário)
-    $nextDate = clone $now;
-    $nextDate->modify('+1 day');
-    // Avançar até ao próximo dia da semana desejado
+    $start = $afterDate ? new DateTime($afterDate, $timezone) : new DateTime('now', $timezone);
+    // Move to the next day (we want a date strictly after $afterDate)
+    $start->modify('+1 day');
+
+    // Map day names to DateTime's "next X" format
     $targetDay = ucfirst($dayOfWeek);
-    $nextDate->modify("next $targetDay");
+    // Start searching from the start date
+    $date = clone $start;
+    // Limit to 52 weeks ahead
+    for ($i = 0; $i < 52; $i++) {
+        // If the current day matches the target day of week
+        if ($date->format('l') === $targetDay) {
+            $sessionDate = $date->format('Y-m-d');
 
-    $sessionDate = $nextDate->format('Y-m-d');
-
-    // Verificar se já existe uma sessão para esta data (não cancelada)
-    $stmt = $pdo->prepare("
-        SELECT id FROM class_sessions 
-        WHERE schedule_id = ? AND session_date = ? AND status != 'cancelled'
-        LIMIT 1
-    ");
-    $stmt->execute([$scheduleId, $sessionDate]);
-    $existing = $stmt->fetchColumn();
-    if ($existing) {
-        return (int)$existing;
+            // Check if a session already exists for this date (any status)
+            $stmt = $pdo->prepare("SELECT id FROM class_sessions WHERE schedule_id = ? AND session_date = ? LIMIT 1");
+            $stmt->execute([$scheduleId, $sessionDate]);
+            if (!$stmt->fetchColumn()) {
+                // No session exists – create one
+                $stmt = $pdo->prepare("INSERT INTO class_sessions (schedule_id, session_date, status) VALUES (?, ?, 'scheduled')");
+                $stmt->execute([$scheduleId, $sessionDate]);
+                return (int)$pdo->lastInsertId();
+            }
+            // If a session already exists (even cancelled), skip this date and continue searching
+        }
+        $date->modify('+1 day');
     }
-
-    // Criar a nova sessão
-    $stmt = $pdo->prepare("
-        INSERT INTO class_sessions (schedule_id, session_date, status) 
-        VALUES (?, ?, 'scheduled')
-    ");
-    $stmt->execute([$scheduleId, $sessionDate]);
-    return (int)$pdo->lastInsertId();
+    return null;
 }
 
 function getUpcomingEnrolledSessions(PDO $pdo, int $memberId): array

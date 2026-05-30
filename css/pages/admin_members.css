@@ -65,3 +65,8 @@
 .form-control, .form-select {
     width: 100%;
 }
+
+#enrolled-classes-table {
+    margin-top: var(--sp-lg);
+    margin-bottom: var(--sp-lg);
+}

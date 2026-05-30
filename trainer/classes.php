@@ -33,29 +33,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
     if ($sessionId <= 0) {
         $error = 'Invalid session.';
     } else {
-        // Cancela a sessão actual
-        $cancelled = cancelTrainerSession($pdo, $sessionId, $trainerId);
-        if ($cancelled) {
-            // Notificar membros e administradores
-            notifyUsersAboutCancelledTrainerSession($pdo, $sessionId);
+        // Get session details before cancelling (especially its date)
+        $stmt = $pdo->prepare("SELECT schedule_id, session_date FROM class_sessions WHERE id = ?");
+        $stmt->execute([$sessionId]);
+        $sessionData = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$sessionData) {
+            $error = 'Session not found.';
+        } else {
+            $cancelled = cancelTrainerSession($pdo, $sessionId, $trainerId);
+            if ($cancelled) {
+                notifyUsersAboutCancelledTrainerSession($pdo, $sessionId);
 
-            // Obter o schedule_id a partir da sessão cancelada
-            $stmt = $pdo->prepare("SELECT schedule_id FROM class_sessions WHERE id = ?");
-            $stmt->execute([$sessionId]);
-            $scheduleId = $stmt->fetchColumn();
-            if ($scheduleId) {
-                // Criar a próxima sessão (se não existir)
-                $newSessionId = createNextSessionForSchedule($pdo, (int)$scheduleId);
+                $scheduleId = (int)$sessionData['schedule_id'];
+                $cancelledDate = $sessionData['session_date'];
+
+                // Create the next session strictly after the cancelled session's date
+                $newSessionId = createNextSessionForSchedule($pdo, $scheduleId, $cancelledDate);
                 if ($newSessionId) {
                     $message = 'Session cancelled. Next session has been scheduled.';
                 } else {
-                    $message = 'Session cancelled, but could not create the next session.';
+                    $message = 'Session cancelled, but could not create the next session (no future dates available).';
                 }
             } else {
-                $message = 'Session cancelled successfully.';
+                $error = 'Failed to cancel session. Please try again.';
             }
-        } else {
-            $error = 'Failed to cancel session. Please try again.';
         }
     }
 }
@@ -165,7 +166,15 @@ output_header('classes.css');
                         <ul class="class-meta">
                             <li>🧘 <?= htmlspecialchars($schedule['class_type_label'] ?? '') ?></li>
                             <li>📍 <?= htmlspecialchars($schedule['location']) ?></li>
-                            <li>📅 <?= htmlspecialchars($schedule['day_of_week']) ?> at <?= htmlspecialchars($schedule['start_time']) ?></li>
+                            <?php if ($session): ?>
+                                <?php
+                                    $sessionDateObj = new DateTime($session['session_date']);
+                                    $formattedDate = $sessionDateObj->format('l, F j, Y');
+                                ?>
+                                <li>📅 <strong>Next:</strong> <?= htmlspecialchars($formattedDate) ?> at <?= htmlspecialchars($schedule['start_time']) ?></li>
+                            <?php else: ?>
+                                <li>📅 <?= htmlspecialchars($schedule['day_of_week']) ?> at <?= htmlspecialchars($schedule['start_time']) ?> (recurring)</li>
+                            <?php endif; ?>
                             <li>👥 Capacity: <?= (int)$schedule['capacity'] ?></li>
                             <li>⏱️ Duration: <?= (int)$schedule['duration_min'] ?> minutes</li>
                         </ul>

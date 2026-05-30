@@ -87,7 +87,19 @@ function output_class_schedule_card($schedule) {
                 <li>👤 <?= $trainerName ?></li>
                 <li>⏱️ <?= $duration ?> min</li>
                 <li>📍 <?= $location ?></li>
-                <li>📅 <?= $day ?> at <?= $startTime ?></li>
+                <?php
+                // Get the next upcoming session (real or virtual)
+                $sessions = getUpcomingSessionsBySchedule($GLOBALS['pdo'], $scheduleId, 1);
+                if (!empty($sessions)):
+                    $nextSession = $sessions[0];
+                    $nextDate = $nextSession['session_date']; // Y-m-d
+                    $dateObj = new DateTime($nextDate);
+                    $formattedDate = $dateObj->format('l, F j, Y \a\t g:i A');
+                ?>
+                    <li>📅 <strong>Next:</strong> <?= htmlspecialchars($formattedDate) ?></li>
+                <?php else: ?>
+                    <li>📅 <?= htmlspecialchars($day) ?> at <?= $startTime ?></li>
+                <?php endif; ?>
             </ul>
         </div>
         <div class="class-foot">

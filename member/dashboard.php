@@ -118,7 +118,7 @@ output_header('member_dashboard.css');
         <div class="card full-width-card">
             <div class="card-head">
                 <h2 class="card-title">Your Upcoming Classes</h2>
-                <a href="classes.php" class="secondary-button btn-sm">Browse All Classes</a>
+                <a href="my_classes.php" class="secondary-button btn-sm">Browse All Your Classes</a>
             </div>
 
             <div class="table-wrap">
