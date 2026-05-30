@@ -77,7 +77,7 @@ function output_trainer_card($trainer) {
  */
 function output_trainers_admin_table($trainers) {
     if (empty($trainers)) {
-        echo '<tr><td colspan="6" class="center-text">No trainers found.</td></tr>';
+        echo '<tr><td colspan="7" class="center-text">No trainers found.</td></tr>';
         return;
     }
 
