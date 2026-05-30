@@ -1,4 +1,12 @@
 <?php
+/**
+ * trainer/dashboard.php
+ * Dashboard for trainers showing KPIs, pending PT requests, upcoming classes,
+ * confirmed PT sessions, and past classes.
+ *
+ * All database queries are delegated to helper functions in db/trainers.php.
+ */
+
 require_once '../includes/session.php';
 require_once '../includes/header.php';
 require_once '../includes/footer.php';
@@ -10,16 +18,15 @@ require_once '../db/notifications.php';
 
 requireAuth('trainer');
 
-// Create the database connection and get the logged-in trainer id.
 $pdo = getDatabaseConnection();
-$trainerId = $_SESSION['user_id'];
+$trainerId = (int)$_SESSION['user_id'];
 
-// Load dashboard data through database helper functions.
+// Load all dashboard data via helper functions
 $stats = getTrainerStats($pdo, $trainerId);
-$upcoming = getTrainerUpcomingClasses($pdo, $trainerId);
-$pastClasses = getTrainerPastClasses($pdo, $trainerId);
+$upcomingClasses = getTrainerUpcomingClasses($pdo, $trainerId, 10);
+$pastClasses = getTrainerPastClasses($pdo, $trainerId, 10);
 $pendingPT = getTrainerPendingPTRequests($pdo, $trainerId);
-$confirmedPT = getTrainerConfirmedPT($pdo, $trainerId);
+$confirmedPT = getTrainerConfirmedPT($pdo, $trainerId, 10);
 
 // Handle accept/reject actions for personal training requests.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -35,19 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $newStatus = $action === 'accept' ? 'confirmed' : 'cancelled';
 
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, $newStatus)) {
-            // Get the member affected by this PT request through a database helper.
-            $memberId = getPTRequestMemberId($pdo, $requestId);
-
+            // Get the member ID affected by this PT request
+            $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
+            $stmt->execute([$requestId]);
+            $memberId = $stmt->fetchColumn();
             if ($memberId) {
                 $trainerName = $_SESSION['user_name'] ?? '';
-
                 $message = $action === 'accept'
                     ? "Your personal training request has been confirmed by trainer " . $trainerName
                     : "Your personal training request has been declined by trainer " . $trainerName;
-
-                createNotification($pdo, $memberId, $message, $action === 'accept' ? 'success' : 'warning');
+                createNotification($pdo, (int)$memberId, $message, $action === 'accept' ? 'success' : 'warning');
             }
-
             header('Location: dashboard.php');
             exit;
         }
@@ -70,19 +75,20 @@ output_header('trainer_dashboard.css');
     </header>
 
     <div class="dashboard-content">
+        <!-- KPI Cards -->
         <div class="kpi-grid">
             <div class="kpi-card">
-                <p class="kpi-num"><?= $stats['upcoming'] ?></p>
+                <p class="kpi-num"><?= (int)$stats['upcoming'] ?></p>
                 <p class="kpi-lbl">📅 Upcoming Classes</p>
             </div>
 
             <div class="kpi-card">
-                <p class="kpi-num"><?= $stats['students'] ?></p>
+                <p class="kpi-num"><?= (int)$stats['students'] ?></p>
                 <p class="kpi-lbl">👥 Enrolled Students</p>
             </div>
 
             <div class="kpi-card">
-                <p class="kpi-num"><?= $stats['past'] ?></p>
+                <p class="kpi-num"><?= (int)$stats['past'] ?></p>
                 <p class="kpi-lbl">🏁 Classes Completed</p>
             </div>
         </div>
@@ -90,6 +96,7 @@ output_header('trainer_dashboard.css');
         <div class="dash-layout">
             <div class="dash-col">
 
+                <!-- Pending Personal Training Requests -->
                 <div class="card">
                     <div class="card-head">
                         <h2 class="card-title">Pending Personal Training Requests</h2>
@@ -108,7 +115,6 @@ output_header('trainer_dashboard.css');
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 <?php if (empty($pendingPT)): ?>
                                     <tr>
@@ -126,17 +132,12 @@ output_header('trainer_dashboard.css');
                                                 <form method="post" class="action-inline-form">
                                                     <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                     <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
-                                                    <button type="submit" name="action" value="accept" class="main-button btn-sm">
-                                                        Accept
-                                                    </button>
+                                                    <button type="submit" name="action" value="accept" class="main-button btn-sm">Accept</button>
                                                 </form>
-
                                                 <form method="post" class="action-inline-form">
                                                     <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
                                                     <input type="hidden" name="request_id" value="<?= (int)$req['id'] ?>">
-                                                    <button type="submit" name="action" value="reject" class="decline-btn btn-sm">
-                                                        Decline
-                                                    </button>
+                                                    <button type="submit" name="action" value="reject" class="decline-btn btn-sm">Decline</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -147,12 +148,12 @@ output_header('trainer_dashboard.css');
                     </div>
                 </div>
 
+                <!-- Upcoming Classes -->
                 <div class="card">
                     <div class="card-head">
                         <h2 class="card-title">Your Upcoming Classes</h2>
                         <a href="classes.php" class="secondary-button btn-sm">View Schedule</a>
                     </div>
-
                     <div class="table-wrap">
                         <table class="table">
                             <thead>
@@ -165,14 +166,16 @@ output_header('trainer_dashboard.css');
                                     <th>Capacity</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-                                <?php if (empty($upcoming)): ?>
-                                    <tr>
-                                        <td colspan="6" class="center-text">No upcoming classes assigned.</td>
-                                    </tr>
+                                <?php if (empty($upcomingClasses)): ?>
+                                    <tr><td colspan="6" class="center-text">No upcoming classes assigned.</td></tr>
                                 <?php else: ?>
-                                    <?php foreach ($upcoming as $class): ?>
+                                    <?php foreach ($upcomingClasses as $class): ?>
+                                        <?php
+                                        $percent = $class['capacity'] > 0
+                                            ? round(($class['enrolled_count'] / $class['capacity']) * 100)
+                                            : 0;
+                                        ?>
                                         <tr>
                                             <td><?= htmlspecialchars($class['class_name']) ?></td>
                                             <td><?= htmlspecialchars($class['session_date']) ?></td>
@@ -180,11 +183,6 @@ output_header('trainer_dashboard.css');
                                             <td><?= htmlspecialchars($class['location']) ?></td>
                                             <td><?= (int)$class['enrolled_count'] ?> / <?= (int)$class['capacity'] ?></td>
                                             <td>
-                                                <?php
-                                                $percent = $class['capacity'] > 0
-                                                    ? round(($class['enrolled_count'] / $class['capacity']) * 100)
-                                                    : 0;
-                                                ?>
                                                 <span class="badge badge-<?= $percent >= 100 ? 'danger' : ($percent >= 80 ? 'warning' : 'success') ?>">
                                                     <?= $percent ?>%
                                                 </span>
@@ -201,12 +199,12 @@ output_header('trainer_dashboard.css');
 
             <div class="dash-col">
 
+                <!-- Confirmed PT Sessions -->
                 <div class="card">
                     <div class="card-head">
                         <h2 class="card-title">Confirmed PT Sessions</h2>
                         <a href="pt_requests.php?filter=confirmed" class="secondary-button btn-sm">View All</a>
                     </div>
-
                     <div class="table-wrap">
                         <table class="table">
                             <thead>
@@ -218,12 +216,9 @@ output_header('trainer_dashboard.css');
                                     <th>Notes</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 <?php if (empty($confirmedPT)): ?>
-                                    <tr>
-                                        <td colspan="5" class="center-text">No confirmed PT sessions.</td>
-                                    </tr>
+                                    <tr><td colspan="5" class="center-text">No confirmed PT sessions.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($confirmedPT as $pt): ?>
                                         <tr>
@@ -240,11 +235,11 @@ output_header('trainer_dashboard.css');
                     </div>
                 </div>
 
+                <!-- Recent Classes (Past) -->
                 <div class="card">
                     <div class="card-head">
                         <h2 class="card-title">Recent Classes (Past)</h2>
                     </div>
-
                     <div class="table-wrap">
                         <table class="table">
                             <thead>
@@ -255,12 +250,9 @@ output_header('trainer_dashboard.css');
                                     <th>Enrolled</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 <?php if (empty($pastClasses)): ?>
-                                    <tr>
-                                        <td colspan="4" class="center-text">No past classes yet.</td>
-                                    </tr>
+                                    <tr><td colspan="4" class="center-text">No past classes yet.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($pastClasses as $class): ?>
                                         <tr>
@@ -280,6 +272,5 @@ output_header('trainer_dashboard.css');
         </div>
     </div>
 </main>
-
 
 <?php output_footer('../trainer/'); ?>

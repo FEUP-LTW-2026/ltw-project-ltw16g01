@@ -57,8 +57,8 @@ output_header('member_dashboard.css');
             </div>
 
             <div class="kpi-card">
-                <p class="kpi-num"><?= htmlspecialchars($stats['avg_rating']) ?></p>
-                <p class="kpi-lbl">⭐ Average Rating</p>
+                <p class="kpi-num"><?= count($confirmedPT) ?></p>
+                <p class="kpi-lbl">💪 Confirmed PT Sessions</p>
             </div>
         </div>
 

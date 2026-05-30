@@ -296,15 +296,17 @@ function getDistinctSpecializations($pdo) {
 }
 
 function getTrainerStats($pdo, $trainerId) {
+    // Upcoming classes (scheduled sessions with date >= today)
     $stmt = $pdo->prepare("
-        SELECT COUNT(*) 
+        SELECT COUNT(DISTINCT sess.id) 
         FROM class_sessions sess
         JOIN class_schedules cs ON sess.schedule_id = cs.id
         WHERE cs.trainer_id = ? AND sess.session_date >= date('now') AND sess.status = 'scheduled'
     ");
     $stmt->execute([$trainerId]);
-    $upcoming = $stmt->fetchColumn();
+    $upcoming = (int)$stmt->fetchColumn();
 
+    // Enrolled students (unique members in future sessions)
     $stmt = $pdo->prepare("
         SELECT COUNT(DISTINCT e.member_id)
         FROM enrollments e
@@ -313,16 +315,17 @@ function getTrainerStats($pdo, $trainerId) {
         WHERE cs.trainer_id = ? AND sess.session_date >= date('now') AND e.status = 'enrolled'
     ");
     $stmt->execute([$trainerId]);
-    $students = $stmt->fetchColumn();
+    $students = (int)$stmt->fetchColumn();
 
+    // Past classes (any session with date < today, regardless of status)
     $stmt = $pdo->prepare("
-        SELECT COUNT(*) 
+        SELECT COUNT(DISTINCT sess.id)
         FROM class_sessions sess
         JOIN class_schedules cs ON sess.schedule_id = cs.id
-        WHERE cs.trainer_id = ? AND sess.session_date < date('now') AND sess.status = 'completed'
+        WHERE cs.trainer_id = ? AND sess.session_date < date('now')
     ");
     $stmt->execute([$trainerId]);
-    $past = $stmt->fetchColumn();
+    $past = (int)$stmt->fetchColumn();
 
     return [
         'upcoming' => $upcoming,
