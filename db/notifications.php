@@ -382,3 +382,140 @@ function notifyTrainerClassEnrollment(
         'Class Enrollment'
     );
 }
+
+/**
+ * Notify all enrolled members and administrators when a trainer cancels a session.
+ *
+ * @param PDO $pdo
+ * @param int $sessionId
+ * @return void
+ */
+function notifyUsersAboutCancelledTrainerSession(PDO $pdo, int $sessionId): void
+{
+    // 1. Get session details (class name, date, time, schedule)
+    $stmt = $pdo->prepare("
+        SELECT 
+            sess.id AS session_id,
+            sess.session_date,
+            sch.start_time,
+            c.name AS class_name,
+            sch.id AS schedule_id
+        FROM class_sessions sess
+        JOIN class_schedules sch ON sess.schedule_id = sch.id
+        JOIN classes c ON sch.class_id = c.id
+        WHERE sess.id = ?
+    ");
+    $stmt->execute([$sessionId]);
+    $session = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$session) {
+        return;
+    }
+
+    $className = $session['class_name'];
+    $sessionDate = date('l, F j, Y', strtotime($session['session_date']));
+    $startTime = $session['start_time'];
+
+    // 2. Get all enrolled members for this session
+    $stmt = $pdo->prepare("
+        SELECT e.member_id, u.name, u.email
+        FROM enrollments e
+        JOIN users u ON e.member_id = u.id
+        WHERE e.session_id = ? AND e.status = 'enrolled'
+    ");
+    $stmt->execute([$sessionId]);
+    $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 3. Notify each enrolled member
+    $message = "The class '{$className}' scheduled for {$sessionDate} at {$startTime} has been cancelled by the trainer.";
+    foreach ($members as $member) {
+        createNotification(
+            $pdo,
+            (int)$member['member_id'],
+            $message,
+            'warning',
+            'Class cancelled'
+        );
+    }
+
+    // 4. Notify all administrators (role‑based)
+    $adminMessage = "Trainer cancelled session for class '{$className}' on {$sessionDate} at {$startTime}. All enrolled members have been notified.";
+    createNotification(
+        $pdo,
+        $adminMessage,
+        'warning',
+        null,
+        'admin',
+        'role',
+        'Session cancelled'
+    );
+}
+
+/**
+ * Notify enrolled members and administrators when a trainer updates a class schedule.
+ *
+ * @param PDO $pdo
+ * @param int $scheduleId
+ * @param array $changes List of human‑readable changes (e.g. ["time: 10:00 → 11:00"])
+ * @return void
+ */
+function notifyUsersAboutUpdatedClassSchedule(PDO $pdo, int $scheduleId, array $changes): void
+{
+    if (empty($changes)) {
+        return;
+    }
+
+    // 1. Get schedule details (class name, next upcoming session dates)
+    $stmt = $pdo->prepare("
+        SELECT 
+            c.name AS class_name,
+            sch.day_of_week,
+            sch.start_time
+        FROM class_schedules sch
+        JOIN classes c ON sch.class_id = c.id
+        WHERE sch.id = ?
+    ");
+    $stmt->execute([$scheduleId]);
+    $schedule = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$schedule) {
+        return;
+    }
+
+    $className = $schedule['class_name'];
+    $changeList = implode(', ', $changes);
+    $message = "The schedule for class '{$className}' has been updated: {$changeList}. Future sessions will reflect these changes.";
+
+    // 2. Get all members enrolled in any future session of this schedule
+    $stmt = $pdo->prepare("
+        SELECT DISTINCT e.member_id
+        FROM enrollments e
+        JOIN class_sessions sess ON e.session_id = sess.id
+        WHERE sess.schedule_id = ? 
+          AND sess.session_date >= date('now')
+          AND e.status = 'enrolled'
+    ");
+    $stmt->execute([$scheduleId]);
+    $memberIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // 3. Notify each affected member
+    foreach ($memberIds as $memberId) {
+        createNotification(
+            $pdo,
+            (int)$memberId,
+            $message,
+            'warning',
+            'Schedule changed'
+        );
+    }
+
+    // 4. Notify all administrators (role‑based)
+    $adminMessage = "Trainer updated schedule for class '{$className}': {$changeList}.";
+    createNotification(
+        $pdo,
+        $adminMessage,
+        'info',
+        null,
+        'admin',
+        'role',
+        'Schedule updated'
+    );
+}

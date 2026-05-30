@@ -73,10 +73,9 @@ function getClassSessionById($pdo, $sessionId) {
     $stmt->execute([$sessionId]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
 function getUpcomingSessionsBySchedule(PDO $pdo, int $scheduleId, int $limit = 5): array
 {
-    // 1. Try to get REAL future sessions already in class_sessions
+    // 1. Tentar obter sessões reais futuras (não canceladas)
     $stmt = $pdo->prepare("
         SELECT 
             sess.id,
@@ -86,63 +85,63 @@ function getUpcomingSessionsBySchedule(PDO $pdo, int $scheduleId, int $limit = 5
             cs.start_time,
             c.name AS class_name,
             u.name AS trainer_name,
-            cs.capacity,
-            cs.day_of_week
+            cs.capacity
         FROM class_sessions sess
         JOIN class_schedules cs ON sess.schedule_id = cs.id
         JOIN classes c ON cs.class_id = c.id
         LEFT JOIN users u ON cs.trainer_id = u.id
-        WHERE sess.schedule_id = ?
+        WHERE sess.schedule_id = ? 
           AND datetime(sess.session_date || ' ' || cs.start_time) > datetime('now')
           AND sess.status = 'scheduled'
-        ORDER BY sess.session_date ASC, cs.start_time ASC
+        ORDER BY sess.session_date ASC
         LIMIT ?
     ");
     $stmt->execute([$scheduleId, $limit]);
     $realSessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
     if (!empty($realSessions)) {
-        // Enrich with required fields for the template
-        foreach ($realSessions as &$s) {
-            $s['schedule_id'] = $scheduleId;
-            $s['is_virtual'] = false;
-        }
         return $realSessions;
     }
-    
-    // 2. Fallback: calculate virtual sessions (no real session exists yet)
+
+    // 2. Fallback: calcular a(s) próxima(s) data(s) virtualmente
     $schedule = getClassScheduleById($pdo, $scheduleId);
-    if (!$schedule) {
-        return [];
-    }
-    
+    if (!$schedule) return [];
+
     $timezone = new DateTimeZone('Europe/Lisbon');
-    $today = new DateTime('now', $timezone);
+    $now = new DateTime('now', $timezone);
+    $today = clone $now;
     $today->setTime(0, 0, 0);
+
+    // A partir de amanhã
     $startDate = clone $today;
     $startDate->modify('+1 day');
-    
+
     $dayMap = [
-        'Monday' => 'Mon', 'Tuesday' => 'Tue', 'Wednesday' => 'Wed',
-        'Thursday' => 'Thu', 'Friday' => 'Fri', 'Saturday' => 'Sat', 'Sunday' => 'Sun'
+        'Monday'    => 'Mon',
+        'Tuesday'   => 'Tue',
+        'Wednesday' => 'Wed',
+        'Thursday'  => 'Thu',
+        'Friday'    => 'Fri',
+        'Saturday'  => 'Sat',
+        'Sunday'    => 'Sun'
     ];
     $targetDay = $dayMap[$schedule['day_of_week']] ?? null;
     if (!$targetDay) return [];
-    
+
     $sessions = [];
     $date = clone $startDate;
     $found = 0;
-    while ($found < $limit && $found < 52) {
+    while ($found < $limit && $found < 52) { // máximo 52 semanas no futuro
         if ($date->format('D') === $targetDay) {
             $sessionDate = $date->format('Y-m-d');
+            // Verifica se a data virtual já não foi cancelada (não há registo de cancelamento para datas virtuais, mas por segurança)
+            // Podes também verificar se já existe uma sessão real cancelada nessa data e pular se quiseres.
             $sessions[] = [
-                'id'            => -($found + 1), // negative = virtual
-                'schedule_id'   => $scheduleId,
+                'id'            => -($found + 1), // ID virtual (negativo)
                 'session_date'  => $sessionDate,
                 'status'        => 'scheduled',
                 'start_time'    => $schedule['start_time'],
                 'class_name'    => $schedule['class_name'],
-                'trainer_name'  => getTrainerNameById2($pdo, $schedule['trainer_id']),
+                'trainer_name'  => $schedule['trainer_name'] ?? 'TBD',
                 'capacity'      => (int)$schedule['capacity'],
                 'enrolled_count'=> 0,
                 'is_virtual'    => true
@@ -355,69 +354,79 @@ function getTrainerScheduleDetailsForUpdate(PDO $pdo, int $scheduleId, int $trai
     $schedule = $stmt->fetch(PDO::FETCH_ASSOC);
     return $schedule ?: null;
 }
-function createNextSessionForSchedule(PDO $pdo, int $scheduleId): ?array
+
+function createNextSessionForSchedule(PDO $pdo, int $scheduleId): ?int
 {
-    // Get schedule details
-    $stmt = $pdo->prepare("
-        SELECT day_of_week, start_time 
-        FROM class_schedules 
-        WHERE id = ?
-    ");
-    $stmt->execute([$scheduleId]);
-    $schedule = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Obter os detalhes do horário
+    $schedule = getClassScheduleById($pdo, $scheduleId);
     if (!$schedule) {
         return null;
     }
 
-    // Map full day names to three‑letter abbreviations
-    $dayMap = [
-        'Monday'    => 'Mon',
-        'Tuesday'   => 'Tue',
-        'Wednesday' => 'Wed',
-        'Thursday'  => 'Thu',
-        'Friday'    => 'Fri',
-        'Saturday'  => 'Sat',
-        'Sunday'    => 'Sun'
-    ];
-    $targetDay = $dayMap[$schedule['day_of_week']] ?? null;
-    if (!$targetDay) {
-        return null;
-    }
+    $dayOfWeek = $schedule['day_of_week']; // "Monday", "Tuesday", etc.
+    $startTime = $schedule['start_time'];
 
+    // Calcular a próxima data com base no dia da semana
     $timezone = new DateTimeZone('Europe/Lisbon');
-    $today = new DateTime('now', $timezone);
-    $today->setTime(0, 0, 0);
-    $startDate = clone $today;
-    $startDate->modify('+1 day'); // look from tomorrow
+    $now = new DateTime('now', $timezone);
+    // A partir de amanhã (para não pegar hoje se já passou o horário)
+    $nextDate = clone $now;
+    $nextDate->modify('+1 day');
+    // Avançar até ao próximo dia da semana desejado
+    $targetDay = ucfirst($dayOfWeek);
+    $nextDate->modify("next $targetDay");
 
-    $date = clone $startDate;
-    for ($i = 0; $i < 52; $i++) { // max one year ahead
-        if ($date->format('D') === $targetDay) {
-            $sessionDate = $date->format('Y-m-d');
-            
-            // Check if a session already exists for this date
-            $existingId = getSessionIdByDateAndSchedule($pdo, $scheduleId, $sessionDate);
-            if ($existingId) {
-                // Return existing session
-                $stmt2 = $pdo->prepare("SELECT * FROM class_sessions WHERE id = ?");
-                $stmt2->execute([$existingId]);
-                return $stmt2->fetch(PDO::FETCH_ASSOC);
-            }
-            
-            // Create new session
-            $stmt2 = $pdo->prepare("
-                INSERT INTO class_sessions (schedule_id, session_date, status) 
-                VALUES (?, ?, 'scheduled')
-            ");
-            $stmt2->execute([$scheduleId, $sessionDate]);
-            $newId = $pdo->lastInsertId();
-            
-            $stmt2 = $pdo->prepare("SELECT * FROM class_sessions WHERE id = ?");
-            $stmt2->execute([$newId]);
-            return $stmt2->fetch(PDO::FETCH_ASSOC);
-        }
-        $date->modify('+1 day');
+    $sessionDate = $nextDate->format('Y-m-d');
+
+    // Verificar se já existe uma sessão para esta data (não cancelada)
+    $stmt = $pdo->prepare("
+        SELECT id FROM class_sessions 
+        WHERE schedule_id = ? AND session_date = ? AND status != 'cancelled'
+        LIMIT 1
+    ");
+    $stmt->execute([$scheduleId, $sessionDate]);
+    $existing = $stmt->fetchColumn();
+    if ($existing) {
+        return (int)$existing;
     }
-    return null;
+
+    // Criar a nova sessão
+    $stmt = $pdo->prepare("
+        INSERT INTO class_sessions (schedule_id, session_date, status) 
+        VALUES (?, ?, 'scheduled')
+    ");
+    $stmt->execute([$scheduleId, $sessionDate]);
+    return (int)$pdo->lastInsertId();
 }
+
+function getUpcomingEnrolledSessions(PDO $pdo, int $memberId): array
+{
+    $sql = "
+        SELECT 
+            e.id AS enrollment_id,
+            sess.id AS session_id,
+            sess.session_date,
+            cs.start_time,
+            cs.location,
+            cs.duration_min,
+            c.name AS class_name,
+            c.description AS class_description,
+            u.name AS trainer_name,
+            (SELECT COUNT(*) FROM enrollments WHERE session_id = sess.id AND status = 'enrolled') AS enrolled_count,
+            cs.capacity
+        FROM enrollments e
+        JOIN class_sessions sess ON e.session_id = sess.id
+        JOIN class_schedules cs ON sess.schedule_id = cs.id
+        JOIN classes c ON cs.class_id = c.id
+        LEFT JOIN users u ON cs.trainer_id = u.id
+        WHERE e.member_id = ?
+          AND e.status = 'enrolled'
+          AND datetime(sess.session_date || ' ' || cs.start_time) > datetime('now')
+        ORDER BY sess.session_date ASC, cs.start_time ASC
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$memberId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 ?>

@@ -30,17 +30,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Handle class session cancellation.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cancel_session') {
     $sessionId = (int)($_POST['session_id'] ?? 0);
-
     if ($sessionId <= 0) {
         $error = 'Invalid session.';
     } else {
+        // Cancela a sessão actual
         $cancelled = cancelTrainerSession($pdo, $sessionId, $trainerId);
-
         if ($cancelled) {
-            // Notify affected members and admins through database helper functions.
+            // Notificar membros e administradores
             notifyUsersAboutCancelledTrainerSession($pdo, $sessionId);
 
-            $message = 'Session cancelled successfully. Notifications sent.';
+            // Obter o schedule_id a partir da sessão cancelada
+            $stmt = $pdo->prepare("SELECT schedule_id FROM class_sessions WHERE id = ?");
+            $stmt->execute([$sessionId]);
+            $scheduleId = $stmt->fetchColumn();
+            if ($scheduleId) {
+                // Criar a próxima sessão (se não existir)
+                $newSessionId = createNextSessionForSchedule($pdo, (int)$scheduleId);
+                if ($newSessionId) {
+                    $message = 'Session cancelled. Next session has been scheduled.';
+                } else {
+                    $message = 'Session cancelled, but could not create the next session.';
+                }
+            } else {
+                $message = 'Session cancelled successfully.';
+            }
         } else {
             $error = 'Failed to cancel session. Please try again.';
         }

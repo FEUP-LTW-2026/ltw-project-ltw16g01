@@ -1,0 +1,35 @@
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.data-table th,
+.data-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+.data-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.inline-form {
+    display: inline;
+}
+.danger-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.danger-button:hover {
+    background-color: #c82333;
+}
