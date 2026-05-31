@@ -38,15 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $error = 'Invalid session.';
     } else {
         // Get session details before cancellation (for trainer notification)
-        $stmt = $pdo->prepare("
-            SELECT cs.trainer_id, c.name AS class_name
-            FROM class_sessions sess
-            JOIN class_schedules cs ON sess.schedule_id = cs.id
-            JOIN classes c ON cs.class_id = c.id
-            WHERE sess.id = ?
-        ");
-        $stmt->execute([$sessionId]);
-        $sessionInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sessionInfo = getSessionClassNotificationInfo($pdo, $sessionId);
 
         $result = cancelMemberEnrollment($pdo, $memberId, $sessionId);
 

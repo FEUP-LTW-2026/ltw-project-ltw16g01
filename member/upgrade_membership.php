@@ -81,9 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'You already have this membership plan.';
     } else {
         // Retrieve member details for the notification message (name, username, email)
-        $stmt = $pdo->prepare("SELECT name, username, email FROM users WHERE id = ?");
-        $stmt->execute([$memberId]);
-        $member = $stmt->fetch(PDO::FETCH_ASSOC);
+        $member = getMemberNotificationDetails($pdo, $memberId);
         $memberName = $member['name'] ?? 'Member';
         $memberUsername = $member['username'] ?? 'unknown';
         $memberEmail = $member['email'] ?? 'unknown';

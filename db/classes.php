@@ -73,6 +73,18 @@ function getClassSessionById($pdo, $sessionId) {
     $stmt->execute([$sessionId]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+function getSessionClassNotificationInfo($pdo, $sessionId) {
+    $stmt = $pdo->prepare("
+        SELECT cs.trainer_id, c.name AS class_name
+        FROM class_sessions sess
+        JOIN class_schedules cs ON sess.schedule_id = cs.id
+        JOIN classes c ON cs.class_id = c.id
+        WHERE sess.id = ?
+    ");
+    $stmt->execute([$sessionId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 function getUpcomingSessionsBySchedule(PDO $pdo, int $scheduleId, int $limit = 5): array
 {
     // 1. Tentar obter sessões reais futuras (não canceladas)

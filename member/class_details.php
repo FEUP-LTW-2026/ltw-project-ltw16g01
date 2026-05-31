@@ -32,15 +32,11 @@ if (!$schedule) {
 // Fetch trainer info (if any)
 $trainer = null;
 if (!empty($schedule['trainer_id'])) {
-    $stmt = $pdo->prepare("SELECT id, name FROM users WHERE id = ?");
-    $stmt->execute([$schedule['trainer_id']]);
-    $trainer = $stmt->fetch(PDO::FETCH_ASSOC);
+    $trainer = getScheduleTrainerBasicInfo($pdo, (int)$schedule['trainer_id']);
 }
 
 // Get class type label
-$typeStmt = $pdo->prepare("SELECT label FROM class_types WHERE id = ?");
-$typeStmt->execute([$schedule['class_type_id']]);
-$typeLabel = $typeStmt->fetchColumn();
+$typeLabel = getClassTypeLabelById($pdo, (int)$schedule['class_type_id']);
 
 // Get all reviews for this class schedule
 $reviews = getClassReviews($pdo, $scheduleId);

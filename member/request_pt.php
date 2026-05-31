@@ -55,9 +55,7 @@ $success = '';
 $trainers = getAvailableTrainersForPT($pdo);
 
 // Fetch member name for the notification (to avoid extra DB call later, do it once)
-$stmt = $pdo->prepare("SELECT name FROM users WHERE id = ?");
-$stmt->execute([$memberId]);
-$memberName = $stmt->fetchColumn();
+$memberName = getMemberNameById($pdo, (int)$memberId);
 
 // Process the request form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

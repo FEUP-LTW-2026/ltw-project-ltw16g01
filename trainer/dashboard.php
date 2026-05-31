@@ -43,9 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (updatePTRequestStatus($pdo, $requestId, $trainerId, $newStatus)) {
             // Get the member ID affected by this PT request
-            $stmt = $pdo->prepare("SELECT member_id FROM personal_bookings WHERE id = ?");
-            $stmt->execute([$requestId]);
-            $memberId = $stmt->fetchColumn();
+            $memberId = getPTRequestMemberId($pdo, $requestId);
             if ($memberId) {
                 $trainerName = $_SESSION['user_name'] ?? '';
                 $message = $action === 'accept'

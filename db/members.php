@@ -274,6 +274,19 @@ function getMemberPlanFeatures($plan) {
     return $features[$plan] ?? $features['basic'];
 }
 
+
+function getMemberNameById($pdo, $memberId) {
+    $stmt = $pdo->prepare("SELECT name FROM users WHERE id = ?");
+    $stmt->execute([$memberId]);
+    return $stmt->fetchColumn();
+}
+
+function getMemberNotificationDetails($pdo, $memberId) {
+    $stmt = $pdo->prepare("SELECT name, username, email FROM users WHERE id = ?");
+    $stmt->execute([$memberId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function upgradeMemberPlan($pdo, $memberId, $newPlan) {
     $allowedPlans = ['basic', 'premium', 'vip'];
 

@@ -35,3 +35,9 @@ function getNextSessionWithCapacity($pdo, $schedule) {
         'status' => $session['status']
     ];
 }
+
+function getClassSessionBasicInfo($pdo, $sessionId) {
+    $stmt = $pdo->prepare("SELECT schedule_id, session_date FROM class_sessions WHERE id = ?");
+    $stmt->execute([$sessionId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}

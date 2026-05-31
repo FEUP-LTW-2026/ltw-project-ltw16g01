@@ -34,9 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
         $error = 'Invalid session.';
     } else {
         // Get session details before cancelling (especially its date)
-        $stmt = $pdo->prepare("SELECT schedule_id, session_date FROM class_sessions WHERE id = ?");
-        $stmt->execute([$sessionId]);
-        $sessionData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sessionData = getClassSessionBasicInfo($pdo, $sessionId);
         if (!$sessionData) {
             $error = 'Session not found.';
         } else {
