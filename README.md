@@ -58,6 +58,7 @@ To open the Admin Dashboard page, manually change the browser URL to:
 - [x] Notification System: Admins receive notifications about relevant actions involving members, trainers, classes, equipment, and bookings. Members also receive notifications about important updates, such as class changes, cancellations, and booking-related events. Trainers also receive notifications regarding relevant actions, including enrolments in their classes, PT requests and assignments to new classes (by the admin).
 - [x] Admin Analytics Dashboard: Admins can view gym-wide metrics, such as the most popular classes, equipment usage, membership statistics, and member retention.
 - [x] Analytics and Reports: Admins can export analytics and reports to CSV and PDF formats.
+- [x] Information by email: When admin create a member or a trainer, the associated email will receive the credencials to be able to login
 
 ## Running
 
