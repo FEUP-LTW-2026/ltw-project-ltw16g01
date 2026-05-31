@@ -428,4 +428,21 @@ function getUpcomingEnrolledSessions(PDO $pdo, int $memberId): array
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getClassScheduleDeleteDetails($pdo, $scheduleId) {
+    $stmt = $pdo->prepare("
+        SELECT 
+            cs.id, 
+            cs.trainer_id, 
+            cs.day_of_week, 
+            cs.start_time,
+            c.name AS class_name
+        FROM class_schedules cs
+        INNER JOIN classes c ON cs.class_id = c.id
+        WHERE cs.id = ?
+    ");
+
+    $stmt->execute([$scheduleId]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>

@@ -16,8 +16,20 @@ requireAuth('admin');
 // Get database connection
 $pdo = getDatabaseConnection();
 
-// Get class schedule ID from URL query string
-$scheduleId = (int)($_GET['id'] ?? 0);
+// Only allow POST requests for delete actions
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Method not allowed.');
+}
+
+// CSRF protection
+if (!isset($_POST['csrf'], $_SESSION['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+    http_response_code(403);
+    exit('Invalid CSRF token.');
+}
+
+// Get class schedule ID from POST body
+$scheduleId = (int)($_POST['id'] ?? 0);
 
 if ($scheduleId <= 0) {
     header('Location: classes.php?error=invalid_id');
@@ -25,19 +37,7 @@ if ($scheduleId <= 0) {
 }
 
 // Fetch class schedule details before deletion (to get trainer info and class name)
-$stmt = $pdo->prepare("
-    SELECT 
-        cs.id, 
-        cs.trainer_id, 
-        cs.day_of_week, 
-        cs.start_time,
-        c.name AS class_name
-    FROM class_schedules cs
-    INNER JOIN classes c ON cs.class_id = c.id
-    WHERE cs.id = ?
-");
-$stmt->execute([$scheduleId]);
-$schedule = $stmt->fetch(PDO::FETCH_ASSOC);
+$schedule = getClassScheduleDeleteDetails($pdo, $scheduleId);
 
 if (!$schedule) {
     // Class schedule not found

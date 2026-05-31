@@ -294,3 +294,21 @@ function upgradeMemberPlan($pdo, $memberId, $newPlan) {
         $memberId
     ]);
 }
+
+function getMemberDeleteDetails($pdo, $id) {
+    $stmt = $pdo->prepare("
+        SELECT 
+            u.id, 
+            u.name, 
+            u.username, 
+            u.email,
+            mp.membership_plan
+        FROM users u
+        LEFT JOIN member_profiles mp ON u.id = mp.user_id
+        WHERE u.id = ? AND u.role = 'member'
+    ");
+
+    $stmt->execute([$id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}

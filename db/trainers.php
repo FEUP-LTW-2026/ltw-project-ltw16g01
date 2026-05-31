@@ -416,4 +416,23 @@ function getTrainerConfirmedPT($pdo, $trainerId, $limit = 10) {
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getTrainerDeleteDetails($pdo, $id) {
+    $stmt = $pdo->prepare("
+        SELECT 
+            u.id, 
+            u.name, 
+            u.username, 
+            u.email,
+            tp.specializations,
+            tp.certifications
+        FROM users u
+        LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
+        WHERE u.id = ? AND u.role = 'trainer'
+    ");
+
+    $stmt->execute([$id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>

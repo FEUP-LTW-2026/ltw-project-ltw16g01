@@ -15,8 +15,20 @@ requireAuth('admin');
 // Get database connection
 $pdo = getDatabaseConnection();
 
-// Get equipment ID from URL query string
-$id = (int)($_GET['id'] ?? 0);
+// Only allow POST requests for delete actions
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Method not allowed.');
+}
+
+// CSRF protection
+if (!isset($_POST['csrf'], $_SESSION['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+    http_response_code(403);
+    exit('Invalid CSRF token.');
+}
+
+// Get equipment ID from POST body
+$id = (int)($_POST['id'] ?? 0);
 
 if ($id <= 0) {
     header('Location: equipment.php?error=invalid_id');
@@ -24,14 +36,7 @@ if ($id <= 0) {
 }
 
 // Fetch equipment details before deletion (to get name, category, quantity for the notification)
-$stmt = $pdo->prepare("
-    SELECT e.id, e.name, e.quantity, e.available, ec.label AS category_label
-    FROM equipment e
-    LEFT JOIN equipment_categories ec ON e.category_id = ec.id
-    WHERE e.id = ?
-");
-$stmt->execute([$id]);
-$equipment = $stmt->fetch(PDO::FETCH_ASSOC);
+$equipment = getEquipmentDeleteDetails($pdo, $id);
 
 if (!$equipment) {
     // Equipment not found

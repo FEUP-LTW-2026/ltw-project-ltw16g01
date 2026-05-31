@@ -106,7 +106,11 @@ function output_trainers_admin_table($trainers) {
             </td>
             <td>
                 <a href="edit_trainer.php?id=<?= $id ?>" class="action-link">Edit</a>
-                <a href="delete_trainer.php?id=<?= $id ?>" class="action-link danger delete-trainer-link">Delete</a>
+                <form method="post" action="delete_trainer.php" class="delete-trainer-link">
+                    <input type="hidden" name="id" value="<?= $id ?>">
+                    <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+                    <button type="submit" class="action-link danger">Delete</button>
+                </form>
             </td>
         </tr>
         <?php

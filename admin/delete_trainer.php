@@ -15,8 +15,20 @@ requireAuth('admin');
 // Get database connection
 $pdo = getDatabaseConnection();
 
-// Get trainer ID from URL query string
-$id = (int)($_GET['id'] ?? 0);
+// Only allow POST requests for delete actions
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Method not allowed.');
+}
+
+// CSRF protection
+if (!isset($_POST['csrf'], $_SESSION['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+    http_response_code(403);
+    exit('Invalid CSRF token.');
+}
+
+// Get trainer ID from POST body
+$id = (int)($_POST['id'] ?? 0);
 
 if ($id <= 0) {
     header('Location: trainers.php?error=invalid_id');
@@ -24,20 +36,7 @@ if ($id <= 0) {
 }
 
 // Fetch trainer details before deletion (name, username, email, specializations, certifications)
-$stmt = $pdo->prepare("
-    SELECT 
-        u.id, 
-        u.name, 
-        u.username, 
-        u.email,
-        tp.specializations,
-        tp.certifications
-    FROM users u
-    LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
-    WHERE u.id = ? AND u.role = 'trainer'
-");
-$stmt->execute([$id]);
-$trainer = $stmt->fetch(PDO::FETCH_ASSOC);
+$trainer = getTrainerDeleteDetails($pdo, $id);
 
 if (!$trainer) {
     // Trainer not found

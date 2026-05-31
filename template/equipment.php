@@ -110,12 +110,13 @@ function output_equipment_card($item, $memberPlan = null) {
                     Edit
                 </a>
 
-                <a 
-                    href="delete_equipment.php?id=<?= $id ?>" 
-                    class="delete-btn btn-sm delete-equipment-link"
-                >
-                    Delete
-                </a>
+                <form method="post" action="delete_equipment.php" class="delete-equipment-link">
+                    <input type="hidden" name="id" value="<?= $id ?>">
+                    <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+                    <button type="submit" class="delete-btn btn-sm">
+                        Delete
+                    </button>
+                </form>
             </div>
         <?php endif; ?>
     </article>

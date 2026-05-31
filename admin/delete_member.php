@@ -15,8 +15,20 @@ requireAuth('admin');
 // Get database connection
 $pdo = getDatabaseConnection();
 
-// Get member ID from URL query string
-$id = (int)($_GET['id'] ?? 0);
+// Only allow POST requests for delete actions
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Method not allowed.');
+}
+
+// CSRF protection
+if (!isset($_POST['csrf'], $_SESSION['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) {
+    http_response_code(403);
+    exit('Invalid CSRF token.');
+}
+
+// Get member ID from POST body
+$id = (int)($_POST['id'] ?? 0);
 
 if ($id <= 0) {
     header('Location: members.php?error=invalid_id');
@@ -24,19 +36,7 @@ if ($id <= 0) {
 }
 
 // Fetch member details before deletion (name, username, email, membership plan)
-$stmt = $pdo->prepare("
-    SELECT 
-        u.id, 
-        u.name, 
-        u.username, 
-        u.email,
-        mp.membership_plan
-    FROM users u
-    LEFT JOIN member_profiles mp ON u.id = mp.user_id
-    WHERE u.id = ? AND u.role = 'member'
-");
-$stmt->execute([$id]);
-$member = $stmt->fetch(PDO::FETCH_ASSOC);
+$member = getMemberDeleteDetails($pdo, $id);
 
 if (!$member) {
     // Member not found

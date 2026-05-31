@@ -150,7 +150,11 @@ function output_class_schedule_card($schedule) {
             <?php if (isset($_SESSION['active_role']) && $_SESSION['active_role'] === 'admin'): ?>
                 <div class="admin-actions">
                     <a href="edit_class.php?id=<?= $scheduleId ?>" class="secondary-button btn-sm">Edit</a>
-                    <a href="delete_class.php?id=<?= $scheduleId ?>" class="delete-btn btn-sm delete-class-link">Delete</a>
+                    <form method="post" action="delete_class.php" class="delete-class-link">
+                        <input type="hidden" name="id" value="<?= $scheduleId ?>">
+                        <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf']) ?>">
+                        <button type="submit" class="delete-btn btn-sm">Delete</button>
+                    </form>
                 </div>
             <?php endif; ?>
         </div>

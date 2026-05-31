@@ -367,3 +367,16 @@ function cancelEquipmentReservation($pdo, $reservationId, $memberId) {
         ];
     }
 }
+
+function getEquipmentDeleteDetails($pdo, $id) {
+    $stmt = $pdo->prepare("
+        SELECT e.id, e.name, e.quantity, e.available, ec.label AS category_label
+        FROM equipment e
+        LEFT JOIN equipment_categories ec ON e.category_id = ec.id
+        WHERE e.id = ?
+    ");
+
+    $stmt->execute([$id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
