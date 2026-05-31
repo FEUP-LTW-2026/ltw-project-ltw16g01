@@ -77,7 +77,7 @@ output_header('trainer_dashboard.css');
         <div class="kpi-grid">
             <div class="kpi-card">
                 <p class="kpi-num"><?= (int)$stats['upcoming'] ?></p>
-                <p class="kpi-lbl">📅 Upcoming Classes</p>
+                <p class="kpi-lbl">📅 This Week's Upcoming Classes</p>
             </div>
 
             <div class="kpi-card">

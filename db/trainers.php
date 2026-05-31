@@ -295,29 +295,49 @@ function getDistinctSpecializations($pdo) {
     return array_keys($specs);
 }
 
+/**
+ * Get trainer statistics for the dashboard.
+ *
+ * @param PDO $pdo
+ * @param int $trainerId
+ * @return array ['upcoming' => int, 'students' => int, 'past' => int]
+ */
 function getTrainerStats($pdo, $trainerId) {
-    // Upcoming classes (scheduled sessions with date >= today)
+    // Calculate the date range for the current week (from today to next Sunday)
+    $today = date('Y-m-d');
+    $nextSunday = date('Y-m-d', strtotime('next sunday'));
+
+    // If today is Sunday, set end date to today (no future days in the week)
+    if (date('N') == 7) {
+        $nextSunday = $today;
+    }
+
+    // Count scheduled sessions that fall between today and the coming Sunday
     $stmt = $pdo->prepare("
         SELECT COUNT(DISTINCT sess.id) 
         FROM class_sessions sess
         JOIN class_schedules cs ON sess.schedule_id = cs.id
-        WHERE cs.trainer_id = ? AND sess.session_date >= date('now') AND sess.status = 'scheduled'
+        WHERE cs.trainer_id = ? 
+          AND sess.session_date BETWEEN ? AND ?
+          AND sess.status = 'scheduled'
     ");
-    $stmt->execute([$trainerId]);
+    $stmt->execute([$trainerId, $today, $nextSunday]);
     $upcoming = (int)$stmt->fetchColumn();
 
-    // Enrolled students (unique members in future sessions)
+    // Count unique enrolled students in the same week's sessions
     $stmt = $pdo->prepare("
         SELECT COUNT(DISTINCT e.member_id)
         FROM enrollments e
         JOIN class_sessions sess ON e.session_id = sess.id
         JOIN class_schedules cs ON sess.schedule_id = cs.id
-        WHERE cs.trainer_id = ? AND sess.session_date >= date('now') AND e.status = 'enrolled'
+        WHERE cs.trainer_id = ? 
+          AND sess.session_date BETWEEN ? AND ?
+          AND e.status = 'enrolled'
     ");
-    $stmt->execute([$trainerId]);
+    $stmt->execute([$trainerId, $today, $nextSunday]);
     $students = (int)$stmt->fetchColumn();
 
-    // Past classes (any session with date < today, regardless of status)
+    // Count past sessions (any time before today)
     $stmt = $pdo->prepare("
         SELECT COUNT(DISTINCT sess.id)
         FROM class_sessions sess
@@ -329,51 +349,35 @@ function getTrainerStats($pdo, $trainerId) {
 
     return [
         'upcoming' => $upcoming,
-        'students' => $students,
-        'past' => $past
+        'students'  => $students,
+        'past'      => $past
     ];
 }
 
 function getTrainerUpcomingClasses($pdo, $trainerId, $limit = 10) {
     $sql = "
         SELECT 
+            sess.id as session_id,
+            sess.session_date,
             cs.id as schedule_id,
             c.name as class_name,
             cs.day_of_week,
             cs.start_time,
             cs.location,
             cs.duration_min,
-            sess.session_date,
-            sess.id as session_id,
-            (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') as enrolled_count,
-            cs.capacity
+            cs.capacity,
+            (
+                SELECT COUNT(*) 
+                FROM enrollments e 
+                WHERE e.session_id = sess.id AND e.status = 'enrolled'
+            ) as enrolled_count
         FROM class_schedules cs
         JOIN classes c ON cs.class_id = c.id
         JOIN class_sessions sess ON sess.schedule_id = cs.id
-        WHERE cs.trainer_id = ? AND sess.session_date >= date('now') AND sess.status = 'scheduled'
+        WHERE cs.trainer_id = ? 
+          AND sess.session_date >= date('now')
+          AND sess.status = 'scheduled'
         ORDER BY sess.session_date ASC, cs.start_time ASC
-        LIMIT ?
-    ";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$trainerId, $limit]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function getTrainerPastClasses($pdo, $trainerId, $limit = 10) {
-    $sql = "
-        SELECT 
-            c.name as class_name,
-            cs.day_of_week,
-            cs.start_time,
-            sess.session_date,
-            sess.id as session_id,
-            (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') as enrolled_count,
-            cs.capacity
-        FROM class_schedules cs
-        JOIN classes c ON cs.class_id = c.id
-        JOIN class_sessions sess ON sess.schedule_id = cs.id
-        WHERE cs.trainer_id = ? AND sess.session_date < date('now')
-        ORDER BY sess.session_date DESC
         LIMIT ?
     ";
     $stmt = $pdo->prepare($sql);
@@ -434,5 +438,27 @@ function getTrainerDeleteDetails($pdo, $id) {
     $stmt->execute([$id]);
 
     return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getTrainerPastClasses($pdo, $trainerId, $limit = 10) {
+    $sql = "
+        SELECT 
+            c.name as class_name,
+            cs.day_of_week,
+            cs.start_time,
+            sess.session_date,
+            sess.id as session_id,
+            (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = sess.id AND e.status = 'enrolled') as enrolled_count,
+            cs.capacity
+        FROM class_schedules cs
+        JOIN classes c ON cs.class_id = c.id
+        JOIN class_sessions sess ON sess.schedule_id = cs.id
+        WHERE cs.trainer_id = ? AND sess.session_date < date('now')
+        ORDER BY sess.session_date DESC
+        LIMIT ?
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$trainerId, $limit]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
