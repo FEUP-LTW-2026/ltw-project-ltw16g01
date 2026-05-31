@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.4.17 on Sat May 30 22:26:38 2026
+-- File generated with SQLiteStudio v3.4.17 on Sun May 31 14:50:09 2026
 --
 -- Text encoding used: UTF-8
 --
@@ -82,6 +82,15 @@ INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (31, 1
 INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (32, 4, '2026-06-18', 'cancelled');
 INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (33, 1, '2026-06-22', 'cancelled');
 INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (34, 1, '2026-06-29', 'cancelled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (35, 1, '2026-07-06', 'cancelled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (36, 10, '2026-06-09', 'scheduled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (37, 2, '2026-06-09', 'scheduled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (38, 4, '2026-06-25', 'cancelled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (39, 3, '2026-06-10', 'scheduled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (40, 9, '2026-06-10', 'scheduled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (41, 5, '2026-06-12', 'scheduled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (42, 4, '2026-07-02', 'scheduled');
+INSERT INTO class_sessions (id, schedule_id, session_date, status) VALUES (43, 1, '2026-07-13', 'scheduled');
 
 -- Table: class_types
 DROP TABLE IF EXISTS class_types;
@@ -173,6 +182,14 @@ INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES 
 INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (19, 20, 23, '2026-05-30 12:45:20', 'cancelled');
 INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (20, 20, 24, '2026-05-30 12:45:52', 'cancelled');
 INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (21, 20, 34, '2026-05-30 13:01:46', 'enrolled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (22, 25, 38, '2026-05-31 13:20:45', 'cancelled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (23, 25, 39, '2026-05-31 13:20:46', 'enrolled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (24, 25, 40, '2026-05-31 13:20:48', 'enrolled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (25, 25, 35, '2026-05-31 13:20:49', 'cancelled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (26, 25, 36, '2026-05-31 13:20:50', 'enrolled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (27, 25, 37, '2026-05-31 13:20:51', 'enrolled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (28, 25, 41, '2026-05-31 13:20:52', 'enrolled');
+INSERT INTO enrollments (id, member_id, session_id, enrolled_at, status) VALUES (29, 25, 43, '2026-05-31 13:21:50', 'enrolled');
 
 -- Table: equipment
 DROP TABLE IF EXISTS equipment;
@@ -314,6 +331,7 @@ INSERT INTO notification_reads (id, notification_id, user_id, read_at) VALUES (3
 INSERT INTO notification_reads (id, notification_id, user_id, read_at) VALUES (4, 3, 13, '2026-05-29 20:59:44');
 INSERT INTO notification_reads (id, notification_id, user_id, read_at) VALUES (5, 9, 12, '2026-05-29 21:46:02');
 INSERT INTO notification_reads (id, notification_id, user_id, read_at) VALUES (6, 17, 1, '2026-05-29 22:04:32');
+INSERT INTO notification_reads (id, notification_id, user_id, read_at) VALUES (7, 107, 13, '2026-05-30 21:29:14');
 
 -- Table: notification_types
 DROP TABLE IF EXISTS notification_types;
@@ -416,6 +434,16 @@ INSERT INTO notifications (id, user_id, target_role, scope, title, message, noti
 INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (98, 2, NULL, 'personal', NULL, 'The class ''CrossFit WOD'' on Friday at 17:30 has been removed (schedule ID: 5).', 3, '2026-05-30 14:12:32');
 INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (106, NULL, 'admin', 'role', 'New member', 'New member created: João Costa (username: joaocosta, email: jc@gmail.com, plan: Vip).', 1, '2026-05-30 21:18:05');
 INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (107, NULL, 'admin', 'role', 'Member updated', 'Member updated: João Costa (username: joaocosta, email: jc@gmail.com, plan: Vip, status: Active).', 1, '2026-05-30 21:18:12');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (108, 1, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''Pilates Core''.', 1, '2026-05-31 13:20:45');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (109, 3, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''Spinning Class''.', 1, '2026-05-31 13:20:46');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (110, 2, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''Boxing Conditioning''.', 1, '2026-05-31 13:20:48');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (111, 1, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''Morning Yoga''.', 1, '2026-05-31 13:20:49');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (112, 3, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''Senior Fitness''.', 1, '2026-05-31 13:20:50');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (113, 2, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''Power HIIT''.', 1, '2026-05-31 13:20:51');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (114, 2, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''CrossFit WOD''.', 1, '2026-05-31 13:20:52');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (115, NULL, 'admin', 'role', 'Session cancelled', 'Trainer cancelled session for class ''Pilates Core'' on Thursday, June 25, 2026 at 10:00. All enrolled members have been notified.', 3, '2026-05-31 13:21:22');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (116, NULL, 'admin', 'role', 'Session cancelled', 'Trainer cancelled session for class ''Morning Yoga'' on Monday, July 6, 2026 at 08:00. All enrolled members have been notified.', 3, '2026-05-31 13:21:25');
+INSERT INTO notifications (id, user_id, target_role, scope, title, message, notification_type_id, created_at) VALUES (117, 1, NULL, 'personal', 'Class Enrollment', 'João Costa enrolled in your class ''Morning Yoga''.', 1, '2026-05-31 13:21:50');
 
 -- Table: password_resets
 DROP TABLE IF EXISTS password_resets;
